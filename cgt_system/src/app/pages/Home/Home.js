@@ -41,20 +41,16 @@ import "./styles/front-page-landing.css";
 import "bootstrap";
 export default function Home() {
   return (
-    <div>
-      <Navbar />
-      <div data-bs-spy="scroll" className="scrollspy-example">
-        <Hero />
-        <Features />
-        <Reviews />
-        <Teams />
-        <Pricing />
-        <Funfact />
-        <FAQ />
-        <Cta />
-        <Contact />
-      </div>
-      <Footer />
+    <div data-bs-spy="scroll" className="scrollspy-example">
+      <Hero />
+      <Features />
+      <Reviews />
+      <Teams />
+      <Pricing />
+      <Funfact />
+      <FAQ />
+      <Cta />
+      <Contact />
     </div>
   );
 }

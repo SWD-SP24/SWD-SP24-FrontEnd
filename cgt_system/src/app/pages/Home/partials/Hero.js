@@ -1,6 +1,8 @@
 //img
 import Images from "../../../assets/img/images";
 const Hero = () => {
+  const demoToken = null;
+
   return (
     // <!-- Hero: Start -->
     <section id="hero-animation">
@@ -38,32 +40,34 @@ const Hero = () => {
               </a>
             </div>
           </div>
-          <div id="heroDashboardAnimation" className="hero-animation-img">
-            <a href="../html/index.html" target="_blank">
-              <div
-                id="heroAnimationImg"
-                className="position-relative hero-dashboard-img"
-              >
-                <img
-                  src={Images.heroDashboard}
-                  alt="hero dashboard"
-                  className="animation-img"
-                  data-app-light-img="front-pages/landing-page/hero-dashboard-light.png"
-                  data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png"
-                />
-                <img
-                  src={Images.heroElement}
-                  alt="hero elements"
-                  className="position-absolute hero-elements-img animation-img top-0 start-0"
-                  data-app-light-img="front-pages/landing-page/hero-elements-light.png"
-                  data-app-dark-img="front-pages/landing-page/hero-elements-dark.png"
-                />
-              </div>
-            </a>
-          </div>
+          {demoToken ? null : (
+            <div id="heroDashboardAnimation" className="hero-animation-img">
+              <a href="../html/index.html" target="_blank">
+                <div
+                  id="heroAnimationImg"
+                  className="position-relative hero-dashboard-img"
+                >
+                  <img
+                    src={Images.heroDashboard}
+                    alt="hero dashboard"
+                    className="animation-img"
+                    data-app-light-img="front-pages/landing-page/hero-dashboard-light.png"
+                    data-app-dark-img="front-pages/landing-page/hero-dashboard-dark.png"
+                  />
+                  <img
+                    src={Images.heroElement}
+                    alt="hero elements"
+                    className="position-absolute hero-elements-img animation-img top-0 start-0"
+                    data-app-light-img="front-pages/landing-page/hero-elements-light.png"
+                    data-app-dark-img="front-pages/landing-page/hero-elements-dark.png"
+                  />
+                </div>
+              </a>
+            </div>
+          )}
         </div>
       </div>
-      <div className="landing-hero-blank"></div>
+      <div className={demoToken ? "none" : "landing-hero-blank"}></div>
     </section>
     // <!-- Hero: End -->
   );

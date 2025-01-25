@@ -1,7 +1,6 @@
-import logo from "./logo.svg";
-import Home from "./app/pages/Home/Home.js";
+import MainRoutes from "./app/routes/MainRoutes";
 function App() {
-  return <Home />;
+  return <MainRoutes />;
 }
 
 export default App;
