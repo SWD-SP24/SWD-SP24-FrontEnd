@@ -1,4 +1,7 @@
+import { useNavigate } from "react-router";
+
 const Navbar = () => {
+  const nav = useNavigate();
   return (
     <nav className="layout-navbar shadow-none py-0">
       <div className="container">
@@ -262,14 +265,14 @@ const Navbar = () => {
 
             {/* <!-- navbar button: Start --> */}
             <li>
-              <a
-                href="../vertical-menu-template/auth-login-cover.html"
+              <button
                 className="btn btn-primary"
                 target="_blank"
+                onClick={() => nav("login")}
               >
                 <span className="tf-icons icon-base bx bx-log-in-circle scaleX-n1-rtl me-md-1"></span>
                 <span className="d-none d-md-block">Login/Register</span>
-              </a>
+              </button>
             </li>
             {/* <!-- navbar button: End --> */}
           </ul>
