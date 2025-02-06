@@ -20,9 +20,6 @@ import "../../assets/fonts/iconify-icons.css";
 
 //core css
 import "@simonwep/pickr";
-
-import "../../styles/core.css";
-import "../../styles/demo.css";
 import "./styles/front-page.css";
 //vendor CSS
 import "../../../../node_modules/perfect-scrollbar/css/perfect-scrollbar.css";

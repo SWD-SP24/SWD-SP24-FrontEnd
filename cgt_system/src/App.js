@@ -1,6 +1,7 @@
+import React from "react";
 import MainRoutes from "./app/routes/MainRoutes";
-function App() {
+import "./app/styles/GlobalStyles/GlobalStyles.scss";
+
+export default function App() {
   return <MainRoutes />;
 }
-
-export default App;

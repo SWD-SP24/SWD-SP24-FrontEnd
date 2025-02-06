@@ -1,7 +1,5 @@
 //img
 import Images from "../../../assets/img/images.js";
-
-import "../../../styles/core.css";
 //core modules
 import { Autoplay, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
