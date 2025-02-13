@@ -1,18 +1,16 @@
 import React, { useCallback, useRef } from "react";
-import styles from "./loginForm.module.scss";
-import "bootstrap/dist/css/bootstrap.min.css";
-import classNames from "classnames/bind";
-import { validateField } from "../../schemas/loginSchema";
-import InputField from "../../../../components/InputField/InputField";
-import RememberMe from "../RememberMe/RememberMe";
 import Button from "../Button/Button";
-import { sFormData } from "../../loginStore";
-import { Link } from "react-router";
+import styles from "./registerForm.module.scss";
+import classNames from "classnames/bind";
+import { validateField } from "../../schemas/registerShema";
+import { sFormData } from "../../registerStore";
+import InputField from "../InputField/InputField";
+import Terms from "../Terms/Terms";
 
 const cx = classNames.bind(styles);
 
-export default function LoginForm() {
-  const rememberMeRef = useRef(false);
+export default function RegisterForm() {
+  const isAgreeRef = useRef(false);
 
   const handleFieldChange = useCallback((name, value) => {
     sFormData.set((prev) => {
@@ -20,8 +18,8 @@ export default function LoginForm() {
     });
   }, []);
 
-  const handleRememberMeChange = useCallback((value) => {
-    rememberMeRef.current = value;
+  const handleIsAgreeChange = useCallback((value) => {
+    isAgreeRef.current = value;
   }, []);
 
   return (
@@ -58,13 +56,28 @@ export default function LoginForm() {
           onFieldChange={handleFieldChange}
         />
       </div>
-      <div className={cx("my-7", "d-flex", "justify-content-between")}>
-        <RememberMe onRememberMeChange={handleRememberMeChange} />
-        <Link href="/auth-forgot-password-cover.html">
-          <p className={cx("mb-0")}>Forgot Password?</p>
-        </Link>
+
+      <div
+        className={cx(
+          "form-password-toggle",
+          "form-control-validation",
+          "fv-plugins-icon-container"
+        )}
+      >
+        <InputField
+          label={"Confirm Password"}
+          name={"confirmPassword"}
+          type={"password"}
+          placeholder={"••••••••"}
+          validate={validateField}
+          onFieldChange={handleFieldChange}
+        />
       </div>
-      <Button data={{ rememberMe: rememberMeRef }} buttonTag={"Sign in"} />
+      <div className={cx("my-7", "d-flex", "justify-content-between")}>
+        <Terms onIsAgreeChange={handleIsAgreeChange} />
+      </div>
+
+      <Button data={{ isAgree: isAgreeRef }} buttonTag={"Sign up"} />
     </form>
   );
 }

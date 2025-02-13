@@ -1,15 +1,14 @@
 import React from "react";
-import styles from "./login.module.scss";
+import styles from "./register.module.scss";
 import classNames from "classnames/bind";
-import "bootstrap/dist/css/bootstrap.min.css";
-import login_image from "../../assets/img/illustrations/parent-and-child.png";
-import LoginHeader from "./partials/LoginHeader/LoginHeader";
-import LoginForm from "./partials/LoginForm/LoginForm";
+import RegisterHeader from "./partials/RegisterHeader/RegisterHeader";
+import register_image from "../../assets/img/illustrations/mom-and-children.png";
 import { Link } from "react-router";
+import RegisterForm from "./partials/RegisterForm/RegisterForm";
 
 const cx = classNames.bind(styles);
 
-export default function Login() {
+export default function Register() {
   return (
     <div
       className={cx(
@@ -18,7 +17,7 @@ export default function Login() {
         "fade-in"
       )}
     >
-      <LoginHeader />
+      <RegisterHeader />
       <div className={cx("authentication-inner", "row", "m-0")}>
         <div
           className={cx(
@@ -32,10 +31,12 @@ export default function Login() {
         >
           <div className={cx("w-100", "d-flex", "justify-content-center")}>
             <img
-              src={login_image}
+              src={register_image}
               className={cx("img-fluid")}
               alt="Login image"
               width="1000"
+              data-app-dark-img="illustrations/boy-with-rocket-dark.png"
+              data-app-light-img="illustrations/boy-with-rocket-light.png"
             />
           </div>
         </div>
@@ -53,16 +54,15 @@ export default function Login() {
           )}
         >
           <div className={cx("w-px-400", "mx-auto", "mt-sm-12", "mt-8")}>
-            <h4 className={cx("mb-1")}>Welcome to Grow+ 👋</h4>
+            <h4 className={cx("mb-1")}>A Journey Begins Here 🌱</h4>
             <p className={cx("mb-6")}>
-              Please sign in to your account and start tracking your child's
-              growth journey.
+              Effortless and fun way to monitor your child's development!
             </p>
-            <LoginForm />
+            <RegisterForm />
             <p className={cx("text-center")}>
-              <span>New on our platform? </span>
-              <Link to={"/register"}>
-                <span>Create an account</span>
+              <span>Already have an account?</span>
+              <Link to={"/login"}>
+                <span> Sign in instead</span>
               </Link>
             </p>
           </div>
