@@ -5,6 +5,7 @@ import NotFound from "../pages/Error/NotFound";
 import UserLayouts from "../layouts/UserLayouts";
 import Pricing from "../pages/Pricing/PricingPage";
 import PricingPage from "../pages/Pricing/PricingPage";
+import Profile from "../pages/Profile/Profile";
 
 export default function MainRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function MainRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/pricing" element={<PricingPage />} />
         </Route>
+        <Route path="/user-profile" element={<Profile />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

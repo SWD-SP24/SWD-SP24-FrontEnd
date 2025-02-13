@@ -7,7 +7,6 @@ const Pricing = () => {
   const [priceSales, setPriceSales] = useState(true);
   const [membershipPackages, setMembershipPackages] = useState(null);
 
-  const homePackages = [];
   const handleChange = (e) => {
     if (e.target.checked === true) {
       setPriceSales(true);
@@ -23,18 +22,10 @@ const Pricing = () => {
     });
   }, []);
   if (membershipPackages === null) {
-    return <div> </div>;
+    return <div> loading </div>;
   }
   console.log(membershipPackages);
-  homePackages.push(membershipPackages.at(3));
-  membershipPackages.map((packages) => {
-    if (
-      packages.membershipPackageName != "Basic" &&
-      packages.membershipPackageName != "Trial"
-    ) {
-      homePackages.push(packages);
-    }
-  });
+
   return (
     <section id="landingPricing" className="section-py bg-body landing-pricing">
       <div className="container">
@@ -431,7 +422,7 @@ const Pricing = () => {
             </div>
           </div> */}
           {/* <!-- Standard Plan: End --> */}
-          {homePackages.map((packages) => {
+          {membershipPackages.map((packages) => {
             return (
               <div className="col-xl-4 col-lg-6">
                 <div className="card" style={{ height: 695 }}>
