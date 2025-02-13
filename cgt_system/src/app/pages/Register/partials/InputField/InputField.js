@@ -5,18 +5,19 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import styles from "./inputField.module.scss";
 import classNames from "classnames/bind";
 import debounce from "lodash.debounce";
-import { sFormError } from "../../pages/Login/loginStore";
-import { sFormData } from "../../pages/Register/registerStore";
+import { sFormData, sFormError } from "../../registerStore";
 
 const cx = classNames.bind(styles);
 const InputField = React.memo(
   ({ label, name, type, placeholder, value = "", onFieldChange, validate }) => {
     const [fieldValue, setFieldValue] = useState(value);
     const error = sFormError.use((formError) => formError[name]);
-    const password = sFormData.use((formData) => formData.password);
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     const isPassword = name === "password";
     const isConfirmPassword = name === "confirmPassword";
+    const password = isConfirmPassword
+      ? sFormData.use((formData) => formData.password)
+      : "";
 
     const debouceValidateField = debounce((name, value) => {
       const fieldError = validate(
@@ -54,10 +55,10 @@ const InputField = React.memo(
           placeholder={placeholder}
           value={fieldValue}
           onChange={handleChange}
-          autoFocus={!isPassword}
+          autoFocus={!isPassword && !isConfirmPassword}
           autoComplete={isPassword ? "current-password" : ""}
         />
-        {isPassword && (
+        {(isPassword || isConfirmPassword) && (
           <span
             className={cx("input-group-text", "cursor-pointer")}
             onClick={() => setIsPasswordVisible((prev) => !prev)}
@@ -75,7 +76,7 @@ const InputField = React.memo(
         <label htmlFor={name} className={"form-label"}>
           {label}
         </label>
-        {isPassword ? (
+        {isPassword || isConfirmPassword ? (
           <div className="input-group input-group-merge has-validation">
             {inputElement}
           </div>

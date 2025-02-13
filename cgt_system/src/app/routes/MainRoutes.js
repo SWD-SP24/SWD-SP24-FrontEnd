@@ -5,6 +5,8 @@ import NotFound from "../pages/Error/NotFound";
 import UserLayouts from "../layouts/UserLayouts";
 import PricingPage from "../pages/Pricing/PricingPage";
 import Login from "../pages/Login/Login";
+import Register from "../pages/Register";
+import Welcome from "../pages/Welcome";
 
 export default function MainRoutes() {
   return (
@@ -16,6 +18,8 @@ export default function MainRoutes() {
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="login" element={<Login />} />
+        <Route path="register" element={<Register />} />
+        <Route path="welcome" element={<Welcome />} />
       </Routes>
     </BrowserRouter>
   );
