@@ -23,7 +23,7 @@ export default function Button({ data, buttonTag }) {
         const { token: authToken } = response.data || {};
         if (authToken) {
           Cookies.set("auth_token", authToken);
-          showToast("success", "", "You have logged in successfully!");
+          navigate("/user-profile");
         }
       }
     };

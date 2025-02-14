@@ -4,6 +4,13 @@ const API_URLS = {
     LOGIN: "/api/Users/login",
     REGISTER: "/api/Users/register",
   },
+  MEMBERSHIP_PACKAGE: {
+    GET: "/api/MembershipPackages",
+  },
+  USER: {
+    CURRENT_USER: "/api/Users/self",
+    UPDATE_CURRENT_USER: "/api/Users",
+  },
 };
 
 export default API_URLS;

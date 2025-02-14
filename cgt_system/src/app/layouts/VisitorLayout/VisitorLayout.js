@@ -3,7 +3,7 @@ import Navbar from "./NavbarUser";
 import { Outlet } from "react-router";
 import Footer from "./FooterUser";
 
-export default function UserLayouts() {
+export default function VisitorLayout() {
   return (
     <div>
       <Navbar />

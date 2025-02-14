@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
 //component layout
-import Navbar from "../../layouts/NavbarUser.js";
-import Footer from "../../layouts/FooterUser.js";
+import Navbar from "../../layouts/VisitorLayout/NavbarUser.js";
+import Footer from "../../layouts/VisitorLayout/FooterUser.js";
 
 //partial section components
 import Hero from "./partials/Hero.js";

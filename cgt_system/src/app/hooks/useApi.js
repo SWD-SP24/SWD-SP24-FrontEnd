@@ -5,7 +5,7 @@ const useApi = ({ url, method = "POST", body = null }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
-  const callApi = async () => {
+  const callApi = async (customBody = body) => {
     setIsLoading(true);
     setError(null);
     setResponse(null);
@@ -14,7 +14,7 @@ const useApi = ({ url, method = "POST", body = null }) => {
       const config = {
         method,
         url,
-        data: body,
+        data: customBody,
       };
 
       const result = await axiosInstance(config);
