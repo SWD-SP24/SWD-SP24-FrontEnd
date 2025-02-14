@@ -9,6 +9,9 @@ import Register from "../pages/Register";
 import Welcome from "../pages/Welcome";
 import VisitorLayout from "../layouts/VisitorLayout/VisitorLayout";
 import UserLayout from "../layouts/UserLayout";
+import EmailForm from "../pages/EmailForm/EmailForm";
+import CodeForm from "../pages/CodeForm";
+import ResetPasswordForm from "../pages/ResetPasswordForm";
 
 export default function MainRoutes() {
   return (
@@ -25,6 +28,12 @@ export default function MainRoutes() {
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="welcome" element={<Welcome />} />
+        <Route path="forgot-password/email" element={<EmailForm />} />
+        <Route path="forgot-password/code" element={<CodeForm />} />
+        <Route
+          path="forgot-password/reset-password"
+          element={<ResetPasswordForm />}
+        />
       </Routes>
     </BrowserRouter>
   );

@@ -28619,5 +28619,11 @@ $toast-colors: (
   }
 }
 
+#twoStepsForm .fv-plugins-bootstrap5-row-invalid .form-control {
+    border-width: 2px;
+    border-color: #ff3e1d;
+    box-shadow: none
+  }
+
   
   

@@ -10,6 +10,11 @@ const API_URLS = {
   USER: {
     CURRENT_USER: "/api/Users/self",
     UPDATE_CURRENT_USER: "/api/Users",
+    FORGOT_PASSWORD: {
+      SEND_RESET_CODE: "/api/Users/forgot-password",
+      VALIDATE_RESET_CODE: "/api/Users/validate-reset-code",
+      RESET_PASSWORD: "/api/Users/reset-password",
+    },
   },
 };
 
