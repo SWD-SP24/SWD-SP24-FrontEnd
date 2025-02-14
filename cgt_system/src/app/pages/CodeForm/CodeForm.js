@@ -1,18 +1,25 @@
-import React from "react";
-import styles from "./register.module.scss";
+import React, { useEffect } from "react";
+import styles from "./codeForm.module.scss";
 import classNames from "classnames/bind";
-import RegisterHeader from "./partials/RegisterHeader/RegisterHeader";
-import register_image from "../../assets/img/illustrations/mom-and-children.png";
-import { Link } from "react-router";
-import RegisterForm from "./partials/RegisterForm/RegisterForm";
-import { sFormData, sFormError } from "./registerStore";
+import CodeFormHeader from "./partials/CodeFormHeader/CodeFormHeader";
+import image from "../../assets/img/illustrations/girl-verify-password-light.png";
+import { Link, useLocation } from "react-router";
+import SendCodeForm from "./partials/SendCodeForm/SendCodeForm";
+import { sCode, sEmail } from "./codeFormStore";
 
 const cx = classNames.bind(styles);
 
-export default function Register() {
+export default function CodeForm() {
+  const location = useLocation();
+  const email = location.state?.email;
+
+  useEffect(() => {
+    sEmail.set(email);
+  }, []);
+
   const handleNavigate = () => {
-    sFormData.reset();
-    sFormError.reset();
+    sCode.reset();
+    sEmail.reset();
   };
 
   return (
@@ -23,7 +30,7 @@ export default function Register() {
         "fade-in"
       )}
     >
-      <RegisterHeader />
+      <CodeFormHeader />
       <div className={cx("authentication-inner", "row", "m-0")}>
         <div
           className={cx(
@@ -37,15 +44,16 @@ export default function Register() {
         >
           <div className={cx("w-100", "d-flex", "justify-content-center")}>
             <img
-              src={register_image}
+              src={image}
               className={cx("img-fluid")}
               alt="Login image"
-              width="1000"
+              width="700"
               data-app-dark-img="illustrations/boy-with-rocket-dark.png"
               data-app-light-img="illustrations/boy-with-rocket-light.png"
             />
           </div>
         </div>
+
         <div
           className={cx(
             "d-flex",
@@ -60,17 +68,23 @@ export default function Register() {
           )}
         >
           <div className={cx("w-px-400", "mx-auto", "mt-sm-12", "mt-8")}>
-            <h4 className={cx("mb-1")}>A Journey Begins Here 🌱</h4>
+            <h4 className={cx("mb-1")}>Reset Code Verification 💬</h4>
             <p className={cx("mb-6")}>
-              Effortless and fun way to monitor your child's development!
+              We sent a verification code to your email. Enter the code from the
+              email in the field below.
             </p>
-            <RegisterForm />
-            <p className={cx("text-center")}>
-              <span>Already have an account?</span>
-              <Link to={"/login"} onClick={() => handleNavigate()}>
-                <span> Sign in instead</span>
+            <p class="mb-0">Type your 6 digit security code</p>
+            <SendCodeForm />
+            <div class="text-center">
+              <Link
+                to={"/login"}
+                onClick={() => handleNavigate()}
+                class="d-flex align-items-center justify-content-center"
+              >
+                <i class="bx bx-chevron-left icon-20px scaleX-n1-rtl me-1_5 align-top"></i>
+                Back to login
               </Link>
-            </p>
+            </div>
           </div>
         </div>
       </div>
