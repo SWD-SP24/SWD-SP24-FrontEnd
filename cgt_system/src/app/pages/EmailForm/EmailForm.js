@@ -1,19 +1,18 @@
-import React from "react";
-import styles from "./login.module.scss";
+import React, { useCallback } from "react";
+import styles from "./emailForm.module.scss";
 import classNames from "classnames/bind";
-import "bootstrap/dist/css/bootstrap.min.css";
-import login_image from "../../assets/img/illustrations/parent-and-child.png";
-import LoginHeader from "./partials/LoginHeader/LoginHeader";
-import LoginForm from "./partials/LoginForm/LoginForm";
+import EmailFormHeader from "./partials/EmailFormHeader/EmailFormHeader";
+import image from "../../assets/img/illustrations/girl-unlock-password-light.png";
 import { Link } from "react-router";
-import { sFormData, sFormError } from "./loginStore";
+import SendMailForm from "./partials/SendMailForm/SendMailForm";
+import { sEmail, sEmailError } from "./emailFormStore";
 
 const cx = classNames.bind(styles);
 
-export default function Login() {
+export default function EmailForm() {
   const handleNavigate = () => {
-    sFormData.reset();
-    sFormError.reset();
+    sEmail.reset();
+    sEmailError.reset();
   };
 
   return (
@@ -24,7 +23,7 @@ export default function Login() {
         "fade-in"
       )}
     >
-      <LoginHeader />
+      <EmailFormHeader />
       <div className={cx("authentication-inner", "row", "m-0")}>
         <div
           className={cx(
@@ -38,13 +37,16 @@ export default function Login() {
         >
           <div className={cx("w-100", "d-flex", "justify-content-center")}>
             <img
-              src={login_image}
+              src={image}
               className={cx("img-fluid")}
               alt="Login image"
-              width="1000"
+              width="700"
+              data-app-dark-img="illustrations/boy-with-rocket-dark.png"
+              data-app-light-img="illustrations/boy-with-rocket-light.png"
             />
           </div>
         </div>
+
         <div
           className={cx(
             "d-flex",
@@ -59,18 +61,21 @@ export default function Login() {
           )}
         >
           <div className={cx("w-px-400", "mx-auto", "mt-sm-12", "mt-8")}>
-            <h4 className={cx("mb-1")}>Welcome to Grow+ 👋</h4>
+            <h4 className={cx("mb-1")}>Forgot Password? 🔒</h4>
             <p className={cx("mb-6")}>
-              Please sign in to your account and start tracking your child's
-              growth journey.
+              Enter your email and we'll send you a code to reset your password
             </p>
-            <LoginForm />
-            <p className={cx("text-center")}>
-              <span>New on our platform? </span>
-              <Link to={"/register"} onClick={() => handleNavigate()}>
-                <span>Create an account</span>
+            <SendMailForm />
+            <div class="text-center">
+              <Link
+                to={"/login"}
+                onClick={() => handleNavigate()}
+                class="d-flex align-items-center justify-content-center"
+              >
+                <i class="bx bx-chevron-left icon-20px scaleX-n1-rtl me-1_5 align-top"></i>
+                Back to login
               </Link>
-            </p>
+            </div>
           </div>
         </div>
       </div>

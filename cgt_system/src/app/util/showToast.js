@@ -11,6 +11,7 @@ const showToast = (
   onCancel = null
 ) => {
   Swal.fire({
+    toast: !showButtons,
     icon: icon,
     title: title,
     text: text,
