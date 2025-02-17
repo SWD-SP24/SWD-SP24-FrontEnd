@@ -526,7 +526,7 @@ export default function UserLayout() {
           <div class="layout-page">
             {/* <!-- Navbar --> */}
 
-            <Navbar response={response} />
+            <Navbar response={response} handleLogOut={LogOut} />
 
             {/* <!-- / Navbar --> */}
 

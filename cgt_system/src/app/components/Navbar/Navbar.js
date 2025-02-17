@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Avatar from "../Avatar/Avatar";
 
-const Navbar = ({ response }) => {
+const Navbar = ({ response, handleLogout }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
@@ -82,10 +82,10 @@ const Navbar = ({ response }) => {
                 <div className="dropdown-divider"></div>
               </li>
               <li>
-                <a className="dropdown-item" href="auth-login-basic.html">
+                <div className="dropdown-item" onClick={handleLogout}>
                   <i className="bx bx-power-off me-2"></i>
                   <span className="align-middle">Log Out</span>
-                </a>
+                </div>
               </li>
             </ul>
           </li>

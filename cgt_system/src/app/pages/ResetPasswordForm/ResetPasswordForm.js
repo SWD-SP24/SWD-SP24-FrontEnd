@@ -1,12 +1,10 @@
-import React, { useEffect } from "react";
-import styles from "./resetPasswordForm.module.scss";
 import classNames from "classnames/bind";
-import image from "../../assets/img/illustrations/boy-with-laptop-light.png";
-import Button from "../ForgotPassword/partials/Button/Button";
-import InputField from "../ForgotPassword/partials/InputField/InputField";
+import React, { useEffect } from "react";
 import { Link, useLocation } from "react-router";
+import image from "../../assets/img/illustrations/boy-with-laptop-light.png";
 import ResetPasswordFormHeader from "./partials/ResetPasswordFormHeader/ResetPasswordFormHeader";
 import SendNewPassword from "./partials/SendNewPassword/SendNewPassword";
+import styles from "./resetPasswordForm.module.scss";
 import { sFormData } from "./resetPasswordStore";
 
 const cx = classNames.bind(styles);
