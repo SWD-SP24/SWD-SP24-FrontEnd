@@ -1,5 +1,5 @@
 const API_URLS = {
-  BASE_URL: "https://swd39220250111235725.azurewebsites.net",
+  BASE_URL: "https://swd39220250217220816.azurewebsites.net",
   AUTH: {
     LOGIN: "/api/Users/login",
     REGISTER: "/api/Users/register",
@@ -15,6 +15,7 @@ const API_URLS = {
       VALIDATE_RESET_CODE: "/api/Users/validate-reset-code",
       RESET_PASSWORD: "/api/Users/reset-password",
     },
+    GET_USERS_LIST: "/api/Users",
   },
 };
 

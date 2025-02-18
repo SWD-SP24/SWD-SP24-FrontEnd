@@ -12,6 +12,7 @@ import UserLayout from "../layouts/UserLayout";
 import EmailForm from "../pages/EmailForm/EmailForm";
 import CodeForm from "../pages/CodeForm";
 import ResetPasswordForm from "../pages/ResetPasswordForm";
+import ManageUser from "../pages/ManageUser/ManageUser";
 
 export default function MainRoutes() {
   return (
@@ -22,7 +23,8 @@ export default function MainRoutes() {
           <Route path="/pricing" element={<PricingPage />} />
         </Route>
         <Route element={<UserLayout />}>
-          <Route path="/user-profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/manage-user" element={<ManageUser />} />
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="login" element={<Login />} />

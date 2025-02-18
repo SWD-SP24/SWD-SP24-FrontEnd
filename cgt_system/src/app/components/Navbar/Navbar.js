@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Avatar from "../Avatar/Avatar";
+import { Link } from "react-router";
 
 const Navbar = ({ response, handleLogout }) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
@@ -73,19 +74,23 @@ const Navbar = ({ response, handleLogout }) => {
                 <div className="dropdown-divider"></div>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                <Link to="/profile" className="dropdown-item" href="#">
                   <i className="bx bx-user me-2"></i>
                   <span className="align-middle">My Profile</span>
-                </a>
+                </Link>
               </li>
               <li>
                 <div className="dropdown-divider"></div>
               </li>
               <li>
-                <div className="dropdown-item" onClick={handleLogout}>
+                <Link
+                  to="/login"
+                  className="dropdown-item"
+                  onClick={handleLogout}
+                >
                   <i className="bx bx-power-off me-2"></i>
                   <span className="align-middle">Log Out</span>
-                </div>
+                </Link>
               </li>
             </ul>
           </li>

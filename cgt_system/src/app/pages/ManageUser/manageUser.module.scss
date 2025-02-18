@@ -1,0 +1,75 @@
+.user-content {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+  justify-content: start;
+  .user-content-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 100%;
+  }
+  .user-content-name {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 5px;
+    .user-content-name-title {
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--text-color);
+    }
+    .user-content-subtitle {
+      font-size: 12px;
+      line-height: 1.5;
+      font-weight: 400;
+      color: var(--text-color);
+    }
+  }
+}
+
+.table-header {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  padding: 24px;
+  .table-header-right-banner {
+    flex: 1;
+  }
+  .table-header-left-banner {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    gap: 24px;
+
+    .search-bar {
+      width: 70%;
+    }
+    .add-user-button {
+      letter-spacing: 0.2px;
+      text-transform: uppercase;
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+.table-banner {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 24px;
+  .table-banner-title {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .table-banner-filters {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+  }
+}
+.table-banner-search {
+  height: 56px;
+}

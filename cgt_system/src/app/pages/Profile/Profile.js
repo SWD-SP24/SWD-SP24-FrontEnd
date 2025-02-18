@@ -1,10 +1,9 @@
-import React, { use, useRef } from "react";
+import React from "react";
 
-import Avatar from "../../components/Avatar/Avatar";
-import splitName from "../../util/splitName";
 import { useOutletContext } from "react-router";
-import UpdateForm from "./partials/UpdateForm";
+import splitName from "../../util/splitName";
 import AvatarForm from "./partials/AvatarForm/AvatarForm";
+import UpdateForm from "./partials/UpdateForm";
 
 export default function Profile() {
   const { response, callApi } = useOutletContext();

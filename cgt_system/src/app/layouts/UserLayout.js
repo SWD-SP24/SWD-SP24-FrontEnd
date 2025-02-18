@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
-import { Outlet, Link, useNavigate } from "react-router";
 import Cookies from "js-cookie";
+import React, { useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router";
 
 //icons
 import "../assets/fonts/boxicons.css";
@@ -16,10 +16,9 @@ import "../../../node_modules/perfect-scrollbar/css/perfect-scrollbar.css";
 import "bootstrap";
 
 //endbuild
-import API_URLS from "../config/apiUrls";
-import showToast from "../util/showToast";
-import useApi from "../hooks/useApi";
 import Navbar from "../components/Navbar/Navbar.js";
+import API_URLS from "../config/apiUrls";
+import useApi from "../hooks/useApi";
 export default function UserLayout() {
   const { isLoading, response, error, callApi } = useApi({
     url: `${API_URLS.USER.CURRENT_USER}`,
@@ -41,14 +40,11 @@ export default function UserLayout() {
   useEffect(() => {
     if (error) {
       console.error("API Error:", error);
-      showToast("error", "", error?.message);
     }
   }, [error]); // Chạy khi error thay đổi
 
   const LogOut = () => {
     Cookies.remove("auth_token");
-    const navigate = useNavigate();
-    navigate("/login");
   };
   return (
     <>
@@ -525,9 +521,7 @@ export default function UserLayout() {
           {/* <!-- Layout container --> */}
           <div class="layout-page">
             {/* <!-- Navbar --> */}
-
             <Navbar response={response} handleLogOut={LogOut} />
-
             {/* <!-- / Navbar --> */}
 
             {/* <!-- Content wrapper --> */}
