@@ -4,6 +4,7 @@ import styles from "./manageUser.module.scss";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import debounce from "../../util/debounce";
+import ActionDropdown from "./partials/ActionDropdown.js";
 const cx = classNames.bind(styles);
 export default function ManageUser() {
   const { response, error, callApi } = useApi({
@@ -222,7 +223,7 @@ export default function ManageUser() {
                             </span>
                           </td>
                           <td>
-                            <div class="dropdown">
+                            {/* <div class="dropdown">
                               <button
                                 type="button"
                                 class="btn p-0 dropdown-toggle hide-arrow"
@@ -244,7 +245,8 @@ export default function ManageUser() {
                                   <i class="bx bx-trash me-1"></i> Delete
                                 </a>
                               </div>
-                            </div>
+                            </div> */}
+                            <ActionDropdown />
                           </td>
                         </tr>
                       );
