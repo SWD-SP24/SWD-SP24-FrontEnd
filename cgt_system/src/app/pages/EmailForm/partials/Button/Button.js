@@ -10,7 +10,7 @@ export default function Button({ buttonTag }) {
   const email = sEmail.use();
 
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.FORGOT_PASSWORD.SEND_RESET_CODE}`,
+    url: `${API_URLS.USER.FORGOT_PASSWORD.SEND_RESET_CODE}`,
     method: "POST",
     body: { email: email },
   });

@@ -6,10 +6,13 @@ import image from "../../assets/img/illustrations/girl-unlock-password-light.png
 import { Link } from "react-router";
 import SendMailForm from "./partials/SendMailForm/SendMailForm";
 import { sEmail, sEmailError } from "./emailFormStore";
+import { sIsParent } from "../Login/loginStore";
 
 const cx = classNames.bind(styles);
 
 export default function EmailForm() {
+  const isParent = sIsParent.use();
+
   const handleNavigate = () => {
     sEmail.reset();
     sEmailError.reset();
@@ -68,7 +71,7 @@ export default function EmailForm() {
             <SendMailForm />
             <div class="text-center">
               <Link
-                to={"/login"}
+                to={isParent ? "/login" : "/admin-doctor/login"}
                 onClick={() => handleNavigate()}
                 class="d-flex align-items-center justify-content-center"
               >

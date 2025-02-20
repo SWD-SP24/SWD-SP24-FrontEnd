@@ -13,6 +13,8 @@ import EmailForm from "../pages/EmailForm/EmailForm";
 import CodeForm from "../pages/CodeForm";
 import ResetPasswordForm from "../pages/ResetPasswordForm";
 import ManageUser from "../pages/ManageUser/ManageUser";
+import AdminRoutes from "./AdminRoutes";
+import NotAuthorized from "../pages/NotAuthorized";
 
 export default function MainRoutes() {
   return (
@@ -22,20 +24,43 @@ export default function MainRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/pricing" element={<PricingPage />} />
         </Route>
-        <Route element={<UserLayout />}>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/manage-user" element={<ManageUser />} />
-        </Route>
-        <Route path="*" element={<NotFound />} />
+
+        {/* Auth */}
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
-        <Route path="welcome" element={<Welcome />} />
         <Route path="forgot-password/email" element={<EmailForm />} />
         <Route path="forgot-password/code" element={<CodeForm />} />
         <Route
           path="forgot-password/reset-password"
           element={<ResetPasswordForm />}
         />
+
+        {/* Admin-Doctor Auth */}
+        <Route path="admin-doctor/login" element={<Login />} />
+        <Route
+          path="admin-doctor/forgot-password/email"
+          element={<EmailForm />}
+        />
+        <Route
+          path="admin-doctor/forgot-password/code"
+          element={<CodeForm />}
+        />
+        <Route
+          path="admin-doctor/forgot-password/reset-password"
+          element={<ResetPasswordForm />}
+        />
+
+        {/* Parent */}
+        <Route element={<UserLayout />}>
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/manage-user" element={<ManageUser />} />
+        </Route>
+        <Route path="*" element={<NotFound />} />
+        <Route path="welcome" element={<Welcome />} />
+        <Route path="not-authorized" element={<NotAuthorized />} />
+
+        {/* Admin */}
+        <Route path="/admin/*" element={<AdminRoutes />} />
       </Routes>
     </BrowserRouter>
   );

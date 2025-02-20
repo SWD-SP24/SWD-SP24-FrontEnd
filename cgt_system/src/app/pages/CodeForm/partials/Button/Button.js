@@ -7,7 +7,7 @@ import showToast from "../../../../util/showToast";
 
 export default function Button({ buttonTag, otp, onSubmit }) {
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.FORGOT_PASSWORD.VALIDATE_RESET_CODE}`,
+    url: `${API_URLS.USER.FORGOT_PASSWORD.VALIDATE_RESET_CODE}`,
     method: "POST",
     body: { email: sEmail.value, code: otp },
   });
