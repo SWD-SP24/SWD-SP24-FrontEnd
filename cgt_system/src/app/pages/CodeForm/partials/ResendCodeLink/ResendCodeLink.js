@@ -8,7 +8,7 @@ import showToast from "../../../../util/showToast";
 export default function ResendCodeLink() {
   const [countdown, setCountdown] = useState(60);
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.FORGOT_PASSWORD.SEND_RESET_CODE}`,
+    url: `${API_URLS.USER.FORGOT_PASSWORD.SEND_RESET_CODE}`,
     method: "POST",
     body: { email: sEmail.value },
   });

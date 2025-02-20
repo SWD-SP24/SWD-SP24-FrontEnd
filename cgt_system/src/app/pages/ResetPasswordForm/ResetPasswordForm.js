@@ -6,10 +6,12 @@ import ResetPasswordFormHeader from "./partials/ResetPasswordFormHeader/ResetPas
 import SendNewPassword from "./partials/SendNewPassword/SendNewPassword";
 import styles from "./resetPasswordForm.module.scss";
 import { sFormData } from "./resetPasswordStore";
+import { sIsParent } from "../Login/loginStore";
 
 const cx = classNames.bind(styles);
 
 export default function ResetPasswordForm() {
+  const isParent = sIsParent.use();
   const location = useLocation();
   const email = location.state?.email;
   const code = location.state?.code;
@@ -74,7 +76,7 @@ export default function ResetPasswordForm() {
             <SendNewPassword />
             <div class="text-center">
               <Link
-                to={"/login"}
+                to={isParent ? "/login" : "/admin-doctor/login"}
                 class="d-flex align-items-center justify-content-center"
               >
                 <i class="bx bx-chevron-left icon-20px scaleX-n1-rtl me-1_5 align-top"></i>

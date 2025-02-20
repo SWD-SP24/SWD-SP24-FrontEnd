@@ -6,14 +6,14 @@ import { validateField } from "../../schemas/loginSchema";
 import InputField from "../../../../components/InputField/InputField";
 import RememberMe from "../RememberMe/RememberMe";
 import Button from "../Button/Button";
-import { sFormData, sFormError } from "../../loginStore";
-import { Link, useNavigate } from "react-router";
+import { sFormData, sFormError, sIsParent } from "../../loginStore";
+import { Link } from "react-router";
 
 const cx = classNames.bind(styles);
 
 export default function LoginForm() {
+  const isParent = sIsParent.use();
   const rememberMeRef = useRef(false);
-  const navigate = useNavigate();
 
   const handleFieldChange = useCallback((name, value) => {
     sFormData.set((prev) => {
@@ -66,7 +66,14 @@ export default function LoginForm() {
       </div>
       <div className={cx("my-7", "d-flex", "justify-content-between")}>
         <RememberMe onRememberMeChange={handleRememberMeChange} />
-        <Link to={"/forgot-password/email"} onClick={() => handleNavigate()}>
+        <Link
+          to={
+            isParent
+              ? "/forgot-password/email"
+              : "/admin-doctor/forgot-password/email"
+          }
+          onClick={() => handleNavigate()}
+        >
           <p className={cx("mb-0")}>Forgot Password?</p>
         </Link>
       </div>

@@ -3,6 +3,7 @@ const API_URLS = {
   AUTH: {
     LOGIN: "/api/Users/login",
     REGISTER: "/api/Users/register",
+    ADMIN_LOGIN: "/api/AdminAuth/loginAdmin",
   },
   MEMBERSHIP_PACKAGE: {
     GET: "/api/MembershipPackages",

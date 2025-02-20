@@ -6,12 +6,12 @@ import { useNavigate } from "react-router";
 import { validateField } from "../../schemas/resetPasswordFormSchema";
 import showToast from "../../../../util/showToast";
 
-export default function Button({ buttonTag, onSuccess }) {
+export default function Button({ buttonTag }) {
   const formData = sFormData.use();
   const navigate = useNavigate();
 
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.FORGOT_PASSWORD.RESET_PASSWORD}`,
+    url: `${API_URLS.USER.FORGOT_PASSWORD.RESET_PASSWORD}`,
     method: "POST",
     body: {
       email: formData.email,
@@ -23,7 +23,6 @@ export default function Button({ buttonTag, onSuccess }) {
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
-        onSuccess();
         showToast(
           "success",
           "Password Reset Successful",
