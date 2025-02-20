@@ -3,14 +3,14 @@ import Cookies from "js-cookie";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import { useNavigate } from "react-router";
-import { sFormData, sFormError } from "../../loginStore";
+import { sFormData, sFormError, sIsParent } from "../../loginStore";
 import { validateField } from "../../schemas/loginSchema";
 import showToast from "../../../../util/showToast";
 
 export default function Button({ data, buttonTag }) {
   const formData = sFormData.use();
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.AUTH.LOGIN}`,
+    url: API_URLS.AUTH.LOGIN,
     method: "POST",
     body: formData,
   });
@@ -20,10 +20,25 @@ export default function Button({ data, buttonTag }) {
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
+        const user = response.data || {};
         const { token: authToken } = response.data || {};
         if (authToken) {
           Cookies.set("auth_token", authToken);
-          navigate("/profile");
+          Cookies.set("user", JSON.stringify(user));
+
+          switch (user.role) {
+            case "member":
+              navigate("/member/dashboard");
+              break;
+            case "admin":
+              navigate("/admin/dashboard");
+              break;
+            case "doctor":
+              navigate("/doctor/dashboard");
+              break;
+            default:
+              navigate("/");
+          }
         }
       }
     };

@@ -6,12 +6,14 @@ import image from "../../assets/img/illustrations/girl-verify-password-light.png
 import { Link, useLocation } from "react-router";
 import SendCodeForm from "./partials/SendCodeForm/SendCodeForm";
 import { sCode, sEmail } from "./codeFormStore";
+import { sIsParent } from "../Login/loginStore";
 
 const cx = classNames.bind(styles);
 
 export default function CodeForm() {
   const location = useLocation();
   const email = location.state?.email;
+  const isParent = sIsParent.use();
 
   useEffect(() => {
     sEmail.set(email);
@@ -77,7 +79,7 @@ export default function CodeForm() {
             <SendCodeForm />
             <div class="text-center">
               <Link
-                to={"/login"}
+                to={isParent ? "/login" : "/admin-doctor/login"}
                 onClick={() => handleNavigate()}
                 class="d-flex align-items-center justify-content-center"
               >
