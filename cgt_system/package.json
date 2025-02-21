@@ -23,7 +23,8 @@
     "react-scripts": "5.0.1",
     "react-signify": "^1.5.6",
     "sweetalert2": "^11.15.10",
-    "swiper": "^11.2.1"
+    "swiper": "^11.2.1",
+    "zustand": "^5.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
