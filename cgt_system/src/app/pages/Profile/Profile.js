@@ -7,7 +7,6 @@ import UpdateForm from "./partials/UpdateForm";
 
 export default function Profile() {
   const { response, callApi } = useOutletContext();
-
   const nameParts = [];
 
   if (response != null) {

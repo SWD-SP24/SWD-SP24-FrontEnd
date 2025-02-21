@@ -51,9 +51,8 @@ export default function MainRoutes() {
         />
 
         {/* Parent */}
-        <Route element={<UserLayout />}>
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/manage-user" element={<ManageUser />} />
+        <Route path="/member" element={<UserLayout />}>
+          <Route path="profile" element={<Profile />} />
         </Route>
         <Route path="*" element={<NotFound />} />
         <Route path="welcome" element={<Welcome />} />

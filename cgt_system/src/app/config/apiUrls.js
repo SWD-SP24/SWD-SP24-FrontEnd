@@ -18,6 +18,9 @@ const API_URLS = {
     },
     GET_USERS_LIST: "/api/Users",
   },
+  ADMIN: {
+    CREATE_DOCTOR: "/api/AdminAuth/registerDoctor",
+  },
 };
 
 export default API_URLS;

@@ -5,6 +5,7 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import debounce from "../../util/debounce";
 import ActionDropdown from "./partials/ActionDropdown.js";
+import AddUserButton from "./partials/AddUserButton.js";
 const cx = classNames.bind(styles);
 export default function ManageUser() {
   const { response, error, callApi } = useApi({
@@ -23,13 +24,13 @@ export default function ManageUser() {
 
   useEffect(() => {
     if (response) {
-      console.log("API Response:", response);
+      console.log("Get Users List Response:", response);
     }
   }, [response]); // Chạy khi response thay đổi
 
   useEffect(() => {
     if (error) {
-      console.error("API Error:", error);
+      console.error("Get Users List Error:", error);
     }
   }, [error]); // Chạy khi error thay đổi
 
@@ -128,12 +129,7 @@ export default function ManageUser() {
                 id="html5-search-input"
                 onChange={debounce(handleSearch, 300)}
               />
-              <button
-                type="button"
-                className={cx("btn", "btn-primary", "add-user-button")}
-              >
-                Add User
-              </button>
+              <AddUserButton refetch={callApi} />
             </div>
           </div>
           <div class="table-responsive text-nowrap">
@@ -156,41 +152,38 @@ export default function ManageUser() {
                   <th>Actions</th>
                 </tr>
               </thead>
-              <tbody class="table-border-bottom-0">
-                {/* <!-- First Row --> */}
-                {response ? (
-                  response &&
-                  response.data
-                    .filter((user) => {
-                      if (filterRole != "" && !user.role.includes(filterRole)) {
+              {/* <!-- First Row --> */}
+              {response ? (
+                response &&
+                response.data
+                  .filter((user) => {
+                    if (filterRole != "" && !user.role.includes(filterRole)) {
+                      return false;
+                    }
+                    if (
+                      filterMembership != "" &&
+                      !(user.membershipPackageId == filterMembership)
+                    ) {
+                      return false;
+                    }
+                    if (filterStatus != "" && !(user.status === filterStatus)) {
+                      return false;
+                    }
+                    if (
+                      filterSearch != "" &&
+                      !user.fullName
+                        .toLowerCase()
+                        .includes(filterSearch.toLowerCase())
+                    ) {
+                      if (!user.email.includes(filterSearch)) {
                         return false;
                       }
-                      if (
-                        filterMembership != "" &&
-                        !(user.membershipPackageId == filterMembership)
-                      ) {
-                        return false;
-                      }
-                      if (
-                        filterStatus != "" &&
-                        !(user.status === filterStatus)
-                      ) {
-                        return false;
-                      }
-                      if (
-                        filterSearch != "" &&
-                        !user.fullName
-                          .toLowerCase()
-                          .includes(filterSearch.toLowerCase())
-                      ) {
-                        if (!user.email.includes(filterSearch)) {
-                          return false;
-                        }
-                      }
-                      return true;
-                    })
-                    .map((user) => {
-                      return (
+                    }
+                    return true;
+                  })
+                  .map((user) => {
+                    return (
+                      <tbody class="table-border-bottom-0">
                         <tr key={user.id}>
                           <td>
                             <input
@@ -246,32 +239,32 @@ export default function ManageUser() {
                                 </a>
                               </div>
                             </div> */}
-                            <ActionDropdown />
+                            <ActionDropdown id={user.userId} />
                           </td>
                         </tr>
-                      );
-                    })
-                ) : (
-                  <>
-                    <div
-                      className="container-xxl flex-grow-1 container-p-y d-flex justify-content-center align-items-center"
-                      style={{ height: "100vh" }}
-                    >
-                      <span
-                        className="spinner-border spinner-border-lg text-primary"
-                        role="status"
-                        style={{
-                          width: "3rem",
-                          height: "3rem",
-                          borderWidth: "0.5rem",
-                        }}
-                      ></span>
-                    </div>
-                  </>
-                )}
+                      </tbody>
+                    );
+                  })
+              ) : (
+                <>
+                  <div
+                    className="container-xxl flex-grow-1 container-p-y d-flex justify-content-center align-items-center"
+                    style={{ height: "100vh" }}
+                  >
+                    <span
+                      className="spinner-border spinner-border-lg text-primary"
+                      role="status"
+                      style={{
+                        width: "3rem",
+                        height: "3rem",
+                        borderWidth: "0.5rem",
+                      }}
+                    ></span>
+                  </div>
+                </>
+              )}
 
-                {/* <!-- Second Row --> */}
-              </tbody>
+              {/* <!-- Second Row --> */}
             </table>
           </div>
         </div>

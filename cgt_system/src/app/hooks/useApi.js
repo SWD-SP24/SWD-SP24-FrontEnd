@@ -5,7 +5,8 @@ const useApi = ({ url, method = "POST", body = null }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [response, setResponse] = useState(null);
   const [error, setError] = useState(null);
-  const callApi = async (customBody = body) => {
+
+  const callApi = async (customBody = body, customUrl = url) => {
     setIsLoading(true);
     setError(null);
     setResponse(null);
@@ -13,7 +14,7 @@ const useApi = ({ url, method = "POST", body = null }) => {
     try {
       const config = {
         method,
-        url,
+        url: customUrl,
         data: customBody,
       };
 

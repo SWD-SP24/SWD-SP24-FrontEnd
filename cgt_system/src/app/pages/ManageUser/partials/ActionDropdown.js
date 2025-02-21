@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const DropdownMenu = () => {
+const DropdownMenu = ({ id }) => {
   const [show, setShow] = useState(false);
 
   const handleToggle = () => {
@@ -21,24 +21,25 @@ const DropdownMenu = () => {
       style={{ position: "relative", textAlign: "center" }}
     >
       <button
-        type="button"
-        className="btn p-0 dropdown-toggle hide-arrow"
+        type="button "
+        className="dropdown-toggle btn btn-primary btn-icon rounded-pill hide-arrow"
         onClick={handleToggle}
+        aria-expanded="false"
       >
-        &#x22EE;
+        <i class="bx bx-dots-vertical-rounded" style={{ color: "white" }}></i>
       </button>
       {show && (
-        <div
-          className="dropdown-menu show"
+        <button
+          className="dropdown-menu show "
           style={{ position: "absolute", left: "auto", right: 0 }}
         >
           <button className="dropdown-item" onClick={handleEdit}>
             &#9998; Edit
           </button>
           <button className="dropdown-item" onClick={handleDelete}>
-            &#128465; Delete
+            &#128465; Block
           </button>
-        </div>
+        </button>
       )}
     </div>
   );
