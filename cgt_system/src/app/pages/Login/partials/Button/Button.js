@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import { useNavigate } from "react-router";
-import { sFormData, sFormError, sIsParent } from "../../loginStore";
+import { sFormData, sFormError } from "../../loginStore";
 import { validateField } from "../../schemas/loginSchema";
 import showToast from "../../../../util/showToast";
 

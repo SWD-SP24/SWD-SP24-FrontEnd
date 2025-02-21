@@ -1,21 +1,39 @@
-import { useState, useEffect } from "react";
 import Cookies from "js-cookie";
+import { useNavigate } from "react-router";
+import { create } from "zustand";
+
+const useUserStore = create((set) => {
+  const storedUser = Cookies.get("user");
+  let user = null;
+  try {
+    user = storedUser ? JSON.parse(storedUser) : null;
+  } catch (error) {
+    console.error("Error parsing user from localStorage:", error);
+  }
+
+  return {
+    user,
+    setUser: (user) => {
+      set({ user });
+      Cookies.set("user", JSON.stringify(user));
+    },
+    clearUser: () => {
+      set({ user: null });
+      Cookies.remove("user");
+      Cookies.remove("auth_token");
+    },
+  };
+});
 
 const useUser = () => {
-  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
+  const store = useUserStore();
+  const clearUser = () => {
+    store.clearUser();
+    navigate("/");
+  };
 
-  useEffect(() => {
-    const userData = Cookies.get("user");
-    if (userData) {
-      try {
-        setUser(JSON.parse(userData));
-      } catch (error) {
-        console.error("Error parsing user data from cookies:", error);
-      }
-    }
-  }, []);
-
-  return user;
+  return { ...store, clearUser };
 };
 
 export default useUser;

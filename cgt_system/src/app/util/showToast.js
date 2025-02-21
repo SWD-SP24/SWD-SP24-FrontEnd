@@ -8,16 +8,17 @@ const showToast = (
   confirmText = "OK",
   cancelText = "Cancel",
   onConfirm = null,
-  onCancel = null
+  onCancel = null,
+  disableOutsideClick = false
 ) => {
-  Swal.fire({
+  const options = {
     toast: !showButtons,
     icon: icon,
     title: title,
     text: text,
     position: showButtons ? "center" : "top-end",
     showConfirmButton: showButtons,
-    showCancelButton: showButtons,
+    showCancelButton: showButtons && !disableOutsideClick,
     confirmButtonText: confirmText,
     cancelButtonText: cancelText,
     timer: showButtons ? undefined : 3000,
@@ -32,7 +33,15 @@ const showToast = (
     showClass: {
       popup: "swal2-noanimation",
     },
-  }).then((result) => {
+  };
+
+  if (showButtons) {
+    options.allowOutsideClick = !disableOutsideClick;
+    options.allowEscapeKey = !disableOutsideClick;
+    options.allowEnterKey = true;
+  }
+
+  Swal.fire(options).then((result) => {
     if (result.isConfirmed && onConfirm) {
       onConfirm();
     } else if (result.dismiss === Swal.DismissReason.cancel && onCancel) {
