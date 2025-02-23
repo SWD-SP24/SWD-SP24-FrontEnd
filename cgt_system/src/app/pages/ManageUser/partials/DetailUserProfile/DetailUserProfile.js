@@ -6,8 +6,9 @@ import ProfileContent from "../../../Profile/partials/ProfileContent/ProfileCont
 import splitName from "../../../../util/splitName.js";
 export default function DetailUserProfile() {
   const id = useParams().id;
+  const apiUrl = `${API_URLS.USER.USER_WITH_ID}${id}`;
   const { isLoading, response, callApi } = useApi({
-    url: `${API_URLS.USER.GET_USER_WITH_ID}/${id}`,
+    url: apiUrl,
     method: "GET",
   });
 
@@ -53,6 +54,7 @@ export default function DetailUserProfile() {
       response={response}
       nameParts={nameParts}
       refetch={callApi}
+      apiUrl={apiUrl}
     />
   );
 }

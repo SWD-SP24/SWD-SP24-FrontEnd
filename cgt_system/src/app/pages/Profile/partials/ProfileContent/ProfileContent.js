@@ -2,7 +2,12 @@ import React from "react";
 import UpdateForm from "../UpdateForm";
 import AvatarForm from "../AvatarForm/AvatarForm";
 
-export default function ProfileContent({ response, callApi, nameParts }) {
+export default function ProfileContent({
+  response,
+  refetch,
+  nameParts,
+  apiUrl,
+}) {
   return (
     <div class="content-wrapper">
       {/* <!-- Content --> */}
@@ -25,14 +30,19 @@ export default function ProfileContent({ response, callApi, nameParts }) {
               <h5 class="card-header">Profile Details</h5>
               {/* <!-- Account --> */}
               <div class="card-body">
-                <AvatarForm userData={response} refetch={callApi} />
+                <AvatarForm
+                  userData={response}
+                  refetch={refetch}
+                  apiUrl={apiUrl}
+                />
               </div>
               <hr class="my-0" />
               <div class="card-body">
                 <UpdateForm
                   userData={response}
-                  refetch={callApi}
+                  refetch={refetch}
                   nameParts={nameParts}
+                  apiUrl={apiUrl}
                 />
               </div>
               {/* <!-- /Account --> */}

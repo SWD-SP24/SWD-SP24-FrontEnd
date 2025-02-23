@@ -2,9 +2,9 @@ import React, { useRef } from "react";
 import useApi from "../../../hooks/useApi";
 import API_URLS from "../../../config/apiUrls";
 
-export default function UpdateForm({ userData, refetch, nameParts }) {
+export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
   const { response, error, callApi } = useApi({
-    url: `${API_URLS.USER.UPDATE_CURRENT_USER}`,
+    url: apiUrl,
     method: "PUT",
   });
   const firstNameRef = useRef();

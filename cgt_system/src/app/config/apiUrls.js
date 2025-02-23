@@ -18,7 +18,7 @@ const API_URLS = {
     },
     CHANGE_PASSWORD: "/api/Users/change-password",
     GET_USERS_LIST: "/api/Users",
-    GET_USER_WITH_ID: "/api/Users/",
+    USER_WITH_ID: "/api/Users/",
   },
   ADMIN: {
     CREATE_DOCTOR: "/api/AdminAuth/registerDoctor",

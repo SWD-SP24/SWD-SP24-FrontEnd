@@ -31,10 +31,10 @@ import Avatar from "../../../../components/Avatar/Avatar";
 import API_URLS from "../../../../config/apiUrls";
 import useApi from "../../../../hooks/useApi";
 
-export default function AvatarForm({ userData, refetch }) {
+export default function AvatarForm({ userData, refetch, apiUrl }) {
   const imageUrlRef = useRef();
   const { response, callApi } = useApi({
-    url: `${API_URLS.USER.UPDATE_CURRENT_USER}`,
+    url: apiUrl,
     method: "PUT",
   });
 
