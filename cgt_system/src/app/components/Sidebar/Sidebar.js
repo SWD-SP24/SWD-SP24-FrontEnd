@@ -5,7 +5,7 @@ import { sidebarItems } from "../../constants/sidebarItems";
 
 export default function Sidebar({ role }) {
   const location = useLocation();
-  const menuItems = sidebarItems["admin"] || [];
+  const menuItems = sidebarItems[role] || [];
 
   const [activeMenu, setActiveMenu] = useState("");
   const [activeSubMenu, setActiveSubMenu] = useState("");
@@ -35,7 +35,15 @@ export default function Sidebar({ role }) {
   return (
     <aside
       id="layout-menu"
-      className="layout-menu menu-vertical menu bg-menu-theme"
+      className="layout-menu-fixed layout-menu menu-vertical menu bg-menu-theme"
+      style={{
+        position: "fixed",
+        insetBlock: "0",
+        touchAction: "none",
+        userSelect: "none",
+        WebkitUserDrag: "none",
+        WebkitTapHighlightColor: "rgba(0, 0, 0, 0)",
+      }}
     >
       <div className="app-brand demo">
         <Link to={"/"} className="app-brand-link">

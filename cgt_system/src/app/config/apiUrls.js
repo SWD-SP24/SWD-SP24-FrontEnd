@@ -16,6 +16,7 @@ const API_URLS = {
       VALIDATE_RESET_CODE: "/api/Users/validate-reset-code",
       RESET_PASSWORD: "/api/Users/reset-password",
     },
+    CHANGE_PASSWORD: "/api/Users/change-password",
     GET_USERS_LIST: "/api/Users",
     GET_USER_WITH_ID: "/api/Users/",
   },

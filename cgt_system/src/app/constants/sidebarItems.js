@@ -23,10 +23,6 @@ export const sidebarItems = {
       submenu: [
         { title: "Account", path: "/admin/account-setting/account" },
         { title: "Security", path: "/admin/account-setting/security" },
-        {
-          title: "Billing & Plans",
-          path: "/admin/account-setting/billing-plans",
-        },
       ],
     },
   ],
