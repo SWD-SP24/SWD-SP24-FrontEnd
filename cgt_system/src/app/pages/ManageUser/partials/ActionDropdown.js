@@ -1,14 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 
 const DropdownMenu = ({ id }) => {
   const [show, setShow] = useState(false);
+  const navigate = useNavigate();
 
   const handleToggle = () => {
     setShow(!show);
   };
 
   const handleEdit = () => {
-    console.log("Edit clicked");
+    navigate(`/admin/users/${id}`);
   };
 
   const handleDelete = () => {

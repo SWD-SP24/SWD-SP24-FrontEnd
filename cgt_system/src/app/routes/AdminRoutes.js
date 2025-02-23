@@ -7,6 +7,7 @@ import Loading from "../components/Loading/Loading";
 import Profile from "../pages/Profile/Profile";
 import UserLayout from "../layouts/UserLayout/UserLayout";
 import ManageUser from "../pages/ManageUser/ManageUser";
+import DetailUserProfile from "../pages/ManageUser/partials/DetailUserProfile/DetailUserProfile.js";
 
 export default function AdminRoutes() {
   const user = useUser();
@@ -28,6 +29,7 @@ export default function AdminRoutes() {
         <Route element={<UserLayout />}>
           <Route path="dashboard" element={<ComingSoon />} />
           <Route path="users" element={<ManageUser />} />
+          <Route path="users/:id" element={<DetailUserProfile />} />
           <Route path="membership-packages" element={<ComingSoon />} />
           <Route path="blog" element={<ComingSoon />} />
           <Route path="faq" element={<ComingSoon />} />
