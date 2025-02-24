@@ -28,7 +28,7 @@ export default function Button({ buttonTag }) {
 
     const handleError = () => {
       if (error?.message) {
-        showToast("error", "", error?.message);
+        showToast({ icon: "error", text: error.message });
       }
     };
 

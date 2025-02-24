@@ -25,27 +25,14 @@ export default function Button({ data, buttonTag }) {
         if (authToken) {
           Cookies.set("auth_token", authToken);
           Cookies.set("user", JSON.stringify(user));
-
-          switch (user.role) {
-            case "member":
-              navigate("/member/dashboard");
-              break;
-            case "admin":
-              navigate("/admin/dashboard");
-              break;
-            case "doctor":
-              navigate("/doctor/dashboard");
-              break;
-            default:
-              navigate("/");
-          }
+          navigate("/dashboard");
         }
       }
     };
 
     const handleError = () => {
       if (error?.message) {
-        showToast("error", "", error?.message);
+        showToast({ icon: "error", text: error.message });
       }
     };
 

@@ -1,31 +1,48 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router";
+
+// Layouts
+import VisitorLayout from "../layouts/VisitorLayout/VisitorLayout";
+import MainLayout from "../layouts/MainLayout";
+import AccountSettingLayout from "../layouts/AccountSettingLayout";
+
+// Pages Publlic
 import Home from "../pages/Home/Home";
-import NotFound from "../pages/Error/NotFound";
 import PricingPage from "../pages/Pricing/PricingPage";
-import Profile from "../pages/Profile/Profile";
+import NotFound from "../pages/Error/NotFound";
+
+// Auth Pages
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register";
-import Welcome from "../pages/Welcome";
-import VisitorLayout from "../layouts/VisitorLayout/VisitorLayout";
-import UserLayout from "../layouts/UserLayout";
 import EmailForm from "../pages/EmailForm/EmailForm";
 import CodeForm from "../pages/CodeForm";
 import ResetPasswordForm from "../pages/ResetPasswordForm";
-import ManageUser from "../pages/ManageUser/ManageUser";
+
+import Welcome from "../pages/Welcome";
+
+// Admin Routes
 import AdminRoutes from "./AdminRoutes";
+
+// Account Setting Pages
+import ChangePassword from "../pages/ChangePassword";
+
+// Not Authorized
 import NotAuthorized from "../pages/NotAuthorized";
+
+// Coming Soon Page
+import ComingSoon from "../pages/ComingSoon";
 
 export default function MainRoutes() {
   return (
     <BrowserRouter>
       <Routes>
+        {/* Các trang public với VisitorLayout */}
         <Route element={<VisitorLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/pricing" element={<PricingPage />} />
         </Route>
 
-        {/* Auth */}
+        {/* Các trang liên quan đến Auth */}
         <Route path="login" element={<Login />} />
         <Route path="register" element={<Register />} />
         <Route path="forgot-password/email" element={<EmailForm />} />
@@ -50,16 +67,28 @@ export default function MainRoutes() {
           element={<ResetPasswordForm />}
         />
 
-        {/* Parent */}
-        <Route path="/member" element={<UserLayout />}>
-          <Route path="profile" element={<Profile />} />
+        {/* Các route sử dụng MainLayout */}
+        <Route element={<MainLayout />}>
+          {/* Admin Routes */}
+          <Route path="admin/*" element={<AdminRoutes />} />
+
+          <Route path="/dashboard" element={<ComingSoon />} />
+
+          {/* Account Setting với layout riêng */}
+          <Route path="account-setting" element={<AccountSettingLayout />}>
+            {/* Thay trang này bằng trang edit profile */}
+            <Route path="account" element={<ComingSoon />} />
+
+            <Route path="security" element={<ChangePassword />} />
+          </Route>
         </Route>
-        <Route path="*" element={<NotFound />} />
+
+        {/* Các trang khác */}
         <Route path="welcome" element={<Welcome />} />
         <Route path="not-authorized" element={<NotAuthorized />} />
 
-        {/* Admin */}
-        <Route path="/admin/*" element={<AdminRoutes />} />
+        {/* Nếu không tìm thấy route nào */}
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   );

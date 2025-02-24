@@ -24,23 +24,28 @@ export default function Button({ buttonTag, onReset, user }) {
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
-        showToast(
-          "success",
-          "Password Changed Successful",
-          "Please log in with your new password.",
-          true,
-          "Go to Login",
-          "",
-          () => navigate(redirectTo),
-          null,
-          true
-        );
+        showToast({
+          icon: "success",
+          title: "Password Changed Successful",
+          text: "Please log in with your new password.",
+          showButtons: true,
+          confirmText: "Go to Login",
+          cancelText: "",
+          onConfirm: () => navigate(redirectTo),
+          onCancle: null,
+          disableOutsideClick: true,
+        });
       }
     };
 
     const handleError = () => {
       if (error?.message) {
-        showToast("error", "", error?.message);
+        const targetElement = document.querySelector(".card");
+        showToast({
+          icon: "error",
+          text: error.message,
+          targetElement: targetElement,
+        });
       }
     };
 
