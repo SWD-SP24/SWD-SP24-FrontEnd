@@ -1,21 +1,22 @@
 import Swal from "sweetalert2";
 
-const showToast = (
-  icon,
-  title,
-  text,
+const showToast = ({
+  icon = "info",
+  title = "",
+  text = "",
   showButtons = false,
   confirmText = "OK",
   cancelText = "Cancel",
   onConfirm = null,
   onCancel = null,
-  disableOutsideClick = false
-) => {
+  disableOutsideClick = false,
+  targetElement = null,
+} = {}) => {
   const options = {
     toast: !showButtons,
-    icon: icon,
-    title: title,
-    text: text,
+    icon,
+    title,
+    text,
     position: showButtons ? "center" : "top-end",
     showConfirmButton: showButtons,
     showCancelButton: showButtons && !disableOutsideClick,
@@ -33,6 +34,8 @@ const showToast = (
     showClass: {
       popup: "swal2-noanimation",
     },
+    showCloseButton: !showButtons,
+    target: targetElement || "body",
   };
 
   if (showButtons) {

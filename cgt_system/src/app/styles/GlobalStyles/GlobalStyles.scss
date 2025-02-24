@@ -36179,15 +36179,6 @@ $toast-colors: (
 );
 
 .custom-toast {
-  font-size: 14px !important;
-  padding: 10px 15px !important;
-  min-height: 50px !important;
-  width: 350px !important;
-  display: flex !important;
-  align-items: center !important;
-  background: transparent !important;
-  color: white !important;
-  border-radius: 8px !important;
 
   @each $type, $color in $toast-colors {
     &.#{$type} {
@@ -36195,6 +36186,7 @@ $toast-colors: (
       color: $color !important;
 
       .swal2-icon {
+        font-size: 10px;
         color: $color !important;
       }
     }
@@ -36206,7 +36198,7 @@ $toast-colors: (
   }
 
   .custom-toast-progress {
-    height: 2px !important;
+    height: 4px !important;
     border-radius: 2px !important;
   }
 
@@ -36218,8 +36210,6 @@ $toast-colors: (
 }
 
 .swal2-noanimation {
-  margin-top: 77px;
-  margin-right: 13px;
   animation: fadeInRight 0.3s ease-in-out !important;
 }
 
@@ -36232,4 +36222,8 @@ $toast-colors: (
     transform: translateX(0);
     opacity: 1;
   }
+}
+
+.swal2-container {
+  position: absolute;
 }

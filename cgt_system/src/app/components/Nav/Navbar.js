@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "./navbar.module.scss";
-import { useLogout } from "../../hooks/useLogout";
 import { navbarItems } from "../../constants/navbarItems";
 import { useNavigate } from "react-router";
 import useUser from "../../hooks/useUser";
+import default_avatar from "../../assets/img/avatars/default-avatar.jpg";
 
 export default function Navbar({ user }) {
   const menuItems = navbarItems[user.role] || [];
@@ -95,7 +95,7 @@ export default function Navbar({ user }) {
             >
               <div className="avatar avatar-online">
                 <img
-                  src={user.avatar}
+                  src={user.avatar ? user.avatar : default_avatar}
                   alt="Avatar"
                   className="rounded-circle"
                 />
@@ -117,7 +117,7 @@ export default function Navbar({ user }) {
                     <div className="flex-shrink-0 me-3">
                       <div className="avatar avatar-online">
                         <img
-                          src={user.avatar}
+                          src={user.avatar ? user.avatar : default_avatar}
                           alt="Avatar"
                           className="w-px-40 h-auto rounded-circle"
                         />

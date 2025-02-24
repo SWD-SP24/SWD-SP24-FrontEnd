@@ -23,21 +23,21 @@ export default function Button({ buttonTag }) {
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
-        showToast(
-          "success",
-          "Password Reset Successful",
-          "You can now log in with your new password.",
-          true,
-          "Go to Login",
-          "Cancel",
-          () => navigate("/login")
-        );
+        showToast({
+          icon: "success",
+          title: "Password Reset Successful",
+          text: "You can now log in with your new password.",
+          showButtons: true,
+          confirmText: "Go to Login",
+          cancelText: "Cancel",
+          onConfirm: () => navigate("/login"),
+        });
       }
     };
 
     const handleError = () => {
       if (error?.message) {
-        showToast("error", "", error?.message);
+        showToast({ icon: "error", text: error.message });
       }
     };
 

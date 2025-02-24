@@ -1,9 +1,30 @@
-import React from "react";
-import Sidebar from "../../components/Sidebar/Sidebar";
+import React, { useEffect } from "react";
+import Cookies from "js-cookie";
 import { Outlet } from "react-router";
-import Navbar from "../../components/Nav/Navbar";
+import useUser from "../hooks/useUser";
+import Sidebar from "../components/Sidebar/Sidebar";
+import Navbar from "../components/Nav/Navbar";
+import Loading from "../components/Loading/Loading";
 
-export default function UserLayout({ user }) {
+export default function MainLayout() {
+  const { user, setUser } = useUser();
+
+  useEffect(() => {
+    const storedUser = Cookies.get("user");
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Error parsing user:", error);
+      }
+    }
+  }, []);
+
+  if (user === null) {
+    return <Loading />;
+  }
+
   return (
     <div className="layout-wrapper layout-content-navbar bg-body">
       <div className="layout-container">
@@ -21,6 +42,7 @@ export default function UserLayout({ user }) {
           className="layout-page"
           style={{
             paddingLeft: "260px",
+            paddingTop: "76px",
           }}
         >
           <Navbar user={user} />

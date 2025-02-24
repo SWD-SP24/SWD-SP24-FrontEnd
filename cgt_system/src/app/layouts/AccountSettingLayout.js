@@ -1,8 +1,9 @@
 import React from "react";
-import { Outlet } from "react-router";
+import { Outlet, useOutletContext } from "react-router";
 import Nav from "../components/AccountSettingNavbar/Nav";
 
-export default function AccountSettingLayout({ user }) {
+export default function AccountSettingLayout() {
+  const { user } = useOutletContext();
   return (
     <div className="row fv-plugins-icon-container">
       <div className="col-md-12">

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router";
+import "../../styles/demo.css";
 import AppBrandLogo from "../AppBrandLogo/AppBrandLogo";
 import { sidebarItems } from "../../constants/sidebarItems";
 
