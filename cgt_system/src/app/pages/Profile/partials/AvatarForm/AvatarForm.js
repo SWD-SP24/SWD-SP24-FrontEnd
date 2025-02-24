@@ -31,7 +31,7 @@ import Avatar from "../../../../components/Avatar/Avatar";
 import API_URLS from "../../../../config/apiUrls";
 import useApi from "../../../../hooks/useApi";
 
-export default function AvatarForm({ userData, refetch, apiUrl }) {
+export default function AvatarForm({ userData, setUser, apiUrl }) {
   const imageUrlRef = useRef();
   const { response, callApi } = useApi({
     url: apiUrl,
@@ -40,6 +40,7 @@ export default function AvatarForm({ userData, refetch, apiUrl }) {
 
   useEffect(() => {
     if (response) {
+      setUser(response.data);
       console.log("response: ", response);
     }
   }, [response]);
@@ -48,13 +49,12 @@ export default function AvatarForm({ userData, refetch, apiUrl }) {
     const data = { avatar: imageUrlRef.current.value };
     console.log("Image URL: ", data);
     await callApi(data);
-
-    refetch();
+    imageUrlRef.current.value = "";
   };
   return (
     <div className="d-flex align-items-start align-items-sm-center gap-4">
       <Avatar
-        src={userData?.data?.avatar || ""}
+        src={userData?.avatar || ""}
         alt="User"
         className="d-block rounded"
       />
@@ -98,7 +98,6 @@ export default function AvatarForm({ userData, refetch, apiUrl }) {
                   type="text"
                   className="form-control"
                   placeholder="Paste image URL here..."
-                  defaultValue={userData?.data?.avatar || ""}
                 />
               </div>
               <div className="modal-footer">

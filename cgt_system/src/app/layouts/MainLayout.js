@@ -48,7 +48,7 @@ export default function MainLayout() {
           <Navbar user={user} />
           <div className="content-wrapper">
             <div className="container-xxl flex-grow-1 container-p-y">
-              <Outlet context={{ user }} />
+              <Outlet context={{ user, setUser }} />
             </div>
           </div>
         </div>

@@ -1,29 +1,42 @@
-import React, { useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import useApi from "../../../hooks/useApi";
-import API_URLS from "../../../config/apiUrls";
-
-export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
-  const { response, error, callApi } = useApi({
+import splitName from "../../../util/splitName.js";
+export default function UpdateForm({ userData, setUser, apiUrl }) {
+  const { response, callApi } = useApi({
     url: apiUrl,
     method: "PUT",
   });
-  const firstNameRef = useRef();
-  const lastNameRef = useRef();
-  const phoneRef = useRef();
-  const handleSubmit = (e) => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [phone, setPhone] = useState("");
+
+  useEffect(() => {
+    if (userData) {
+      const nameParts = splitName(userData.fullName);
+      setFirstName(nameParts[0] || "");
+      setLastName(nameParts[1] || "");
+      setPhone(userData.phoneNumber || "");
+    }
+  }, [userData]);
+
+  useEffect(() => {
+    if (response) {
+      setUser(response.data);
+    }
+  }, [response]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("form data: ", {
-      fullName: `${firstNameRef.current.value} ${lastNameRef.current.value}`,
-      phone: phoneRef.current.value,
-    });
+
     const data = {
-      fullName: `${firstNameRef.current.value} ${lastNameRef.current.value}`,
-      phone: phoneRef.current.value,
+      fullName: `${firstName} ${lastName}`,
+      phone: phone,
     };
 
-    callApi(data);
-    refetch();
+    await callApi(data);
   };
+
+  console.log("rerender ne");
   return (
     <form id="formAccountSettings" onSubmit={handleSubmit}>
       <div class="row">
@@ -32,12 +45,12 @@ export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
             First Name
           </label>
           <input
-            ref={firstNameRef}
             class="form-control"
             type="text"
             id="firstName"
             name="firstName"
-            defaultValue={nameParts[0]}
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
             autofocus
           />
         </div>
@@ -46,12 +59,12 @@ export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
             Last Name
           </label>
           <input
-            ref={lastNameRef}
             class="form-control"
             type="text"
             name="lastName"
             id="lastName"
-            defaultValue={nameParts[1]}
+            value={lastName}
+            onChange={(e) => setLastName(e.target.value)}
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -63,7 +76,7 @@ export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
             type="text"
             id="role"
             name="role"
-            placeholder={userData?.data?.role || ""}
+            placeholder={userData?.role || ""}
             disabled
           />
         </div>
@@ -76,7 +89,7 @@ export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
             type="text"
             id="subscription"
             name="subscription"
-            placeholder={userData?.data?.membershipPackageId || ""}
+            placeholder={userData?.membershipPackageId || ""}
             disabled
           />
         </div>
@@ -89,8 +102,8 @@ export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
             type="text"
             id="email"
             name="email"
-            value={userData?.data?.email || ""}
-            placeholder={userData?.data?.email || ""}
+            value={userData?.email || ""}
+            placeholder={userData?.email || ""}
             disabled
           />
         </div>
@@ -102,13 +115,12 @@ export default function UpdateForm({ userData, refetch, nameParts, apiUrl }) {
           <div class="input-group input-group-merge">
             <span class="input-group-text">VN (+84)</span>
             <input
-              ref={phoneRef}
               type="text"
               id="phoneNumber"
               name="phoneNumber"
               class="form-control"
-              defaultValue={userData?.data?.phoneNumber || ""}
-              placeholder={userData?.data?.phoneNumber || ""}
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
             />
           </div>
         </div>

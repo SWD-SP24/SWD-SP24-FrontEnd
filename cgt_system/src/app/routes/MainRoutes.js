@@ -31,6 +31,7 @@ import NotAuthorized from "../pages/NotAuthorized";
 
 // Coming Soon Page
 import ComingSoon from "../pages/ComingSoon";
+import Profile from "../pages/Profile/Profile";
 
 export default function MainRoutes() {
   return (
@@ -77,7 +78,7 @@ export default function MainRoutes() {
           {/* Account Setting với layout riêng */}
           <Route path="account-setting" element={<AccountSettingLayout />}>
             {/* Thay trang này bằng trang edit profile */}
-            <Route path="account" element={<ComingSoon />} />
+            <Route path="account" element={<Profile />} />
 
             <Route path="security" element={<ChangePassword />} />
           </Route>

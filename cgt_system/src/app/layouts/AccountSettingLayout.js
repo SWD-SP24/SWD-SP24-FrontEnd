@@ -3,12 +3,12 @@ import { Outlet, useOutletContext } from "react-router";
 import Nav from "../components/AccountSettingNavbar/Nav";
 
 export default function AccountSettingLayout() {
-  const { user } = useOutletContext();
+  const { user, setUser } = useOutletContext();
   return (
     <div className="row fv-plugins-icon-container">
       <div className="col-md-12">
         <Nav role={user.role} />
-        <Outlet context={{ user }} />
+        <Outlet context={{ user, setUser }} />
       </div>
     </div>
   );
