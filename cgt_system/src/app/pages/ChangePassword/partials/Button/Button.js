@@ -34,6 +34,7 @@ export default function Button({ buttonTag, onReset, user }) {
           onConfirm: () => navigate(redirectTo),
           onCancle: null,
           disableOutsideClick: true,
+          targetElement: document.body,
         });
       }
     };
