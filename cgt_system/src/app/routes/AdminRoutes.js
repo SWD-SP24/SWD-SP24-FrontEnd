@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ComingSoon from "../pages/ComingSoon";
 import ManageUser from "../pages/ManageUser/ManageUser";
 import DetailUserProfile from "../pages/ManageUser/partials/DetailUserProfile/DetailUserProfile.js";
+import ManagePackages from "../pages/ManagePackage/ManagePackage.js";
 
 export default function AdminRoutes() {
   const { user } = useOutletContext();
@@ -21,7 +22,7 @@ export default function AdminRoutes() {
         <Route path="users" element={<ManageUser />} />
         <Route path="users/:id" element={<DetailUserProfile />} />
         <Route path="dashboard" element={<ComingSoon />} />
-        <Route path="membership-packages" element={<ComingSoon />} />
+        <Route path="membership-packages" element={<ManagePackages />} />
         <Route path="blog" element={<ComingSoon />} />
         <Route path="faq" element={<ComingSoon />} />
       </Route>

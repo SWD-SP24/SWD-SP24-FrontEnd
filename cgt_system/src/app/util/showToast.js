@@ -22,7 +22,7 @@ const showToast = ({
     showCancelButton: showButtons && !disableOutsideClick,
     confirmButtonText: confirmText,
     cancelButtonText: cancelText,
-    timer: showButtons ? undefined : 3000,
+    timer: showButtons ? undefined : 5000,
     timerProgressBar: !showButtons,
     customClass: showButtons
       ? {}
