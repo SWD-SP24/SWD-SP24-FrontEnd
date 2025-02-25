@@ -1,9 +1,9 @@
 import classNames from "classnames/bind";
 import React, { useEffect, useState } from "react";
-import styles from "./manageUser.module.scss";
-import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
+import useApi from "../../hooks/useApi";
 import debounce from "../../util/debounce";
+import styles from "./manageUser.module.scss";
 import ActionDropdown from "./partials/ActionDropdown.js";
 import AddUserButton from "./partials/AddUserButton.js";
 const cx = classNames.bind(styles);
@@ -17,6 +17,7 @@ export default function ManageUser() {
   const [filterMembership, setFilterMembership] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const [filterSearch, setFilterSearch] = useState("");
+  const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
     callApi();
@@ -52,6 +53,25 @@ export default function ManageUser() {
   const handleSearch = (e) => {
     e.preventDefault();
     setFilterSearch(e.target.value);
+  };
+
+  const handleActivePage = (index) => {
+    setActivePage(index);
+    const customUrl = `${API_URLS.USER.GET_USERS_LIST}?pageNumber=${index}&pageSize=8`;
+    callApi(null, customUrl);
+  };
+
+  const handleMinMaxPage = (direction) => {
+    if (direction === "min") {
+      setActivePage(1);
+      const customUrl = `${API_URLS.USER.GET_USERS_LIST}?pageNumber=1&pageSize=8`;
+      callApi(null, customUrl);
+    }
+    if (direction === "max") {
+      setActivePage(response.pagination.lastVisiblePage);
+      const customUrl = `${API_URLS.USER.GET_USERS_LIST}?pageNumber=${response.pagination.lastVisiblePage}&pageSize=8`;
+      callApi(null, customUrl);
+    }
   };
   return (
     <div class="content-wrapper">
@@ -268,9 +288,37 @@ export default function ManageUser() {
             </table>
           </div>
         </div>
-
-        {/* <!--/ Hoverable Table rows --> */}
       </div>
+      <nav aria-label="Page navigation" className={cx("pagination-pos")}>
+        <ul class="pagination justify-content-end">
+          <li class="page-item prev">
+            <a class="page-link" onClick={() => handleMinMaxPage("min")}>
+              <i class="tf-icon bx bx-chevrons-left"></i>
+            </a>
+          </li>
+          {response &&
+            [...Array(response.pagination.lastVisiblePage)].map((_, index) => {
+              return (
+                <li class="page-item">
+                  <a
+                    className={
+                      "page-link " + (index + 1 === activePage ? "active" : "")
+                    }
+                    key={index}
+                    onClick={() => handleActivePage(index + 1)}
+                  >
+                    {index + 1}
+                  </a>
+                </li>
+              );
+            })}
+          <li class="page-item next">
+            <a class="page-link" onClick={() => handleMinMaxPage("max")}>
+              <i class="tf-icon bx bx-chevrons-right"></i>
+            </a>
+          </li>
+        </ul>
+      </nav>
       {/* <!-- / Content --> */}
 
       <div class="content-backdrop fade"></div>
