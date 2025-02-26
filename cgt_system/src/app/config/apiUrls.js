@@ -9,6 +9,7 @@ const API_URLS = {
     GET: "/api/MembershipPackages",
     POST: "/api/MembershipPackages",
     DELETE: "/api/MembershipPackages",
+    PATCH: "/api/MembershipPackages",
   },
   PERMISSION: {
     GET: "/api/Permissions",

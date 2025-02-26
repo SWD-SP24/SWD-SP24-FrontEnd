@@ -1,6 +1,62 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { sPackages, sPagination } from "../../managePackageStore";
+import useApi from "../../../../hooks/useApi";
+import showToast from "../../../../util/showToast";
+import API_URLS from "../../../../config/apiUrls";
 
 export default function PackageFilters() {
+  const pagination = sPagination.use();
+  const { isLoading, response, error, callApi } = useApi({
+    method: "GET",
+  });
+
+  useEffect(() => {
+    const handleApiResponse = () => {
+      if (response?.status === "successful") {
+        const packages = response.data || {};
+        const pagination = response.pagination || {};
+        if (packages) {
+          sPackages.set(packages);
+          sPagination.set((prev) => {
+            prev.value.totalPages = pagination.lastVisiblePage;
+            prev.value.totalItems = pagination.total;
+          });
+        }
+      }
+    };
+
+    const handleError = () => {
+      if (error?.message) {
+        showToast({
+          icon: "error",
+          text: error?.message,
+          targetElement: document.querySelector(".card"),
+        });
+      }
+    };
+
+    try {
+      handleApiResponse();
+      handleError();
+    } catch (err) {
+      console.error("Error handling API response:", err);
+    }
+  }, [response, error]);
+
+  const handleChange = (event) => {
+    const newItemsPerPage = parseInt(event.target.value, 10);
+    const firstVisibleItemIndex =
+      (pagination.currentPage - 1) * pagination.itemsPerPage + 1;
+    const newCurrentPage =
+      Math.ceil(firstVisibleItemIndex / newItemsPerPage) || 1;
+    sPagination.set((prev) => {
+      prev.value.itemsPerPage = newItemsPerPage;
+      prev.value.currentPage = newCurrentPage;
+    });
+
+    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${newCurrentPage}&pageSize=${newItemsPerPage}`;
+    callApi(null, customUrl);
+  };
   return (
     <div className="row mx-3 justify-content-between my-0">
       <div className="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto mt-0">
@@ -11,6 +67,7 @@ export default function PackageFilters() {
             aria-controls="DataTables_Table_0"
             className="form-select"
             id="dt-length-0"
+            onChange={handleChange}
           >
             <option value="10">10</option>
             <option value="25">25</option>

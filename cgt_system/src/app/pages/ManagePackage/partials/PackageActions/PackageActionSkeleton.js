@@ -5,17 +5,12 @@ import "react-loading-skeleton/dist/skeleton.css";
 export default function PackageActionsSkeleton() {
   return (
     <div className="d-flex align-items-center">
-      <div style={{ marginRight: "0.5rem" }}>
-        <Skeleton height={32} width={32} />
-      </div>
-
-      <div style={{ marginRight: "0.5rem" }}>
-        <Skeleton height={32} width={32} />
-      </div>
-
-      <div>
-        <Skeleton height={32} width={32} />
-      </div>
+      <button className="btn btn-icon me-1">
+        <Skeleton height={22} width={22} />
+      </button>
+      <i className="btn btn-icon delete-record">
+        <Skeleton height={22} width={22} />
+      </i>
     </div>
   );
 }

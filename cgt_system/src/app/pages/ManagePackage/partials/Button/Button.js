@@ -1,12 +1,18 @@
 import React, { useEffect } from "react";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
-import { sFormData, sFormError, sPackages } from "../../managePackageStore";
+import {
+  sFormData,
+  sFormError,
+  sPackages,
+  sPagination,
+} from "../../managePackageStore";
 import { validateField } from "../../schemas/managePackageSchema";
 import showToast from "../../../../util/showToast";
 import { Modal } from "bootstrap";
 
 export default function Button({ buttonTag, selectedPermissions }) {
+  const pagination = sPagination.use();
   const formData = sFormData.use();
   const { isLoading, response, error, callApi } = useApi({
     url: `${API_URLS.MEMBERSHIP_PACKAGE.POST}`,
@@ -26,7 +32,7 @@ export default function Button({ buttonTag, selectedPermissions }) {
     error: getPackageError,
     callApi: getPackageCallApi,
   } = useApi({
-    url: API_URLS.MEMBERSHIP_PACKAGE.GET,
+    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`,
     method: "GET",
   });
 
@@ -63,10 +69,15 @@ export default function Button({ buttonTag, selectedPermissions }) {
 
   useEffect(() => {
     const handleApiResponse = () => {
-      if (getPackageResponse?.status === "success") {
+      if (getPackageResponse?.status === "successful") {
         const packages = getPackageResponse.data || {};
+        const pagination = getPackageResponse.pagination || {};
         if (packages) {
           sPackages.set(packages);
+          sPagination.set((prev) => {
+            prev.value.totalPages = pagination.lastVisiblePage;
+            prev.value.totalItems = pagination.total;
+          });
         }
       }
     };
@@ -136,7 +147,7 @@ export default function Button({ buttonTag, selectedPermissions }) {
 
   return (
     <button className={"btn btn-primary me-sm-3 me-1"} onClick={handleSubmit}>
-      {isLoading ? (
+      {isLoading || getPackagesLoading ? (
         <>
           <span
             className="spinner-border spinner-border-sm"
