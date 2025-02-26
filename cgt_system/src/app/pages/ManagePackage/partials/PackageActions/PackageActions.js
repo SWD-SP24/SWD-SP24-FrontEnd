@@ -2,10 +2,11 @@ import React, { useEffect } from "react";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import showToast from "../../../../util/showToast";
-import { sPackages } from "../../managePackageStore";
+import { sPackages, sPagination } from "../../managePackageStore";
 import PackageActionsSkeleton from "./PackageActionSkeleton";
 
 export default function PackageActions({ packageId }) {
+  const pagination = sPagination.use();
   const { isLoading, response, error, callApi } = useApi({
     method: "DELETE",
   });
@@ -16,7 +17,7 @@ export default function PackageActions({ packageId }) {
     error: getPackageError,
     callApi: getPackageCallApi,
   } = useApi({
-    url: API_URLS.MEMBERSHIP_PACKAGE.GET,
+    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`,
     method: "GET",
   });
 
@@ -52,10 +53,15 @@ export default function PackageActions({ packageId }) {
 
   useEffect(() => {
     const handleApiResponse = () => {
-      if (getPackageResponse?.status === "success") {
+      if (getPackageResponse?.status === "successful") {
         const packages = getPackageResponse.data || {};
+        const pagination = getPackageResponse.pagination || {};
         if (packages) {
           sPackages.set(packages);
+          sPagination.set((prev) => {
+            prev.value.totalPages = pagination.lastVisiblePage;
+            prev.value.totalItems = pagination.total;
+          });
         }
       }
     };
@@ -89,32 +95,22 @@ export default function PackageActions({ packageId }) {
         <PackageActionsSkeleton />
       ) : (
         <>
+          <button
+            className="btn btn-icon me-1"
+            data-bs-target="#editPermissionModal"
+            data-bs-toggle="modal"
+            data-bs-dismiss="modal"
+          >
+            <i className="icon-base bx bx-edit icon-md"></i>
+          </button>
           <i
             className="btn btn-icon delete-record"
             onClick={() => handleDelete(packageId)}
           >
             <i className="icon-base bx bx-trash icon-md"></i>
           </i>
-          <a href="app-user-view-account.html" className="btn btn-icon">
-            <i className="icon-base bx bx-show icon-md"></i>
-          </a>
-          <a
-            href="javascript:;"
-            className="btn btn-icon dropdown-toggle hide-arrow"
-            data-bs-toggle="dropdown"
-          >
-            <i className="icon-base bx bx-dots-vertical-rounded icon-md"></i>
-          </a>
         </>
       )}
-      <div className="dropdown-menu dropdown-menu-end m-0">
-        <a href="javascript:;" className="dropdown-item">
-          Edit
-        </a>
-        <a href="javascript:;" className="dropdown-item">
-          Suspend
-        </a>
-      </div>
     </>
   );
 }

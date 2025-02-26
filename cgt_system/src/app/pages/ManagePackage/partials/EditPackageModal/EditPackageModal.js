@@ -3,44 +3,28 @@ import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import showToast from "../../../../util/showToast";
 import Button from "../Button/Button";
-import {
-  sFormData,
-  sFormError,
-  sRolePagination,
-} from "../../managePackageStore";
+import { sFormData, sFormError } from "../../managePackageStore";
 import { validateField } from "../../schemas/managePackageSchema";
 import InputField from "../InputField/InputField";
-import Pagination from "../Pagination/Pagination";
 
-export default function AddPackageModal() {
-  const pagination = sRolePagination.use();
+export default function EditPackageModal() {
   const [permissions, setPermissions] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isReset, setIsReset] = useState(false);
   const permissionsError = sFormError.use((formData) => formData.permissions);
 
   const { isLoading, response, error, callApi } = useApi({
+    url: `${API_URLS.PERMISSION.GET}`,
     method: "GET",
   });
 
   useEffect(() => {
-    const customUrl = `${API_URLS.PERMISSION.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`;
-    callApi(null, customUrl);
+    callApi();
   }, []);
 
   useEffect(() => {
-    if (response?.status === "successful") {
-      const permissions = response.data || {};
-      const pagination = response.pagination || {};
-      if (permissions) {
-        setPermissions(response.data || []);
-      }
-      if (pagination) {
-        sRolePagination.set((prev) => {
-          prev.value.totalPages = pagination.lastVisiblePage;
-          prev.value.totalItems = pagination.total;
-        });
-      }
+    if (response?.status === "success") {
+      setPermissions(response.data || []);
     }
   }, [response]);
 
@@ -85,14 +69,6 @@ export default function AddPackageModal() {
     });
   }, []);
 
-  const handlePageChange = (page) => {
-    sRolePagination.set((prev) => {
-      prev.value.currentPage = page;
-    });
-    const customUrl = `${API_URLS.PERMISSION.GET}?pageNumber=${page}&pageSize=${pagination.itemsPerPage}`;
-    callApi(null, customUrl);
-  };
-
   return (
     <div
       className="modal fade"
@@ -120,40 +96,38 @@ export default function AddPackageModal() {
               className="row g-6 fv-plugins-bootstrap5 fv-plugins-framework"
               noValidate="novalidate"
             >
-              <div className="row g-2">
-                <div className="col-12 form-control-validation fv-plugins-icon-container">
-                  <InputField
-                    label={"Package Name"}
-                    name={"packageName"}
-                    type={"text"}
-                    placeholder={"Enter a membership package name"}
-                    validate={validateField}
-                    onFieldChange={handleFieldChange}
-                    reset={isReset}
-                  />
-                </div>
-                <div className="col-md-6 form-control-validation fv-plugins-icon-container">
-                  <InputField
-                    label={"Price"}
-                    name={"price"}
-                    type={"number"}
-                    placeholder={"Enter price"}
-                    validate={validateField}
-                    onFieldChange={handleFieldChange}
-                    reset={isReset}
-                  />
-                </div>
-                <div className="col-md-6 form-control-validation fv-plugins-icon-container">
-                  <InputField
-                    label={"Validity Period"}
-                    name={"validityPeriod"}
-                    type={"number"}
-                    placeholder={"Enter validity period"}
-                    validate={validateField}
-                    onFieldChange={handleFieldChange}
-                    reset={isReset}
-                  />
-                </div>
+              <div className="col-12 form-control-validation fv-plugins-icon-container">
+                <InputField
+                  label={"Package Name"}
+                  name={"packageName"}
+                  type={"text"}
+                  placeholder={"Enter a membership package name"}
+                  validate={validateField}
+                  onFieldChange={handleFieldChange}
+                  reset={isReset}
+                />
+              </div>
+              <div className="col-md-6 form-control-validation fv-plugins-icon-container">
+                <InputField
+                  label={"Price"}
+                  name={"price"}
+                  type={"number"}
+                  placeholder={"Enter price"}
+                  validate={validateField}
+                  onFieldChange={handleFieldChange}
+                  reset={isReset}
+                />
+              </div>
+              <div className="col-md-6 form-control-validation fv-plugins-icon-container">
+                <InputField
+                  label={"Validity Period"}
+                  name={"validityPeriod"}
+                  type={"number"}
+                  placeholder={"Enter validity period"}
+                  validate={validateField}
+                  onFieldChange={handleFieldChange}
+                  reset={isReset}
+                />
               </div>
               <div className="col-12">
                 <h5 className="mb-6">Permissions</h5>
@@ -166,11 +140,8 @@ export default function AddPackageModal() {
                     <div>{permissionsError}</div>
                   </div>
                 )}
-                <div
-                  id="DataTables_Table_0_wrapper"
-                  className="dt-container dt-bootstrap5 dt-empty-footer"
-                >
-                  <table className="table table-responsive">
+                <div className="table-responsive">
+                  <table className="table table-flush-spacing mb-0 border-top">
                     <tbody>
                       {permissions.map((permission) => (
                         <tr key={permission.permissionId}>
@@ -202,13 +173,6 @@ export default function AddPackageModal() {
                       ))}
                     </tbody>
                   </table>
-                  <Pagination
-                    currentPage={pagination.currentPage}
-                    itemsPerPage={pagination.itemsPerPage}
-                    totalItems={pagination.totalItems}
-                    totalPages={pagination.totalPages}
-                    onPageChange={handlePageChange}
-                  />
                 </div>
               </div>
               <div className="col-12 text-center">

@@ -12,3 +12,16 @@ export const sFormError = signify({
   validityPeriod: "",
   permissions: "",
 });
+export const sPagination = signify({
+  currentPage: 1,
+  totalItems: 0,
+  totalPages: 0,
+  itemsPerPage: 10,
+});
+
+export const sRolePagination = signify({
+  currentPage: 1,
+  totalItems: 0,
+  totalPages: 0,
+  itemsPerPage: 10,
+});

@@ -6,7 +6,7 @@ import showToast from "../../util/showToast";
 import PackageFilters from "./partials/PackageFilters/PackageFilters";
 import PackageTable from "./partials/PackageTable/PackageTable";
 import Pagination from "./partials/Pagination/Pagination";
-import { sPackages } from "./managePackageStore";
+import { sPackages, sPagination } from "./managePackageStore";
 import PackageFiltersSkeleton from "./partials/PackageFilters/PackageFilterSkeleton";
 import PackageTableSkeleton from "./partials/PackageTable/PackageTableSkeleton";
 import PaginationSkeleton from "./partials/Pagination/PaginationSkeleton";
@@ -14,22 +14,31 @@ import AddPackageModal from "./partials/AddPackageModal/AddPackageModal";
 
 export default function ManagePackages() {
   const packages = sPackages.use();
+  const pagination = sPagination.use();
 
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}`,
     method: "GET",
   });
 
   useEffect(() => {
-    callApi();
+    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`;
+    callApi(null, customUrl);
+
+    return () => {
+      sPagination.reset();
+    };
   }, []);
 
   useEffect(() => {
     const handleApiResponse = () => {
-      if (response?.status === "success") {
+      if (response?.status === "successful") {
         const packages = response.data || {};
         if (packages) {
           sPackages.set(packages);
+          sPagination.set((prev) => {
+            prev.value.totalPages = response.pagination.lastVisiblePage;
+            prev.value.totalItems = response.pagination.total;
+          });
         }
       }
     };
@@ -52,6 +61,14 @@ export default function ManagePackages() {
     }
   }, [response, error]);
 
+  const handlePageChange = (page) => {
+    sPagination.set((prev) => {
+      prev.value.currentPage = page;
+    });
+    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${page}&pageSize=${pagination.itemsPerPage}`;
+    callApi(null, customUrl);
+  };
+
   return (
     <>
       <div className="card">
@@ -70,7 +87,13 @@ export default function ManagePackages() {
               <>
                 <PackageFilters />
                 <PackageTable packages={packages} />
-                <Pagination />
+                <Pagination
+                  currentPage={pagination.currentPage}
+                  itemsPerPage={pagination.itemsPerPage}
+                  totalItems={pagination.totalItems}
+                  totalPages={pagination.totalPages}
+                  onPageChange={handlePageChange}
+                />
               </>
             )}
           </div>
