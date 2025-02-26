@@ -1,47 +1,8 @@
-import React, { useEffect } from "react";
-import { sPackages, sPagination } from "../../managePackageStore";
-import useApi from "../../../../hooks/useApi";
-import showToast from "../../../../util/showToast";
-import API_URLS from "../../../../config/apiUrls";
+import React from "react";
+import { sPagination } from "../../managePackageStore";
 
-export default function PackageFilters() {
+export default function PackageFilters({ onFetchPackages }) {
   const pagination = sPagination.use();
-  const { isLoading, response, error, callApi } = useApi({
-    method: "GET",
-  });
-
-  useEffect(() => {
-    const handleApiResponse = () => {
-      if (response?.status === "successful") {
-        const packages = response.data || {};
-        const pagination = response.pagination || {};
-        if (packages) {
-          sPackages.set(packages);
-          sPagination.set((prev) => {
-            prev.value.totalPages = pagination.lastVisiblePage;
-            prev.value.totalItems = pagination.total;
-          });
-        }
-      }
-    };
-
-    const handleError = () => {
-      if (error?.message) {
-        showToast({
-          icon: "error",
-          text: error?.message,
-          targetElement: document.querySelector(".card"),
-        });
-      }
-    };
-
-    try {
-      handleApiResponse();
-      handleError();
-    } catch (err) {
-      console.error("Error handling API response:", err);
-    }
-  }, [response, error]);
 
   const handleChange = (event) => {
     const newItemsPerPage = parseInt(event.target.value, 10);
@@ -54,8 +15,7 @@ export default function PackageFilters() {
       prev.value.currentPage = newCurrentPage;
     });
 
-    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${newCurrentPage}&pageSize=${newItemsPerPage}`;
-    callApi(null, customUrl);
+    onFetchPackages(newCurrentPage, newItemsPerPage);
   };
   return (
     <div className="row mx-3 justify-content-between my-0">

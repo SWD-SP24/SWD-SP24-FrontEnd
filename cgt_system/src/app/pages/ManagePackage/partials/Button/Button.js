@@ -11,19 +11,11 @@ import { validateField } from "../../schemas/managePackageSchema";
 import showToast from "../../../../util/showToast";
 import { Modal } from "bootstrap";
 
-export default function Button({ buttonTag, selectedPermissions }) {
+export default function Button({ buttonTag, data, selectedPermissions }) {
   const pagination = sPagination.use();
   const formData = sFormData.use();
   const { isLoading, response, error, callApi } = useApi({
-    url: `${API_URLS.MEMBERSHIP_PACKAGE.POST}`,
-    method: "POST",
-    body: {
-      membershipPackageName: formData.packageName,
-      price: formData.price,
-      status: "inactive",
-      validityPeriod: formData.validityPeriod,
-      permissions: selectedPermissions,
-    },
+    method: buttonTag === "Submit" ? "POST" : "PUT",
   });
 
   const {
@@ -129,11 +121,26 @@ export default function Button({ buttonTag, selectedPermissions }) {
       return;
     }
 
-    callApi();
+    const customUrl =
+      buttonTag === "Submit"
+        ? `${API_URLS.MEMBERSHIP_PACKAGE.POST}`
+        : `${API_URLS.MEMBERSHIP_PACKAGE.PUT}/${data?.membershipPackageId}`;
+
+    const customBody = {
+      membershipPackageName: formData.packageName,
+      price: formData.price,
+      status: buttonTag === "Submit" ? "inactive" : data?.status,
+      validityPeriod: formData.validityPeriod,
+      permissions: selectedPermissions,
+    };
+
+    callApi(customBody, customUrl);
   };
 
   const closeModal = () => {
-    const modalElement = document.getElementById("addRoleModal");
+    const modalElement = document.getElementById(
+      buttonTag === "Submit" ? "addRoleModal" : "editPackageModal"
+    );
     if (modalElement) {
       const modalInstance = Modal.getInstance(modalElement);
       if (modalInstance) {

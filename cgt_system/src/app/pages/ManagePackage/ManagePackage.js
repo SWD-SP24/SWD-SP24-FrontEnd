@@ -7,10 +7,9 @@ import PackageFilters from "./partials/PackageFilters/PackageFilters";
 import PackageTable from "./partials/PackageTable/PackageTable";
 import Pagination from "./partials/Pagination/Pagination";
 import { sPackages, sPagination } from "./managePackageStore";
-import PackageFiltersSkeleton from "./partials/PackageFilters/PackageFilterSkeleton";
 import PackageTableSkeleton from "./partials/PackageTable/PackageTableSkeleton";
-import PaginationSkeleton from "./partials/Pagination/PaginationSkeleton";
 import AddPackageModal from "./partials/AddPackageModal/AddPackageModal";
+import EditPackageModal from "./partials/EditPackageModal/EditPackageModal";
 
 export default function ManagePackages() {
   const packages = sPackages.use();
@@ -21,9 +20,7 @@ export default function ManagePackages() {
   });
 
   useEffect(() => {
-    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`;
-    callApi(null, customUrl);
-
+    fetchPackages(pagination.currentPage, pagination.itemsPerPage);
     return () => {
       sPagination.reset();
     };
@@ -33,11 +30,12 @@ export default function ManagePackages() {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
         const packages = response.data || {};
+        const pagination = response.pagination || {};
         if (packages) {
           sPackages.set(packages);
           sPagination.set((prev) => {
-            prev.value.totalPages = response.pagination.lastVisiblePage;
-            prev.value.totalItems = response.pagination.total;
+            prev.value.totalPages = pagination.lastVisiblePage;
+            prev.value.totalItems = pagination.total;
           });
         }
       }
@@ -61,12 +59,16 @@ export default function ManagePackages() {
     }
   }, [response, error]);
 
+  const fetchPackages = (page, pageSize) => {
+    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${page}&pageSize=${pageSize}`;
+    callApi(null, customUrl);
+  };
+
   const handlePageChange = (page) => {
     sPagination.set((prev) => {
       prev.value.currentPage = page;
     });
-    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${page}&pageSize=${pagination.itemsPerPage}`;
-    callApi(null, customUrl);
+    fetchPackages(page, pagination.itemsPerPage);
   };
 
   return (
@@ -77,29 +79,31 @@ export default function ManagePackages() {
             id="DataTables_Table_0_wrapper"
             className="dt-container dt-bootstrap5 dt-empty-footer"
           >
+            <PackageFilters onFetchPackages={fetchPackages} />
             {isLoading ? (
               <>
-                <PackageFiltersSkeleton />
                 <PackageTableSkeleton />
-                <PaginationSkeleton />
               </>
             ) : (
               <>
-                <PackageFilters />
-                <PackageTable packages={packages} />
-                <Pagination
-                  currentPage={pagination.currentPage}
-                  itemsPerPage={pagination.itemsPerPage}
-                  totalItems={pagination.totalItems}
-                  totalPages={pagination.totalPages}
-                  onPageChange={handlePageChange}
+                <PackageTable
+                  packages={packages}
+                  onFetchPackages={fetchPackages}
                 />
               </>
             )}
+            <Pagination
+              currentPage={pagination.currentPage}
+              itemsPerPage={pagination.itemsPerPage}
+              totalItems={pagination.totalItems}
+              totalPages={pagination.totalPages}
+              onPageChange={handlePageChange}
+            />
           </div>
         </div>
       </div>
       <AddPackageModal />
+      <EditPackageModal />
     </>
   );
 }

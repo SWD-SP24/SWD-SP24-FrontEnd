@@ -1,10 +1,11 @@
 import { signify } from "react-signify";
 
 export const sPackages = signify([]);
+export const sPermissions = signify([]);
 export const sFormData = signify({
   packageName: "",
-  price: "",
-  validityPeriod: "",
+  price: 0,
+  validityPeriod: 0,
 });
 export const sFormError = signify({
   packageName: "",
@@ -19,9 +20,10 @@ export const sPagination = signify({
   itemsPerPage: 10,
 });
 
-export const sRolePagination = signify({
+export const sPermissionsPagination = signify({
   currentPage: 1,
   totalItems: 0,
   totalPages: 0,
   itemsPerPage: 10,
 });
+export const sPackageIdToEdit = signify("");

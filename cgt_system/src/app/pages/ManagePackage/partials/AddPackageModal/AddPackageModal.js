@@ -6,14 +6,15 @@ import Button from "../Button/Button";
 import {
   sFormData,
   sFormError,
-  sRolePagination,
+  sPermissionsPagination,
 } from "../../managePackageStore";
 import { validateField } from "../../schemas/managePackageSchema";
 import InputField from "../InputField/InputField";
 import Pagination from "../Pagination/Pagination";
+import Skeleton from "react-loading-skeleton";
 
 export default function AddPackageModal() {
-  const pagination = sRolePagination.use();
+  const pagination = sPermissionsPagination.use();
   const [permissions, setPermissions] = useState([]);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [isReset, setIsReset] = useState(false);
@@ -23,10 +24,10 @@ export default function AddPackageModal() {
     method: "GET",
   });
 
-  useEffect(() => {
+  const fetchPermissions = () => {
     const customUrl = `${API_URLS.PERMISSION.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`;
     callApi(null, customUrl);
-  }, []);
+  };
 
   useEffect(() => {
     if (response?.status === "successful") {
@@ -36,7 +37,7 @@ export default function AddPackageModal() {
         setPermissions(response.data || []);
       }
       if (pagination) {
-        sRolePagination.set((prev) => {
+        sPermissionsPagination.set((prev) => {
           prev.value.totalPages = pagination.lastVisiblePage;
           prev.value.totalItems = pagination.total;
         });
@@ -64,16 +65,19 @@ export default function AddPackageModal() {
     setSelectedPermissions([]);
     setIsReset((prev) => !prev);
     sFormData.reset();
+    sPermissionsPagination.reset();
     sFormError.reset();
   };
 
   useEffect(() => {
     const modalElement = document.getElementById("addRoleModal");
     if (modalElement) {
+      modalElement.addEventListener("shown.bs.modal", fetchPermissions);
       modalElement.addEventListener("hidden.bs.modal", resetForm);
     }
     return () => {
       if (modalElement) {
+        modalElement.removeEventListener("shown.bs.modal", fetchPermissions);
         modalElement.removeEventListener("hidden.bs.modal", resetForm);
       }
     };
@@ -86,7 +90,7 @@ export default function AddPackageModal() {
   }, []);
 
   const handlePageChange = (page) => {
-    sRolePagination.set((prev) => {
+    sPermissionsPagination.set((prev) => {
       prev.value.currentPage = page;
     });
     const customUrl = `${API_URLS.PERMISSION.GET}?pageNumber=${page}&pageSize=${pagination.itemsPerPage}`;
@@ -172,34 +176,47 @@ export default function AddPackageModal() {
                 >
                   <table className="table table-responsive">
                     <tbody>
-                      {permissions.map((permission) => (
-                        <tr key={permission.permissionId}>
-                          <td className="text-nowrap fw-medium text-heading">
-                            {permission.description}
-                          </td>
-                          <td>
-                            <div className="d-flex justify-content-end">
-                              <div className="form-check mb-0 me-4 me-lg-12">
-                                <input
-                                  className={`form-check-input ${
-                                    permissionsError && "is-invalid"
-                                  }`}
-                                  type="checkbox"
-                                  id={`permission-${permission.permissionId}`}
-                                  checked={selectedPermissions.includes(
-                                    permission.permissionId
-                                  )}
-                                  onChange={() =>
-                                    handlePermissionChange(
-                                      permission.permissionId
-                                    )
-                                  }
-                                />
-                              </div>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                      {isLoading
+                        ? Array(5)
+                            .fill(0)
+                            .map((_, index) => (
+                              <tr key={index}>
+                                <td>
+                                  <Skeleton height={18} width={250} />
+                                </td>
+                                <td>
+                                  <Skeleton height={18} width={18} />
+                                </td>
+                              </tr>
+                            ))
+                        : permissions.map((permission) => (
+                            <tr key={permission.permissionId}>
+                              <td className="text-nowrap fw-medium text-heading">
+                                {permission.description}
+                              </td>
+                              <td>
+                                <div className="d-flex justify-content-end">
+                                  <div className="form-check mb-0 me-4 me-lg-12">
+                                    <input
+                                      className={`form-check-input ${
+                                        permissionsError && "is-invalid"
+                                      }`}
+                                      type="checkbox"
+                                      id={`permission-${permission.permissionId}`}
+                                      checked={selectedPermissions.includes(
+                                        permission.permissionId
+                                      )}
+                                      onChange={() =>
+                                        handlePermissionChange(
+                                          permission.permissionId
+                                        )
+                                      }
+                                    />
+                                  </div>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
                     </tbody>
                   </table>
                   <Pagination
