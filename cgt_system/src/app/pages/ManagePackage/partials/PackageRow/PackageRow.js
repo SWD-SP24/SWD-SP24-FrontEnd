@@ -3,29 +3,19 @@ import PackageActions from "../PackageActions/PackageActions";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import showToast from "../../../../util/showToast";
-import { sPackages, sPagination } from "../../managePackageStore";
+import { sPagination } from "../../managePackageStore";
 import Skeleton from "react-loading-skeleton";
 
-export default function PackageRow({ packageItem }) {
+export default function PackageRow({ packageItem, onFetchPackages }) {
   const pagination = sPagination.use();
   const { isLoading, response, error, callApi } = useApi({
     method: "PATCH",
   });
 
-  const {
-    isLoading: getPackagesLoading,
-    response: getPackageResponse,
-    error: getPackageError,
-    callApi: getPackageCallApi,
-  } = useApi({
-    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`,
-    method: "GET",
-  });
-
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "success") {
-        getPackageCallApi();
+        onFetchPackages(pagination.currentPage, pagination.itemsPerPage);
       }
     };
 
@@ -46,34 +36,6 @@ export default function PackageRow({ packageItem }) {
       console.error("Error handling API response:", err);
     }
   }, [response, error]);
-
-  useEffect(() => {
-    const handleApiResponse = () => {
-      if (getPackageResponse?.status === "successful") {
-        const packages = getPackageResponse.data || {};
-        if (packages) {
-          sPackages.set(packages);
-        }
-      }
-    };
-
-    const handleError = () => {
-      if (getPackageError?.message) {
-        showToast({
-          icon: "error",
-          text: error?.message,
-          targetElement: document.querySelector(".card"),
-        });
-      }
-    };
-
-    try {
-      handleApiResponse();
-      handleError();
-    } catch (err) {
-      console.error("Error handling API response:", err);
-    }
-  }, [getPackageResponse, getPackageError]);
 
   const handleChangeStatus = () => {
     const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.PATCH}/${packageItem.membershipPackageId}/status`;
@@ -108,7 +70,7 @@ export default function PackageRow({ packageItem }) {
       <td>
         <span className="text-heading">{packageItem.validityPeriod}</span>
       </td>
-      {isLoading || getPackagesLoading ? (
+      {isLoading ? (
         <td>
           <Skeleton height={16.4} width={28.4} borderRadius={30} />
         </td>
@@ -131,7 +93,10 @@ export default function PackageRow({ packageItem }) {
       )}
       <td>
         <div className="d-flex align-items-center">
-          <PackageActions packageId={packageItem.membershipPackageId} />
+          <PackageActions
+            packageId={packageItem.membershipPackageId}
+            onFetchPackages={onFetchPackages}
+          />
         </div>
       </td>
     </tr>

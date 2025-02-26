@@ -1,7 +1,7 @@
 import React from "react";
 import PackageRow from "../PackageRow/PackageRow";
 
-export default function PackageTable({ packages }) {
+export default function PackageTable({ packages, onFetchPackages }) {
   return (
     <div className="justify-content-between dt-layout-table">
       <div className="d-md-flex justify-content-between align-items-center table-responsive dt-layout-full">
@@ -91,6 +91,7 @@ export default function PackageTable({ packages }) {
                 <PackageRow
                   key={packageItem.membershipPackageId}
                   packageItem={packageItem}
+                  onFetchPackages={onFetchPackages}
                 />
               ))
             ) : (
