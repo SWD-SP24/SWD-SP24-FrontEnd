@@ -23,6 +23,11 @@ const API_URLS = {
   ADMIN: {
     CREATE_DOCTOR: "/api/AdminAuth/registerDoctor",
   },
+  CHILDREN: {
+    GET_CHILDREN_LIST: "/api/Children",
+    ADD_CHILD: "/api/Children/add",
+    DELETE_CHILD: "/api/Children/",
+  },
 };
 
 export default API_URLS;

@@ -1,35 +1,7 @@
-// import React from "react";
-// import Avatar from "../../../../components/Avatar/Avatar";
-
-// export default function AvatarForm({ userData }) {
-//   return (
-//     <div class="d-flex align-items-start align-items-sm-center gap-4">
-//       <Avatar
-//         src={userData?.data?.avatar || ""}
-//         alt="User"
-//         className={"d-block rounded"}
-//       />
-//       <div class="button-wrapper">
-//         <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-//           <span class="d-none d-sm-block">Upload new photo</span>
-//           <i class="bx bx-upload d-block d-sm-none"></i>
-//           <input
-//             type="file"
-//             id="upload"
-//             class="account-file-input"
-//             hidden
-//             accept="image/png, image/jpeg"
-//           />
-//         </label>
-//       </div>
-//     </div>
-//   );
-// }
-
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Avatar from "../../../../components/Avatar/Avatar";
-import API_URLS from "../../../../config/apiUrls";
 import useApi from "../../../../hooks/useApi";
+import Cookies from "js-cookie";
 
 export default function AvatarForm({ userData, setUser, apiUrl }) {
   const imageUrlRef = useRef();
@@ -37,6 +9,9 @@ export default function AvatarForm({ userData, setUser, apiUrl }) {
     url: apiUrl,
     method: "PUT",
   });
+
+  const storedUser = Cookies.get("user");
+  const mainUser = JSON.parse(storedUser);
 
   useEffect(() => {
     if (response) {
@@ -60,14 +35,20 @@ export default function AvatarForm({ userData, setUser, apiUrl }) {
       />
       <div className="button-wrapper">
         {/* Button trigger modal */}
-        <button
-          type="button"
-          className="btn btn-primary me-2 mb-4"
-          data-bs-toggle="modal"
-          data-bs-target="#uploadModal"
-        >
-          Upload new photo
-        </button>
+        {mainUser.role === "admin" ? (
+          <div>
+            <h2>{userData.fullName}</h2>
+          </div>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-primary me-2 mb-4"
+            data-bs-toggle="modal"
+            data-bs-target="#uploadModal"
+          >
+            Upload new photo
+          </button>
+        )}
       </div>
 
       {/* Bootstrap Modal */}

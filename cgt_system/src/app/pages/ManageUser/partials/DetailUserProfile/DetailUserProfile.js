@@ -50,11 +50,8 @@ export default function DetailUserProfile() {
   }
 
   return (
-    <ProfileContent
-      response={response}
-      nameParts={nameParts}
-      refetch={callApi}
-      apiUrl={apiUrl}
-    />
+    response && (
+      <ProfileContent user={response.data} setUser={callApi} apiUrl={apiUrl} />
+    )
   );
 }

@@ -1,6 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import Cookies from "js-cookie";
+import React, { useEffect, useState } from "react";
+import { countries } from "../../../constants/countries.js";
 import useApi from "../../../hooks/useApi";
 import splitName from "../../../util/splitName.js";
+import showToast from "../../../util/showToast.js";
 export default function UpdateForm({ userData, setUser, apiUrl }) {
   const { response, callApi } = useApi({
     url: apiUrl,
@@ -9,6 +12,13 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
+  const [country, setCountry] = useState("");
+  const [address, setAddress] = useState("");
+  const [state, setState] = useState("");
+  const [zipCode, setZipCode] = useState("");
+
+  const storedUser = Cookies.get("user");
+  const mainUser = JSON.parse(storedUser);
 
   useEffect(() => {
     if (userData) {
@@ -16,6 +26,11 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
       setFirstName(nameParts[0] || "");
       setLastName(nameParts[1] || "");
       setPhone(userData.phoneNumber || "");
+      setAddress(userData.address || "");
+      setState(userData.state || "");
+      setZipCode(userData.zipcode || "");
+      setCountry(userData.country || "");
+      console.log(userData);
     }
   }, [userData]);
 
@@ -30,12 +45,17 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
 
     const data = {
       fullName: `${firstName} ${lastName}`,
-      phone: phone,
+      phoneNumber: phone,
+      address: address,
+      state: state,
+      zipcode: zipCode,
+      country: country,
     };
-
+    console.log(data);
     await callApi(data);
   };
 
+  const isAdmin = mainUser.role === "admin";
   console.log("rerender ne");
   return (
     <form id="formAccountSettings" onSubmit={handleSubmit}>
@@ -52,6 +72,7 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             autofocus
+            disabled={isAdmin}
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -65,6 +86,7 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             id="lastName"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            disabled={isAdmin}
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -121,6 +143,7 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
               class="form-control"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              disabled={isAdmin}
             />
           </div>
         </div>
@@ -134,6 +157,9 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             id="address"
             name="address"
             placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            disabled={isAdmin}
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -145,7 +171,10 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             type="text"
             id="state"
             name="state"
-            placeholder="California"
+            placeholder="State"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+            disabled={isAdmin}
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -159,38 +188,29 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             name="zipCode"
             placeholder="231465"
             maxlength="6"
+            value={zipCode}
+            onChange={(e) => setZipCode(e.target.value)}
+            disabled={isAdmin}
           />
         </div>
         <div class="mb-3 col-md-6">
           <label class="form-label" for="country">
             Country
           </label>
-          <select id="country" class="select2 form-select">
-            <option value="">Select</option>
-            <option value="Australia">Australia</option>
-            <option value="Bangladesh">Bangladesh</option>
-            <option value="Belarus">Belarus</option>
-            <option value="Brazil">Brazil</option>
-            <option value="Canada">Canada</option>
-            <option value="China">China</option>
-            <option value="France">France</option>
-            <option value="Germany">Germany</option>
-            <option value="India">India</option>
-            <option value="Indonesia">Indonesia</option>
-            <option value="Israel">Israel</option>
-            <option value="Italy">Italy</option>
-            <option value="Japan">Japan</option>
-            <option value="Korea">Korea, Republic of</option>
-            <option value="Mexico">Mexico</option>
-            <option value="Philippines">Philippines</option>
-            <option value="Russia">Russian Federation</option>
-            <option value="South Africa">South Africa</option>
-            <option value="Thailand">Thailand</option>
-            <option value="Turkey">Turkey</option>
-            <option value="Ukraine">Ukraine</option>
-            <option value="United Arab Emirates">United Arab Emirates</option>
-            <option value="United Kingdom">United Kingdom</option>
-            <option value="United States">United States</option>
+          <select
+            id="country"
+            class="select2 form-select"
+            disabled={isAdmin}
+            onChange={(e) => setCountry(e.target.value)}
+          >
+            {countries.map((countryItem) => (
+              <option
+                value={countryItem.value}
+                selected={countryItem.value === country}
+              >
+                {countryItem.name}
+              </option>
+            ))}
           </select>
         </div>
       </div>

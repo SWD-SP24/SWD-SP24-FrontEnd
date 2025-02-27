@@ -36,7 +36,7 @@ const DropdownMenu = ({ id }) => {
           style={{ position: "absolute", left: "auto", right: 0 }}
         >
           <button className="dropdown-item" onClick={handleEdit}>
-            &#9998; Edit
+            &#128065; View
           </button>
           <button className="dropdown-item" onClick={handleDelete}>
             &#128465; Block

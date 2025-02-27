@@ -1,0 +1,41 @@
+.table-size {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+.badge-blood {
+  --bs-badge-padding-x: 0.77em;
+  --bs-badge-padding-y: 0.4235em;
+  --bs-badge-font-size: 0.8667em;
+  --bs-badge-font-weight: 500;
+  --bs-badge-border-radius: 0.25rem;
+  display: inline-block;
+  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+  font-size: var(--bs-badge-font-size);
+  font-weight: var(--bs-badge-font-weight);
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  border-radius: var(--bs-badge-border-radius);
+}
+.badge-a {
+  background-color: #eaf6ff; /* Softest Pastel Blue */
+  color: #1f3a5f; /* Deep Navy Blue */
+} /* A - Gentle Blue */
+
+.badge-b {
+  background-color: #e6faef; /* Softest Pastel Green */
+  color: #1c5a3f; /* Deep Forest Green */
+} /* B - Gentle Green */
+
+.badge-ab {
+  background-color: #f4ebfc; /* Softest Pastel Purple */
+  color: #452a63; /* Deep Royal Purple */
+} /* AB - Gentle Purple */
+
+.badge-o {
+  background-color: #ffeded; /* Softest Pastel Red */
+  color: #7a1f1f; /* Deep Burgundy Red */
+} /* O - Gentle Red */
