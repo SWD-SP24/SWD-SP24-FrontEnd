@@ -7,6 +7,13 @@ const API_URLS = {
   },
   MEMBERSHIP_PACKAGE: {
     GET: "/api/MembershipPackages",
+    POST: "/api/MembershipPackages",
+    PUT: "/api/MembershipPackages",
+    DELETE: "/api/MembershipPackages",
+    PATCH: "/api/MembershipPackages",
+  },
+  PERMISSION: {
+    GET: "/api/Permissions",
   },
   USER: {
     CURRENT_USER: "/api/Users/self",
