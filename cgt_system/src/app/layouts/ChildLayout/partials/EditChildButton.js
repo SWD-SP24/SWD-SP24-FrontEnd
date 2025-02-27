@@ -1,21 +1,35 @@
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import API_URLS from "../../../config/apiUrls";
-import { ages } from "../../../constants/ages.js";
 import useApi from "../../../hooks/useApi";
-export default function AddChildButton({ refetch }) {
+
+export default function EditChildButton({ childData, refetch }) {
+  const { response, callApi } = useApi({
+    url: `${API_URLS.CHILDREN.EDIT_CHILD}${childData.childrenId}`,
+    method: "PUT",
+  });
+
   const fullNameRef = useRef(null);
-  const ageRef = useRef(null);
   const avatarRef = useRef(null);
   const genderRef = useRef(null);
   const dobRef = useRef(null);
-  const bloodRef = useRef(null);
   const allergiesRef = useRef(null);
-  const chronicConditionRef = useRef(null);
+  const chronicConditionsRef = useRef(null);
+  const bloodTypeRef = useRef(null);
 
-  const { response, callApi } = useApi({
-    url: `${API_URLS.CHILDREN.ADD_CHILD}`,
-    method: "POST",
-  });
+  useEffect(() => {
+    fullNameRef.current.value = childData.fullName;
+    avatarRef.current.value = childData.avatar;
+    genderRef.current.value = childData.gender;
+    dobRef.current.value = childData.dob;
+    allergiesRef.current.value = childData.allergies;
+    chronicConditionsRef.current.value = childData.chronicConditions;
+    bloodTypeRef.current.value = childData.bloodType;
+  }, [childData]);
+
+  useEffect(() => {
+    console.log(response);
+  }, [response]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -23,28 +37,25 @@ export default function AddChildButton({ refetch }) {
       avatar: avatarRef.current.value,
       gender: genderRef.current.value,
       dob: dobRef.current.value,
-      bloodType: bloodRef.current.value,
       allergies: allergiesRef.current.value,
-      chronicConditions: chronicConditionRef.current.value,
+      chronicConditions: chronicConditionsRef.current.value,
+      bloodType: bloodTypeRef.current.value,
     };
     console.log(data);
     await callApi(data);
     refetch();
-    e.target.reset();
   };
 
   return (
-    <>
+    <div>
       <button
-        className="btn add-new btn-primary"
+        class="btn btn-primary me-4"
         data-bs-toggle="modal"
         data-bs-target="#modalCenter"
       >
-        <span>
-          <i className="icon-base bx bx-plus icon-sm me-0 me-sm-2"></i>
-          <span className="d-none d-sm-inline-block">Add New Child</span>
-        </span>
+        Edit
       </button>
+      {/**Modal Edit */}
       <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -125,7 +136,7 @@ export default function AddChildButton({ refetch }) {
                     <select
                       id="bloodTypeSelect"
                       class="form-select"
-                      ref={bloodRef}
+                      ref={bloodTypeRef}
                     >
                       <option value="A">A</option>
                       <option value="B">B</option>
@@ -152,7 +163,7 @@ export default function AddChildButton({ refetch }) {
                       Chronic Conditions
                     </label>
                     <input
-                      ref={chronicConditionRef}
+                      ref={chronicConditionsRef}
                       type="text"
                       id="chronicCondition"
                       class="form-control"
@@ -181,6 +192,6 @@ export default function AddChildButton({ refetch }) {
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

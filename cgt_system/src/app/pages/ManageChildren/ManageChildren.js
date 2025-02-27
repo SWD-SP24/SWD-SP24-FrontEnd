@@ -4,6 +4,7 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import "./ManageChildren.scss";
 import ActionButton from "./partials/ActionButton";
+import Avatar from "../../components/Avatar/Avatar";
 export default function ManageChildren() {
   const { response, callApi } = useApi({
     url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
@@ -61,7 +62,7 @@ export default function ManageChildren() {
               className="d-md-flex align-items-center dt-layout-end col-md-auto d-flex gap-md-4 justify-content-start gap-4 flex-wrap mt-0"
               style={{ paddingLeft: "8px" }}
             >
-              {/* <div className={cx("table-size")}>
+              {/* <div className={"table-size"}>
                 <label htmlFor="dt-length-0">Show</label>
                 <div>
                   <select
@@ -80,10 +81,7 @@ export default function ManageChildren() {
             </div>
             <div className="d-md-flex align-items-center dt-layout-end col-md-auto ms-auto d-flex gap-md-4 justify-content-md-between justify-content-center gap-4 flex-wrap mt-0">
               <div className="d-md-flex align-items-center dt-layout-end col-md-auto ms-auto d-flex gap-md-4 justify-content-md-between justify-content-center gap-4 flex-wrap mt-0">
-                <div
-                  className="dt-search md-6 mb-0"
-                  style={{ display: "flex", alignItems: "center" }}
-                >
+                <div className="  d-flex align-items-center ">
                   <input
                     type="search"
                     className="form-control"
@@ -109,7 +107,7 @@ export default function ManageChildren() {
                     </option>
                   </select>
                 </div>
-                <div className="dt-buttons btn-group flex-wrap d-flex gap-4 mb-md-0 mb-6">
+                <div className="dt-buttons  flex-wrap d-flex gap-4 mb-md-0 mb-6">
                   <AddChildButton refetch={callApi} />
                 </div>
               </div>
@@ -204,7 +202,12 @@ export default function ManageChildren() {
                           <tr>
                             <td className="sorting_1">
                               <div className="d-flex justify-content-start align-items-center user-name">
-                                <div className="avatar-wrapper"></div>
+                                <div>
+                                  <Avatar
+                                    src={child.avatar}
+                                    className="child-avatar"
+                                  />
+                                </div>
                                 <div className="d-flex flex-column">
                                   <a
                                     href="app-user-view-account.html"
@@ -228,7 +231,7 @@ export default function ManageChildren() {
                                       </span>
                                     ) : (
                                       <span className="badge bg-label-danger">
-                                        Male
+                                        Female
                                       </span>
                                     )}
                                   </span>

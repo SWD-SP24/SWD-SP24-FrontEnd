@@ -31,10 +31,7 @@ export default function ActionButton({ childId, refetch }) {
       >
         <i className="icon-base bx bx-show icon-md"></i>
       </a>
-      <i
-        className="btn btn-icon delete-record"
-        onClick={(e) => handleDelete(e)}
-      >
+      <i className="btn btn-icon delete-record" onClick={() => handleDelete()}>
         <i
           className="icon-base bx bx-trash icon-md"
           style={{ color: "#B22222" }}

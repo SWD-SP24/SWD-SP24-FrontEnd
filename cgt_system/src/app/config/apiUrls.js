@@ -34,6 +34,8 @@ const API_URLS = {
     GET_CHILDREN_LIST: "/api/Children",
     ADD_CHILD: "/api/Children/add",
     DELETE_CHILD: "/api/Children/",
+    GET_CHILDREN_WITH_ID: "/api/Children/child/",
+    EDIT_CHILD: "/api/Children/edit/",
   },
 };
 
