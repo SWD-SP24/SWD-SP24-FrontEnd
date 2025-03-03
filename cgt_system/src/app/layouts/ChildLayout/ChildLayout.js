@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useRef } from "react";
-import { useParams } from "react-router";
+import { Outlet, useParams } from "react-router";
 import Avatar from "../../components/Avatar/Avatar";
 import API_URLS from "../../config/apiUrls";
 import useApi from "../../hooks/useApi";
@@ -125,33 +125,29 @@ export default function ChildLayout() {
           <ul class="nav nav-pills flex-column flex-md-row mb-6 flex-wrap row-gap-2">
             <li class="nav-item">
               <a class="nav-link active" href="javascript:void(0);">
-                <i class="icon-base bx bx-user icon-sm me-1_5"></i>Account
+                <i class="icon-base bx bx-list-ol icon-sm me-1_5"></i>Indicators
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="app-user-view-security.html">
-                <i class="icon-base bx bx-lock-alt icon-sm me-1_5"></i>Security
+                <i class="icon-base bx bx-line-chart icon-sm me-1_5"></i>Charts
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="app-user-view-billing.html">
-                <i class="icon-base bx bx-detail icon-sm me-1_5"></i>Billing
-                &amp; Plans
+                <i class="icon-base bx bx-smile icon-sm me-1_5"></i>Teeth
               </a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="app-user-view-notifications.html">
-                <i class="icon-base bx bx-bell icon-sm me-1_5"></i>Notifications
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="app-user-view-connections.html">
-                <i class="icon-base bx bx-link icon-sm me-1_5"></i>Connections
+                <i class="icon-base bx bx-injection icon-sm me-1_5"></i>
+                Vaccinations
               </a>
             </li>
           </ul>
         </div>
         {/* <!--/ User Pills --> */}
+        <Outlet childId={response.data.childrenId} />
       </div>
     </div>
   );

@@ -37,6 +37,9 @@ const API_URLS = {
     GET_CHILDREN_WITH_ID: "/api/Children/child/",
     EDIT_CHILD: "/api/Children/edit/",
   },
+  INDICATORS: {
+    INDICATORS: "/api/GrowthIndicators",
+  },
 };
 
 export default API_URLS;
