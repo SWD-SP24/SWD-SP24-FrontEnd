@@ -62,13 +62,19 @@ export default function PackageRow({ packageItem, onFetchPackages }) {
           </div>
         </div>
       </td>
-      <td>
+      <td className="dt-type-numeric">
         <span className="text-truncate d-flex align-items-center text-heading">
-          {packageItem.price}
+          $
+          {packageItem.price.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
         </span>
       </td>
       <td>
-        <span className="text-heading">{packageItem.validityPeriod}</span>
+        <span className="text-heading">
+          {packageItem.validityPeriod.toLocaleString("en-US")} days
+        </span>
       </td>
       {isLoading ? (
         <td>

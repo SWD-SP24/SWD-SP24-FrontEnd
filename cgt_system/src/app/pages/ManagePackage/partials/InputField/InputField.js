@@ -46,11 +46,41 @@ const InputField = React.memo(
     }, 500);
 
     const handleChange = (e) => {
-      const { value } = e.target;
-      setFieldValue(value);
+      let { name, value } = e.target;
 
-      if (validate) {
-        debouceValidateField(name, value);
+      if (name === "price" || name === "validityPeriod") {
+        // Loại bỏ dấu phẩy để tránh lỗi khi nhập tiếp
+        const rawValue = value.replace(/,/g, "");
+
+        // Nếu không phải số hợp lệ, thoát (cho phép dấu chấm ở giữa số)
+        if (!/^\d*\.?\d*$/.test(rawValue)) return;
+
+        // Tách phần nguyên và phần thập phân
+        let [integerPart, decimalPart] = rawValue.split(".");
+
+        // Định dạng phần nguyên với dấu phẩy ngăn cách hàng nghìn
+        integerPart = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+        // Gộp lại với phần thập phân (nếu có)
+        const formattedValue =
+          decimalPart !== undefined
+            ? `${integerPart}.${decimalPart}`
+            : integerPart;
+
+        setFieldValue(formattedValue);
+
+        if (validate) {
+          const valueToNumber = Number(rawValue); // Chuyển thành số không có dấu phẩy
+          console.log(valueToNumber);
+
+          debouceValidateField(name, valueToNumber);
+        }
+      } else {
+        setFieldValue(value);
+
+        if (validate) {
+          debouceValidateField(name, value);
+        }
       }
     };
 

@@ -140,7 +140,7 @@ export default function AddPackageModal() {
                   <InputField
                     label={"Price"}
                     name={"price"}
-                    type={"number"}
+                    type={"text"}
                     placeholder={"Enter price"}
                     validate={validateField}
                     onFieldChange={handleFieldChange}
@@ -151,7 +151,7 @@ export default function AddPackageModal() {
                   <InputField
                     label={"Validity Period"}
                     name={"validityPeriod"}
-                    type={"number"}
+                    type={"text"}
                     placeholder={"Enter validity period"}
                     validate={validateField}
                     onFieldChange={handleFieldChange}
