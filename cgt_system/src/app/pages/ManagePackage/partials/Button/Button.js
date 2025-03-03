@@ -33,7 +33,7 @@ export default function Button({ buttonTag, data, selectedPermissions }) {
       if (response?.status === "success") {
         showToast({
           icon: "success",
-          text: "Membership package added successfull !",
+          text: "Membership package updated successfull !",
           targetElement: document.querySelector(".card"),
         });
         closeModal();
