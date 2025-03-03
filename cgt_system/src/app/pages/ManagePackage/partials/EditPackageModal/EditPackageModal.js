@@ -220,7 +220,7 @@ export default function EditPackageModal() {
                     <InputField
                       label={"Price"}
                       name={"price"}
-                      type={"number"}
+                      type={"text"}
                       placeholder={"Enter price"}
                       value={membershipPackage?.price}
                       validate={validateField}
@@ -232,7 +232,7 @@ export default function EditPackageModal() {
                     <InputField
                       label={"Validity Period"}
                       name={"validityPeriod"}
-                      type={"number"}
+                      type={"text"}
                       placeholder={"Enter validity period"}
                       value={membershipPackage?.validityPeriod}
                       validate={validateField}
