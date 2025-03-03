@@ -26,6 +26,9 @@ const API_URLS = {
     CHANGE_PASSWORD: "/api/Users/change-password",
     GET_USERS_LIST: "/api/Users",
     USER_WITH_ID: "/api/Users/",
+    MEMBERSHIP_PACKAGE: {
+      CURRENT: "api/UserMemberships/CurrentPackage",
+    },
   },
   ADMIN: {
     CREATE_DOCTOR: "/api/AdminAuth/registerDoctor",
