@@ -1,6 +1,8 @@
 import React from "react";
 
-export default function BMIProgressBar({ bmi }) {
+export default function BMIProgessBar({ bmi }) {
+  if (!bmi || isNaN(bmi)) return null; // Don't render if bmi is invalid
+
   let progress = (bmi / 40) * 100; // Normalize to a max BMI of 40
   let variant = "success"; // Default color for normal BMI
 
@@ -10,16 +12,14 @@ export default function BMIProgressBar({ bmi }) {
   else variant = "danger"; // Obese (Red)
 
   return (
-    <div>
-      <div className="progress  me-3" style={{ height: "6px", width: "70px;" }}>
-        <div
-          className={`progress-bar bg-${variant}`}
-          style={{ width: `${progress}%` }}
-          aria-valuenow={bmi}
-          aria-valuemin="0"
-          aria-valuemax="40"
-        ></div>
-      </div>
+    <div className="progress me-3" style={{ height: "6px", width: "70px" }}>
+      <div
+        className={`progress-bar bg-${variant}`}
+        style={{ width: `${progress}%` }}
+        aria-valuenow={bmi}
+        aria-valuemin="0"
+        aria-valuemax="40"
+      ></div>
     </div>
   );
 }

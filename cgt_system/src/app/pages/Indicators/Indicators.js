@@ -5,7 +5,7 @@ import { useParams } from "react-router";
 import API_URLS from "../../config/apiUrls.js";
 import useApi from "../../hooks/useApi.js";
 import { formatDate } from "../../util/formatDate.js";
-
+import RemoveIndicators from "./partials/RemoveIndicators.js";
 export default function Indicators() {
   const childId = useParams().id;
   const url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}`;
@@ -22,10 +22,6 @@ export default function Indicators() {
   useEffect(() => {
     console.log(response);
   }, [response]);
-
-  if (!response) {
-    return <div> loading</div>;
-  }
 
   return (
     <div class="card mb-6">
@@ -55,7 +51,7 @@ export default function Indicators() {
               </div>
             </div>
             <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
-              <AddIndicators />
+              <AddIndicators refetch={callApi} childId={childId} />
             </div>
           </div>
           <div class="justify-content-between dt-layout-table">
@@ -157,10 +153,10 @@ export default function Indicators() {
                             </div>
                           </td>
                           <td class="">
-                            <i
-                              className="icon-base bx bx-trash icon-md"
-                              style={{ color: "#B22222" }}
-                            ></i>
+                            <RemoveIndicators
+                              refetch={callApi}
+                              indicatorId={record.growthIndicatorsId}
+                            />
                           </td>
                         </tr>
                       );
