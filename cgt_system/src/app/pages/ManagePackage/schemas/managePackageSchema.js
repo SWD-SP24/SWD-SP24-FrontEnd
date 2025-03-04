@@ -5,11 +5,14 @@ export const validateField = (name, value) => {
     error = "Please enter package name";
   }
 
-  if (name === "price" && (!value || value < 0)) {
+  if (name === "price" && (value === "" || value === null || value < 0)) {
     error = "Please enter a valid price";
   }
 
-  if (name === "validityPeriod" && (!value || value <= 0)) {
+  if (
+    name === "validityPeriod" &&
+    (value === "" || value === null || value <= 0)
+  ) {
     error = "Please enter a valid validity period";
   }
 

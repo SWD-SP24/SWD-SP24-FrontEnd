@@ -33,6 +33,7 @@ import NotAuthorized from "../pages/NotAuthorized";
 import ComingSoon from "../pages/ComingSoon";
 import Profile from "../pages/Profile/Profile";
 import MemberRoutes from "./MemberRoutes";
+import BillingAndPlans from "../pages/BillingAndPlans";
 
 export default function MainRoutes() {
   return (
@@ -80,10 +81,11 @@ export default function MainRoutes() {
           <Route path="member/*" element={<MemberRoutes />} />
           {/* Account Setting với layout riêng */}
           <Route path="account-setting" element={<AccountSettingLayout />}>
-            {/* Thay trang này bằng trang edit profile */}
             <Route path="account" element={<Profile />} />
 
             <Route path="security" element={<ChangePassword />} />
+
+            <Route path="billing-and-plans" element={<BillingAndPlans />} />
           </Route>
         </Route>
 
