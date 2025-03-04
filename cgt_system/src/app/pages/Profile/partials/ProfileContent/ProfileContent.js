@@ -9,7 +9,7 @@ export default function ProfileContent({ user, setUser, apiUrl }) {
 
       <div className="col-md-12">
         <div className="card mb-4">
-          <h5 className="card-header">Profile Details</h5>
+          <h5 className="card-header">Edit Profile</h5>
           {/* <!-- Account --> */}
           <div className="card-body">
             <AvatarForm userData={user} setUser={setUser} apiUrl={apiUrl} />

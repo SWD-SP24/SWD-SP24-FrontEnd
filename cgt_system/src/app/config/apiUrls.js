@@ -11,6 +11,7 @@ const API_URLS = {
     PUT: "/api/MembershipPackages",
     DELETE: "/api/MembershipPackages",
     PATCH: "/api/MembershipPackages",
+    GET_PRICING_PLAN: "api/MembershipPackages/PricingPlan",
   },
   PERMISSION: {
     GET: "/api/Permissions",
