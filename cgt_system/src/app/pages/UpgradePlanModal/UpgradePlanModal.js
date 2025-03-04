@@ -176,19 +176,28 @@ export default function UpgradePlanModal() {
                                 </small>
                               )}
                             </div>
-                            <button
-                              type="button"
-                              className={`btn ${
-                                pricingPlan.isActive
-                                  ? "btn-label-success"
-                                  : "btn-label-primary"
-                              } d-grid w-100`}
-                              data-bs-dismiss="modal"
-                            >
-                              {pricingPlan.isActive
-                                ? "Your Current Plan"
-                                : "Upgrade"}
-                            </button>
+                            {pricingPlan.isActive ? (
+                              <div
+                                className="alert alert-success d-flex align-items-center justify-content-center mb-0"
+                                style={{ height: "37.6px" }}
+                              >
+                                <span>Your Current Plan</span>
+                              </div>
+                            ) : (
+                              <button
+                                type="button"
+                                className={`btn ${
+                                  pricingPlan.isActive
+                                    ? "btn-label-success"
+                                    : "btn-label-primary"
+                                } d-grid w-100`}
+                                data-bs-dismiss="modal"
+                              >
+                                {pricingPlan.isActive
+                                  ? "Your Current Plan"
+                                  : "Upgrade"}
+                              </button>
+                            )}
                           </div>
                           <hr />
                           <b className="text-start mb-5">
