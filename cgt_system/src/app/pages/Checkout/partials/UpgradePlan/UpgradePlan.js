@@ -50,7 +50,7 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                       }
                     </span>
                   </p>
-                  <table>
+                  <table className="">
                     <tbody>
                       <tr>
                         <td className="pe-4">Remaining Days:</td>
@@ -100,7 +100,7 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                     {checkoutInfo?.membershipPackage?.membershipPackageName}
                   </span>
                 </p>
-                <table className="w-100">
+                <table>
                   <tbody>
                     <tr>
                       <td className="pe-4">Validity Period:</td>
@@ -112,10 +112,12 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                       <td className="pe-4">Monthly Price:</td>
                       <p className="fw-medium mb-0">
                         $
-                        {(
-                          checkoutInfo?.membershipPackage?.price -
-                          checkoutInfo?.membershipPackage?.savingPerMonth
-                        ).toFixed(2)}
+                        {isYearly
+                          ? (
+                              checkoutInfo?.membershipPackage?.price -
+                              checkoutInfo?.membershipPackage?.savingPerMonth
+                            ).toFixed(2)
+                          : checkoutInfo?.membershipPackage?.price.toFixed(2)}
                         /month
                         {isYearly && (
                           <s className="text-body-secondary ms-1 small">
@@ -193,12 +195,14 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                       {formatDate(checkoutInfo?.endDate)}
                     </p>
                   </tr>
-                  <tr>
-                    <td className="pe-4">Additional Date:</td>
-                    <p className="fw-medium mb-0">
-                      {checkoutInfo?.additionalDays} days
-                    </p>
-                  </tr>
+                  {checkoutInfo?.additionalDays > 0 && (
+                    <tr>
+                      <td className="pe-4">Additional Days:</td>
+                      <p className="fw-medium mb-0">
+                        {checkoutInfo?.additionalDays} days
+                      </p>
+                    </tr>
+                  )}
                   <tr>
                     <td className="pe-4">Total Validity Period:</td>
                     <p className="fw-medium mb-0">{totalDays} days</p>

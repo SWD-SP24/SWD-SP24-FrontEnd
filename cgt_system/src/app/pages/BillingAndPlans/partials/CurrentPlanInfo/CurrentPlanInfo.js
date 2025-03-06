@@ -131,8 +131,7 @@ export default function CurrentPlanInfo({ currentPlan }) {
                     <div className="d-flex justify-content-between mb-1">
                       <h6 className="mb-0">Days</h6>
                       <h6 className="mb-0">
-                        {daysRemaining} of{" "}
-                        {currentPlan?.membershipPackage.validityPeriod} Days
+                        {daysUsed} of {totalDays} Days
                       </h6>
                     </div>
                     <div className="progress rounded">

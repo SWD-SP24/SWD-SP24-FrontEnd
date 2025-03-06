@@ -34,6 +34,7 @@ import ComingSoon from "../pages/ComingSoon";
 import Profile from "../pages/Profile/Profile";
 import MemberRoutes from "./MemberRoutes";
 import BillingAndPlans from "../pages/BillingAndPlans";
+import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
 
 export default function MainRoutes() {
   return (
@@ -92,6 +93,7 @@ export default function MainRoutes() {
         {/* Các trang khác */}
         <Route path="welcome" element={<Welcome />} />
         <Route path="not-authorized" element={<NotAuthorized />} />
+        <Route path="upgrade-plan/confirm" element={<UpgradePlanConfirm />} />
 
         {/* Nếu không tìm thấy route nào */}
         <Route path="*" element={<NotFound />} />

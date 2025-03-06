@@ -1,7 +1,45 @@
-import React from "react";
+import React, { useEffect } from "react";
 import UpgradePlanModal from "../../../UpgradePlanModal/UpgradePlanModal";
+import useApi from "../../../../hooks/useApi";
+import API_URLS from "../../../../config/apiUrls";
+import { useNavigate } from "react-router";
+import showToast from "../../../../util/showToast";
 
 export default function Summary({ checkoutInfo, isYearly }) {
+  const { isLoading, response, error, callApi } = useApi({
+    url: API_URLS.UPGRADE_MEMBERSHIP_PACKAGE.PROCEED_PAYMENT,
+    method: "POST",
+    body: {
+      idPackage: checkoutInfo?.membershipPackage?.membershipPackageId,
+      paymentType: isYearly ? "yearly" : "monthly",
+    },
+  });
+
+  useEffect(() => {
+    if (response) {
+      const paypalRedirectUrl = response.link || "";
+      if (paypalRedirectUrl) {
+        window.location.href = paypalRedirectUrl;
+      }
+    }
+  }, [response]);
+
+  useEffect(() => {
+    if (error?.message) {
+      showToast({
+        icon: "error",
+        text: error?.message,
+        targetElement: document.querySelector(".card"),
+      });
+    }
+  }, [error]);
+
+  const handleProceedPayment = (e) => {
+    e.preventDefault();
+
+    callApi();
+  };
+
   return (
     <>
       <div className="col-lg-5 card-body p-md-8">
@@ -15,8 +53,8 @@ export default function Summary({ checkoutInfo, isYearly }) {
             <h1 className="text-heading mb-0">
               $
               {isYearly
-                ? checkoutInfo?.membershipPackage?.yearlyPrice
-                : checkoutInfo?.membershipPackage?.price}
+                ? checkoutInfo?.membershipPackage?.yearlyPrice.toFixed(2)
+                : checkoutInfo?.membershipPackage?.price.toFixed(2)}
             </h1>
             <sub className="h6 text-body mb-n3">
               {isYearly ? "/year" : "/month"}
@@ -45,8 +83,8 @@ export default function Summary({ checkoutInfo, isYearly }) {
             <h6 className="mb-0">
               $
               {isYearly
-                ? checkoutInfo?.membershipPackage?.price * 12
-                : checkoutInfo?.membershipPackage?.price}
+                ? (checkoutInfo?.membershipPackage?.price * 12).toFixed(2)
+                : checkoutInfo?.membershipPackage?.price.toFixed(2)}
             </h6>
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2">
@@ -81,15 +119,30 @@ export default function Summary({ checkoutInfo, isYearly }) {
               <strong>
                 $
                 {isYearly
-                  ? checkoutInfo?.membershipPackage?.yearlyPrice
-                  : checkoutInfo?.membershipPackage?.price}
+                  ? checkoutInfo?.membershipPackage?.yearlyPrice.toFixed(2)
+                  : checkoutInfo?.membershipPackage?.price.toFixed(2)}
               </strong>
             </h6>
           </div>
           <div className="d-grid mt-5">
-            <button className="btn btn-success">
-              <span className="me-2">Proceed with Payment</span>
-              <i className="icon-base bx bx-right-arrow-alt scaleX-n1-rtl"></i>
+            <button
+              className="btn btn-success"
+              onClick={(e) => handleProceedPayment(e)}
+            >
+              {isLoading ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                </>
+              ) : (
+                <>
+                  <span className="me-2">Proceed with Payment</span>
+                  <i className="icon-base bx bx-right-arrow-alt scaleX-n1-rtl"></i>
+                </>
+              )}
             </button>
           </div>
 
