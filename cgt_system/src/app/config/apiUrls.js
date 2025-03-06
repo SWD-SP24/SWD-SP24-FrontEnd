@@ -13,6 +13,9 @@ const API_URLS = {
     PATCH: "/api/MembershipPackages",
     GET_PRICING_PLAN: "api/MembershipPackages/PricingPlan",
   },
+  UPGRADE_MEMBERSHIP_PACKAGE: {
+    CHECKOUT: "/api/BuyMembershipPackage",
+  },
   PERMISSION: {
     GET: "/api/Permissions",
   },
