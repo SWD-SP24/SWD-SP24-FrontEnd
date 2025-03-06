@@ -24,96 +24,195 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
         Upgrade your plan to access exclusive child development tracking
         features.
       </p>
-      {checkoutInfo?.remainingDays > 0 && (
-        <div className="border p-4 rounded my-4">
-          <h5>Current Plan Information</h5>
-          <p>
-            <strong>Current Plan:</strong>{" "}
-            {checkoutInfo?.currentMembershipPackage?.membershipPackageName}
-          </p>
-          <p>
-            <strong>Remaining Days:</strong> {checkoutInfo?.remainingDays} days
-          </p>
-          <p>
-            <strong>Remaining Balance:</strong> $
-            {checkoutInfo?.remainingPrice.toFixed(2)}
-          </p>
 
-          <p>
-            <strong>Converted Additional Days:</strong>{" "}
-            {checkoutInfo?.additionalDays} days
-          </p>
+      {/* Current Plan */}
+      {checkoutInfo?.remainingDays > 0 && (
+        <div class="border p-4 rounded my-4">
+          <div class="custom-option-header mb-2 w-100 d-flex justify-content-end">
+            <span class="badge bg-label-primary">Current</span>
+          </div>
+          <div class="d-flex gap-4 flex-sm-row flex-column align-items-center">
+            <div class="flex-shrink-0 d-flex align-items-center">
+              <img
+                src={checkoutInfo?.currentMembershipPackage.image}
+                alt="Plan Image"
+                class="w-px-100"
+              />
+            </div>
+            <div class="flex-grow-1">
+              <div class="row text-center text-sm-start">
+                <div class="col-md-12">
+                  <p class="me-3 mb-2">
+                    <h5 className="text-heading">
+                      <span class="text-heading">
+                        {
+                          checkoutInfo?.currentMembershipPackage
+                            ?.membershipPackageName
+                        }
+                      </span>
+                    </h5>
+                  </p>
+                  <table>
+                    <tbody>
+                      <tr>
+                        <td class="pe-4">Remaining Days:</td>
+                        <p class="fw-medium mb-0">
+                          {checkoutInfo?.remainingDays} days
+                        </p>
+                      </tr>
+                      <tr>
+                        <td class="pe-4">Remaining Balance:</td>
+                        <p class="fw-medium mb-0">
+                          ${checkoutInfo?.remainingPrice.toFixed(2)}
+                        </p>
+                      </tr>
+                      <tr>
+                        <td class="pe-4">Converted Additional Days:</td>
+                        <p class="fw-medium mb-0">
+                          {checkoutInfo?.additionalDays} days
+                        </p>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
-      {/* New Plan */}
-      <div className="border p-4 rounded my-4">
-        <h5>
-          New Plan: {checkoutInfo?.membershipPackage?.membershipPackageName}
-        </h5>
-        <p>
-          <strong>Validity Period:</strong>{" "}
-          {checkoutInfo?.membershipPackage?.validityPeriod} days
-        </p>
 
-        <p>
-          <strong>Monthly Price:</strong> $
-          {(
-            checkoutInfo?.membershipPackage?.price -
-            checkoutInfo?.membershipPackage?.savingPerMonth
-          ).toFixed(2)}
-          /month
-          {isYearly && (
-            <s className="text-body-secondary ms-1 small">
-              {" "}
-              ${checkoutInfo?.membershipPackage?.price.toFixed(2)}/month{" "}
-            </s>
-          )}
-        </p>
-        {isYearly && (
-          <p>
-            <strong>Yearly Price:</strong> $
-            {checkoutInfo?.membershipPackage?.yearlyPrice.toFixed(2)}/year
-          </p>
-        )}
-        {showMonthlySaving && isYearly && (
-          <p>
-            <strong>Monthly Savings:</strong> $
-            {checkoutInfo?.membershipPackage?.savingPerMonth.toFixed(2)}
-          </p>
-        )}
+      {/* New Plan */}
+      <div class="border p-4 rounded my-4">
+        <div class="custom-option-header mb-2 w-100 d-flex justify-content-end">
+          <span class="badge bg-label-success">New</span>
+        </div>
+        <div class="d-flex gap-4 flex-sm-row flex-column align-items-center">
+          <div class="flex-shrink-0 d-flex align-items-center">
+            <img
+              src={checkoutInfo?.membershipPackage.image}
+              alt="Plan Image"
+              class="w-px-100"
+            />
+          </div>
+          <div class="flex-grow-1">
+            <div class="row text-center text-sm-start">
+              <div class="col-md-12">
+                <p class="me-3 mb-2">
+                  <h5 className="text-heading">
+                    <span class="text-heading">
+                      {checkoutInfo?.membershipPackage?.membershipPackageName}
+                    </span>
+                  </h5>
+                </p>
+                <table className="w-100">
+                  <tbody>
+                    <tr>
+                      <td class="pe-4">Validity Period:</td>
+                      <p class="fw-medium mb-0">
+                        {checkoutInfo?.membershipPackage?.validityPeriod} days
+                      </p>
+                    </tr>
+                    <tr>
+                      <td class="pe-4">Monthly Price:</td>
+                      <p class="fw-medium mb-0">
+                        $
+                        {(
+                          checkoutInfo?.membershipPackage?.price -
+                          checkoutInfo?.membershipPackage?.savingPerMonth
+                        ).toFixed(2)}
+                        /month
+                        {isYearly && (
+                          <s className="text-body-secondary ms-1 small">
+                            ${checkoutInfo?.membershipPackage?.price.toFixed(2)}
+                            /month
+                          </s>
+                        )}
+                      </p>
+                    </tr>
+                    {isYearly && (
+                      <tr>
+                        <td class="pe-4">Yearly Price:</td>
+                        <p class="fw-medium mb-0">
+                          $
+                          {checkoutInfo?.membershipPackage?.yearlyPrice.toFixed(
+                            2
+                          )}
+                          /year
+                        </p>
+                      </tr>
+                    )}
+                    {showMonthlySaving && isYearly && (
+                      <tr>
+                        <td class="pe-4">Monthly Savings:</td>
+                        <p class="fw-medium mb-0">
+                          $
+                          {checkoutInfo?.membershipPackage?.savingPerMonth.toFixed(
+                            2
+                          )}
+                        </p>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+
       {/* Upgrade Overview */}
       <div className="border p-4 rounded my-4">
-        <h5>Upgrade Overview</h5>
-        <p>
-          <strong>Current Plan:</strong>{" "}
-          {checkoutInfo?.currentMembershipPackage?.membershipPackageName}
-        </p>
-        <p>
-          <strong>New Plan:</strong>{" "}
-          {checkoutInfo?.membershipPackage?.membershipPackageName}
-        </p>
-        <p>
-          <strong>Start Date:</strong> {formatDate(checkoutInfo?.startDate)}
-        </p>
-        <p>
-          <strong>End Date:</strong> {formatDate(checkoutInfo?.endDate)}
-        </p>
-        <p>
-          {checkoutInfo?.additionalDays > 0 && (
-            <>
-              <strong>Additional Days:</strong> {checkoutInfo?.additionalDays}{" "}
-              days
-            </>
-          )}
-        </p>
-        <p>
-          <strong>Total Validity Period:</strong> {totalDays} days
-        </p>
-      </div>
-      {/* Benefit Comparison */}
-      <div className="border p-4 rounded my-4">
-        <h5>Benefit Comparison</h5>
+        <div className="alert alert-secondary">
+          <h5 className="fw-bold">Upgrade Overview</h5>
+          <table className="w-100 mb-4">
+            <tbody>
+              <tr className="row">
+                <td className="col-6">
+                  <tr>
+                    <td class="pe-4">From Plan:</td>
+                    <p class="fw-bold mb-0">
+                      {
+                        checkoutInfo?.currentMembershipPackage
+                          .membershipPackageName
+                      }
+                    </p>
+                  </tr>
+                  <tr>
+                    <td class="pe-4">To Plan:</td>
+                    <p class="fw-bold mb-0">
+                      {checkoutInfo?.membershipPackage.membershipPackageName}
+                    </p>
+                  </tr>
+                </td>
+                <td className="col-6">
+                  <tr>
+                    <td class="pe-4">Start Date:</td>
+                    <p class="fw-medium mb-0">
+                      {formatDate(checkoutInfo?.startDate)}
+                    </p>
+                  </tr>
+                  <tr>
+                    <td class="pe-4">Expiration Date:</td>
+                    <p class="fw-medium mb-0">
+                      {formatDate(checkoutInfo?.endDate)}
+                    </p>
+                  </tr>
+                  <tr>
+                    <td class="pe-4">Additional Date:</td>
+                    <p class="fw-medium mb-0">
+                      {checkoutInfo?.additionalDays} days
+                    </p>
+                  </tr>
+                  <tr>
+                    <td class="pe-4">Total Validity Period:</td>
+                    <p class="fw-medium mb-0">{totalDays} days</p>
+                  </tr>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
         <table className="table">
           <thead>
             <tr>
