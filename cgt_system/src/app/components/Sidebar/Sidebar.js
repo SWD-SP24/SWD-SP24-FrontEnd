@@ -12,16 +12,25 @@ export default function Sidebar({ role }) {
   const [activeSubMenu, setActiveSubMenu] = useState("");
 
   useEffect(() => {
+    let found = false;
+
     menuItems.forEach((item) => {
       if (item.path === location.pathname) {
         setActiveSubMenu(item.title);
+        found = true;
       }
       item.submenu?.forEach((subItem) => {
         if (subItem.path === location.pathname) {
           setActiveSubMenu(subItem.title);
+          found = true;
         }
       });
     });
+
+    if (!found) {
+      setActiveMenu("");
+      setActiveSubMenu("");
+    }
   }, [location.pathname]);
 
   const handleMenuClick = (menu) => {

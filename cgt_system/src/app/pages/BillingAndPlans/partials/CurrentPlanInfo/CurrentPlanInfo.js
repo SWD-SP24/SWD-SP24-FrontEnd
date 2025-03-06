@@ -4,12 +4,14 @@ import UpgradePlanModal from "../../../UpgradePlanModal";
 export default function CurrentPlanInfo({ currentPlan }) {
   const isFreePlan = currentPlan?.membershipPackage.price === 0;
 
-  const daysRemaining = Math.max(
-    Math.ceil(
-      (new Date(currentPlan?.endDate) - new Date()) / (1000 * 60 * 60 * 24)
-    ),
-    0
-  );
+  // Tính toán thời gian sử dụng
+  const startDate = new Date(currentPlan?.startDate);
+  const endDate = new Date(currentPlan?.endDate);
+  const today = new Date();
+  const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+  const daysUsed = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
+  const daysRemaining = totalDays - daysUsed;
+  const progressWidth = `${100 - (daysUsed / totalDays) * 100}%`;
 
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
@@ -23,13 +25,13 @@ export default function CurrentPlanInfo({ currentPlan }) {
 
   return (
     <>
-      <div class="card mb-6">
-        <h5 class="card-header">Current Plan</h5>
-        <div class="card-body">
-          <div class="row row-gap-6">
-            <div class="col-md-6 mb-1">
-              <div class="mb-6">
-                <h6 class="mb-1">
+      <div className="card mb-6">
+        <h5 className="card-header">Current Plan</h5>
+        <div className="card-body">
+          <div className="row row-gap-6">
+            <div className="col-md-6 mb-1">
+              <div className="mb-6">
+                <h6 className="mb-1">
                   Your Current Plan is{" "}
                   {currentPlan?.membershipPackage.membershipPackageName}
                 </h6>
@@ -40,7 +42,7 @@ export default function CurrentPlanInfo({ currentPlan }) {
                 </p>
               </div>
               {isFreePlan && (
-                <ul class="text-muted ps-0">
+                <ul className="text-muted ps-0">
                   <li className="mb-4 d-flex align-items-center">
                     <span className="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
                       <i className="icon-base bx bx-check icon-xs"></i>
@@ -63,15 +65,15 @@ export default function CurrentPlanInfo({ currentPlan }) {
               )}
               {!isFreePlan && (
                 <>
-                  <h6 class="mb-1">
+                  <h6 className="mb-1">
                     Active until {formatDate(currentPlan?.endDate)}
                   </h6>
                   <p>
                     We will send you a notification upon Subscription expiration
                   </p>
-                  <div class="mb-6">
+                  <div className="mb-6">
                     <button
-                      class="col-12 btn btn-primary me-2"
+                      className="col-12 btn btn-primary me-2"
                       data-bs-toggle="modal"
                       data-bs-target="#upgradePlanModal"
                     >
@@ -81,16 +83,16 @@ export default function CurrentPlanInfo({ currentPlan }) {
                 </>
               )}
             </div>
-            <div class="col-md-6">
+            <div className="col-md-6">
               {isFreePlan ? (
-                <div class="badge d-block w-100 bg-label-primary rounded p-4 text-center">
-                  <h6 class="text-dark">Want More Features?</h6>
-                  <p class="text-muted text-wrap">
+                <div className="badge d-block w-100 bg-label-primary rounded p-4 text-center">
+                  <h6 className="text-dark">Want More Features?</h6>
+                  <p className="text-muted text-wrap">
                     Upgrade to unlock new benefits like advanced analytics,
                     priority support, and more.
                   </p>
                   <button
-                    class="col-12 btn btn-primary me-2"
+                    className="col-12 btn btn-primary me-2"
                     data-bs-toggle="modal"
                     data-bs-target="#upgradePlanModal"
                   >
@@ -100,15 +102,15 @@ export default function CurrentPlanInfo({ currentPlan }) {
               ) : (
                 <>
                   <div
-                    class={`alert ${
+                    className={`alert ${
                       daysRemaining < 10 ? "alert-warning" : "alert-success"
                     } mb-6`}
                     role="alert"
                   >
-                    <h5 class="alert-heading mb-1 d-flex align-items-center gap-2">
-                      <span class="alert-icon rounded-circle">
+                    <h5 className="alert-heading mb-1 d-flex align-items-center gap-2">
+                      <span className="alert-icon rounded-circle">
                         <i
-                          class={`icon-base bx ${
+                          className={`icon-base bx ${
                             daysRemaining < 10 ? "bx-error" : "bx-coffee"
                           } icon-md`}
                         ></i>
@@ -119,7 +121,7 @@ export default function CurrentPlanInfo({ currentPlan }) {
                           : "Your plan is active!"}
                       </span>
                     </h5>
-                    <span class="ms-11 ps-1">
+                    <span className="ms-11 ps-1">
                       {daysRemaining < 10
                         ? "Your plan requires update"
                         : "You're all set! Enjoy your plan benefits."}
@@ -136,19 +138,11 @@ export default function CurrentPlanInfo({ currentPlan }) {
                     <div className="progress rounded">
                       <div
                         className="progress-bar"
-                        style={{
-                          width: `${
-                            (daysRemaining /
-                              currentPlan?.membershipPackage.validityPeriod) *
-                            100
-                          }%`,
-                        }}
                         role="progressbar"
-                        aria-valuenow={daysRemaining}
+                        style={{ width: progressWidth }}
+                        aria-valuenow={daysUsed}
                         aria-valuemin="0"
-                        aria-valuemax={
-                          currentPlan?.membershipPackage.validityPeriod
-                        }
+                        aria-valuemax={totalDays}
                       ></div>
                     </div>
                     <small className="text-muted">

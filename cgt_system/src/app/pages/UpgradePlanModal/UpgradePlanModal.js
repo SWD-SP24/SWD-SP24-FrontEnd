@@ -3,11 +3,14 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import UpgradePlanModalSkeleton from "./UpgradePlanModalSkeleton";
+import { useNavigate } from "react-router";
 
 export default function UpgradePlanModal() {
   const [isAnnually, setIsAnnually] = useState(false);
   const [pricingPlans, setPricingPlans] = useState([]);
   const [maxDiscount, setMaxDiscount] = useState(null);
+
+  const navigate = useNavigate();
 
   const { isLoading, response, error, callApi } = useApi({
     url: API_URLS.MEMBERSHIP_PACKAGE.GET_PRICING_PLAN,
@@ -127,113 +130,140 @@ export default function UpgradePlanModal() {
                 </div>
 
                 <div className="row gy-6">
-                  {pricingPlans.map((pricingPlan) => (
-                    <div
-                      key={pricingPlan.membershipPackageId}
-                      className="col-xl mb-md-0 px-3 d-flex"
-                    >
-                      <div className="card border rounded shadow-none d-flex flex-column h-100">
-                        <div className="card-body pt-12 d-flex flex-column h-100">
-                          <div>
-                            <div className="mt-3 mb-5 text-center">
-                              <img
-                                src={pricingPlan.image}
-                                alt="Image"
-                                width="120"
-                              />
-                            </div>
-                            <h4 className="card-title text-center text-capitalize mb-1">
-                              {pricingPlan.membershipPackageName}
-                            </h4>
-                            <div className="text-center h-px-50 mb-10">
-                              <div className="d-flex justify-content-center">
-                                <sup className="h6 text-body pricing-currency mt-2 mb-0 me-1">
-                                  $
-                                </sup>
-                                <h1 className="mb-0 text-primary">
-                                  {isAnnually
-                                    ? Number.isInteger(
-                                        pricingPlan.price -
-                                          pricingPlan.savingPerMonth
-                                      )
-                                      ? pricingPlan.price -
-                                        pricingPlan.savingPerMonth
-                                      : (
-                                          pricingPlan.price -
-                                          pricingPlan.savingPerMonth
-                                        ).toFixed(2)
-                                    : Number.isInteger(pricingPlan.price)
-                                    ? pricingPlan.price
-                                    : pricingPlan.price.toFixed(2)}
-                                </h1>
-                                <sub className="h6 text-body pricing-duration mt-auto mb-1">
-                                  /month
-                                </sub>
+                  {pricingPlans.map((pricingPlan, index) => {
+                    const previousPlanName =
+                      index > 0
+                        ? pricingPlans[index - 1].membershipPackageName
+                        : null;
+                    const activePlanIndex = pricingPlans.findIndex(
+                      (plan) => plan.isActive
+                    );
+                    return (
+                      <div
+                        key={pricingPlan.membershipPackageId}
+                        className="col-xl mb-md-0 px-3 d-flex"
+                      >
+                        <div className="card border rounded shadow-none d-flex flex-column h-100">
+                          <div className="card-body pt-12 d-flex flex-column h-100">
+                            <div>
+                              <div className="mt-3 mb-5 text-center">
+                                <img
+                                  src={pricingPlan.image}
+                                  alt="Image"
+                                  width="120"
+                                />
                               </div>
-                              {isAnnually && pricingPlan.yearlyPrice > 0 && (
-                                <small className="price-yearly price-yearly-toggle text-body-secondary">
-                                  USD {pricingPlan.yearlyPrice} / year
-                                </small>
+                              <h4 className="card-title text-center text-capitalize mb-1">
+                                {pricingPlan.membershipPackageName}
+                              </h4>
+                              <div className="text-center h-px-50 mb-10">
+                                <div className="d-flex justify-content-center">
+                                  <sup className="h6 text-body pricing-currency mt-2 mb-0 me-1">
+                                    $
+                                  </sup>
+                                  <h1 className="mb-0 text-primary">
+                                    {isAnnually
+                                      ? Number.isInteger(
+                                          pricingPlan.price -
+                                            pricingPlan.savingPerMonth
+                                        )
+                                        ? pricingPlan.price -
+                                          pricingPlan.savingPerMonth
+                                        : (
+                                            pricingPlan.price -
+                                            pricingPlan.savingPerMonth
+                                          ).toFixed(2)
+                                      : Number.isInteger(pricingPlan.price)
+                                      ? pricingPlan.price
+                                      : pricingPlan.price.toFixed(2)}
+                                  </h1>
+                                  <sub className="h6 text-body pricing-duration mt-auto mb-1">
+                                    /month
+                                  </sub>
+                                </div>
+                                {isAnnually && pricingPlan.yearlyPrice > 0 && (
+                                  <small className="price-yearly price-yearly-toggle text-body-secondary">
+                                    ${pricingPlan.yearlyPrice} / year
+                                  </small>
+                                )}
+                              </div>
+                              {pricingPlan.isActive ? (
+                                <div
+                                  className="alert alert-success d-flex align-items-center justify-content-center mb-0"
+                                  style={{ height: "37.6px" }}
+                                >
+                                  <span>Your Current Plan</span>
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  className="btn btn-label-primary d-grid w-100"
+                                  data-bs-dismiss="modal"
+                                  disabled={
+                                    activePlanIndex !== -1 &&
+                                    index < activePlanIndex
+                                  }
+                                  onClick={
+                                    activePlanIndex !== -1 &&
+                                    index < activePlanIndex
+                                      ? undefined
+                                      : () =>
+                                          navigate(
+                                            "/member/upgrade-plan/checkout",
+                                            {
+                                              state: {
+                                                planId:
+                                                  pricingPlan.membershipPackageId,
+                                                isYearly: isAnnually,
+                                              },
+                                            }
+                                          )
+                                  }
+                                >
+                                  {pricingPlan.isActive
+                                    ? "Your Current Plan"
+                                    : "Upgrade"}
+                                </button>
                               )}
                             </div>
-                            {pricingPlan.isActive ? (
-                              <div
-                                className="alert alert-success d-flex align-items-center justify-content-center mb-0"
-                                style={{ height: "37.6px" }}
-                              >
-                                <span>Your Current Plan</span>
-                              </div>
-                            ) : (
-                              <button
-                                type="button"
-                                className={`btn ${
-                                  pricingPlan.isActive
-                                    ? "btn-label-success"
-                                    : "btn-label-primary"
-                                } d-grid w-100`}
-                                data-bs-dismiss="modal"
-                              >
-                                {pricingPlan.isActive
-                                  ? "Your Current Plan"
-                                  : "Upgrade"}
-                              </button>
-                            )}
-                          </div>
-                          <hr />
-                          <b className="text-start mb-5">
-                            {pricingPlan.summary}
-                          </b>
-                          <ul className="list-group flex-grow-1">
-                            {pricingPlan?.permissions
-                              .filter((permission) => {
-                                if (
-                                  displayedPermissions.has(
+                            <hr />
+                            <b className="text-start mb-5">
+                              {pricingPlan.price === 0
+                                ? "A simple start for everyone:"
+                                : `Everything in the ${previousPlanName}, plus:`}
+                            </b>
+                            <ul className="list-group flex-grow-1">
+                              {pricingPlan?.permissions
+                                .filter((permission) => {
+                                  if (
+                                    displayedPermissions.has(
+                                      permission.permissionId
+                                    )
+                                  ) {
+                                    return false; // Bỏ qua quyền đã xuất hiện ở gói trước
+                                  }
+                                  displayedPermissions.add(
                                     permission.permissionId
-                                  )
-                                ) {
-                                  return false; // Bỏ qua quyền đã xuất hiện ở gói trước
-                                }
-                                displayedPermissions.add(
-                                  permission.permissionId
-                                );
-                                return true; // Hiển thị quyền chưa xuất hiện
-                              })
-                              .map((permission) => (
-                                <li
-                                  key={permission.permissionId}
-                                  className="mb-4 d-flex align-items-center"
-                                >
-                                  <span className="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                                    <i className="icon-base bx bx-check icon-xs"></i>
-                                  </span>
-                                  <span>{permission.description}</span>
-                                </li>
-                              ))}
-                          </ul>
+                                  );
+                                  return true; // Hiển thị quyền chưa xuất hiện
+                                })
+                                .map((permission) => (
+                                  <li
+                                    key={permission.permissionId}
+                                    className="mb-4 d-flex align-items-center"
+                                  >
+                                    <span className="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
+                                      <i className="icon-base bx bx-check icon-xs"></i>
+                                    </span>
+                                    <span>{permission.description}</span>
+                                  </li>
+                                ))}
+                            </ul>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </div>

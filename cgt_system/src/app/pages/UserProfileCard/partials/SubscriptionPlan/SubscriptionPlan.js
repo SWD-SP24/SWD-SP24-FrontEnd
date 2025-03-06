@@ -8,7 +8,7 @@ import UpgradePlanModal from "../../../UpgradePlanModal";
 export default function SubscriptionPlan() {
   const [plan, setPlan] = useState(null);
 
-  const isLifetime = plan?.membershipPackage.membershipPackageName === "Basic";
+  const isLifetime = plan?.membershipPackage.price === 0;
 
   // Tính toán thời gian sử dụng
   const startDate = new Date(plan?.startDate);
@@ -23,7 +23,7 @@ export default function SubscriptionPlan() {
   const daysRemaining = isLifetime ? "Unlimited" : totalDays - daysUsed;
   const progressWidth = isLifetime
     ? "100%"
-    : `${(daysUsed / totalDays) * 100}%`;
+    : `${100 - (daysUsed / totalDays) * 100}%`;
 
   const { isLoading, response, error, callApi } = useApi({
     url: API_URLS.USER.MEMBERSHIP_PACKAGE.CURRENT,

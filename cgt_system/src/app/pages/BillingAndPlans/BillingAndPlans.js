@@ -3,10 +3,11 @@ import CurrentPlanInfo from "./partials/CurrentPlanInfo/CurrentPlanInfo";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
+import CurrentPlanInfoSkeleton from "./partials/CurrentPlanInfo/CurrentPlanInfoSkeleton";
 
 export default function BillingAndPlans() {
   const [currentPlan, setCurrentPlan] = useState(null);
-  const { response, error, callApi } = useApi({
+  const { isLoading, response, error, callApi } = useApi({
     url: API_URLS.USER.MEMBERSHIP_PACKAGE.CURRENT,
     method: "GET",
   });
@@ -36,7 +37,11 @@ export default function BillingAndPlans() {
 
   return (
     <>
-      <CurrentPlanInfo currentPlan={currentPlan} />
+      {isLoading ? (
+        <CurrentPlanInfoSkeleton />
+      ) : (
+        <CurrentPlanInfo currentPlan={currentPlan} />
+      )}
     </>
   );
 }
