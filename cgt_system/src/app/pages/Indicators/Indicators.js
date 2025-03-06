@@ -1,13 +1,17 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddIndicators from "./partials/AddIndicators.js";
 import BMIProgressBar from "./partials/BMIProgessBar.js";
 import { useParams } from "react-router";
 import API_URLS from "../../config/apiUrls.js";
 import useApi from "../../hooks/useApi.js";
-import { formatDate } from "../../util/formatDate.js";
+import { toDMY } from "../../util/dateFormat.js";
 import RemoveIndicators from "./partials/RemoveIndicators.js";
+import DateRangePicker from "./partials/DateRangePicker.js";
 export default function Indicators() {
   const childId = useParams().id;
+  const fromDateRef = useRef(null);
+  const toDateRef = useRef(null);
+
   const url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}`;
 
   const { response, callApi } = useApi({
@@ -33,22 +37,12 @@ export default function Indicators() {
         >
           <div class="row mx-md-2 justify-content-between">
             <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto px-4 mt-0">
-              <div class="dt-length mb-md-6 mb-0">
-                <select
-                  name="DataTables_Table_0_length"
-                  aria-controls="DataTables_Table_0"
-                  class="form-select ms-0"
-                  id="dt-length-0"
-                >
-                  <option value="7">7</option>
-                  <option value="10">10</option>
-                  <option value="25">25</option>
-                  <option value="50">50</option>
-                  <option value="75">75</option>
-                  <option value="100">100</option>
-                </select>
-                <label for="dt-length-0"></label>
-              </div>
+              <DateRangePicker
+                fromDateRef={fromDateRef}
+                toDateRef={toDateRef}
+                refetch={callApi}
+                childId={childId}
+              />
             </div>
             <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
               <AddIndicators refetch={callApi} childId={childId} />
@@ -89,7 +83,7 @@ export default function Indicators() {
                       aria-label="Leader: Activate to sort"
                       tabindex="0"
                     >
-                      <span class="dt-column-title">Weight</span>
+                      <span class="dt-column-title">Weight (kg)</span>
                     </th>
                     <th
                       data-dt-column="4"
@@ -98,7 +92,7 @@ export default function Indicators() {
                       class="dt-orderable-none"
                       aria-label="Team"
                     >
-                      <span class="dt-column-title">Height</span>
+                      <span class="dt-column-title">Height (cm)</span>
                     </th>
                     <th
                       class="w-px-200 dt-orderable-asc dt-orderable-desc dt-type-numeric"
@@ -129,7 +123,7 @@ export default function Indicators() {
                             <div class="d-flex justify-content-left align-items-center">
                               <div class="d-flex flex-column gap-50">
                                 <span class="text-truncate fw-medium text-heading">
-                                  {formatDate(record.recordTime)}
+                                  {toDMY(record.recordTime)}
                                 </span>
                               </div>
                             </div>

@@ -47,95 +47,100 @@ export default function EditChildButton({ childData, refetch }) {
   };
 
   return (
-    <div>
+    <>
       <button
-        class="btn btn-primary me-4"
+        className="btn btn-primary me-4"
         data-bs-toggle="modal"
-        data-bs-target="#modalCenter"
+        data-bs-target="#editChildModal"
       >
         Edit
       </button>
-      {/**Modal Edit */}
-      <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalCenterTitle">
-                Add New Child
+
+      {/* Modal Edit */}
+      <div
+        className="modal fade"
+        id="editChildModal"
+        tabIndex="-1"
+        aria-hidden="true"
+      >
+        <div className="modal-dialog modal-dialog-centered" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title" id="editChildModalTitle">
+                Edit Child
               </h5>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div class="modal-body">
-                <div class="row ">
-                  <div class="col mb-3">
-                    <label for="fullName" class="form-label">
+              <div className="modal-body">
+                <div className="row">
+                  <div className="col mb-3">
+                    <label htmlFor="fullName" className="form-label">
                       Full Name
                     </label>
                     <input
                       ref={fullNameRef}
                       type="text"
                       id="fullName"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Enter Child Name"
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col mb-3">
-                    <label for="avatarUrl" class="form-label">
+                <div className="row">
+                  <div className="col mb-3">
+                    <label htmlFor="avatarUrl" className="form-label">
                       Avatar
                     </label>
                     <input
                       ref={avatarRef}
                       type="text"
                       id="avatarUrl"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Enter Avatar Link"
                     />
                   </div>
                 </div>
-                <div class="row g-2 mb-3">
-                  <div class="col mb-0">
-                    <label for="genderSelect" class="form-label">
+                <div className="row g-2 mb-3">
+                  <div className="col mb-0">
+                    <label htmlFor="genderSelect" className="form-label">
                       Gender
                     </label>
                     <select
                       id="genderSelect"
-                      class="form-select"
+                      className="form-select"
                       ref={genderRef}
                     >
                       <option value="male">Male</option>
                       <option value="female">Female</option>
                     </select>
                   </div>
-                  <div class="col mb-0">
-                    <label for="dobInput" class="form-label">
+                  <div className="col mb-0">
+                    <label htmlFor="dobInput" className="form-label">
                       Date
                     </label>
-
                     <input
                       ref={dobRef}
-                      class="form-control"
+                      className="form-control"
                       type="date"
                       defaultValue="2021-06-18"
                       id="dobInput"
                     />
                   </div>
                 </div>
-                <div class="row g-2 mb-3">
-                  <div class="col mb-0">
-                    <label for="bloodTypeSelect" class="form-label">
+                <div className="row g-2 mb-3">
+                  <div className="col mb-0">
+                    <label htmlFor="bloodTypeSelect" className="form-label">
                       Blood-type
                     </label>
                     <select
                       id="bloodTypeSelect"
-                      class="form-select"
+                      className="form-select"
                       ref={bloodTypeRef}
                     >
                       <option value="A">A</option>
@@ -144,45 +149,45 @@ export default function EditChildButton({ childData, refetch }) {
                       <option value="O">O</option>
                     </select>
                   </div>
-                  <div class="col mb-0">
-                    <label for="allergies" class="form-label">
+                  <div className="col mb-0">
+                    <label htmlFor="allergies" className="form-label">
                       Allergies
                     </label>
                     <input
                       ref={allergiesRef}
                       type="text"
                       id="allergies"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Enter Allergy Ingredients"
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col mb-3">
-                    <label for="chronicCondition" class="form-label">
+                <div className="row">
+                  <div className="col mb-3">
+                    <label htmlFor="chronicCondition" className="form-label">
                       Chronic Conditions
                     </label>
                     <input
                       ref={chronicConditionsRef}
                       type="text"
                       id="chronicCondition"
-                      class="form-control"
+                      className="form-control"
                       placeholder="Enter Chronic Conditions"
                     />
                   </div>
                 </div>
               </div>
-              <div class="modal-footer">
+              <div className="modal-footer">
                 <button
                   type="reset"
-                  class="btn btn-outline-secondary"
+                  className="btn btn-outline-secondary"
                   data-bs-dismiss="modal"
                 >
                   Close
                 </button>
                 <button
                   type="submit"
-                  class="btn btn-primary"
+                  className="btn btn-primary"
                   data-bs-dismiss="modal"
                 >
                   Save changes
@@ -192,6 +197,6 @@ export default function EditChildButton({ childData, refetch }) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

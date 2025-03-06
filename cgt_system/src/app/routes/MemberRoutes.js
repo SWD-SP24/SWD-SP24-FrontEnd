@@ -5,6 +5,7 @@ import ComingSoon from "../pages/ComingSoon";
 import ManageChildren from "../pages/ManageChildren/ManageChildren";
 import ChildLayout from "../layouts/ChildLayout/ChildLayout";
 import Indicators from "../pages/Indicators/Indicators";
+import Overview from "../pages/Overview/Overview";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
@@ -20,7 +21,10 @@ export default function MemberRoutes() {
       >
         <Route path="children" element={<ManageChildren />} />
         <Route element={<ChildLayout />}>
-          <Route path="children/:id" element={<Indicators />} />
+          <Route path="children/:id" element={<Overview />} />
+          <Route path="children/:id/indicators" element={<Indicators />} />
+          <Route path="children/:id/teeth" element={<ComingSoon />} />
+          <Route path="children/:id/vaccinations" element={<ComingSoon />} />
         </Route>
         <Route path="*" element={<ComingSoon />} />
       </Route>

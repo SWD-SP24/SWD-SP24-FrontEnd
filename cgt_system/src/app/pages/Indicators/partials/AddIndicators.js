@@ -56,7 +56,7 @@ export default function AddIndicators({ refetch, childId }) {
             <form onSubmit={handleSubmit}>
               <div class="modal-body">
                 <div class="row g-2 mb-3">
-                  <div class="col mb-2">
+                  <div class="col mb-2 ">
                     <label for="weight" class="form-label">
                       Weight
                     </label>
