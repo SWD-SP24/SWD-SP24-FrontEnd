@@ -46,6 +46,7 @@ const API_URLS = {
   },
   INDICATORS: {
     INDICATORS: "/api/GrowthIndicators",
+    LATEST_RECORD: "/api/GrowthIndicators/latest",
   },
 };
 

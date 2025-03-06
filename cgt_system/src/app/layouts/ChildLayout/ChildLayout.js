@@ -8,6 +8,7 @@ import calculateAge from "../../util/calculateAge";
 import "./childLayout.scss";
 import EditChildButton from "./partials/EditChildButton";
 import RemoveChildButton from "./partials/RemoveChildButton";
+import LatestRecord from "./partials/LatestRecord";
 export default function ChildLayout() {
   const id = useParams().id;
   const storedUser = Cookies.get("user");
@@ -79,28 +80,7 @@ export default function ChildLayout() {
               </div>
             </div>
             <div className="d-flex justify-content-around flex-wrap my-6 gap-0 gap-md-3 gap-lg-4">
-              <div className="d-flex align-items-center me-5 gap-4">
-                <div className="avatar">
-                  <div className="avatar-initial bg-label-primary rounded w-px-40 h-px-40">
-                    <i className="icon-base bx bx-check icon-lg"></i>
-                  </div>
-                </div>
-                <div>
-                  <h5 className="mb-0">1.23k</h5>
-                  <span>Task Done</span>
-                </div>
-              </div>
-              <div className="d-flex align-items-center gap-4">
-                <div className="avatar">
-                  <div className="avatar-initial bg-label-primary rounded w-px-40 h-px-40">
-                    <i className="icon-base bx bx-customize icon-lg"></i>
-                  </div>
-                </div>
-                <div>
-                  <h5 className="mb-0">568</h5>
-                  <span>Project Done</span>
-                </div>
-              </div>
+              <LatestRecord id={id} />
             </div>
             <div className="info-container">
               <ul className="list-unstyled mb-6">
