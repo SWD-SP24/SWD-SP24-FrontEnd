@@ -4,32 +4,32 @@ import AvatarForm from "../AvatarForm/AvatarForm";
 
 export default function ProfileContent({ user, setUser, apiUrl }) {
   return (
-    <div class="content-wrapper">
+    <div className="content-wrapper">
       {/* <!-- Content --> */}
 
-      <div class="col-md-12">
-        <div class="card mb-4">
-          <h5 class="card-header">Profile Details</h5>
+      <div className="col-md-12">
+        <div className="card mb-4">
+          <h5 className="card-header">Edit Profile</h5>
           {/* <!-- Account --> */}
-          <div class="card-body">
+          <div className="card-body">
             <AvatarForm userData={user} setUser={setUser} apiUrl={apiUrl} />
           </div>
-          <hr class="my-0" />
-          <div class="card-body">
+          <hr className="my-0" />
+          <div className="card-body">
             <UpdateForm userData={user} setUser={setUser} apiUrl={apiUrl} />
           </div>
           {/* <!-- /Account --> */}
         </div>
         {/* <!-- Delete Acc --> */}
-        {/* <div class="card">
-                          <h5 class="card-header">Delete Account</h5>
-                          <div class="card-body">
-                            <div class="mb-3 col-12 mb-0">
-                              <div class="alert alert-warning">
-                                <h6 class="alert-heading fw-bold mb-1">
+        {/* <div className="card">
+                          <h5 className="card-header">Delete Account</h5>
+                          <div className="card-body">
+                            <div className="mb-3 col-12 mb-0">
+                              <div className="alert alert-warning">
+                                <h6 className="alert-heading fw-bold mb-1">
                                   Are you sure you want to delete your account?
                                 </h6>
-                                <p class="mb-0">
+                                <p className="mb-0">
                                   Once you delete your account, there is no going
                                   back. Please be certain.
                                 </p>
@@ -39,15 +39,15 @@ export default function ProfileContent({ user, setUser, apiUrl }) {
                               id="formAccountDeactivation"
                               onsubmit="return false"
                             >
-                              <div class="form-check mb-3">
+                              <div className="form-check mb-3">
                                 <input
-                                  class="form-check-input"
+                                  className="form-check-input"
                                   type="checkbox"
                                   name="accountActivation"
                                   id="accountActivation"
                                 />
                                 <label
-                                  class="form-check-label"
+                                  className="form-check-label"
                                   for="accountActivation"
                                 >
                                   I confirm my account deactivation
@@ -55,7 +55,7 @@ export default function ProfileContent({ user, setUser, apiUrl }) {
                               </div>
                               <button
                                 type="submit"
-                                class="btn btn-danger deactivate-account"
+                                className="btn btn-danger deactivate-account"
                               >
                                 Deactivate Account
                               </button>
@@ -66,7 +66,7 @@ export default function ProfileContent({ user, setUser, apiUrl }) {
 
       {/* <!-- / Content --> */}
 
-      <div class="content-backdrop fade"></div>
+      <div className="content-backdrop fade"></div>
     </div>
   );
 }

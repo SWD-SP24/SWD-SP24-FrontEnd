@@ -30,7 +30,6 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
       setState(userData.state || "");
       setZipCode(userData.zipcode || "");
       setCountry(userData.country || "");
-      console.log(userData);
     }
   }, [userData]);
 
@@ -56,7 +55,6 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
   };
 
   const isAdmin = mainUser.role === "admin";
-  console.log("rerender ne");
   return (
     <form id="formAccountSettings" onSubmit={handleSubmit}>
       <div class="row">
@@ -71,7 +69,7 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             name="firstName"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
-            autofocus
+            autoFocus
             disabled={isAdmin}
           />
         </div>

@@ -6,6 +6,7 @@ import ManageChildren from "../pages/ManageChildren/ManageChildren";
 import ChildLayout from "../layouts/ChildLayout/ChildLayout";
 import Indicators from "../pages/Indicators/Indicators";
 import Overview from "../pages/Overview/Overview";
+import Checkout from "../pages/Checkout";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
@@ -26,6 +27,7 @@ export default function MemberRoutes() {
           <Route path="children/:id/teeth" element={<ComingSoon />} />
           <Route path="children/:id/vaccinations" element={<ComingSoon />} />
         </Route>
+        <Route path="upgrade-plan/checkout" element={<Checkout />} />
         <Route path="*" element={<ComingSoon />} />
       </Route>
     </Routes>
