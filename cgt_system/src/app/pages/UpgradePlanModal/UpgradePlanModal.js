@@ -4,6 +4,7 @@ import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import UpgradePlanModalSkeleton from "./UpgradePlanModalSkeleton";
 import { useNavigate } from "react-router";
+import { auto } from "@popperjs/core";
 
 export default function UpgradePlanModal() {
   const [isAnnually, setIsAnnually] = useState(false);
@@ -146,7 +147,12 @@ export default function UpgradePlanModal() {
                         <div className="card border rounded shadow-none d-flex flex-column h-100">
                           <div className="card-body pt-12 d-flex flex-column h-100">
                             <div>
-                              <div className="mt-3 mb-5 text-center">
+                              <div
+                                className="mt-3 mb-5 text-center"
+                                style={{
+                                  height: "125px",
+                                }}
+                              >
                                 <img
                                   src={pricingPlan.image}
                                   alt="Image"
@@ -156,6 +162,9 @@ export default function UpgradePlanModal() {
                               <h4 className="card-title text-center text-capitalize mb-1">
                                 {pricingPlan.membershipPackageName}
                               </h4>
+                              <p class="text-center mb-5">
+                                {pricingPlan.summary}
+                              </p>
                               <div className="text-center h-px-50 mb-10">
                                 <div className="d-flex justify-content-center">
                                   <sup className="h6 text-body pricing-currency mt-2 mb-0 me-1">

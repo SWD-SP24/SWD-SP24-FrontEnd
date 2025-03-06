@@ -16,7 +16,10 @@ export default function Welcome() {
             We're excited to help you track your child's growth and milestones
           </p>
           <p className="mb-6 mx-2">Let's make every step memorable! 🎉</p>
-          <Link className={cx("btn", "btn-primary", "btn-animated")}>
+          <Link
+            to={"/member/dashboard"}
+            className={cx("btn", "btn-primary", "btn-animated")}
+          >
             Start Exploring
           </Link>
         </div>

@@ -20,10 +20,11 @@ export default function Button({ data, buttonTag }) {
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
+        const user = response.data || {};
         const { token: authToken } = response.data || {};
         if (authToken) {
-          console.log(authToken);
           Cookies.set("auth_token", authToken);
+          Cookies.set("user", JSON.stringify(user));
           navigate("/welcome");
         }
       }

@@ -15,6 +15,7 @@ const API_URLS = {
   },
   UPGRADE_MEMBERSHIP_PACKAGE: {
     CHECKOUT: "/api/BuyMembershipPackage",
+    PROCEED_PAYMENT: "/api/BuyMembershipPackage/BuyMembershipPackage",
   },
   PERMISSION: {
     GET: "/api/Permissions",
