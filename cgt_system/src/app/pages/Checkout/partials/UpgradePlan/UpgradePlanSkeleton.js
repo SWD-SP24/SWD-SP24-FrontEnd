@@ -13,107 +13,122 @@ export default function UpgradePlanSkeleton() {
 
       {/* Current Plan Skeleton */}
       <div className="border p-4 rounded my-4">
-        <h5>
-          <Skeleton width={200} />
-        </h5>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={95} />
-          </strong>{" "}
-          <Skeleton width={120} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={118} />
-          </strong>{" "}
-          <Skeleton width={50} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={141} />
-          </strong>{" "}
-          <Skeleton width={80} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={194} />
-          </strong>{" "}
-          <Skeleton width={50} />
-        </p>
+        {/* Header Skeleton */}
+        <div className="custom-option-header mb-2 w-100 d-flex justify-content-end">
+          <Skeleton width={80} height={24} />
+        </div>
+
+        <div className="d-flex gap-4 flex-sm-row flex-column align-items-center">
+          {/* Image Skeleton */}
+          <div className="flex-shrink-0 d-flex align-items-center">
+            <Skeleton width={100} height={100} />
+          </div>
+
+          {/* Content Skeleton */}
+          <div className="flex-grow-1">
+            <div className="row text-center text-sm-start">
+              <div className="col-md-12">
+                <p className="me-3 mb-2">
+                  <Skeleton width={120} height={20} />
+                </p>
+
+                <table>
+                  <tbody>
+                    <tr>
+                      <td className="pe-4">
+                        <Skeleton width={120} />
+                      </td>
+                      <p className="fw-medium mb-0">
+                        <Skeleton width={50} />
+                      </p>
+                    </tr>
+                    <tr>
+                      <td className="pe-4">
+                        <Skeleton width={120} />
+                      </td>
+                      <p className="fw-medium mb-0">
+                        <Skeleton width={80} />
+                      </p>
+                    </tr>
+                    <tr>
+                      <td className="pe-4">
+                        <Skeleton width={120} />
+                      </td>
+                      <p className="fw-medium mb-0">
+                        <Skeleton width={50} />
+                      </p>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* New Plan Skeleton */}
       <div className="border p-4 rounded my-4">
-        <h5>
-          <Skeleton width={200} />
-        </h5>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={108} />
-          </strong>{" "}
-          <Skeleton width={80} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={103} />
-          </strong>{" "}
-          <Skeleton width={100} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={80} />
-          </strong>{" "}
-          <Skeleton width={100} />
-        </p>
+        {/* Header Skeleton */}
+        <div className="custom-option-header mb-2 w-100 d-flex justify-content-end">
+          <Skeleton width={80} height={24} />
+        </div>
+
+        <div className="d-flex gap-4 flex-sm-row flex-column align-items-center">
+          {/* Image Skeleton */}
+          <div className="flex-shrink-0 d-flex align-items-center">
+            <Skeleton width={100} height={100} />
+          </div>
+
+          {/* Content Skeleton */}
+          <div className="flex-grow-1">
+            <div className="row text-center text-sm-start">
+              <div className="col-md-12">
+                <p className="me-3 mb-2">
+                  <Skeleton width={120} height={20} />
+                </p>
+
+                <table>
+                  <tbody>
+                    <tr>
+                      <td className="pe-4">
+                        <Skeleton width={120} />
+                      </td>
+                      <p className="fw-medium mb-0">
+                        <Skeleton width={50} />
+                      </p>
+                    </tr>
+                    <tr>
+                      <td className="pe-4">
+                        <Skeleton width={120} />
+                      </td>
+                      <p className="fw-medium mb-0">
+                        <Skeleton width={80} />
+                      </p>
+                    </tr>
+                    <tr>
+                      <td className="pe-4">
+                        <Skeleton width={120} />
+                      </td>
+                      <p className="fw-medium mb-0">
+                        <Skeleton width={50} />
+                      </p>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Upgrade Overview Skeleton */}
       <div className="border p-4 rounded my-4">
-        <h5>
-          <Skeleton width={180} />
-        </h5>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={108} />
-          </strong>{" "}
-          <Skeleton width={120} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={103} />
-          </strong>{" "}
-          <Skeleton width={120} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={80} />
-          </strong>{" "}
-          <Skeleton width={100} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={80} />
-          </strong>{" "}
-          <Skeleton width={100} />
-        </p>
-        <p className="d-flex gap-2">
-          <strong>
-            <Skeleton width={80} />
-          </strong>{" "}
-          <Skeleton width={80} />
-        </p>
-      </div>
-
-      {/* Benefit Comparison Skeleton */}
-      <div className="border p-4 rounded my-4">
-        <h5>
-          <Skeleton width={200} />
-        </h5>
+        <Skeleton height={158} />
         <table className="table">
           <thead>
             <tr>
               <th>
-                <Skeleton width={90} />
+                <Skeleton width={100} />
               </th>
               <th className="text-center">
                 <Skeleton width={80} />
@@ -124,16 +139,16 @@ export default function UpgradePlanSkeleton() {
             </tr>
           </thead>
           <tbody>
-            {[...Array(3)].map((_, index) => (
+            {[...Array(5)].map((_, index) => (
               <tr key={index}>
                 <td>
-                  <Skeleton width={150} />
+                  <Skeleton width={180} />
                 </td>
                 <td className="text-center">
-                  <Skeleton width={20} height={20} />
+                  <Skeleton circle width={24} height={24} />
                 </td>
                 <td className="text-center">
-                  <Skeleton width={20} height={20} />
+                  <Skeleton circle width={24} height={24} />
                 </td>
               </tr>
             ))}

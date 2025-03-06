@@ -5,6 +5,8 @@ import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import UpgradePlan from "./partials/UpgradePlan/UpgradePlan";
 import UpgradePlanSkeleton from "./partials/UpgradePlan/UpgradePlanSkeleton";
+import Summary from "./partials/Summary/Summary";
+import SummarySkeleton from "./partials/Summary/SummarySkeleton";
 
 export default function Checkout() {
   const location = useLocation();
@@ -21,6 +23,10 @@ export default function Checkout() {
   useEffect(() => {
     callApi();
   }, []);
+
+  useEffect(() => {
+    callApi();
+  }, [isYearly]);
 
   useEffect(() => {
     if (response) {
@@ -47,6 +53,7 @@ export default function Checkout() {
         <div className="card px-3">
           <div className="row">
             <UpgradePlanSkeleton />
+            <SummarySkeleton />
           </div>
         </div>
       </>
@@ -57,6 +64,7 @@ export default function Checkout() {
       <div className="card px-3">
         <div className="row">
           <UpgradePlan checkoutInfo={checkoutInfo} isYearly={isYearly} />
+          <Summary checkoutInfo={checkoutInfo} isYearly={isYearly} />
         </div>
       </div>
     </>

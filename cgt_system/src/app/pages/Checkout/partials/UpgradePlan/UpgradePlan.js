@@ -27,48 +27,46 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
 
       {/* Current Plan */}
       {checkoutInfo?.remainingDays > 0 && (
-        <div class="border p-4 rounded my-4">
-          <div class="custom-option-header mb-2 w-100 d-flex justify-content-end">
-            <span class="badge bg-label-primary">Current</span>
+        <div className="border p-4 rounded my-4">
+          <div className="custom-option-header mb-2 w-100 d-flex justify-content-end">
+            <span className="badge bg-label-primary">Current</span>
           </div>
-          <div class="d-flex gap-4 flex-sm-row flex-column align-items-center">
-            <div class="flex-shrink-0 d-flex align-items-center">
+          <div className="d-flex gap-4 flex-sm-row flex-column align-items-center">
+            <div className="flex-shrink-0 d-flex align-items-center">
               <img
                 src={checkoutInfo?.currentMembershipPackage.image}
                 alt="Plan Image"
-                class="w-px-100"
+                className="w-px-100"
               />
             </div>
-            <div class="flex-grow-1">
-              <div class="row text-center text-sm-start">
-                <div class="col-md-12">
-                  <p class="me-3 mb-2">
-                    <h5 className="text-heading">
-                      <span class="text-heading">
-                        {
-                          checkoutInfo?.currentMembershipPackage
-                            ?.membershipPackageName
-                        }
-                      </span>
-                    </h5>
+            <div className="flex-grow-1">
+              <div className="row text-center text-sm-start">
+                <div className="col-md-12">
+                  <p className="me-3 mb-2">
+                    <span className="fw-bold text-heading">
+                      {
+                        checkoutInfo?.currentMembershipPackage
+                          ?.membershipPackageName
+                      }
+                    </span>
                   </p>
                   <table>
                     <tbody>
                       <tr>
-                        <td class="pe-4">Remaining Days:</td>
-                        <p class="fw-medium mb-0">
+                        <td className="pe-4">Remaining Days:</td>
+                        <p className="fw-medium mb-0">
                           {checkoutInfo?.remainingDays} days
                         </p>
                       </tr>
                       <tr>
-                        <td class="pe-4">Remaining Balance:</td>
-                        <p class="fw-medium mb-0">
+                        <td className="pe-4">Remaining Balance:</td>
+                        <p className="fw-medium mb-0">
                           ${checkoutInfo?.remainingPrice.toFixed(2)}
                         </p>
                       </tr>
                       <tr>
-                        <td class="pe-4">Converted Additional Days:</td>
-                        <p class="fw-medium mb-0">
+                        <td className="pe-4">Converted Additional Days:</td>
+                        <p className="fw-medium mb-0">
                           {checkoutInfo?.additionalDays} days
                         </p>
                       </tr>
@@ -82,39 +80,37 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
       )}
 
       {/* New Plan */}
-      <div class="border p-4 rounded my-4">
-        <div class="custom-option-header mb-2 w-100 d-flex justify-content-end">
-          <span class="badge bg-label-success">New</span>
+      <div className="border p-4 rounded my-4">
+        <div className="custom-option-header mb-2 w-100 d-flex justify-content-end">
+          <span className="badge bg-label-success">New</span>
         </div>
-        <div class="d-flex gap-4 flex-sm-row flex-column align-items-center">
-          <div class="flex-shrink-0 d-flex align-items-center">
+        <div className="d-flex gap-4 flex-sm-row flex-column align-items-center">
+          <div className="flex-shrink-0 d-flex align-items-center">
             <img
               src={checkoutInfo?.membershipPackage.image}
               alt="Plan Image"
-              class="w-px-100"
+              className="w-px-100"
             />
           </div>
-          <div class="flex-grow-1">
-            <div class="row text-center text-sm-start">
-              <div class="col-md-12">
-                <p class="me-3 mb-2">
-                  <h5 className="text-heading">
-                    <span class="text-heading">
-                      {checkoutInfo?.membershipPackage?.membershipPackageName}
-                    </span>
-                  </h5>
+          <div className="flex-grow-1">
+            <div className="row text-center text-sm-start">
+              <div className="col-md-12">
+                <p className="me-3 mb-2">
+                  <span className="fw-bold text-heading">
+                    {checkoutInfo?.membershipPackage?.membershipPackageName}
+                  </span>
                 </p>
                 <table className="w-100">
                   <tbody>
                     <tr>
-                      <td class="pe-4">Validity Period:</td>
-                      <p class="fw-medium mb-0">
+                      <td className="pe-4">Validity Period:</td>
+                      <p className="fw-medium mb-0">
                         {checkoutInfo?.membershipPackage?.validityPeriod} days
                       </p>
                     </tr>
                     <tr>
-                      <td class="pe-4">Monthly Price:</td>
-                      <p class="fw-medium mb-0">
+                      <td className="pe-4">Monthly Price:</td>
+                      <p className="fw-medium mb-0">
                         $
                         {(
                           checkoutInfo?.membershipPackage?.price -
@@ -131,8 +127,8 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                     </tr>
                     {isYearly && (
                       <tr>
-                        <td class="pe-4">Yearly Price:</td>
-                        <p class="fw-medium mb-0">
+                        <td className="pe-4">Yearly Price:</td>
+                        <p className="fw-medium mb-0">
                           $
                           {checkoutInfo?.membershipPackage?.yearlyPrice.toFixed(
                             2
@@ -143,8 +139,8 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                     )}
                     {showMonthlySaving && isYearly && (
                       <tr>
-                        <td class="pe-4">Monthly Savings:</td>
-                        <p class="fw-medium mb-0">
+                        <td className="pe-4">Monthly Savings:</td>
+                        <p className="fw-medium mb-0">
                           $
                           {checkoutInfo?.membershipPackage?.savingPerMonth.toFixed(
                             2
@@ -169,8 +165,8 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
               <tr className="row">
                 <td className="col-6">
                   <tr>
-                    <td class="pe-4">From Plan:</td>
-                    <p class="fw-bold mb-0">
+                    <td className="pe-4">From Plan:</td>
+                    <p className="fw-bold mb-0">
                       {
                         checkoutInfo?.currentMembershipPackage
                           .membershipPackageName
@@ -178,34 +174,34 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
                     </p>
                   </tr>
                   <tr>
-                    <td class="pe-4">To Plan:</td>
-                    <p class="fw-bold mb-0">
+                    <td className="pe-4">To Plan:</td>
+                    <p className="fw-bold mb-0">
                       {checkoutInfo?.membershipPackage.membershipPackageName}
                     </p>
                   </tr>
                 </td>
                 <td className="col-6">
                   <tr>
-                    <td class="pe-4">Start Date:</td>
-                    <p class="fw-medium mb-0">
+                    <td className="pe-4">Start Date:</td>
+                    <p className="fw-medium mb-0">
                       {formatDate(checkoutInfo?.startDate)}
                     </p>
                   </tr>
                   <tr>
-                    <td class="pe-4">Expiration Date:</td>
-                    <p class="fw-medium mb-0">
+                    <td className="pe-4">Expiration Date:</td>
+                    <p className="fw-medium mb-0">
                       {formatDate(checkoutInfo?.endDate)}
                     </p>
                   </tr>
                   <tr>
-                    <td class="pe-4">Additional Date:</td>
-                    <p class="fw-medium mb-0">
+                    <td className="pe-4">Additional Date:</td>
+                    <p className="fw-medium mb-0">
                       {checkoutInfo?.additionalDays} days
                     </p>
                   </tr>
                   <tr>
-                    <td class="pe-4">Total Validity Period:</td>
-                    <p class="fw-medium mb-0">{totalDays} days</p>
+                    <td className="pe-4">Total Validity Period:</td>
+                    <p className="fw-medium mb-0">{totalDays} days</p>
                   </tr>
                 </td>
               </tr>
