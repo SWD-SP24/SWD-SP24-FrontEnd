@@ -6,6 +6,7 @@ import {
   onSnapshot,
   where,
   orderBy,
+  addDoc,
 } from "firebase/firestore";
 import "./chat.css";
 import image from "../../assets/img/avatars/default-avatar.jpg";
@@ -243,19 +244,45 @@ export default function Chat() {
         {/* End Chats */}
 
         {/* Chat History */}
-        <ChatHistory
-          currentUser={user}
-          recipient={
-            selectedConversation
-              ? selectedConversation[
-                  selectedConversation.participants.find(
+        {selectedConversation ? (
+          <ChatHistory
+            currentUser={user}
+            recipientId={
+              selectedConversation
+                ? selectedConversation.participants.find(
                     (id) => id !== user.userId
                   )
-                ]
-              : null
-          }
-          messages={messages}
-        />
+                : null
+            }
+            recipient={
+              selectedConversation
+                ? selectedConversation[
+                    selectedConversation.participants.find(
+                      (id) => id !== user.userId
+                    )
+                  ]
+                : null
+            }
+            messages={messages}
+            conversationId={selectedConversation.id}
+          />
+        ) : (
+          <div
+            class="col app-chat-conversation d-flex align-items-center justify-content-center flex-column"
+            id="app-chat-conversation"
+          >
+            <div class="bg-label-primary p-8 rounded-circle">
+              <i class="icon-base bx bx-message-alt-detail icon-48px"></i>
+            </div>
+            <p class="my-4">Select a contact to start a conversation.</p>
+            <button
+              class="btn btn-primary app-chat-conversation-btn"
+              id="app-chat-conversation-btn"
+            >
+              Select Contact
+            </button>
+          </div>
+        )}
         {/* End Chat History */}
       </div>
     </div>

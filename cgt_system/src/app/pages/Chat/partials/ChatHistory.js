@@ -1,7 +1,24 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import image from "../../../assets/img/avatars/default-avatar.jpg";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../../../config/firebase";
 
-export default function ChatHistory({ currentUser, recipient, messages }) {
+export default function ChatHistory({
+  currentUser,
+  recipientId,
+  recipient,
+  messages,
+  conversationId,
+}) {
+  const [newMessage, setNewMessage] = useState("");
+  const chatEndRef = useRef(null);
+
   const formatTimestamp = (timestamp) => {
     if (!timestamp?.seconds) return "Unknown time";
 
@@ -34,6 +51,48 @@ export default function ChatHistory({ currentUser, recipient, messages }) {
       });
     }
   };
+
+  const sendMessage = async (newMessage) => {
+    if (!conversationId) return;
+
+    try {
+      await addDoc(
+        collection(db, "conversations", conversationId, "messages"),
+        {
+          senderId: currentUser.userId,
+          recipientId: recipientId,
+          text: newMessage,
+          timestamp: serverTimestamp(),
+        }
+      );
+
+      // Cập nhật lastMessage, lastSenderId, lastSenderName, lastSenderAvatar trong conversations
+      const conversationRef = doc(db, "conversations", conversationId);
+      await updateDoc(conversationRef, {
+        lastMessage: newMessage,
+        lastSenderId: currentUser.userId,
+        lastSenderName: currentUser.fullName,
+        lastSenderAvatar: currentUser.avatar || "",
+        lastTimestamp: serverTimestamp(),
+      });
+
+      setNewMessage("");
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+
+    if (!newMessage) return;
+
+    sendMessage(newMessage);
+  };
+
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "auto" });
+  }, [messages]);
 
   return (
     <div className="col app-chat-history d-block" id="app-chat-history">
@@ -126,14 +185,20 @@ export default function ChatHistory({ currentUser, recipient, messages }) {
               );
             })}
           </ul>
+          <div ref={chatEndRef} />
         </div>
 
         {/* Chat Input */}
         <div className="chat-history-footer shadow-xs">
-          <form className="form-send-message d-flex justify-content-between align-items-center">
+          <form
+            className="form-send-message d-flex justify-content-between align-items-center"
+            onSubmit={handleSendMessage}
+          >
             <input
               className="form-control message-input border-0 me-4 shadow-none"
               placeholder="Type your message here..."
+              value={newMessage}
+              onChange={(e) => setNewMessage(e.target.value)}
             />
             <div className="message-actions d-flex align-items-center">
               <span className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer">
