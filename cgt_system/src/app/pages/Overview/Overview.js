@@ -32,8 +32,8 @@ export default function Overview() {
   }
 
   return (
-    <div className="scrollable-container">
-      <PerfectScrollbar
+    <div>
+      {/* <PerfectScrollbar
         options={{
           wheelSpeed: 0.5, // Smooth scrolling
           swipeEasing: true,
@@ -46,7 +46,10 @@ export default function Overview() {
           <WeightChart />
           <BMIChart />
         </div>
-      </PerfectScrollbar>
+      </PerfectScrollbar> */}
+      <HeightChart />
+      <WeightChart />
+      <BMIChart />
     </div>
   );
 }

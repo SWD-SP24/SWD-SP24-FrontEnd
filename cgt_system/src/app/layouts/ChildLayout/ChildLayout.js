@@ -52,9 +52,12 @@ export default function ChildLayout() {
 
   return (
     <div className="row">
-      <div className="col-xl-4 col-lg-5 order-1 order-md-0">
+      <div className="col-xl-4 col-lg-5 order-1 order-md-0 ">
         {/* <!-- User Card --> */}
-        <div className="card mb-6  ">
+        <div
+          className="card mb-6  "
+          style={{ position: "sticky", top: "90px" }}
+        >
           <div className="card-body pt-12 text-container">
             <ul class="circles">
               <li></li>

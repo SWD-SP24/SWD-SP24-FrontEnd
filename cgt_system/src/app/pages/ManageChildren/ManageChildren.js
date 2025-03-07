@@ -5,6 +5,7 @@ import API_URLS from "../../config/apiUrls";
 import "./ManageChildren.scss";
 import ActionButton from "./partials/ActionButton";
 import Avatar from "../../components/Avatar/Avatar";
+import { Link } from "react-router";
 export default function ManageChildren() {
   const { response, callApi } = useApi({
     url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
@@ -135,7 +136,6 @@ export default function ManageChildren() {
                       data-dt-column="1"
                       rowSpan="1"
                       colSpan="1"
-                      className="dt-orderable-asc dt-orderable-desc dt-ordering-desc"
                       aria-sort="descending"
                       aria-label="User: Activate to remove sorting"
                       tabIndex="0"
@@ -145,25 +145,13 @@ export default function ManageChildren() {
                       </span>
                       <span className="dt-column-order"></span>
                     </th>
-                    <th
-                      data-dt-column="2"
-                      rowSpan="1"
-                      colSpan="1"
-                      className="dt-orderable-asc dt-orderable-desc"
-                      tabIndex="0"
-                    >
+                    <th data-dt-column="2" rowSpan="1" colSpan="1" tabIndex="0">
                       <span className="dt-column-title" role="button">
                         Gender
                       </span>
                       <span className="dt-column-order"></span>
                     </th>
-                    <th
-                      data-dt-column="3"
-                      rowSpan="1"
-                      colSpan="1"
-                      className="dt-orderable-asc dt-orderable-desc"
-                      tabIndex="0"
-                    >
+                    <th data-dt-column="3" rowSpan="1" colSpan="1" tabIndex="0">
                       <span className="dt-column-title" role="button">
                         Date of birth
                       </span>
@@ -173,14 +161,10 @@ export default function ManageChildren() {
                       data-dt-column="4"
                       rowSpan="1"
                       colSpan="1"
-                      className="dt-orderable-asc dt-orderable-desc dt-ordering-desc"
                       aria-sort="descending"
                       tabIndex="0"
                     >
-                      <span className="dt-column-title" role="button">
-                        Blood-type
-                      </span>
-                      <span className="dt-column-order"></span>
+                      <span className="dt-column-title">Blood-type</span>
                     </th>
 
                     <th
@@ -201,7 +185,10 @@ export default function ManageChildren() {
                         return (
                           <tr>
                             <td className="sorting_1">
-                              <div className="d-flex justify-content-start align-items-center user-name">
+                              <Link
+                                to={`${child.childrenId}`}
+                                className="d-flex justify-content-start align-items-center user-name"
+                              >
                                 <div>
                                   <Avatar
                                     src={child.avatar}
@@ -218,7 +205,7 @@ export default function ManageChildren() {
                                     </span>
                                   </a>
                                 </div>
-                              </div>
+                              </Link>
                             </td>
                             <td className="sorting_1">
                               <div className="d-flex justify-content-start align-items-center user-name">
