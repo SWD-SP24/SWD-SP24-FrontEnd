@@ -12,9 +12,12 @@ import image from "../../assets/img/avatars/default-avatar.jpg";
 import doctor_image from "../../assets/img/illustrations/doctor.png";
 import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
+import ChatHistory from "./partials/ChatHistory";
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
+  const [messages, setMessages] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
 
@@ -70,6 +73,30 @@ export default function Chat() {
     if (minutes < 60) return `${minutes} minutes ago`;
     if (hours < 24) return `${hours} hours ago`;
     return `${days} days ago`;
+  };
+
+  const selectConversation = (conversation) => {
+    setSelectedConversation(conversation);
+    setMessages([]);
+
+    const messagesRef = collection(
+      db,
+      "conversations",
+      conversation.id,
+      "messages"
+    );
+    const q = query(messagesRef, orderBy("timestamp", "asc"));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const messagesData = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      setMessages(messagesData);
+    });
+
+    return () => unsubscribe();
   };
 
   return (
@@ -177,7 +204,7 @@ export default function Chat() {
                           ? "active"
                           : ""
                       }`}
-                      onClick={() => setSelectedConversation(conversation)}
+                      onClick={() => selectConversation(conversation)}
                     >
                       <a className="d-flex align-items-center">
                         <div className="flex-shrink-0 avatar avatar-online">
@@ -213,6 +240,23 @@ export default function Chat() {
             </ul>
           </div>
         </div>
+        {/* End Chats */}
+
+        {/* Chat History */}
+        <ChatHistory
+          currentUser={user}
+          recipient={
+            selectedConversation
+              ? selectedConversation[
+                  selectedConversation.participants.find(
+                    (id) => id !== user.userId
+                  )
+                ]
+              : null
+          }
+          messages={messages}
+        />
+        {/* End Chat History */}
       </div>
     </div>
   );
