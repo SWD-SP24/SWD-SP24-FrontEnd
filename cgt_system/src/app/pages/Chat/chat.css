@@ -447,6 +447,7 @@
 [data-bs-theme="dark"] .app-chat {
   --bs-chat-bg: #20202e;
 }
+
 .sidebar-body::-webkit-scrollbar {
   width: 3px;
 }
