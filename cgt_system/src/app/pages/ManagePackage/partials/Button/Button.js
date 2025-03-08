@@ -11,9 +11,15 @@ import { validateField } from "../../schemas/managePackageSchema";
 import showToast from "../../../../util/showToast";
 import { Modal } from "bootstrap";
 
-export default function Button({ buttonTag, data, selectedPermissions }) {
+export default function Button({
+  buttonTag,
+  data,
+  image,
+  selectedPermissions,
+}) {
   const pagination = sPagination.use();
   const formData = sFormData.use();
+
   const { isLoading, response, error, callApi } = useApi({
     method: buttonTag === "Submit" ? "POST" : "PUT",
   });
@@ -26,6 +32,16 @@ export default function Button({ buttonTag, data, selectedPermissions }) {
   } = useApi({
     url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`,
     method: "GET",
+  });
+
+  const {
+    isLoading: getImageUrlLoading,
+    response: getImageUrlResponse,
+    error: getImageUrlError,
+    callApi: getImageUrlCallApi,
+  } = useApi({
+    url: API_URLS.IMAGE.GET_URL,
+    method: "POST",
   });
 
   useEffect(() => {
@@ -92,7 +108,7 @@ export default function Button({ buttonTag, data, selectedPermissions }) {
     }
   }, [getPackageResponse, getPackageError]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const packageNameError = validateField("packageName", formData.packageName);
@@ -121,21 +137,45 @@ export default function Button({ buttonTag, data, selectedPermissions }) {
       return;
     }
 
-    const customUrl =
-      buttonTag === "Submit"
-        ? `${API_URLS.MEMBERSHIP_PACKAGE.POST}`
-        : `${API_URLS.MEMBERSHIP_PACKAGE.PUT}/${data?.membershipPackageId}`;
+    const data = new FormData();
+    data.append("file", image);
 
-    const customBody = {
-      membershipPackageName: formData.packageName,
-      price: formData.price,
-      status: buttonTag === "Submit" ? "inactive" : data?.status,
-      validityPeriod: formData.validityPeriod,
-      permissions: selectedPermissions,
-    };
-
-    callApi(customBody, customUrl);
+    await getImageUrlCallApi(data);
   };
+
+  useEffect(() => {
+    if (getImageUrlResponse?.status === "successful") {
+      const imageUrl = getImageUrlResponse.data.url || {};
+
+      const customUrl =
+        buttonTag === "Submit"
+          ? `${API_URLS.MEMBERSHIP_PACKAGE.POST}`
+          : `${API_URLS.MEMBERSHIP_PACKAGE.PUT}/${data?.membershipPackageId}`;
+
+      const customBody = {
+        membershipPackageName: formData.packageName,
+        summary: formData.summary,
+        percentDiscount: formData.percentDiscount,
+        image: imageUrl,
+        price: formData.price,
+        status: buttonTag === "Submit" ? "inactive" : data?.status,
+        validityPeriod: formData.validityPeriod,
+        permissions: selectedPermissions,
+      };
+
+      callApi(customBody, customUrl);
+    }
+  }, [getImageUrlResponse]);
+
+  useEffect(() => {
+    if (getImageUrlCallApi?.message) {
+      showToast({
+        icon: "error",
+        text: getImageUrlError?.message,
+        targetElement: document.querySelector(".card"),
+      });
+    }
+  }, [getImageUrlError]);
 
   const closeModal = () => {
     const modalElement = document.getElementById(
@@ -154,7 +194,7 @@ export default function Button({ buttonTag, data, selectedPermissions }) {
 
   return (
     <button className={"btn btn-primary me-sm-3 me-1"} onClick={handleSubmit}>
-      {isLoading || getPackagesLoading ? (
+      {isLoading || getPackagesLoading || getImageUrlLoading ? (
         <>
           <span
             className="spinner-border spinner-border-sm"
