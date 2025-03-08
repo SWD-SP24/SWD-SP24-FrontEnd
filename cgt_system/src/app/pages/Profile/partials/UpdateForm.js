@@ -1,11 +1,9 @@
-import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
-import { countries } from "../../../constants/countries.js";
 import useApi from "../../../hooks/useApi";
 import splitName from "../../../util/splitName.js";
 import showToast from "../../../util/showToast.js";
 export default function UpdateForm({ userData, setUser, apiUrl }) {
-  const { response, callApi } = useApi({
+  const { isLoading, response, callApi } = useApi({
     url: apiUrl,
     method: "PUT",
   });
@@ -16,9 +14,6 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
   const [address, setAddress] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
-
-  const storedUser = Cookies.get("user");
-  const mainUser = JSON.parse(storedUser);
 
   useEffect(() => {
     if (userData) {
@@ -35,6 +30,11 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
 
   useEffect(() => {
     if (response) {
+      showToast({
+        icon: "success",
+        text: "Information updated successful !",
+        targetElement: document.querySelector(".info"),
+      });
       setUser(response.data);
     }
   }, [response]);
@@ -50,11 +50,9 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
       zipcode: zipCode,
       country: country,
     };
-    console.log(data);
     await callApi(data);
   };
 
-  const isAdmin = mainUser.role === "admin";
   return (
     <form id="formAccountSettings" onSubmit={handleSubmit}>
       <div class="row">
@@ -67,10 +65,10 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             type="text"
             id="firstName"
             name="firstName"
+            placeholder="First Name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
             autoFocus
-            disabled={isAdmin}
           />
         </div>
         <div class="mb-3 col-md-6">
@@ -82,52 +80,11 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             type="text"
             name="lastName"
             id="lastName"
+            placeholder="Last Name"
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
-            disabled={isAdmin}
           />
         </div>
-        <div class="mb-3 col-md-6">
-          <label for="Role" class="form-label">
-            Role
-          </label>
-          <input
-            class="form-control"
-            type="text"
-            id="role"
-            name="role"
-            placeholder={userData?.role || ""}
-            disabled
-          />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="Subcription" class="form-label">
-            Subcription Type
-          </label>
-          <input
-            class="form-control"
-            type="text"
-            id="subscription"
-            name="subscription"
-            placeholder={userData?.membershipPackageId || ""}
-            disabled
-          />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="email" class="form-label">
-            E-mail
-          </label>
-          <input
-            class="form-control"
-            type="text"
-            id="email"
-            name="email"
-            value={userData?.email || ""}
-            placeholder={userData?.email || ""}
-            disabled
-          />
-        </div>
-
         <div class="mb-3 col-md-6">
           <label class="form-label" for="phoneNumber">
             Phone Number
@@ -139,9 +96,9 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
               id="phoneNumber"
               name="phoneNumber"
               class="form-control"
+              placeholder="xxx-xxx-xxx"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              disabled={isAdmin}
             />
           </div>
         </div>
@@ -150,74 +107,29 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             Address
           </label>
           <input
-            type="text"
             class="form-control"
-            id="address"
+            type="text"
             name="address"
+            id="address"
             placeholder="Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
-            disabled={isAdmin}
           />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="state" class="form-label">
-            State
-          </label>
-          <input
-            class="form-control"
-            type="text"
-            id="state"
-            name="state"
-            placeholder="State"
-            value={state}
-            onChange={(e) => setState(e.target.value)}
-            disabled={isAdmin}
-          />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label for="zipCode" class="form-label">
-            Zip Code
-          </label>
-          <input
-            type="text"
-            class="form-control"
-            id="zipCode"
-            name="zipCode"
-            placeholder="231465"
-            maxlength="6"
-            value={zipCode}
-            onChange={(e) => setZipCode(e.target.value)}
-            disabled={isAdmin}
-          />
-        </div>
-        <div class="mb-3 col-md-6">
-          <label class="form-label" for="country">
-            Country
-          </label>
-          <select
-            id="country"
-            class="select2 form-select"
-            disabled={isAdmin}
-            onChange={(e) => setCountry(e.target.value)}
-          >
-            {countries.map((countryItem) => (
-              <option
-                value={countryItem.value}
-                selected={countryItem.value === country}
-              >
-                {countryItem.name}
-              </option>
-            ))}
-          </select>
         </div>
       </div>
       <div class="mt-2">
         <button type="submit" class="btn btn-primary me-2">
-          Save changes
-        </button>
-        <button type="reset" class="btn btn-outline-secondary">
-          Cancel
+          {isLoading ? (
+            <>
+              <span
+                className="spinner-border spinner-border-sm"
+                role="status"
+                aria-hidden="true"
+              ></span>
+            </>
+          ) : (
+            "Save changes"
+          )}
         </button>
       </div>
     </form>

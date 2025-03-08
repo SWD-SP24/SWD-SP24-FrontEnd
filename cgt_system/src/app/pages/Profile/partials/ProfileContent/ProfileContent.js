@@ -8,7 +8,7 @@ export default function ProfileContent({ user, setUser, apiUrl }) {
       {/* <!-- Content --> */}
 
       <div className="col-md-12">
-        <div className="card mb-4">
+        <div className="card mb-4 info">
           <h5 className="card-header">Edit Profile</h5>
           {/* <!-- Account --> */}
           <div className="card-body">
