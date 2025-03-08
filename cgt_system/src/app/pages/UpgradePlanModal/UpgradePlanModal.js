@@ -78,7 +78,7 @@ export default function UpgradePlanModal() {
       role="dialog"
       style={{ display: "none" }}
     >
-      <div className="modal-dialog modal-xl modal-simple modal-pricing">
+      <div className="modal-dialog modal-xl modal-simple modal-dialog-centered modal-pricing">
         <div className="modal-content">
           {isLoading ? (
             <UpgradePlanModalSkeleton />

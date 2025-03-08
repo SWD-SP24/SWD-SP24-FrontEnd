@@ -53,8 +53,8 @@ export default function UserProfile({ user }) {
               <span> {user.phoneNumber || "Updating..."}</span>
             </li>
             <li className="mb-2">
-              <span className="h6">Country:</span>
-              <span> {user.country || "Updating..."}</span>
+              <span className="h6">Address:</span>
+              <span> {user.address || "Updating..."}</span>
             </li>
           </ul>
         </div>

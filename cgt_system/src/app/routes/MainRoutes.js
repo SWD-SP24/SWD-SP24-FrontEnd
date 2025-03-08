@@ -35,6 +35,7 @@ import Profile from "../pages/Profile/Profile";
 import MemberRoutes from "./MemberRoutes";
 import BillingAndPlans from "../pages/BillingAndPlans";
 import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
+import Chat from "../pages/Chat";
 
 export default function MainRoutes() {
   return (
@@ -75,7 +76,7 @@ export default function MainRoutes() {
         <Route element={<MainLayout />}>
           {/* Admin Routes */}
           <Route path="admin/*" element={<AdminRoutes />} />
-
+          <Route path="/doctor/consultations" element={<Chat />} />
           <Route path="/dashboard" element={<ComingSoon />} />
 
           {/* Member Routes */}
