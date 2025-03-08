@@ -68,7 +68,7 @@ const InputField = React.memo(
           placeholder={placeholder}
           value={fieldValue}
           onChange={handleChange}
-          autoFocus={!isPassword && !isConfirmPassword}
+          autoFocus={name === "oldPassword"}
           autoComplete={isPassword ? "current-password" : ""}
         />
         {(isPassword || isConfirmPassword) && (

@@ -14,6 +14,7 @@ import doctor_image from "../../assets/img/illustrations/doctor.png";
 import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
 import ChatHistory from "./partials/ChatHistory";
+import DoctorListModal from "../DoctorListModal/DoctorListModal";
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
@@ -184,7 +185,11 @@ export default function Chat() {
                     Have questions about your child's health? Chat with a doctor
                     for expert advice and guidance.
                   </p>
-                  <button className="btn btn-primary mt-2">
+                  <button
+                    className="btn btn-primary mt-2"
+                    data-bs-toggle="modal"
+                    data-bs-target="#doctorListModal"
+                  >
                     Start Consultation
                   </button>
                 </li>
@@ -240,6 +245,39 @@ export default function Chat() {
               )}
             </ul>
           </div>
+          {conversations.length > 0 && (
+            <div
+              className="d-flex justify-content-center align-items-center p-2"
+              data-bs-toggle="modal"
+              data-bs-target="#doctorListModal"
+              style={{
+                position: "sticky",
+                bottom: 0,
+                zIndex: 1000,
+              }}
+            >
+              <button
+                className="btn btn-primary shadow-lg d-flex justify-content-center align-items-center"
+                data-bs-toggle="modal"
+                data-bs-target="#doctorListModal"
+                style={{
+                  width: "60px",
+                  height: "60px",
+                  borderRadius: "30%",
+                  fontSize: "24px",
+                  transition: "all 0.3s ease-in-out",
+                }}
+                onMouseEnter={(e) =>
+                  (e.currentTarget.style.transform = "scale(1.1)")
+                }
+                onMouseLeave={(e) =>
+                  (e.currentTarget.style.transform = "scale(1)")
+                }
+              >
+                <i className="bx bx-plus"></i>
+              </button>
+            </div>
+          )}
         </div>
         {/* End Chats */}
 
@@ -285,6 +323,7 @@ export default function Chat() {
         )}
         {/* End Chat History */}
       </div>
+      <DoctorListModal />
     </div>
   );
 }
