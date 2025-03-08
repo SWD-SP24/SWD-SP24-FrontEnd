@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./Chatbot.scss";
 import { AiOutlineClose, AiOutlineMessage } from "react-icons/ai";
-
+import { API_KEY } from "../../../chatbotkey";
 const Chatbot = () => {
     const [messages, setMessages] = useState([]);
     const [input, setInput] = useState("");
@@ -10,7 +10,7 @@ const Chatbot = () => {
     const [isTyping, setIsTyping] = useState(false); // Thêm state isTyping
     const chatBoxRef = useRef(null);
 
-    const API_KEY = "AIzaSyCL6yrkmSSnFuQSuuze1bzScgDOVeaEFxU";
+
     const API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
     useEffect(() => {
