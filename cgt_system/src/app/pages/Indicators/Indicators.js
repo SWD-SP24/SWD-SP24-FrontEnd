@@ -11,8 +11,8 @@ export default function Indicators() {
   const childId = useParams().id;
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
-
-  const url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}`;
+  const [page, setPage] = useState(1);
+  const url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}&pageNumber=1&pageSize=6`;
 
   const { response, callApi } = useApi({
     url: url,
@@ -27,6 +27,11 @@ export default function Indicators() {
     console.log(response);
   }, [response]);
 
+  const handlePage = (index) => {
+    setPage(index);
+    const customUrl = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}&pageNumber=${index}&pageSize=6`;
+    callApi(null, customUrl);
+  };
   return (
     <div class="card mb-6">
       <h5 class="card-header pb-0 text-md-start text-center">Projects List</h5>
@@ -168,61 +173,51 @@ export default function Indicators() {
                 id="DataTables_Table_0_info"
                 role="status"
               >
-                Showing 1 to 7 of 10 entries
+                {response &&
+                  `Showing ${1 + 6 * (page - 1)} to ${Math.min(
+                    1 + 6 * page,
+                    Math.ceil(response.pagination.total)
+                  )} of ${response.pagination.total} entries`}
               </div>
             </div>
             <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
               <div class="dt-paging">
                 <nav aria-label="pagination">
                   <ul class="pagination">
-                    <li class="dt-paging-button page-item disabled">
-                      <button
-                        class="page-link previous"
-                        role="link"
-                        type="button"
-                        aria-controls="DataTables_Table_0"
-                        aria-disabled="true"
-                        aria-label="Previous"
-                        data-dt-idx="previous"
-                        tabindex="-1"
-                      >
+                    <li class="page-item next">
+                      <a class="page-link" onClick={() => handlePage(1)}>
                         <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-18px"></i>
-                      </button>
+                      </a>
                     </li>
-                    <li class="dt-paging-button page-item active">
-                      <button
+
+                    {response &&
+                      [...Array(response.pagination.lastVisiblePage)].map(
+                        (_, index) => {
+                          return (
+                            <li class="page-item">
+                              <a
+                                className={
+                                  "page-link " +
+                                  (index + 1 === page ? "active" : "")
+                                }
+                                key={index}
+                                onClick={() => handlePage(index + 1)}
+                              >
+                                {index + 1}
+                              </a>
+                            </li>
+                          );
+                        }
+                      )}
+                    <li class="page-item next">
+                      <a
                         class="page-link"
-                        role="link"
-                        type="button"
-                        aria-controls="DataTables_Table_0"
-                        aria-current="page"
-                        data-dt-idx="0"
-                      >
-                        1
-                      </button>
-                    </li>
-                    <li class="dt-paging-button page-item">
-                      <button
-                        class="page-link"
-                        role="link"
-                        type="button"
-                        aria-controls="DataTables_Table_0"
-                        data-dt-idx="1"
-                      >
-                        2
-                      </button>
-                    </li>
-                    <li class="dt-paging-button page-item">
-                      <button
-                        class="page-link next"
-                        role="link"
-                        type="button"
-                        aria-controls="DataTables_Table_0"
-                        aria-label="Next"
-                        data-dt-idx="next"
+                        onClick={() =>
+                          handlePage(response.pagination.lastVisiblePage)
+                        }
                       >
                         <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-18px"></i>
-                      </button>
+                      </a>
                     </li>
                   </ul>
                 </nav>

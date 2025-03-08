@@ -56,7 +56,7 @@ export default function ChildLayout() {
         {/* <!-- User Card --> */}
         <div
           className="card mb-6  "
-          style={{ position: "sticky", top: "90px" }}
+          style={{ position: "sticky", top: "90px", zIndex: "1" }}
         >
           <div className="card-body pt-12 text-container">
             <ul class="circles">
@@ -128,7 +128,6 @@ export default function ChildLayout() {
                 </li>
               </ul>
             </div>
-
             <div className="d-flex justify-content-center">
               <EditChildButton childData={response.data} refetch={callApi} />
               <RemoveChildButton childId={response.data.childrenId} />

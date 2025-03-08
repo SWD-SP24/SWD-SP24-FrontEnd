@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from "react";
+import ReactDOM from "react-dom"; // Import ReactDOM
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
 
@@ -26,10 +27,6 @@ export default function EditChildButton({ childData, refetch }) {
     bloodTypeRef.current.value = childData.bloodType;
   }, [childData]);
 
-  useEffect(() => {
-    console.log(response);
-  }, [response]);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const data = {
@@ -56,30 +53,28 @@ export default function EditChildButton({ childData, refetch }) {
         Edit
       </button>
 
-      {/* Modal Edit */}
-      <div
-        className="modal fade"
-        id="editChildModal"
-        tabIndex="-1"
-        aria-hidden="true"
-      >
-        <div className="modal-dialog modal-dialog-centered" role="document">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title" id="editChildModalTitle">
-                Edit Child
-              </h5>
-              <button
-                type="button"
-                className="btn-close"
-                data-bs-dismiss="modal"
-                aria-label="Close"
-              ></button>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="modal-body">
-                <div className="row">
-                  <div className="col mb-3">
+      {/* Render modal at the root level using ReactDOM.createPortal */}
+      {ReactDOM.createPortal(
+        <div
+          className="modal fade"
+          id="editChildModal"
+          tabIndex="-1"
+          aria-hidden="true"
+        >
+          <div className="modal-dialog modal-dialog-centered" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h5 className="modal-title">Edit Child</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <form onSubmit={handleSubmit}>
+                <div className="modal-body">
+                  <div className="mb-3">
                     <label htmlFor="fullName" className="form-label">
                       Full Name
                     </label>
@@ -88,12 +83,9 @@ export default function EditChildButton({ childData, refetch }) {
                       type="text"
                       id="fullName"
                       className="form-control"
-                      placeholder="Enter Child Name"
                     />
                   </div>
-                </div>
-                <div className="row">
-                  <div className="col mb-3">
+                  <div className="mb-3">
                     <label htmlFor="avatarUrl" className="form-label">
                       Avatar
                     </label>
@@ -102,12 +94,9 @@ export default function EditChildButton({ childData, refetch }) {
                       type="text"
                       id="avatarUrl"
                       className="form-control"
-                      placeholder="Enter Avatar Link"
                     />
                   </div>
-                </div>
-                <div className="row g-2 mb-3">
-                  <div className="col mb-0">
+                  <div className="mb-3">
                     <label htmlFor="genderSelect" className="form-label">
                       Gender
                     </label>
@@ -120,23 +109,20 @@ export default function EditChildButton({ childData, refetch }) {
                       <option value="female">Female</option>
                     </select>
                   </div>
-                  <div className="col mb-0">
+                  <div className="mb-3">
                     <label htmlFor="dobInput" className="form-label">
-                      Date
+                      Date of Birth
                     </label>
                     <input
                       ref={dobRef}
-                      className="form-control"
                       type="date"
-                      defaultValue="2021-06-18"
                       id="dobInput"
+                      className="form-control"
                     />
                   </div>
-                </div>
-                <div className="row g-2 mb-3">
-                  <div className="col mb-0">
+                  <div className="mb-3">
                     <label htmlFor="bloodTypeSelect" className="form-label">
-                      Blood-type
+                      Blood Type
                     </label>
                     <select
                       id="bloodTypeSelect"
@@ -149,7 +135,7 @@ export default function EditChildButton({ childData, refetch }) {
                       <option value="O">O</option>
                     </select>
                   </div>
-                  <div className="col mb-0">
+                  <div className="mb-3">
                     <label htmlFor="allergies" className="form-label">
                       Allergies
                     </label>
@@ -158,12 +144,9 @@ export default function EditChildButton({ childData, refetch }) {
                       type="text"
                       id="allergies"
                       className="form-control"
-                      placeholder="Enter Allergy Ingredients"
                     />
                   </div>
-                </div>
-                <div className="row">
-                  <div className="col mb-3">
+                  <div className="mb-3">
                     <label htmlFor="chronicCondition" className="form-label">
                       Chronic Conditions
                     </label>
@@ -172,31 +155,31 @@ export default function EditChildButton({ childData, refetch }) {
                       type="text"
                       id="chronicCondition"
                       className="form-control"
-                      placeholder="Enter Chronic Conditions"
                     />
                   </div>
                 </div>
-              </div>
-              <div className="modal-footer">
-                <button
-                  type="reset"
-                  className="btn btn-outline-secondary"
-                  data-bs-dismiss="modal"
-                >
-                  Close
-                </button>
-                <button
-                  type="submit"
-                  className="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
-                  Save changes
-                </button>
-              </div>
-            </form>
+                <div className="modal-footer">
+                  <button
+                    type="reset"
+                    className="btn btn-outline-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    type="submit"
+                    className="btn btn-primary"
+                    data-bs-dismiss="modal"
+                  >
+                    Save changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-      </div>
+        </div>,
+        document.body // Move modal to the body
+      )}
     </>
   );
 }

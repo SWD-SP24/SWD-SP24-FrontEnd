@@ -73,7 +73,7 @@ export default function BMIChart() {
             labels={labels}
             datasets={[
               {
-                label: "Weight",
+                label: "BMI",
                 data: BMI,
                 borderColor: "#696cff",
                 backgroundColor: "rgba(105, 108, 255, 0.5)",
