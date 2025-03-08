@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axiosInstance from "../config/axiosInstance";
+import { axiosInstance } from "../config/axiosInstance";
 
 const useApi = ({ url, method = "POST", body = null }) => {
   const [isLoading, setIsLoading] = useState(false);
