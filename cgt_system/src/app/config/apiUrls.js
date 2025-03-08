@@ -49,6 +49,10 @@ const API_URLS = {
     INDICATORS: "/api/GrowthIndicators",
     LATEST_RECORD: "/api/GrowthIndicators/latest",
   },
+
+  IMAGE: {
+    GET_URL: "/Utilities/UploadImage",
+  },
 };
 
 export default API_URLS;
