@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../config/firebase";
+import Skeleton from "react-loading-skeleton";
 
 export default function ChatHistory({
   currentUser,
@@ -20,7 +21,7 @@ export default function ChatHistory({
   const chatEndRef = useRef(null);
 
   const formatTimestamp = (timestamp) => {
-    if (!timestamp?.seconds) return "Unknown time";
+    if (!timestamp?.seconds) return "---";
 
     const messageDate = new Date(timestamp.seconds * 1000);
     const now = new Date();
