@@ -19,7 +19,7 @@ export default function VaccineTable({ vaccineList, refetch }) {
   const [filterStatus, setFilterStatus] = useState("");
   const handlePage = (index) => {
     setPage(index);
-    const customUrl = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=${index}&pageSize=8&sortByAge=true`;
+    const customUrl = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=${index}&pageSize=7&sortByAge=true`;
     refetch(null, customUrl);
   };
 
@@ -69,25 +69,25 @@ export default function VaccineTable({ vaccineList, refetch }) {
       </button>
     );
   };
-  const checkStatus = (vaccine, recordList) => {
-    if (!vaccine || !recordList) return "pending"; // Default to "pending"
-    const haveRecord = recordList.some(
-      (record) =>
-        record.vaccineId === vaccine.vaccineId &&
-        record.dose === vaccine.doseNumber // Ensure correct dose comparison
-    );
-    return haveRecord ? "given" : "pending";
-  };
+  // const checkStatus = (vaccine, recordList) => {
+  //   if (!vaccine || !recordList) return "pending"; // Default to "pending"
+  //   const haveRecord = recordList.some(
+  //     (record) =>
+  //       record.vaccineId === vaccine.vaccineId &&
+  //       record.dose === vaccine.doseNumber // Ensure correct dose comparison
+  //   );
+  //   return haveRecord ? "given" : "pending";
+  // };
 
-  if (!vaccineList) return <div>Loading</div>;
-  const filteredList = vaccineList.data.filter((vaccine) => {
-    const status = checkStatus(vaccine, response.data); // Get status
-    return (
-      (filterName === "" ||
-        vaccine.vaccineName.toLowerCase().includes(filterName.toLowerCase())) &&
-      (filterStatus === "" || status === filterStatus) // Compare status correctly
-    );
-  });
+  // if (!vaccineList) return <div>Loading</div>;
+  // const filteredList = vaccineList.data.filter((vaccine) => {
+  //   const status = checkStatus(vaccine, response.data); // Get status
+  //   return (
+  //     (filterName === "" ||
+  //       vaccine.vaccineName.toLowerCase().includes(filterName.toLowerCase())) &&
+  //     (filterStatus === "" || status === filterStatus) // Compare status correctly
+  //   );
+  // });
 
   return (
     <div class="table-responsive mb-4">
