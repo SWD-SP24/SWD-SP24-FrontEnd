@@ -5,7 +5,6 @@ import useApi from "../../hooks/useApi";
 import VaccineTable from "./partials/VaccineTable";
 
 export default function Vaccinations() {
-  const childId = useParams().id;
   const url = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=1&pageSize=7&sortByAge=true`;
 
   const { response, callApi } = useApi({
@@ -18,7 +17,7 @@ export default function Vaccinations() {
   }, []);
 
   useEffect(() => {
-    console.log(response);
+    console.log("Vaccine Schedule ne", response);
   }, [response]);
 
   return (

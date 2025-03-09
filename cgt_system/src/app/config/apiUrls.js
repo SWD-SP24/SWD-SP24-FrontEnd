@@ -62,6 +62,7 @@ const API_URLS = {
   },
   VACCINATIONS: {
     VACCINATIONS_SCHEDULE: "api/VaccinationSchedules",
+    VACCINE: "/api/Vaccines",
   },
   VACCINE_RECORD: {
     VACCINE_RECORD: "/api/VaccineRecords",

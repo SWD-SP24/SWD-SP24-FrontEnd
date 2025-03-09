@@ -100,7 +100,7 @@ export default function ManageChildren() {
                     className="form-select text-capitalize"
                     onChange={(e) => setFilterGender(e.target.value)}
                   >
-                    <option value=""> Select Status </option>
+                    <option value=""> Select Gender </option>
                     <option value="male" className="text-capitalize">
                       Male
                     </option>

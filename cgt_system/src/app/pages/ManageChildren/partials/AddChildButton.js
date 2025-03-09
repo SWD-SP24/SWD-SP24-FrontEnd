@@ -114,6 +114,7 @@ export default function AddChildButton({ refetch }) {
                       type="date"
                       defaultValue="2021-06-18"
                       id="dobInput"
+                      max={new Date().toISOString().split("T")[0]}
                     />
                   </div>
                 </div>
