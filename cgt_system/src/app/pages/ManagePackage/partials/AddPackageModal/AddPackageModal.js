@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
+import "./addPackageModal.css";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import showToast from "../../../../util/showToast";
@@ -12,11 +13,16 @@ import { validateField } from "../../schemas/managePackageSchema";
 import InputField from "../InputField/InputField";
 import Pagination from "../Pagination/Pagination";
 import Skeleton from "react-loading-skeleton";
+import no_image from "../../../../assets/img/illustrations/no_image.jpg";
 
 export default function AddPackageModal() {
   const pagination = sPermissionsPagination.use();
   const [permissions, setPermissions] = useState([]);
+  const [addPackageImage, setAddPackageImage] = useState(null);
+  const [fileAddImage, setFileAddImage] = useState(null);
   const [selectedPermissions, setSelectedPermissions] = useState([]);
+  const errorImage = sFormError.use((formError) => formError["image"]);
+
   const [isReset, setIsReset] = useState(false);
   const permissionsError = sFormError.use((formData) => formData.permissions);
 
@@ -67,6 +73,8 @@ export default function AddPackageModal() {
     sFormData.reset();
     sPermissionsPagination.reset();
     sFormError.reset();
+    setAddPackageImage(null);
+    setFileAddImage(null);
   };
 
   useEffect(() => {
@@ -97,6 +105,15 @@ export default function AddPackageModal() {
     callApi(null, customUrl);
   };
 
+  const handleAddImageChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      setAddPackageImage(URL.createObjectURL(file));
+      setFileAddImage(file);
+    }
+  };
+
   return (
     <div
       className="modal fade"
@@ -124,30 +141,67 @@ export default function AddPackageModal() {
               className="row g-6 fv-plugins-bootstrap5 fv-plugins-framework"
               noValidate="novalidate"
             >
-              <div className="row g-2">
-                <div className="col-12 form-control-validation fv-plugins-icon-container">
+              <div className="p-0 mt-10">
+                <div className="d-flex gap-4 w-100 align-items-center">
+                  <img
+                    src={addPackageImage ? addPackageImage : no_image}
+                    height="100"
+                    className="rounded border"
+                    width="100"
+                    id="uploadedAvatar"
+                  />
+                  <div className="button-wrapper col-md-9">
+                    <label
+                      htmlFor="upload"
+                      className="btn btn-primary me-3 mb-4"
+                    >
+                      <span className="d-none d-sm-block">Upload photo</span>
+                      <i className="icon-base bx bx-upload d-block d-sm-none"></i>
+                      <input
+                        type="file"
+                        id="upload"
+                        className="account-file-input"
+                        onChange={handleAddImageChange}
+                        hidden
+                        accept="image/*"
+                      />
+                    </label>
+                    <button
+                      type="button"
+                      className="btn btn-label-secondary account-image-reset mb-4"
+                      onClick={() => {
+                        setAddPackageImage(null);
+                        setFileAddImage(null);
+                      }}
+                    >
+                      <i className="icon-base bx bx-reset d-block d-sm-none"></i>
+                      <span className="d-none d-sm-block">Reset</span>
+                    </button>
+                    <div>Allowed JPG, GIF or PNG. Max size of 800K</div>
+                    <input hidden className={errorImage && "is-invalid"} />
+                    {errorImage && (
+                      <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">
+                        <div>{errorImage}</div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <hr />
+
+              <div className="row">
+                <div className="col-md-6 p-2 form-control-validation fv-plugins-icon-container">
                   <InputField
                     label={"Package Name"}
                     name={"packageName"}
                     type={"text"}
-                    placeholder={"Enter a membership package name"}
+                    placeholder={"Enter name"}
                     validate={validateField}
                     onFieldChange={handleFieldChange}
                     reset={isReset}
                   />
                 </div>
-                <div className="col-md-6 form-control-validation fv-plugins-icon-container">
-                  <InputField
-                    label={"Price"}
-                    name={"price"}
-                    type={"text"}
-                    placeholder={"Enter price"}
-                    validate={validateField}
-                    onFieldChange={handleFieldChange}
-                    reset={isReset}
-                  />
-                </div>
-                <div className="col-md-6 form-control-validation fv-plugins-icon-container">
+                <div className="col-md-6 p-2 form-control-validation fv-plugins-icon-container">
                   <InputField
                     label={"Validity Period"}
                     name={"validityPeriod"}
@@ -158,7 +212,43 @@ export default function AddPackageModal() {
                     reset={isReset}
                   />
                 </div>
+                <div className="col-md-6 p-2 form-control-validation fv-plugins-icon-container">
+                  <InputField
+                    label={"Price"}
+                    name={"price"}
+                    type={"text"}
+                    placeholder={"Enter price"}
+                    validate={validateField}
+                    onFieldChange={handleFieldChange}
+                    reset={isReset}
+                  />
+                </div>
+                <div className="col-md-6 p-2 form-control-validation fv-plugins-icon-container">
+                  <InputField
+                    label={"Percent Discount (%)"}
+                    name={"percentDiscount"}
+                    type={"text"}
+                    placeholder={"Enter percent discount"}
+                    validate={validateField}
+                    onFieldChange={handleFieldChange}
+                    reset={isReset}
+                  />
+                </div>
+                <div className="col-md-12 p-2 form-control-validation fv-plugins-icon-container">
+                  <InputField
+                    label={"Summary"}
+                    name={"summary"}
+                    type={"text"}
+                    placeholder={"Enter summary"}
+                    validate={validateField}
+                    onFieldChange={handleFieldChange}
+                    reset={isReset}
+                  />
+                </div>
               </div>
+
+              <hr />
+
               <div className="col-12">
                 <h5 className="mb-6">Permissions</h5>
                 <input
@@ -232,6 +322,7 @@ export default function AddPackageModal() {
                 <Button
                   buttonTag={"Submit"}
                   selectedPermissions={selectedPermissions}
+                  image={fileAddImage}
                 />
                 <button
                   type="reset"
