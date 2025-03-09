@@ -11,7 +11,7 @@ export default function Teeth() {
   });
   const [toothData, setToothData] = useState(null);
   const [toothNumber, setToothNumber] = useState(4);
-
+  const [toothRecord, setToothRecord] = useState([]);
   useEffect(() => {
     callApi();
   }, []);
@@ -43,6 +43,18 @@ export default function Teeth() {
     }
   };
 
+  if (toothRecord != null) {
+    const toothIds = toothRecord.map((item) => item.toothId - 2);
+    const uniqueToothNumbers = [...new Set(toothIds)];
+    uniqueToothNumbers.forEach((toothNumber) => {
+      const toothPolygon = document.querySelector(
+        `[data-key="${toothNumber}"]`
+      );
+      if (toothPolygon) {
+        toothPolygon.setAttribute("fill", "#F5E6CC"); // Change color to red
+      }
+    });
+  }
   return (
     <div className="col-12  mb-6">
       <div className="card">
@@ -779,7 +791,10 @@ export default function Teeth() {
               </div>
             </div>
             <hr />
-            <ToothNote toothNumber={toothNumber} />
+            <ToothNote
+              toothNumber={toothNumber}
+              setToothRecord={setToothRecord}
+            />
           </div>
         </div>
       </div>

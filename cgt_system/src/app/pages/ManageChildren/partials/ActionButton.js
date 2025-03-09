@@ -4,10 +4,10 @@ import API_URLS from "../../../config/apiUrls";
 import { useNavigate } from "react-router";
 
 export default function ActionButton({ childId, refetch }) {
-  const apiUrl = `${API_URLS.CHILDREN.DELETE_CHILD}${childId}`;
+  const apiUrl = `${API_URLS.CHILDREN.EDIT_CHILD}${childId}`;
   const { response, callApi } = useApi({
     url: apiUrl,
-    method: "DELETE",
+    method: "PUT",
   });
 
   const navigate = useNavigate();
@@ -17,9 +17,10 @@ export default function ActionButton({ childId, refetch }) {
   };
   const handleDelete = async (e) => {
     e.preventDefault();
-    console.log(apiUrl);
-    console.log("del");
-    await callApi();
+    const data = {
+      status: 0,
+    };
+    await callApi(data);
     refetch();
   };
   return (
@@ -31,7 +32,10 @@ export default function ActionButton({ childId, refetch }) {
       >
         <i className="icon-base bx bx-show icon-md"></i>
       </a>
-      <i className="btn btn-icon delete-record" onClick={() => handleDelete()}>
+      <i
+        className="btn btn-icon delete-record"
+        onClick={(e) => handleDelete(e)}
+      >
         <i
           className="icon-base bx bx-trash icon-md"
           style={{ color: "#B22222" }}
