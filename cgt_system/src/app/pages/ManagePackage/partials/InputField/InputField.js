@@ -34,6 +34,7 @@ const InputField = React.memo(
         value,
         isConfirmPassword ? password : ""
       );
+
       if (error !== fieldError) {
         sFormError.set((prev) => {
           prev.value[name] = fieldError;
@@ -48,7 +49,11 @@ const InputField = React.memo(
     const handleChange = (e) => {
       let { name, value } = e.target;
 
-      if (name === "price" || name === "validityPeriod") {
+      if (
+        name === "price" ||
+        name === "validityPeriod" ||
+        name === "percentDiscount"
+      ) {
         // Loại bỏ dấu phẩy để tránh lỗi khi nhập tiếp
         const rawValue = value.replace(/,/g, "");
 
@@ -71,7 +76,6 @@ const InputField = React.memo(
 
         if (validate) {
           const valueToNumber = Number(rawValue); // Chuyển thành số không có dấu phẩy
-          console.log(valueToNumber);
 
           debouceValidateField(name, valueToNumber);
         }
@@ -115,7 +119,8 @@ const InputField = React.memo(
       </>
     );
     return (
-      <div className="mb-6 form-control-validation fv-plugins-icon-container">
+      // <div className="mb-6 form-control-validation fv-plugins-icon-container">
+      <>
         <label htmlFor={name} className={"form-label"}>
           {label}
         </label>
@@ -131,7 +136,8 @@ const InputField = React.memo(
             <div>{error}</div>
           </div>
         )}
-      </div>
+      </>
+      // </div>
     );
   }
 );
