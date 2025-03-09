@@ -15,7 +15,7 @@ import Skeleton from "react-loading-skeleton";
 import Pagination from "../Pagination/Pagination";
 import no_image from "../../../../assets/img/illustrations/no_image.jpg";
 
-export default function EditPackageModal() {
+export default function EditPackageModal({ users }) {
   const packageId = sPackageIdToEdit.use();
   const pagination = sPermissionsPagination.use();
   const [permissions, setPermissions] = useState([]);
@@ -24,7 +24,6 @@ export default function EditPackageModal() {
   const [selectedPermissions, setSelectedPermissions] = useState([]);
   const [membershipPackage, setMembershipPackage] = useState(null);
   const [isReset, setIsReset] = useState(false);
-
   const permissionsError = sFormError.use((formData) => formData.permissions);
 
   const { isLoading, response, error, callApi } = useApi({
@@ -403,6 +402,7 @@ export default function EditPackageModal() {
                       data={membershipPackage}
                       selectedPermissions={selectedPermissions}
                       image={file}
+                      users={users}
                     />
                     <button
                       type="reset"

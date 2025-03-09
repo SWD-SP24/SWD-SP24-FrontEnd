@@ -1,6 +1,7 @@
 import { signify } from "react-signify";
 
 export const sPackages = signify([]);
+export const sUserAndPackages = signify([]);
 export const sPermissions = signify([]);
 export const sFormData = signify({
   image: null,

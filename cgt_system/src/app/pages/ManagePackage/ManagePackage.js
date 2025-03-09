@@ -6,7 +6,7 @@ import showToast from "../../util/showToast";
 import PackageFilters from "./partials/PackageFilters/PackageFilters";
 import PackageTable from "./partials/PackageTable/PackageTable";
 import Pagination from "./partials/Pagination/Pagination";
-import { sPackages, sPagination } from "./managePackageStore";
+import { sPackages, sPagination, sUserAndPackages } from "./managePackageStore";
 import PackageTableSkeleton from "./partials/PackageTable/PackageTableSkeleton";
 import AddPackageModal from "./partials/AddPackageModal/AddPackageModal";
 import EditPackageModal from "./partials/EditPackageModal/EditPackageModal";
@@ -14,6 +14,7 @@ import PackageList from "./partials/PackageList/PackageList";
 
 export default function ManagePackages() {
   const packages = sPackages.use();
+  const usersAndPackages = sUserAndPackages.use();
   const pagination = sPagination.use();
   const [users, setUsers] = useState([]);
 
@@ -22,18 +23,23 @@ export default function ManagePackages() {
   });
 
   const {
-    isLoading: getUsersLoading,
-    response: getUsersResponse,
-    error: getUsersError,
-    callApi: getUsersCallApi,
+    isLoading: getUserAndPackageLoading,
+    response: getUserAndPackageResponse,
+    error: getUserAndPackageError,
+    callApi: getUserAndPackageCallApi,
   } = useApi({
+    method: "GET",
+  });
+
+  const { response: getUsersResponse, callApi: getUsersCallApi } = useApi({
     url: API_URLS.USER.GET_USERS_LIST,
     method: "GET",
   });
 
   useEffect(() => {
     getUsersCallApi();
-    fetchPackages(pagination.currentPage, pagination.itemsPerPage);
+    fetchPackages();
+    fetchUsersAndPackages(pagination.currentPage, pagination.itemsPerPage);
     return () => {
       sPagination.reset();
     };
@@ -43,13 +49,8 @@ export default function ManagePackages() {
     const handleApiResponse = () => {
       if (response?.status === "successful") {
         const packages = response.data || {};
-        const pagination = response.pagination || {};
         if (packages) {
           sPackages.set(packages);
-          sPagination.set((prev) => {
-            prev.value.totalPages = pagination.lastVisiblePage;
-            prev.value.totalItems = pagination.total;
-          });
         }
       }
     };
@@ -59,7 +60,7 @@ export default function ManagePackages() {
         showToast({
           icon: "error",
           text: error?.message,
-          targetElement: document.querySelector(".card"),
+          targetElement: document.querySelector(".content-wrapper"),
         });
       }
     };
@@ -73,6 +74,39 @@ export default function ManagePackages() {
   }, [response, error]);
 
   useEffect(() => {
+    const handleApiResponse = () => {
+      if (getUserAndPackageResponse?.status === "successful") {
+        const usersAndPackages = getUserAndPackageResponse.data || {};
+        const pagination = getUserAndPackageResponse.pagination || {};
+        if (usersAndPackages) {
+          sUserAndPackages.set(usersAndPackages);
+          sPagination.set((prev) => {
+            prev.value.totalPages = pagination.lastVisiblePage;
+            prev.value.totalItems = pagination.total;
+          });
+        }
+      }
+    };
+
+    const handleError = () => {
+      if (getUserAndPackageError?.message) {
+        showToast({
+          icon: "error",
+          text: getUserAndPackageError?.message,
+          targetElement: document.querySelector(".content-wrapper"),
+        });
+      }
+    };
+
+    try {
+      handleApiResponse();
+      handleError();
+    } catch (err) {
+      console.error("Error handling API response:", err);
+    }
+  }, [getUserAndPackageResponse, getUserAndPackageError]);
+
+  useEffect(() => {
     if (getUsersResponse?.status === "successful") {
       const users = getUsersResponse.data || [];
 
@@ -82,16 +116,23 @@ export default function ManagePackages() {
     }
   }, [getUsersResponse]);
 
-  const fetchPackages = (page, pageSize) => {
-    const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${page}&pageSize=${pageSize}`;
+  const fetchPackages = () => {
+    const customUrl = `${
+      API_URLS.MEMBERSHIP_PACKAGE.GET
+    }?pageNumber=${1}&pageSize=${999}`;
     callApi(null, customUrl);
+  };
+
+  const fetchUsersAndPackages = (page, pageSize) => {
+    const customUrl = `${API_URLS.USER.USERS_AND_MEMBERSHIP}?pageNumber=${page}&pageSize=${pageSize}`;
+    getUserAndPackageCallApi(null, customUrl);
   };
 
   const handlePageChange = (page) => {
     sPagination.set((prev) => {
       prev.value.currentPage = page;
     });
-    fetchPackages(page, pagination.itemsPerPage);
+    fetchUsersAndPackages(page, pagination.itemsPerPage);
   };
 
   return (
@@ -124,16 +165,18 @@ export default function ManagePackages() {
                 id="DataTables_Table_0_wrapper"
                 className="dt-container dt-bootstrap5 dt-empty-footer"
               >
-                <PackageFilters onFetchPackages={fetchPackages} />
-                {isLoading ? (
+                <PackageFilters
+                  onFetchUsersAndPackages={fetchUsersAndPackages}
+                />
+                {getUserAndPackageLoading ? (
                   <>
                     <PackageTableSkeleton />
                   </>
                 ) : (
                   <>
                     <PackageTable
-                      packages={packages}
-                      onFetchPackages={fetchPackages}
+                      usersAndPackages={usersAndPackages}
+                      onFetchUsersAndPackages={fetchUsersAndPackages}
                     />
                   </>
                 )}
@@ -149,7 +192,7 @@ export default function ManagePackages() {
           </div>
         </div>
         <AddPackageModal />
-        <EditPackageModal />
+        <EditPackageModal users={users} />
       </div>
     </>
   );
