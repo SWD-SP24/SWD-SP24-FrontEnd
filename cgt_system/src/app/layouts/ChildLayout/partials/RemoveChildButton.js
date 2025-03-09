@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
 import { useNavigate } from "react-router";
+import showToast from "../../../util/showToast";
 
 export default function RemoveChildButton({ childId }) {
   const navigate = useNavigate();
@@ -17,6 +18,12 @@ export default function RemoveChildButton({ childId }) {
   const handleRemove = async (e) => {
     e.preventDefault();
     await callApi();
+    let target = document.querySelector(".content-wrapper");
+    showToast({
+      icon: "success",
+      text: "Remove Child successfully",
+      targetElement: target,
+    });
     navigate("/member/children");
   };
   return (

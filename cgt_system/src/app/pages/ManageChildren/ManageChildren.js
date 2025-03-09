@@ -45,7 +45,8 @@ export default function ManageChildren() {
       (filterName === "" ||
         child.fullName.toLowerCase().includes(filterName.toLowerCase())) &&
       (filterGender === "" ||
-        child.gender.toLowerCase() === filterGender.toLowerCase())
+        child.gender.toLowerCase() === filterGender.toLowerCase()) &&
+      child.status === 1
     );
   });
   return (

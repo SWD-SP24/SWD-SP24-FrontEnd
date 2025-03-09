@@ -9,6 +9,7 @@ import Overview from "../pages/Overview/Overview";
 import Checkout from "../pages/Checkout";
 import Teeth from "../pages/Teeth/Teeth";
 import Chat from "../pages/Chat";
+import Vaccinations from "../pages/Vaccinations/Vaccinations";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
@@ -27,7 +28,7 @@ export default function MemberRoutes() {
           <Route path="children/:id" element={<Overview />} />
           <Route path="children/:id/indicators" element={<Indicators />} />
           <Route path="children/:id/teeth" element={<Teeth />} />
-          <Route path="children/:id/vaccinations" element={<ComingSoon />} />
+          <Route path="children/:id/vaccinations" element={<Vaccinations />} />
         </Route>
         <Route path="upgrade-plan/checkout" element={<Checkout />} />
         <Route path="consultations" element={<Chat />} />

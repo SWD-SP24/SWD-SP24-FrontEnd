@@ -59,6 +59,12 @@ const API_URLS = {
   TEETH_RECORD: {
     TEETH_RECORD: "/api/TeethingRecords",
   },
+  VACCINATIONS: {
+    VACCINATIONS_SCHEDULE: "api/VaccinationSchedules",
+  },
+  VACCINE_RECORD: {
+    VACCINE_RECORD: "/api/VaccineRecords",
+  },
 };
 
 export default API_URLS;

@@ -105,7 +105,7 @@ export default function Indicators() {
                       <span class="dt-column-title">Height (cm)</span>
                     </th>
                     <th
-                      class="w-px-200 dt-orderable-asc dt-orderable-desc dt-type-numeric"
+                      class="w-px-200 dt-orderable-none"
                       data-dt-column="5"
                       rowspan="1"
                       colspan="1"

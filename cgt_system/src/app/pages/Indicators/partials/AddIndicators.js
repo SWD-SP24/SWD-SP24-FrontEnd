@@ -1,10 +1,11 @@
 import React, { useRef } from "react";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
+import { formatDate, toDMY } from "../../../util/dateFormat";
 export default function AddIndicators({ refetch, childId }) {
   const heightRef = useRef(null);
   const weightRef = useRef(null);
-
+  const recordTimeRef = useRef(null);
   const { response, callApi } = useApi({
     url: `${API_URLS.INDICATORS.INDICATORS}`,
     method: "POST",
@@ -15,6 +16,7 @@ export default function AddIndicators({ refetch, childId }) {
       childrenId: childId,
       height: heightRef.current.value,
       weight: weightRef.current.value,
+      recordTime: toDMY(recordTimeRef.current.value),
     };
     console.log(data);
     await callApi(data);
@@ -78,6 +80,20 @@ export default function AddIndicators({ refetch, childId }) {
                       id="height"
                       class="form-control"
                       placeholder="Enter Child height"
+                    />
+                  </div>
+                  <div class="col mb-0">
+                    <label for="dobInput" class="form-label">
+                      Date
+                    </label>
+
+                    <input
+                      ref={recordTimeRef}
+                      class="form-control"
+                      type="date"
+                      defaultValue="2021-06-18"
+                      id="dobInput"
+                      max={new Date().toISOString().split("T")[0]}
                     />
                   </div>
                 </div>

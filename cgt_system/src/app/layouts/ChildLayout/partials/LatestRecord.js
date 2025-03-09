@@ -16,7 +16,7 @@ export default function LatestRecord({ id }) {
     console.log(response);
   }, [response]);
 
-  if (!response) return <div>Loading...</div>;
+  if (!response) return <div>This kid doesn't have any record yet !</div>;
   return (
     <>
       <div className="d-flex align-items-center me-5 gap-4">

@@ -118,12 +118,16 @@ export default function ChildLayout() {
                 </li>
                 <li className="mb-2">
                   <span className="h6 text-subtitle">Allergies: </span>
-                  <span className="text-data">{response.data.allergies}</span>
+                  <span className="text-data">
+                    {response.data.allergies ? response.data.allergies : "None"}
+                  </span>
                 </li>
                 <li className="mb-2">
                   <span className="h6 text-subtitle">Chronic Condition: </span>
                   <span className="text-data">
-                    {response.data.chronicConditions}
+                    {response.data.chronicConditions
+                      ? response.data.chronicConditions
+                      : "None"}
                   </span>
                 </li>
               </ul>
