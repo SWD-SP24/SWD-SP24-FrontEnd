@@ -53,6 +53,12 @@ const API_URLS = {
   IMAGE: {
     GET_URL: "/Utilities/UploadImage",
   },
+  TEETH: {
+    TEETH: "/api/Teeth",
+  },
+  TEETH_RECORD: {
+    TEETH_RECORD: "/api/TeethingRecords",
+  },
 };
 
 export default API_URLS;

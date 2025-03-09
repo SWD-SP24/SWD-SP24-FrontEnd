@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import AddIndicators from "./partials/AddIndicators.js";
-import BMIProgressBar from "./partials/BMIProgessBar.js";
 import { useParams } from "react-router";
 import API_URLS from "../../config/apiUrls.js";
 import useApi from "../../hooks/useApi.js";
-import { toDMY } from "../../util/dateFormat.js";
-import RemoveIndicators from "./partials/RemoveIndicators.js";
+import AddIndicators from "./partials/AddIndicators.js";
+import BMIProgressBar from "./partials/BMIProgessBar.js";
 import DateRangePicker from "./partials/DateRangePicker.js";
+import EditIndicators from "./partials/EditIndicators.js";
+import RemoveIndicators from "./partials/RemoveIndicators.js";
+
 export default function Indicators() {
   const childId = useParams().id;
   const fromDateRef = useRef(null);
@@ -31,6 +32,10 @@ export default function Indicators() {
     setPage(index);
     const customUrl = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}&pageNumber=${index}&pageSize=6`;
     callApi(null, customUrl);
+  };
+
+  const handleClickEdit = (id) => {
+    console.log("check id truyen", id);
   };
   return (
     <div class="card mb-6">
@@ -128,7 +133,7 @@ export default function Indicators() {
                             <div class="d-flex justify-content-left align-items-center">
                               <div class="d-flex flex-column gap-50">
                                 <span class="text-truncate fw-medium text-heading">
-                                  {toDMY(record.recordTime)}
+                                  {record.recordTime}
                                 </span>
                               </div>
                             </div>
@@ -151,10 +156,14 @@ export default function Indicators() {
                               <span class="text-heading">{record.bmi}</span>
                             </div>
                           </td>
-                          <td class="">
-                            <RemoveIndicators
-                              refetch={callApi}
+                          <td class="d-flex gap-5">
+                            <EditIndicators
                               indicatorId={record.growthIndicatorsId}
+                              refetch={callApi}
+                            />
+                            <RemoveIndicators
+                              indicatorId={record.growthIndicatorsId}
+                              refetch={callApi}
                             />
                           </td>
                         </tr>

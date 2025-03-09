@@ -1,44 +1,37 @@
-export const formatDate = (isoString) => {
-  return new Intl.DateTimeFormat("en-CA", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(new Date(isoString));
+export const formatDate = (dateString) => {
+  if (!dateString) return "";
+
+  // Expecting input format "dd/MM/YYYY"
+  const [day, month, year] = dateString.split("/");
+  return `${year}-${month}-${day}`; // Convert to "YYYY-MM-DD"
 };
 
-export const toDMY = (isoString) => {
-  if (!isoString) return ""; // Handle empty input gracefully
+export const toDMY = (dateString) => {
+  if (!dateString) return "";
 
-  // Ensure the date is in "yyyy-mm-dd" format first
-  const formattedDate = formatDate(isoString).split("/").join("-");
+  const date = new Date(dateString); // Convert ISO string to Date object
 
-  // Convert to "dd-mm-yyyy"
-  const [year, month, day] = formattedDate.split("-");
+  const day = String(date.getDate()).padStart(2, "0"); // Ensure two digits
+  const month = String(date.getMonth() + 1).padStart(2, "0"); // Months are 0-based
+  const year = date.getFullYear();
+
   return `${day}/${month}/${year}`;
 };
 
-export const getYear = (isoString) => {
-  if (!isoString) return "";
-  const formattedDate = formatDate(isoString).split("/").join("-");
-
-  // Convert to "dd-mm-yyyy"
-  const [year, month, day] = formattedDate.split("-");
+export const getYear = (dateString) => {
+  if (!dateString) return "";
+  const [day, month, year] = dateString.split("/");
   return year;
 };
-export const getMonth = (isoString) => {
-  if (!isoString) return "";
-  const formattedDate = formatDate(isoString).split("/").join("-");
 
-  // Convert to "dd-mm-yyyy"
-  const [year, month, day] = formattedDate.split("-");
+export const getMonth = (dateString) => {
+  if (!dateString) return "";
+  const [day, month, year] = dateString.split("/");
   return month;
 };
 
-export const getDate = (isoString) => {
-  if (!isoString) return "";
-  const formattedDate = formatDate(isoString).split("/").join("-");
-
-  // Convert to "dd-mm-yyyy"
-  const [year, month, day] = formattedDate.split("-");
+export const getDate = (dateString) => {
+  if (!dateString) return "";
+  const [day, month, year] = dateString.split("/");
   return day;
 };
