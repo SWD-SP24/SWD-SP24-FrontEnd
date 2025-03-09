@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import {
   Navigation,
@@ -10,47 +10,102 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
+import useApi from "../../hooks/useApi";
+import API_URLS from "../../config/apiUrls";
+import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import { db } from "../../config/firebase";
+import { Modal } from "bootstrap";
 
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. Chu Thi Minh",
-    specialty: "Public Relations Specialist",
-    image:
-      "https://ivie.vn/_next/image?url=https%3A%2F%2Fisofhcare-backup.s3-ap-southeast-1.amazonaws.com%2Fimages%2Fdoctor_f4ed72b7_85fc_43d7_ac3b_9e98156ce1f6.png&w=1920&q=75",
-    rating: 4.5,
-    reviews: 120,
-  },
-  {
-    id: 2,
-    name: "Dr. John Doe",
-    specialty: "Pediatrician",
-    image:
-      "https://ivie.vn/_next/image?url=https%3A%2F%2Fisofhcare-backup.s3-ap-southeast-1.amazonaws.com%2Fimages%2Ftest_7f16e492_a1e5_435f_9f02_bcf31894d87c.png&w=640&q=75",
-    rating: 4.2,
-    reviews: 98,
-  },
-  {
-    id: 3,
-    name: "Dr. Jane Smith",
-    specialty: "Dermatologist",
-    image:
-      "https://ivie.vn/_next/image?url=https%3A%2F%2Fisofhcare-backup.s3-ap-southeast-1.amazonaws.com%2Fimages%2Fdoctor_23d469d9_d5ef_4e13_8be8_4d75b3bb6005.png&w=1920&q=75",
-    rating: 4.8,
-    reviews: 156,
-  },
-  {
-    id: 4,
-    name: "Dr. Emily Brown",
-    specialty: "Cardiologist",
-    image:
-      "https://ivie.vn/_next/image?url=https%3A%2F%2Fisofhcare-backup.s3-ap-southeast-1.amazonaws.com%2Fimages%2Fdoctor_82972113_966a_4d7e_b194_3734a39341c1.png&w=1920&q=75",
-    rating: 4.9,
-    reviews: 200,
-  },
-];
+export default function DoctorListModal({
+  user,
+  conversations,
+  onSelectConversation,
+}) {
+  const { response, callApi } = useApi({
+    url: API_URLS.USER.GET_DOCTORS_LIST,
+    method: "GET",
+  });
 
-export default function DoctorListModal() {
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    const modalElement = document.getElementById("doctorListModal");
+    if (modalElement) {
+      modalElement.addEventListener("shown.bs.modal", () => callApi());
+      modalElement.addEventListener("hidden.bs.modal", handleCloseModal);
+    }
+    return () => {
+      if (modalElement) {
+        modalElement.removeEventListener("shown.bs.modal", callApi);
+        modalElement.removeEventListener("hidden.bs.modal", handleCloseModal);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (response?.status === "successful") {
+      const doctors = response.data || [];
+      if (doctors) {
+        setDoctors(doctors);
+      }
+    }
+  }, [response]);
+
+  const handleCloseModal = () => {
+    setDoctors([]);
+  };
+
+  const handleChatWithDoctor = async (doctor) => {
+    if (!user) return;
+
+    // Kiểm tra xem đã có cuộc trò chuyện với bác sĩ chưa
+    const existingConversation = conversations.find((conv) =>
+      conv.participants.includes(doctor.userId)
+    );
+
+    if (existingConversation) {
+      // Nếu đã có, mở cuộc trò chuyện đó
+      onSelectConversation(existingConversation);
+    } else {
+      // Nếu chưa, tạo cuộc trò chuyện mới
+      const newConversationRef = await addDoc(collection(db, "conversations"), {
+        participants: [user.userId, doctor.userId],
+        lastSenderId: "",
+        lastSenderName: "",
+        lastSenderAvatar: "",
+        lastMessage:
+          "You are now connected with the doctor. Feel free to start a conversation!",
+        lastTimestamp: serverTimestamp(),
+        [user.userId]: { name: user.fullName, avatar: user.avatar },
+        [doctor.userId]: { name: doctor.fullName, avatar: doctor.avatar },
+      });
+
+      const newConversation = {
+        id: newConversationRef.id,
+        participants: [user.userId, doctor.userId],
+        lastSenderId: "",
+        lastSenderName: "",
+        lastSenderAvatar: "",
+        lastMessage:
+          "You are now connected with the doctor. Feel free to start a conversation!",
+        lastTimestamp: serverTimestamp(),
+        [user.userId]: { name: user.fullName, avatar: user.avatar },
+        [doctor.userId]: { name: doctor.fullName, avatar: doctor.avatar },
+      };
+
+      // Mở cuộc trò chuyện mới
+      onSelectConversation(newConversation);
+    }
+
+    const modalElement = document.getElementById("doctorListModal");
+    if (modalElement) {
+      const modalInstance = Modal.getInstance(modalElement);
+      if (modalInstance) {
+        modalInstance.hide();
+      }
+    }
+  };
+
   return (
     <div
       className="modal fade"
@@ -101,7 +156,7 @@ export default function DoctorListModal() {
               className="pt-3"
             >
               {doctors.map((doctor) => (
-                <SwiperSlide key={doctor.id}>
+                <SwiperSlide key={doctor.userId}>
                   <div
                     className="card border-0 shadow-sm p-4 text-center"
                     style={{
@@ -110,18 +165,6 @@ export default function DoctorListModal() {
                       background: "linear-gradient(135deg, #E3F2FD, #FFFFFF)",
                     }}
                   >
-                    <span
-                      className="badge bg-primary position-absolute"
-                      style={{
-                        top: "10px",
-                        right: "10px",
-                        fontSize: "12px",
-                        padding: "6px 12px",
-                        borderRadius: "12px",
-                      }}
-                    >
-                      🌟 Featured
-                    </span>
                     <div className="d-flex justify-content-center">
                       <div
                         className="rounded-circle overflow-hidden border shadow-sm"
@@ -132,33 +175,28 @@ export default function DoctorListModal() {
                         }}
                       >
                         <img
-                          src={doctor.image}
-                          alt={doctor.name}
+                          src={doctor.avatar}
+                          alt={doctor.fullName}
                           className="w-100 h-100 object-fit-cover"
                         />
                       </div>
                     </div>
                     <div className="card-body">
                       <h5 className="card-title fw-bold text-dark">
-                        {doctor.name}
+                        {doctor.fullName}
                       </h5>
-                      <p className="text-muted small">{doctor.specialty}</p>
+                      <p className="text-muted small">
+                        {doctor.specialization}
+                      </p>
                       <div className="d-flex justify-content-center align-items-center mb-3">
-                        {Array.from({ length: 5 }, (_, index) => (
-                          <i
-                            key={index}
-                            className={
-                              index < Math.floor(doctor.rating)
-                                ? "bx bxs-star text-warning"
-                                : "bx bx-star text-secondary"
-                            }
-                          ></i>
-                        ))}
-                        <span className="text-muted ms-2 small">
-                          ({doctor.reviews} reviews)
+                        <span className="text-primary ms-2 small">
+                          {doctor.hospital}
                         </span>
                       </div>
-                      <button className="btn btn-primary mt-6 w-100">
+                      <button
+                        className="btn btn-primary mt-6 w-100"
+                        onClick={() => handleChatWithDoctor(doctor)}
+                      >
                         Chat Now
                       </button>
                     </div>

@@ -34,6 +34,7 @@ const API_URLS = {
     MEMBERSHIP_PACKAGE: {
       CURRENT: "api/UserMemberships/CurrentPackage",
     },
+    GET_DOCTORS_LIST: "/api/Users/doctors",
   },
   ADMIN: {
     CREATE_DOCTOR: "/api/AdminAuth/registerDoctor",

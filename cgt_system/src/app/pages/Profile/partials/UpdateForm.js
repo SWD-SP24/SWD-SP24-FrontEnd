@@ -14,6 +14,8 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
   const [address, setAddress] = useState("");
   const [state, setState] = useState("");
   const [zipCode, setZipCode] = useState("");
+  const [specialization, setSpecialization] = useState("");
+  const [hospital, setHospital] = useState("");
 
   useEffect(() => {
     if (userData) {
@@ -25,6 +27,8 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
       setState(userData.state || "");
       setZipCode(userData.zipcode || "");
       setCountry(userData.country || "");
+      setSpecialization(userData.specialization || "");
+      setHospital(userData.hospital || "");
     }
   }, [userData]);
 
@@ -49,6 +53,8 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
       state: state,
       zipcode: zipCode,
       country: country,
+      specialization: specialization,
+      hospital: hospital,
     };
     await callApi(data);
   };
@@ -116,6 +122,38 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             onChange={(e) => setAddress(e.target.value)}
           />
         </div>
+        {userData.role === "doctor" && (
+          <>
+            <div class="mb-3 col-md-6">
+              <label for="specialization" class="form-label">
+                Specialization
+              </label>
+              <input
+                class="form-control"
+                type="text"
+                name="specialization"
+                id="specialization"
+                placeholder="Specialization"
+                value={specialization}
+                onChange={(e) => setSpecialization(e.target.value)}
+              />
+            </div>
+            <div class="mb-3 col-md-6">
+              <label for="hospital" class="form-label">
+                Hospital
+              </label>
+              <input
+                class="form-control"
+                type="text"
+                name="hospital"
+                id="hospital"
+                placeholder="Hospital"
+                value={hospital}
+                onChange={(e) => setHospital(e.target.value)}
+              />
+            </div>
+          </>
+        )}
       </div>
       <div class="mt-2">
         <button type="submit" class="btn btn-primary me-2">
