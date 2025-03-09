@@ -149,7 +149,7 @@ export default function ManagePackages() {
           </div>
         </div>
         <AddPackageModal />
-        <EditPackageModal />
+        <EditPackageModal users={users} />
       </div>
     </>
   );

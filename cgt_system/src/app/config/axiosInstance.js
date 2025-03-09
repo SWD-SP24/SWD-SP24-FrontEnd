@@ -7,6 +7,9 @@ const axiosInstance = axios.create({
   baseURL: API_URLS.BASE_URL,
 });
 
+// Tạo source để hủy request
+let cancelTokenSource = axios.CancelToken.source();
+
 const setupInterceptors = () => {
   axiosInstance.interceptors.request.use(
     (config) => {
@@ -19,6 +22,9 @@ const setupInterceptors = () => {
         }
       }
 
+      // Thêm CancelToken vào mỗi request
+      config.cancelToken = cancelTokenSource.token;
+
       return config;
     },
     (error) => Promise.reject(error)
@@ -28,6 +34,13 @@ const setupInterceptors = () => {
     (response) => response,
     (error) => {
       if (error.response?.status === 401) {
+        // Hủy tất cả request đang chờ
+        cancelTokenSource.cancel("Session expired. Cancelling all requests.");
+
+        // Tạo CancelToken mới cho request sau này
+        cancelTokenSource = axios.CancelToken.source();
+
+        // Hiển thị thông báo lỗi
         showToast({
           icon: "warning",
           title: "Session Expired",
@@ -41,6 +54,7 @@ const setupInterceptors = () => {
           targetElement: document.body,
         });
       }
+
       return Promise.reject(error);
     }
   );

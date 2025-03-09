@@ -60,7 +60,7 @@ export default function PackageItem({
       showToast({
         icon: "warning",
         text: error?.message,
-        targetElement: document.querySelector(".toast"),
+        targetElement: document.querySelector(".content-wrapper"),
       });
     }
   }, [response, error]);
@@ -85,6 +85,33 @@ export default function PackageItem({
   };
 
   const handleDelete = (id) => {
+    if (totalUserUse > 0 && packageItem.status === "active") {
+      showToast({
+        icon: "warning",
+        text: "This package is active and currently in use. Deletion is not allowed.",
+        targetElement: document.querySelector(".content-wrapper"),
+      });
+      return;
+    }
+
+    if (totalUserUse > 0) {
+      showToast({
+        icon: "warning",
+        text: "This package is currently in use and cannot be deleted.",
+        targetElement: document.querySelector(".content-wrapper"),
+      });
+      return;
+    }
+
+    if (packageItem.status === "active") {
+      showToast({
+        icon: "warning",
+        text: "This package is active and cannot be deleted.",
+        targetElement: document.querySelector(".content-wrapper"),
+      });
+      return;
+    }
+
     const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.DELETE}/${id}`;
     deleteCallApi(null, customUrl);
   };

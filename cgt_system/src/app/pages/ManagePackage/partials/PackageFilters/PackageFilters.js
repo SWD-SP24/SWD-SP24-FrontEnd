@@ -43,7 +43,7 @@ export default function PackageFilters({ onFetchPackages }) {
               type="search"
               className="form-control"
               id="dt-search-0"
-              placeholder="Search Package"
+              placeholder="Search User"
               aria-controls="DataTables_Table_0"
             />
             <label htmlFor="dt-search-0"></label>
@@ -58,20 +58,6 @@ export default function PackageFilters({ onFetchPackages }) {
                 Inactive
               </option>
             </select>
-          </div>
-          <div className="dt-buttons btn-group flex-wrap d-flex gap-4 mb-md-0 mb-6">
-            <button
-              className="btn add-new btn-primary"
-              data-bs-target="#addRoleModal"
-              data-bs-toggle="modal"
-            >
-              <span>
-                <i className="icon-base bx bx-plus icon-sm me-0 me-sm-2"></i>
-                <span className="d-none d-sm-inline-block">
-                  Add New Package
-                </span>
-              </span>
-            </button>
           </div>
         </div>
       </div>
