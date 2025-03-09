@@ -4,6 +4,7 @@ import {
   addDoc,
   collection,
   doc,
+  increment,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -69,7 +70,9 @@ export default function ChatHistory({
 
       // Cập nhật lastMessage, lastSenderId, lastSenderName, lastSenderAvatar trong conversations
       const conversationRef = doc(db, "conversations", conversationId);
+
       await updateDoc(conversationRef, {
+        [`unreadCounts.${recipientId}`]: increment(1),
         lastMessage: newMessage,
         lastSenderId: currentUser.userId,
         lastSenderName: currentUser.fullName,
@@ -202,9 +205,6 @@ export default function ChatHistory({
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <div className="message-actions d-flex align-items-center">
-              <span className="btn btn-text-secondary btn-icon rounded-pill cursor-pointer">
-                <i className="speech-to-text icon-base bx bx-microphone icon-md text-heading"></i>
-              </span>
               <button className="btn btn-primary d-flex send-msg-btn">
                 <span className="align-middle d-md-inline-block d-none">
                   Send

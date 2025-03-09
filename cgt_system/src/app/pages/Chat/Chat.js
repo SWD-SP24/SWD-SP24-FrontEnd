@@ -7,6 +7,8 @@ import {
   where,
   orderBy,
   addDoc,
+  doc,
+  updateDoc,
 } from "firebase/firestore";
 import "./chat.css";
 import image from "../../assets/img/avatars/default-avatar.jpg";
@@ -32,12 +34,8 @@ export default function Chat() {
     const conversationsRef = collection(db, "conversations");
     const q = query(
       conversationsRef,
-      where(
-        "participants",
-        "array-contains",
-        user.userId,
-        orderBy("lastTimestamp", "desc")
-      )
+      where("participants", "array-contains", user.userId),
+      orderBy("lastTimestamp", "desc")
     );
 
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -53,6 +51,7 @@ export default function Chat() {
           lastSenderAvatar: data.lastSenderAvatar,
           lastMessage: data.lastMessage || "",
           lastTimestamp: data.lastTimestamp,
+          unreadCounts: data.unreadCounts?.[user.userId] || 0,
         };
       });
 
@@ -80,6 +79,12 @@ export default function Chat() {
   const selectConversation = (conversation) => {
     setSelectedConversation(conversation);
     setMessages([]);
+
+    // Đánh dấu tin nhắn đã đọc bằng cách đặt unreadCount = 0
+    const conversationRef = doc(db, "conversations", conversation.id);
+    updateDoc(conversationRef, {
+      [`unreadCounts.${user.userId}`]: 0,
+    });
 
     const messagesRef = collection(
       db,
@@ -182,16 +187,19 @@ export default function Chat() {
                   />
                   <p className="fw-bold">No messages yet</p>
                   <p className="text-muted text-center">
-                    Have questions about your child's health? Chat with a doctor
-                    for expert advice and guidance.
+                    {user.role === "doctor"
+                      ? "You haven't had any consultations yet. Stay available for patients seeking medical advice."
+                      : "Have questions about your child's health? Chat with a doctor for expert advice and guidance."}
                   </p>
-                  <button
-                    className="btn btn-primary mt-2"
-                    data-bs-toggle="modal"
-                    data-bs-target="#doctorListModal"
-                  >
-                    Start Consultation
-                  </button>
+                  {user.role !== "doctor" && (
+                    <button
+                      className="btn btn-primary mt-2"
+                      data-bs-toggle="modal"
+                      data-bs-target="#doctorListModal"
+                    >
+                      Start Consultation
+                    </button>
+                  )}
                 </li>
               ) : (
                 // Danh sách cuộc trò chuyện
@@ -222,19 +230,38 @@ export default function Chat() {
                         </div>
                         <div className="chat-contact-info flex-grow-1 ms-4">
                           <div className="d-flex justify-content-between align-items-center">
-                            <h6 className="chat-contact-name text-truncate m-0 fw-normal">
+                            <h6
+                              className={`chat-contact-name text-truncate m-0 ${
+                                conversation.unreadCounts > 0 &&
+                                conversation.lastSenderId !== user.userId &&
+                                conversation.id !== selectedConversation.id
+                                  ? "fw-bold"
+                                  : "fw-normal"
+                              }  `}
+                            >
                               {chatPartner.name}
                             </h6>
                             <small className="chat-contact-list-item-time">
                               {timeAgo(conversation.lastTimestamp)}
                             </small>
                           </div>
-                          {user.userId === conversation.lastSenderId && (
-                            <small className="chat-contact-status text-truncate me-1">
-                              You:
-                            </small>
-                          )}
-                          <small className="chat-contact-status text-truncate">
+                          <small
+                            className={`chat-contact-status text-truncate ${
+                              conversation.unreadCounts > 0 &&
+                              conversation.lastSenderId !== user.userId &&
+                              conversation.id !== selectedConversation.id &&
+                              "fw-bold"
+                            }`}
+                            style={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              maxWidth: "200px",
+                              display: "inline-block",
+                            }}
+                          >
+                            {user.userId === conversation.lastSenderId &&
+                              "You: "}{" "}
                             {conversation.lastMessage}
                           </small>
                         </div>
@@ -245,7 +272,7 @@ export default function Chat() {
               )}
             </ul>
           </div>
-          {conversations.length > 0 && (
+          {conversations.length > 0 && user.role !== "doctor" && (
             <div
               className="d-flex justify-content-center align-items-center p-2"
               data-bs-toggle="modal"
@@ -323,7 +350,11 @@ export default function Chat() {
         )}
         {/* End Chat History */}
       </div>
-      <DoctorListModal />
+      <DoctorListModal
+        user={user}
+        conversations={conversations}
+        onSelectConversation={selectConversation}
+      />
     </div>
   );
 }
