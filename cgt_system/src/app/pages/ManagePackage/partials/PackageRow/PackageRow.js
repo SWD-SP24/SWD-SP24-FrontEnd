@@ -47,17 +47,23 @@ export default function PackageRow({ packageItem, onFetchPackages }) {
 
   return (
     <tr>
-      <td className="sorting_1">
-        <div className="d-flex justify-content-start align-items-center user-name">
-          <div className="avatar-wrapper"></div>
-          <div className="d-flex flex-column">
+      <td class="sorting_1">
+        <div class="d-flex justify-content-left align-items-center">
+          <div class="avatar-wrapper">
+            <div class="avatar avatar-sm me-4">
+              <img
+                src={packageItem.image}
+                alt="Avatar"
+                class="rounded-circle"
+              />
+            </div>
+          </div>
+          <div class="d-flex flex-column">
             <a
               href="app-user-view-account.html"
-              className="text-heading text-truncate"
+              class="text-heading text-truncate"
             >
-              <span className="fw-medium">
-                {packageItem.membershipPackageName}
-              </span>
+              <span class="fw-medium">{packageItem.membershipPackageName}</span>
             </a>
           </div>
         </div>
