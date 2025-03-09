@@ -119,7 +119,8 @@ const InputField = React.memo(
       </>
     );
     return (
-      <div className="mb-6 form-control-validation fv-plugins-icon-container">
+      // <div className="mb-6 form-control-validation fv-plugins-icon-container">
+      <>
         <label htmlFor={name} className={"form-label"}>
           {label}
         </label>
@@ -135,7 +136,8 @@ const InputField = React.memo(
             <div>{error}</div>
           </div>
         )}
-      </div>
+      </>
+      // </div>
     );
   }
 );

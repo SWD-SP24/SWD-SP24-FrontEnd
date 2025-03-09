@@ -117,23 +117,37 @@ export default function Button({
       "validityPeriod",
       formData.validityPeriod
     );
+    const summaryError = validateField("summary", formData.summary);
+
     const permissionsError = validateField(
       "selectedPermissions",
       selectedPermissions
     );
 
+    const imageError =
+      buttonTag === "Submit" ? validateField("image", image) : "";
+
     if (
       packageNameError ||
       priceError ||
       validityPeriodError ||
-      permissionsError
+      permissionsError ||
+      summaryError ||
+      imageError
     ) {
       sFormError.set({
         packageName: packageNameError,
         price: priceError,
         validityPeriod: validityPeriodError,
         permissions: permissionsError,
+        summary: summaryError,
+        image: imageError,
       });
+      return;
+    }
+
+    if (image === null) {
+      handleUpdate(formData.image);
       return;
     }
 
@@ -147,23 +161,7 @@ export default function Button({
     if (getImageUrlResponse?.status === "successful") {
       const imageUrl = getImageUrlResponse.data.url || {};
 
-      const customUrl =
-        buttonTag === "Submit"
-          ? `${API_URLS.MEMBERSHIP_PACKAGE.POST}`
-          : `${API_URLS.MEMBERSHIP_PACKAGE.PUT}/${data?.membershipPackageId}`;
-
-      const customBody = {
-        membershipPackageName: formData.packageName,
-        summary: formData.summary,
-        percentDiscount: formData.percentDiscount,
-        image: imageUrl,
-        price: formData.price,
-        status: buttonTag === "Submit" ? "inactive" : data?.status,
-        validityPeriod: formData.validityPeriod,
-        permissions: selectedPermissions,
-      };
-
-      callApi(customBody, customUrl);
+      handleUpdate(imageUrl);
     }
   }, [getImageUrlResponse]);
 
@@ -176,6 +174,26 @@ export default function Button({
       });
     }
   }, [getImageUrlError]);
+
+  const handleUpdate = (imageUrl) => {
+    const customUrl =
+      buttonTag === "Submit"
+        ? `${API_URLS.MEMBERSHIP_PACKAGE.POST}`
+        : `${API_URLS.MEMBERSHIP_PACKAGE.PUT}/${data?.membershipPackageId}`;
+
+    const customBody = {
+      membershipPackageName: formData.packageName,
+      summary: formData.summary,
+      percentDiscount: formData.percentDiscount,
+      image: imageUrl,
+      price: formData.price,
+      status: buttonTag === "Submit" ? "inactive" : data?.status,
+      validityPeriod: formData.validityPeriod,
+      permissions: selectedPermissions,
+    };
+
+    callApi(customBody, customUrl);
+  };
 
   const closeModal = () => {
     const modalElement = document.getElementById(
