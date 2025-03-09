@@ -2,12 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./Chatbot.scss";
 import { AiOutlineClose, AiOutlineMessage } from "react-icons/ai";
-import { API_KEY } from "../../../chatbotkey.js";
+import { API_KEY } from "../../../chatbotKey";
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  const [isTyping, setIsTyping] = useState(false); // Thêm state isTyping
+  const [isTyping, setIsTyping] = useState(false);
   const chatBoxRef = useRef(null);
 
   const API_URL =
@@ -24,22 +24,33 @@ const Chatbot = () => {
     }
   }, [isOpen]);
 
+  const formatBotMessage = (text) => {
+    return text
+      .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bôi đậm
+      .replace(/\*(.*?)\*/g, "<em>$1</em>") // In nghiêng
+      .replace(/\n/g, "<br />") // Xuống dòng
+      .replace(/\- /g, "• "); // Chuyển dấu "-" thành "•"
+  };
+
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const newMessages = [...messages, { role: "user", content: input }];
     setMessages(newMessages);
     setInput("");
-    setIsTyping(true); // Bắt đầu hiển thị "..." khi bot đang trả lời
+    setIsTyping(true);
 
     try {
       const response = await axios.post(`${API_URL}?key=${API_KEY}`, {
         contents: [{ parts: [{ text: input }] }],
       });
 
-      const botMessage =
+      let botMessage =
         response.data?.candidates?.[0]?.content?.parts?.[0]?.text ||
         "Xin lỗi, tôi không hiểu.";
+
+      botMessage = formatBotMessage(botMessage);
+
       setMessages([...newMessages, { role: "bot", content: botMessage }]);
     } catch (error) {
       console.error("Error:", error);
@@ -48,7 +59,7 @@ const Chatbot = () => {
         { role: "bot", content: "Lỗi khi gọi API" },
       ]);
     } finally {
-      setIsTyping(false); // Ẩn "..." khi bot có câu trả lời
+      setIsTyping(false);
     }
   };
 
@@ -68,22 +79,19 @@ const Chatbot = () => {
               <div
                 key={index}
                 className={msg.role === "user" ? "user-message" : "bot-message"}
-              >
-                {msg.content}
-              </div>
+                dangerouslySetInnerHTML={{ __html: msg.content }} // Hiển thị HTML đúng format
+              />
             ))}
-            {isTyping && <div className="bot-message typing">...</div>}{" "}
-            {/* Hiển thị "..." khi bot đang gõ */}
+            {isTyping && <div className="bot-message typing">...</div>}
           </div>
           <div className="chatbot-input">
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && sendMessage()} // Thêm sự kiện Enter
+              onKeyDown={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Enter here"
             />
-
             <button onClick={sendMessage}>Send</button>
           </div>
         </div>

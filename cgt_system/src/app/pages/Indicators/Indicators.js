@@ -7,7 +7,7 @@ import BMIProgressBar from "./partials/BMIProgessBar.js";
 import DateRangePicker from "./partials/DateRangePicker.js";
 import EditIndicators from "./partials/EditIndicators.js";
 import RemoveIndicators from "./partials/RemoveIndicators.js";
-
+import AIAnalysis from "./partials/AIAnalysis.js";
 export default function Indicators() {
   const childId = useParams().id;
   const fromDateRef = useRef(null);
@@ -232,6 +232,8 @@ export default function Indicators() {
           </div>
         </div>
       </div>
+      <AIAnalysis indicators={response?.data || []} />
+
     </div>
   );
 }

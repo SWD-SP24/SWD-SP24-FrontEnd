@@ -26,10 +26,21 @@ export default function ChildLayout() {
   }, []);
 
   useEffect(() => {
-    if (response) {
-      console.log(response);
+    if (response?.data) {  // Chắc chắn rằng response.data đã tồn tại
+      console.log("API Response:", response.data);  // Debug dữ liệu nhận được
+      if (response.data.dob) {
+        const age = calculateAge(response.data.dob);
+        const bloodType = response.data.bloodType;
+        const gender = response.data.gender;
+        localStorage.setItem("userAge", age);
+        localStorage.setItem("bloodType", bloodType)
+        localStorage.setItem("gender", gender)
+        console.log("Lưu tuổi và máu vào localStorage:", age, bloodType, gender); // Kiểm tra xem có lưu được không
+      }
     }
   }, [response]);
+
+
   if (!response) {
     return <div> loading</div>;
   }
@@ -78,7 +89,7 @@ export default function ChildLayout() {
                   className="img-fluid rounded mb-4"
                 />
                 <div className="user-info text-center">
-                  <h4 className="text-data">{response.data.fullName}</h4>
+                  <h4 className="te xt-data">{response.data.fullName}</h4>
                 </div>
               </div>
             </div>
