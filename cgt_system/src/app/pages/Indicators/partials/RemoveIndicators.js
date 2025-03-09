@@ -9,14 +9,14 @@ export default function RemoveIndicators({ refetch, indicatorId }) {
   });
 
   const handleRemove = async (e) => {
-    let target = document.querySelector(".content-wrapper");
+    // let target = document.querySelector(".content-wrapper");
     e.preventDefault();
     await callApi();
-    showToast({
-      icon: "success",
-      text: "Indicator removed successfully",
-      targetElement: target,
-    });
+    // showToast({
+    //   icon: "success",
+    //   text: "Indicator removed successfully",
+    //   targetElement: target,
+    // });
     refetch();
   };
   return (

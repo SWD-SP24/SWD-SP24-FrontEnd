@@ -16,9 +16,13 @@ export default function Button({
   data,
   image,
   selectedPermissions,
+  users,
 }) {
   const pagination = sPagination.use();
   const formData = sFormData.use();
+  const usersUse = users?.filter(
+    (user) => user.membershipPackageId === data?.membershipPackageId
+  );
 
   const { isLoading, response, error, callApi } = useApi({
     method: buttonTag === "Submit" ? "POST" : "PUT",
@@ -47,11 +51,6 @@ export default function Button({
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "success") {
-        showToast({
-          icon: "success",
-          text: "Membership package updated successfull !",
-          targetElement: document.querySelector(".card"),
-        });
         closeModal();
         getPackageCallApi();
       }
@@ -62,7 +61,7 @@ export default function Button({
         showToast({
           icon: "error",
           text: error.message,
-          targetElement: document.querySelector(".card"),
+          targetElement: document.querySelector(".content-wrapper"),
         });
       }
     };
@@ -110,6 +109,15 @@ export default function Button({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (usersUse.length > 0) {
+      showToast({
+        icon: "warning",
+        text: "This package is currently in use and cannot be deleted.",
+        targetElement: document.querySelector(".content-wrapper"),
+      });
+      return;
+    }
 
     const packageNameError = validateField("packageName", formData.packageName);
     const priceError = validateField("price", formData.price);

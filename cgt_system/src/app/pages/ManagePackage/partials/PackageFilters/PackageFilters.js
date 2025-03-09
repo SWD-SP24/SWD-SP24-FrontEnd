@@ -1,7 +1,7 @@
 import React from "react";
 import { sPagination } from "../../managePackageStore";
 
-export default function PackageFilters({ onFetchPackages }) {
+export default function PackageFilters({ onFetchUsersAndPackages }) {
   const pagination = sPagination.use();
 
   const handleChange = (event) => {
@@ -15,7 +15,7 @@ export default function PackageFilters({ onFetchPackages }) {
       prev.value.currentPage = newCurrentPage;
     });
 
-    onFetchPackages(newCurrentPage, newItemsPerPage);
+    onFetchUsersAndPackages(newCurrentPage, newItemsPerPage);
   };
   return (
     <div className="row mx-3 justify-content-between my-0">
@@ -43,35 +43,38 @@ export default function PackageFilters({ onFetchPackages }) {
               type="search"
               className="form-control"
               id="dt-search-0"
-              placeholder="Search Package"
+              placeholder="Search User"
               aria-controls="DataTables_Table_0"
             />
             <label htmlFor="dt-search-0"></label>
           </div>
           <div className="user_role w-px-200 my-md-0 mt-6 mb-2">
             <select id="UserRole" className="form-select text-capitalize">
-              <option value=""> Select Status </option>
+              <option value=""> Select Package </option>
               <option value="Admin" className="text-capitalize">
-                Active
+                Basic
               </option>
               <option value="Author" className="text-capitalize">
-                Inactive
+                Standard
+              </option>
+              <option value="Author" className="text-capitalize">
+                Premium
               </option>
             </select>
           </div>
-          <div className="dt-buttons btn-group flex-wrap d-flex gap-4 mb-md-0 mb-6">
-            <button
-              className="btn add-new btn-primary"
-              data-bs-target="#addRoleModal"
-              data-bs-toggle="modal"
-            >
-              <span>
-                <i className="icon-base bx bx-plus icon-sm me-0 me-sm-2"></i>
-                <span className="d-none d-sm-inline-block">
-                  Add New Package
-                </span>
-              </span>
-            </button>
+          <div className="user_role w-px-200 my-md-0 mt-6 mb-2">
+            <select id="UserRole" className="form-select text-capitalize">
+              <option value=""> Select Status </option>
+              <option value="Admin" className="text-capitalize">
+                Paid
+              </option>
+              <option value="Author" className="text-capitalize">
+                Pending
+              </option>
+              <option value="Author" className="text-capitalize">
+                Failed
+              </option>
+            </select>
           </div>
         </div>
       </div>
