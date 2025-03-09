@@ -4,6 +4,7 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import { toothDList } from "../../constants/toothDList";
 import ToothNote from "./partials/ToothNote";
+import AIAnalysis from "./partials/AIAnalysis";
 export default function Teeth() {
   const { response, callApi } = useApi({
     url: `${API_URLS.TEETH.TEETH}`,
@@ -797,7 +798,9 @@ export default function Teeth() {
             />
           </div>
         </div>
+        <AIAnalysis indicators={response?.data || []} />
       </div>
+
     </div>
   );
 }

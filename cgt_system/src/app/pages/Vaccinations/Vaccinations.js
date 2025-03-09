@@ -3,7 +3,7 @@ import { useParams } from "react-router";
 import API_URLS from "../../config/apiUrls";
 import useApi from "../../hooks/useApi";
 import VaccineTable from "./partials/VaccineTable";
-
+import AIAnalysis from "./partials/AIAnalysis";
 export default function Vaccinations() {
   const url = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=1&pageSize=7&sortByAge=true`;
 
@@ -29,6 +29,7 @@ export default function Vaccinations() {
         Vaccine List
       </h5>
       <VaccineTable vaccineList={response} refetch={callApi} />
+      <AIAnalysis indicators={response?.data || []} />
     </div>
   );
 }
