@@ -47,11 +47,6 @@ export default function Button({
   useEffect(() => {
     const handleApiResponse = () => {
       if (response?.status === "success") {
-        showToast({
-          icon: "success",
-          text: "Membership package updated successfull !",
-          targetElement: document.querySelector(".card"),
-        });
         closeModal();
         getPackageCallApi();
       }
@@ -62,7 +57,7 @@ export default function Button({
         showToast({
           icon: "error",
           text: error.message,
-          targetElement: document.querySelector(".card"),
+          targetElement: document.querySelector(".content-wrapper"),
         });
       }
     };
