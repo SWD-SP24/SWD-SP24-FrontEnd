@@ -95,7 +95,7 @@ export default function VaccineTable({ vaccineList, refetch }) {
         id="DataTables_Table_0_wrapper"
         class="dt-container dt-bootstrap5 dt-empty-footer"
       >
-        <div
+        {/* <div
           className="row mx-3 justify-content-between my-0"
           style={{ height: "58.225px" }}
         >
@@ -103,7 +103,7 @@ export default function VaccineTable({ vaccineList, refetch }) {
             className="d-md-flex align-items-center dt-layout-end col-md-auto d-flex gap-md-4 justify-content-start gap-4 flex-wrap mt-0"
             style={{ paddingLeft: "8px" }}
           ></div>
-          {/* <div className="d-md-flex align-items-center dt-layout-end col-md-auto ms-auto d-flex gap-md-4 justify-content-md-between justify-content-center gap-4 flex-wrap mt-0">
+          <div className="d-md-flex align-items-center dt-layout-end col-md-auto ms-auto d-flex gap-md-4 justify-content-md-between justify-content-center gap-4 flex-wrap mt-0">
             <div className="d-md-flex align-items-center dt-layout-end col-md-auto ms-auto d-flex gap-md-4 justify-content-md-between justify-content-center gap-4 flex-wrap mt-0">
               <div className="  d-flex align-items-center ">
                 <input
@@ -133,8 +133,8 @@ export default function VaccineTable({ vaccineList, refetch }) {
                 </select>
               </div>
             </div>
-          </div> */}
-        </div>
+          </div>
+        </div> */}
         <div class="justify-content-between dt-layout-table">
           <div class="d-md-flex justify-content-between align-items-center dt-layout-full table-responsive">
             <table

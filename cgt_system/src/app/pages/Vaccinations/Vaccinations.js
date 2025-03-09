@@ -22,7 +22,12 @@ export default function Vaccinations() {
 
   return (
     <div class="card mb-6">
-      <h5 class="card-header pb-0 text-md-start text-center">Vaccine List</h5>
+      <h5
+        class="card-header pb-0 text-md-start text-center"
+        style={{ marginBottom: "20px" }}
+      >
+        Vaccine List
+      </h5>
       <VaccineTable vaccineList={response} refetch={callApi} />
     </div>
   );
