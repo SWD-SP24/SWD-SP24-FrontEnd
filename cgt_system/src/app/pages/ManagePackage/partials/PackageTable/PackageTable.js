@@ -1,7 +1,10 @@
 import React from "react";
 import PackageRow from "../PackageRow/PackageRow";
 
-export default function PackageTable({ packages, onFetchPackages }) {
+export default function PackageTable({
+  usersAndPackages,
+  onFetchUsersAndPackages,
+}) {
   return (
     <div className="justify-content-between dt-layout-table">
       <div className="d-md-flex justify-content-between align-items-center table-responsive dt-layout-full">
@@ -12,10 +15,10 @@ export default function PackageTable({ packages, onFetchPackages }) {
           style={{ width: "100%" }}
         >
           <colgroup>
-            <col data-dt-column="2" style={{ width: "473.375px" }} />
-            <col data-dt-column="3" style={{ width: "313.656px" }} />
-            <col data-dt-column="4" style={{ width: "300.594px" }} />
-            <col data-dt-column="6" style={{ width: "244.688px" }} />
+            <col data-dt-column="2" style={{ width: "86.3125px" }} />
+            <col data-dt-column="3" style={{ width: "350.656px" }} />
+            <col data-dt-column="4" style={{ width: "200.594px" }} />
+            <col data-dt-column="6" style={{ width: "200.594px" }} />
             <col data-dt-column="7" style={{ width: "207.031px" }} />
           </colgroup>
           <thead>
@@ -30,7 +33,7 @@ export default function PackageTable({ packages, onFetchPackages }) {
                 tabIndex="0"
               >
                 <span className="dt-column-title" role="button">
-                  Name
+                  #
                 </span>
                 <span className="dt-column-order"></span>
               </th>
@@ -43,7 +46,7 @@ export default function PackageTable({ packages, onFetchPackages }) {
                 tabIndex="0"
               >
                 <span className="dt-column-title" role="button">
-                  Price
+                  Client
                 </span>
                 <span className="dt-column-order"></span>
               </th>
@@ -56,7 +59,33 @@ export default function PackageTable({ packages, onFetchPackages }) {
                 tabIndex="0"
               >
                 <span className="dt-column-title" role="button">
-                  Validity Period
+                  Package
+                </span>
+                <span className="dt-column-order"></span>
+              </th>
+              <th
+                data-dt-column="6"
+                rowSpan="1"
+                colSpan="1"
+                className="dt-orderable-asc dt-orderable-desc"
+                aria-label="Status: Activate to sort"
+                tabIndex="0"
+              >
+                <span className="dt-column-title" role="button">
+                  Start Date
+                </span>
+                <span className="dt-column-order"></span>
+              </th>
+              <th
+                data-dt-column="6"
+                rowSpan="1"
+                colSpan="1"
+                className="dt-orderable-asc dt-orderable-desc"
+                aria-label="Status: Activate to sort"
+                tabIndex="0"
+              >
+                <span className="dt-column-title" role="button">
+                  Expiration Date
                 </span>
                 <span className="dt-column-order"></span>
               </th>
@@ -73,25 +102,14 @@ export default function PackageTable({ packages, onFetchPackages }) {
                 </span>
                 <span className="dt-column-order"></span>
               </th>
-              <th
-                data-dt-column="7"
-                rowSpan="1"
-                colSpan="1"
-                className="dt-orderable-none"
-                aria-label="Actions"
-              >
-                <span className="dt-column-title">Actions</span>
-                <span className="dt-column-order"></span>
-              </th>
             </tr>
           </thead>
           <tbody>
-            {packages ? (
-              packages.map((packageItem) => (
+            {usersAndPackages ? (
+              usersAndPackages.map((userAndPackageItem) => (
                 <PackageRow
-                  key={packageItem.membershipPackageId}
-                  packageItem={packageItem}
-                  onFetchPackages={onFetchPackages}
+                  key={userAndPackageItem.userId}
+                  userAndPackageItem={userAndPackageItem}
                 />
               ))
             ) : (
