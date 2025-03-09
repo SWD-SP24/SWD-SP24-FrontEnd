@@ -204,7 +204,7 @@ export default function VaccineTable({ vaccineList, refetch }) {
               <tbody>
                 {vaccineList &&
                   response &&
-                  filteredList.map((vaccine) => {
+                  vaccineList.data.map((vaccine) => {
                     return (
                       <tr key={vaccine.vaccineId}>
                         <td class="sorting_1">
