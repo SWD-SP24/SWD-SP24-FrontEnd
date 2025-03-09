@@ -6,7 +6,7 @@ import { toDMY } from "../../../util/dateFormat";
 import UpdateToothRecord from "./UpdateToothRecord";
 import CreateToothRecord from "./CreateToothRecord";
 
-export default function ToothNote({ toothNumber }) {
+export default function ToothNote({ toothNumber, setToothRecord }) {
   const id = useParams().id;
   const [toothData, setToothData] = useState({
     recordId: "",
@@ -38,6 +38,7 @@ export default function ToothNote({ toothNumber }) {
         setToothData({ eruptionDate: "", note: "" });
       }
       console.log("tooth data day ne", toothData);
+      setToothRecord(response.data);
     }
   }, [response, toothNumber]);
   return (
