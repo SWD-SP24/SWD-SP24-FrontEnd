@@ -1,4 +1,5 @@
 //img
+import { API_KEY } from "../../../../chatbotKey.js";
 import Images from "../../../assets/img/images.js";
 
 const Contact = () => {
