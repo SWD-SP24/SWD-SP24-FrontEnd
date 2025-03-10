@@ -182,7 +182,7 @@ const Navbar = () => {
               <li className="nav-item">
                 <a
                   className="nav-link fw-medium"
-                  href="../vertical-menu-template/index.html"
+                  href="/about-us"
                   target="_blank"
                 >
                   About us
