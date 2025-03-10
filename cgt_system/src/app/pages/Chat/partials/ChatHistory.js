@@ -5,11 +5,12 @@ import {
   collection,
   doc,
   increment,
+  onSnapshot,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../config/firebase";
-import Skeleton from "react-loading-skeleton";
+import addNotification from "../../../util/addNotification";
 
 export default function ChatHistory({
   currentUser,
@@ -19,6 +20,8 @@ export default function ChatHistory({
   conversationId,
 }) {
   const [newMessage, setNewMessage] = useState("");
+  const [isRecipientOnline, setIsRecipientOnline] = useState(false);
+  const [lastSeen, setLastSeen] = useState("");
   const chatEndRef = useRef(null);
 
   const formatTimestamp = (timestamp) => {
@@ -54,6 +57,20 @@ export default function ChatHistory({
     }
   };
 
+  // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
+  const timeAgo = (timestamp) => {
+    if (!timestamp?.seconds) return "";
+    const timeDiff = Date.now() - timestamp.seconds * 1000;
+    const minutes = Math.floor(timeDiff / (1000 * 60));
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+
+    if (minutes < 1) return "";
+    if (minutes < 60) return `${minutes} minutes ago`;
+    if (hours < 24) return `${hours} hours ago`;
+    return `${days} days ago`;
+  };
+
   const sendMessage = async (newMessage) => {
     if (!conversationId) return;
 
@@ -80,6 +97,19 @@ export default function ChatHistory({
         lastTimestamp: serverTimestamp(),
       });
 
+      // Nếu recipient offline, thêm thông báo
+      if (!isRecipientOnline) {
+        await addNotification(
+          recipientId,
+          currentUser.fullName,
+          currentUser.avatar,
+          "message",
+          "New Message ✉️",
+          `You have new message from ${currentUser.fullName}`,
+          `/consultations`
+        );
+      }
+
       setNewMessage("");
     } catch (error) {
       console.error("Error:", error);
@@ -93,6 +123,25 @@ export default function ChatHistory({
 
     sendMessage(newMessage);
   };
+
+  useEffect(() => {
+    if (!recipientId) return;
+
+    const recipientRef = doc(db, "activeUsers", String(recipientId));
+
+    // Lắng nghe trạng thái online của recipient
+    const unsubscribe = onSnapshot(recipientRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setIsRecipientOnline(snapshot.data().isOnline || false);
+        setLastSeen(snapshot.data().lastSeen || "");
+      } else {
+        setIsRecipientOnline(false);
+        setLastSeen("");
+      }
+    });
+
+    return () => unsubscribe();
+  }, [recipientId]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -110,7 +159,11 @@ export default function ChatHistory({
                 data-overlay=""
                 data-target="#app-chat-contacts"
               ></i>
-              <div className="flex-shrink-0 avatar avatar-online">
+              <div
+                className={`flex-shrink-0 avatar ${
+                  isRecipientOnline ? "avatar-online" : "avatar-offline"
+                }`}
+              >
                 <img
                   src={recipient?.avatar || image}
                   alt="Avatar"
@@ -124,6 +177,11 @@ export default function ChatHistory({
                 <h6 className="m-0 fw-normal">
                   {recipient?.name || "Unknown"}
                 </h6>
+                <small class="user-status text-body">
+                  {isRecipientOnline
+                    ? "Active now"
+                    : lastSeen && `Active ${timeAgo(lastSeen)}`}
+                </small>
               </div>
             </div>
           </div>

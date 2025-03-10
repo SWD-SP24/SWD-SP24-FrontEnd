@@ -9,6 +9,8 @@ import "./childLayout.scss";
 import EditChildButton from "./partials/EditChildButton";
 import RemoveChildButton from "./partials/RemoveChildButton";
 import LatestRecord from "./partials/LatestRecord";
+import baby_girl from "../../assets/img/illustrations/baby_girl.jpg";
+import baby_boy from "../../assets/img/illustrations/baby_boy.jpg";
 export default function ChildLayout() {
   const params = useParams();
   console.log("Params in ChildLayout:", params); // Debugging
@@ -93,8 +95,14 @@ export default function ChildLayout() {
             <div className="user-avatar-section">
               <div className=" d-flex align-items-center flex-column">
                 <Avatar
-                  src={response.data.avatar}
-                  className="img-fluid rounded mb-4"
+                  src={
+                    response.data.avatar
+                      ? response.data.avatar
+                      : response.data.gender === "male"
+                      ? baby_boy
+                      : baby_girl
+                  }
+                  className="img-fluid border rounded mb-4"
                 />
                 <div className="user-info text-center">
                   <h4 className="te xt-data">{response.data.fullName}</h4>
