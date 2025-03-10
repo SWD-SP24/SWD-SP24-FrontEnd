@@ -76,7 +76,7 @@ export default function MainRoutes() {
         <Route element={<MainLayout />}>
           {/* Admin Routes */}
           <Route path="admin/*" element={<AdminRoutes />} />
-          <Route path="/doctor/consultations" element={<Chat />} />
+          <Route path="consultations" element={<Chat />} />
           <Route path="/dashboard" element={<ComingSoon />} />
 
           {/* Member Routes */}
