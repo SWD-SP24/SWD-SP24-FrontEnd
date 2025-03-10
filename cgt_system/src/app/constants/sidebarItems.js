@@ -1,6 +1,6 @@
 export const sidebarItems = {
   admin: [
-    { title: "Dashboard", path: "/dashboard", icon: "bx bx-home" },
+    { title: "Dashboard", path: "/admin/dashboard", icon: "bx bx-home" },
     {
       title: "User Management",
       icon: "bx bx-user",

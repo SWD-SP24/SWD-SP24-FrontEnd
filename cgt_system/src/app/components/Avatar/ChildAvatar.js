@@ -3,7 +3,8 @@ import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import useApi from "../../hooks/useApi";
 import { useParams } from "react-router";
-
+import bby_boy from "../../assets/img/illustrations/baby_boy.jpg";
+import bby_girl from "../../assets/img/illustrations/baby_girl.jpg";
 const ChildAvatar = ({ childData, refetch, src, alt, className }) => {
   const id = useParams().childId;
   const [image, setImage] = useState(null);
@@ -76,6 +77,12 @@ const ChildAvatar = ({ childData, refetch, src, alt, className }) => {
     "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3396.jpg?w=900";
   if (src) {
     imageSrc = src;
+  } else {
+    if (childData.gender === "male") {
+      imageSrc = bby_boy;
+    } else {
+      imageSrc = bby_girl;
+    }
   }
 
   return (
@@ -87,6 +94,7 @@ const ChildAvatar = ({ childData, refetch, src, alt, className }) => {
         height="100"
         width="100"
         id="uploadedAvatar"
+        style={{ border: 0 }}
       />
       <div className="user-info text-center">
         <h4 className="text-data">{childData.fullName}</h4>

@@ -70,17 +70,10 @@ const Reviews = () => {
                 <SwiperSlide>
                   <div className="card h-100">
                     <div className="card-body text-body d-flex flex-column justify-content-between h-100">
-                      <div className="mb-4">
-                        <img
-                          src={Images.clientLogo1}
-                          alt="client logo"
-                          className="client-logo img-fluid"
-                        />
-                      </div>
                       <p>
-                        “Vuexy is hands down the most useful front end Bootstrap
-                        theme I've ever used. I can't wait to use it again for
-                        my next project.”
+                        “This child growth tracking system has been a lifesaver!
+                        It helps me monitor my baby's milestones and vaccination
+                        schedule with ease.”
                       </p>
                       <div className="text-warning mb-4">
                         <i className="icon-base bx bxs-star"></i>
@@ -98,9 +91,9 @@ const Reviews = () => {
                           />
                         </div>
                         <div>
-                          <h6 className="mb-0">Cecilia Payne</h6>
+                          <h6 className="mb-0">Emily Johnson</h6>
                           <p className="small text-body-secondary mb-0">
-                            CEO of Airbnb
+                            Mother of two
                           </p>
                         </div>
                       </div>
@@ -110,17 +103,10 @@ const Reviews = () => {
                 <SwiperSlide>
                   <div className="card h-100">
                     <div className="card-body text-body d-flex flex-column justify-content-between h-100">
-                      <div className="mb-4">
-                        <img
-                          src={Images.clientLogo2}
-                          alt="client logo"
-                          className="client-logo img-fluid"
-                        />
-                      </div>
                       <p>
-                        “I've never used a theme as versatile and flexible as
-                        Vuexy. It's my go to for building dashboard sites on
-                        almost any project.”
+                        “I love how this system provides personalized growth
+                        insights for my child. It makes parenting so much
+                        easier!”
                       </p>
                       <div className="text-warning mb-4">
                         <i className="icon-base bx bxs-star"></i>
@@ -138,9 +124,9 @@ const Reviews = () => {
                           />
                         </div>
                         <div>
-                          <h6 className="mb-0">Eugenia Moore</h6>
+                          <h6 className="mb-0">David Martinez</h6>
                           <p className="small text-body-secondary mb-0">
-                            Founder of Hubspot
+                            Pediatrician
                           </p>
                         </div>
                       </div>
@@ -150,24 +136,17 @@ const Reviews = () => {
                 <SwiperSlide>
                   <div className="card h-100">
                     <div className="card-body text-body d-flex flex-column justify-content-between h-100">
-                      <div className="mb-4">
-                        <img
-                          src={Images.clientLogo3}
-                          alt="client logo"
-                          className="client-logo img-fluid"
-                        />
-                      </div>
                       <p>
-                        This template is really clean & well documented. The
-                        docs are really easy to understand and it's always easy
-                        to find a screenshot from their website.
+                        “Tracking my child's weight and height progress has
+                        never been this simple! Highly recommended for all
+                        parents.”
                       </p>
                       <div className="text-warning mb-4">
                         <i className="icon-base bx bxs-star"></i>
                         <i className="icon-base bx bxs-star"></i>
                         <i className="icon-base bx bxs-star"></i>
                         <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bx-star"></i>
                       </div>
                       <div className="d-flex align-items-center">
                         <div className="avatar me-3 avatar-sm">
@@ -178,129 +157,9 @@ const Reviews = () => {
                           />
                         </div>
                         <div>
-                          <h6 className="mb-0">Curtis Fletcher</h6>
+                          <h6 className="mb-0">Sarah Lee</h6>
                           <p className="small text-body-secondary mb-0">
-                            Design Lead at Dribbble
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="card h-100">
-                    <div className="card-body text-body d-flex flex-column justify-content-between h-100">
-                      <div className="mb-4">
-                        <img
-                          src={Images.clientLogo4}
-                          alt="client logo"
-                          className="client-logo img-fluid"
-                        />
-                      </div>
-                      <p>
-                        All the requirements for developers have been taken into
-                        consideration, so I’m able to build any interface I
-                        want.
-                      </p>
-                      <div className="text-warning mb-4">
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bx-star"></i>
-                      </div>
-                      <div className="d-flex align-items-center">
-                        <div className="avatar me-3 avatar-sm">
-                          <img
-                            src={Images.avatar4}
-                            alt="Avatar"
-                            className="rounded-circle"
-                          />
-                        </div>
-                        <div>
-                          <h6 className="mb-0">Sara Smith</h6>
-                          <p className="small text-body-secondary mb-0">
-                            Founder of Continental
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="card h-100">
-                    <div className="card-body text-body d-flex flex-column justify-content-between h-100">
-                      <div className="mb-4">
-                        <img
-                          src={Images.clientLogo5}
-                          alt="client logo"
-                          className="client-logo img-fluid"
-                        />
-                      </div>
-                      <p>
-                        “I've never used a theme as versatile and flexible as
-                        Vuexy. It's my go to for building dashboard sites on
-                        almost any project.”
-                      </p>
-                      <div className="text-warning mb-4">
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                      </div>
-                      <div className="d-flex align-items-center">
-                        <div className="avatar me-3 avatar-sm">
-                          <img
-                            src={Images.avatar5}
-                            alt="Avatar"
-                            className="rounded-circle"
-                          />
-                        </div>
-                        <div>
-                          <h6 className="mb-0">Eugenia Moore</h6>
-                          <p className="small text-body-secondary mb-0">
-                            Founder of Hubspot
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </SwiperSlide>
-                <SwiperSlide>
-                  <div className="card h-100">
-                    <div className="card-body text-body d-flex flex-column justify-content-between h-100">
-                      <div className="mb-4">
-                        <img
-                          src={Images.clientLogo6}
-                          alt="client logo"
-                          className="client-logo img-fluid"
-                        />
-                      </div>
-                      <p>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                        Veniam nemo mollitia, ad eum officia numquam nostrum
-                        repellendus consequuntur!
-                      </p>
-                      <div className="text-warning mb-4">
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bxs-star"></i>
-                        <i className="icon-base bx bx-star"></i>
-                      </div>
-                      <div className="d-flex align-items-center">
-                        <div className="avatar me-3 avatar-sm">
-                          <img
-                            src={Images.avatar1}
-                            alt="Avatar"
-                            className="rounded-circle"
-                          />
-                        </div>
-                        <div>
-                          <h6 className="mb-0">Sara Smith</h6>
-                          <p className="small text-body-secondary mb-0">
-                            Founder of Continental
+                            New Parent
                           </p>
                         </div>
                       </div>
@@ -315,56 +174,41 @@ const Reviews = () => {
       {/* <!-- What people say slider: End --> */}
       <hr className="m-0 mt-6 mt-md-12" />
       {/* <!-- Logo slider: Start --> */}
-      <div className="container">
-        <div className="swiper-logo-carousel pt-8">
-          <Swiper id="swiper-clients-logos" slidesPerView={5}>
-            <SwiperSlide className="swiper-slide">
-              <img
-                src={Images.lightLogo1}
-                alt="client logo"
-                className="client-logo"
-                data-app-light-img="front-pages/branding/logo_1-light.png"
-                data-app-dark-img="front-pages/branding/logo_1-dark.png"
-              />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide">
-              <img
-                src={Images.lightLogo2}
-                alt="client logo"
-                className="client-logo"
-                data-app-light-img="front-pages/branding/logo_2-light.png"
-                data-app-dark-img="front-pages/branding/logo_2-dark.png"
-              />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide">
-              <img
-                src={Images.lightLogo3}
-                alt="client logo"
-                className="client-logo"
-                data-app-light-img="front-pages/branding/logo_3-light.png"
-                data-app-dark-img="front-pages/branding/logo_3-dark.png"
-              />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide">
-              <img
-                src={Images.lightLogo4}
-                alt="client logo"
-                className="client-logo"
-                data-app-light-img="front-pages/branding/logo_4-light.png"
-                data-app-dark-img="front-pages/branding/logo_4-dark.png"
-              />
-            </SwiperSlide>
-            <SwiperSlide className="swiper-slide">
-              <img
-                src={Images.lightLogo5}
-                alt="client logo"
-                className="client-logo"
-                data-app-light-img="front-pages/branding/logo_5-light.png"
-                data-app-dark-img="front-pages/branding/logo_5-dark.png"
-              />
-            </SwiperSlide>
-          </Swiper>
-        </div>
+      <div className="swiper-logo-carousel pt-8">
+        <Swiper
+          id="swiper-clients-logos"
+          slidesPerView={5}
+          className="flex items-center"
+        >
+          <SwiperSlide className="swiper-slide flex justify-center">
+            <img
+              src={Images.WHO}
+              alt="Global Nutrition Report logo"
+              className="client-logo h-16 object-contain mx-auto"
+            />
+          </SwiperSlide>
+          <SwiperSlide className="swiper-slide flex justify-center">
+            <img
+              src={Images.CDC}
+              alt="WHO Child Health logo"
+              className="client-logo h-16 object-contain mx-auto"
+            />
+          </SwiperSlide>
+          <SwiperSlide className="swiper-slide flex justify-center">
+            <img
+              src={Images.Gavi}
+              alt="WHO Growth Standards logo"
+              className="client-logo h-16 object-contain mx-auto"
+            />
+          </SwiperSlide>
+          <SwiperSlide className="swiper-slide flex justify-center">
+            <img
+              src={Images.UNICEF}
+              alt="CDC logo"
+              className="client-logo h-16 object-contain mx-auto"
+            />
+          </SwiperSlide>
+        </Swiper>
       </div>
       {/* <!-- Logo slider: End --> */}
     </section>

@@ -158,14 +158,6 @@ export default function ManageUser() {
             <table class="table table-hover">
               <thead>
                 <tr>
-                  <th>
-                    <input
-                      type="checkbox"
-                      id="selectAll"
-                      class="form-check-input"
-                      style={{ transform: "scale(1.1547)" }}
-                    />
-                  </th>
                   <th>User</th>
                   <th>Email</th>
                   <th>Membership</th>
@@ -206,12 +198,6 @@ export default function ManageUser() {
                       })
                       .map((user) => (
                         <tr key={user.id}>
-                          <td>
-                            <input
-                              type="checkbox"
-                              className="selectRow form-check-input"
-                            />
-                          </td>
                           <td className={cx("user-content")}>
                             <Avatar
                               src={user.avatar}

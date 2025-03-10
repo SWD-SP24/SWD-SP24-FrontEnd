@@ -1,21 +1,20 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 
 // Layouts
-import VisitorLayout from "../layouts/VisitorLayout/VisitorLayout";
-import MainLayout from "../layouts/MainLayout";
 import AccountSettingLayout from "../layouts/AccountSettingLayout";
+import MainLayout from "../layouts/MainLayout";
+import VisitorLayout from "../layouts/VisitorLayout/VisitorLayout";
 
 // Pages Publlic
-import Home from "../pages/Home/Home";
-import PricingPage from "../pages/Pricing/PricingPage";
 import NotFound from "../pages/Error/NotFound";
+import Home from "../pages/Home/Home";
 
 // Auth Pages
+import CodeForm from "../pages/CodeForm";
+import EmailForm from "../pages/EmailForm/EmailForm";
 import Login from "../pages/Login/Login";
 import Register from "../pages/Register";
-import EmailForm from "../pages/EmailForm/EmailForm";
-import CodeForm from "../pages/CodeForm";
 import ResetPasswordForm from "../pages/ResetPasswordForm";
 
 import Welcome from "../pages/Welcome";
@@ -30,12 +29,13 @@ import ChangePassword from "../pages/ChangePassword";
 import NotAuthorized from "../pages/NotAuthorized";
 
 // Coming Soon Page
-import ComingSoon from "../pages/ComingSoon";
-import Profile from "../pages/Profile/Profile";
-import MemberRoutes from "./MemberRoutes";
 import BillingAndPlans from "../pages/BillingAndPlans";
-import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
 import Chat from "../pages/Chat";
+import ComingSoon from "../pages/ComingSoon";
+import PricingPlan from "../pages/PricingPlan/PricingPlan";
+import Profile from "../pages/Profile/Profile";
+import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
+import MemberRoutes from "./MemberRoutes";
 
 export default function MainRoutes() {
   return (
@@ -44,7 +44,7 @@ export default function MainRoutes() {
         {/* Các trang public với VisitorLayout */}
         <Route element={<VisitorLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/pricing" element={<PricingPlan />} />
         </Route>
 
         {/* Các trang liên quan đến Auth */}

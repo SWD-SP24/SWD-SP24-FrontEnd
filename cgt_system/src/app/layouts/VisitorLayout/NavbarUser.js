@@ -1,6 +1,20 @@
-import { useNavigate } from "react-router";
+import { use, useState } from "react";
+import { Link, useNavigate } from "react-router";
 
 const Navbar = () => {
+  const [currentTheme, setCurrentTheme] = useState(
+    document.documentElement.getAttribute("data-bs-theme")
+  );
+
+  const handleSetTheme = (theme) => {
+    setCurrentTheme(theme);
+    const isDark =
+      document.documentElement.getAttribute("data-bs-theme") === theme;
+    if (!isDark) {
+      document.documentElement.setAttribute("data-bs-theme", theme);
+    }
+  };
+
   const nav = useNavigate();
   return (
     <nav className="layout-navbar shadow-none py-0">
@@ -136,22 +150,14 @@ const Navbar = () => {
             </button>
             <ul className="navbar-nav me-auto">
               <li className="nav-item">
-                <a
-                  className="nav-link fw-medium"
-                  href="../vertical-menu-template/index.html"
-                  target="_blank"
-                >
+                <Link to={"/"} className="nav-link fw-medium">
                   Home
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a
-                  className="nav-link fw-medium"
-                  href="../vertical-menu-template/index.html"
-                  target="_blank"
-                >
+                <Link to={"/pricing"} className="nav-link fw-medium">
                   Pricing
-                </a>
+                </Link>
               </li>
               {/* <li class="dropdown nav-item ">
                 <a
@@ -214,9 +220,10 @@ const Navbar = () => {
                 <li>
                   <button
                     type="button"
-                    className="dropdown-item align-items-center active"
-                    data-bs-theme-value="light"
-                    aria-pressed="false"
+                    className={`dropdown-item align-items-center ${
+                      currentTheme === "light" ? "active" : ""
+                    }`}
+                    onClick={() => handleSetTheme("light")}
                   >
                     <span>
                       <i
@@ -230,9 +237,10 @@ const Navbar = () => {
                 <li>
                   <button
                     type="button"
-                    className="dropdown-item align-items-center"
-                    data-bs-theme-value="dark"
-                    aria-pressed="true"
+                    className={`dropdown-item align-items-center ${
+                      currentTheme === "dark" ? "active" : ""
+                    }`}
+                    onClick={() => handleSetTheme("dark")}
                   >
                     <span>
                       <i
@@ -240,22 +248,6 @@ const Navbar = () => {
                         data-icon="moon"
                       ></i>
                       Dark
-                    </span>
-                  </button>
-                </li>
-                <li>
-                  <button
-                    type="button"
-                    className="dropdown-item align-items-center"
-                    data-bs-theme-value="system"
-                    aria-pressed="false"
-                  >
-                    <span>
-                      <i
-                        className="icon-base bx bx-desktop icon-md me-3"
-                        data-icon="desktop"
-                      ></i>
-                      System
                     </span>
                   </button>
                 </li>

@@ -6,22 +6,22 @@ const Teams = () => {
     <section id="landingTeam" className="section-py landing-team">
       <div className="container">
         <div className="text-center mb-4">
-          <span className="badge bg-label-primary">Our Great Team</span>
+          <span className="badge bg-label-primary">Our Expert Team</span>
         </div>
         <h4 className="text-center mb-1">
           <span className="position-relative fw-extrabold z-1 px-2">
-            Supported
+            Dedicated
             <img
               src={Images.sectionTitleIcon}
               alt="laptop charging"
               className="section-title-img position-absolute object-fit-contain bottom-0 z-n1"
             />
           </span>
-          by our qualified doctors
+          to Child Health & Development
         </h4>
         <p className="text-center mb-md-11 pb-0 pb-xl-12">
-          We have a team of experienced doctors who are dedicated to providing
-          high-quality care to your childs.
+          Our team consists of experienced professionals committed to ensuring
+          optimal growth and well-being for children.
         </p>
         <div className="row gy-12 mt-2">
           <div className="col-lg-3 col-sm-6">
@@ -35,7 +35,9 @@ const Teams = () => {
               </div>
               <div className="card-body border border-top-0 border-primary-subtle text-center py-5">
                 <h5 className="card-title mb-0">Sophie Gilbert</h5>
-                <p className="text-body-secondary mb-0">Project Manager</p>
+                <p className="text-body-secondary mb-0">
+                  Pediatric Nutritionist
+                </p>
               </div>
             </div>
           </div>
@@ -50,7 +52,7 @@ const Teams = () => {
               </div>
               <div className="card-body border border-top-0 border-info-subtle text-center py-5">
                 <h5 className="card-title mb-0">Paul Miles</h5>
-                <p className="text-body-secondary mb-0">UI Designer</p>
+                <p className="text-body-secondary mb-0">Child Psychologist</p>
               </div>
             </div>
           </div>
@@ -65,7 +67,7 @@ const Teams = () => {
               </div>
               <div className="card-body border border-top-0 border-danger-subtle text-center py-5">
                 <h5 className="card-title mb-0">Nannie Ford</h5>
-                <p className="text-body-secondary mb-0">Development Lead</p>
+                <p className="text-body-secondary mb-0">Pediatrician</p>
               </div>
             </div>
           </div>
@@ -80,7 +82,9 @@ const Teams = () => {
               </div>
               <div className="card-body border border-top-0 border-success-subtle text-center py-5">
                 <h5 className="card-title mb-0">Chris Watkins</h5>
-                <p className="text-body-secondary mb-0">Marketing Manager</p>
+                <p className="text-body-secondary mb-0">
+                  Child Health Consultant
+                </p>
               </div>
             </div>
           </div>

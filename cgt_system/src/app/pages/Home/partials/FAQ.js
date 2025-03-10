@@ -3,178 +3,165 @@ import Images from "../../../assets/img/images.js";
 
 const FAQ = () => {
   return (
-    <section id="landingFAQ" class="section-py bg-body landing-faq">
-      <div class="container">
-        <div class="text-center mb-4">
-          <span class="badge bg-label-primary">FAQ</span>
+    <section id="landingFAQ" className="section-py bg-body landing-faq">
+      <div className="container">
+        <div className="text-center mb-4">
+          <span className="badge bg-label-primary">FAQ</span>
         </div>
-        <h4 class="text-center mb-1 ">
+        <h4 className="text-center mb-1 ">
           Frequently asked
-          <span class="position-relative fw-extrabold z-1 px-2">
+          <span className="position-relative fw-extrabold z-1 px-2">
             questions
             <img
               src={Images.sectionTitleIcon}
-              alt="laptop charging"
-              class="section-title-img position-absolute object-fit-contain bottom-0 z-n1 "
+              alt="FAQ Icon"
+              className="section-title-img position-absolute object-fit-contain bottom-0 z-n1 "
             />
           </span>
         </h4>
-        <p class="text-center mb-12 pb-md-4">
-          Browse through these FAQs to find answers to commonly asked questions.
+        <p className="text-center mb-12 pb-md-4">
+          Browse through these FAQs to find answers about child growth tracking.
         </p>
-        <div class="row gy-12 align-items-center">
-          <div class="col-lg-5">
-            <div class="text-center">
+        <div className="row gy-12 align-items-center">
+          <div className="col-lg-5">
+            <div className="text-center">
               <img
                 src={Images.faqBoyImage}
-                alt="faq boy with logos"
-                class="faq-image"
+                alt="Child Growth FAQ"
+                className="faq-image"
               />
             </div>
           </div>
-          <div class="col-lg-7">
-            <div class="accordion" id="accordionExample">
-              <div class="card accordion-item">
-                <h2 class="accordion-header" id="headingOne">
+          <div className="col-lg-7">
+            <div className="accordion" id="accordionExample">
+              <div className="card accordion-item">
+                <h2 className="accordion-header" id="headingOne">
                   <button
                     type="button"
-                    class="accordion-button"
+                    className="accordion-button"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionOne"
                     aria-expanded="true"
                     aria-controls="accordionOne"
                   >
-                    Do you charge for each upgrade?
+                    How does the child growth tracking system work?
                   </button>
                 </h2>
-
                 <div
                   id="accordionOne"
-                  class="accordion-collapse collapse"
+                  className="accordion-collapse collapse"
                   data-bs-parent="#accordionExample"
                 >
-                  <div class="accordion-body">
-                    Lemon drops chocolate cake gummies carrot cake chupa chups
-                    muffin topping. Sesame snaps icing marzipan gummi bears
-                    macaroon dragée danish caramels powder. Bear claw dragée
-                    pastry topping soufflé. Wafer gummi bears marshmallow pastry
-                    pie.
+                  <div className="accordion-body">
+                    The system allows parents to input their child's growth
+                    metrics, including height, weight, and developmental
+                    milestones. It then provides insights and recommendations
+                    based on growth charts and medical guidelines.
                   </div>
                 </div>
               </div>
-              <div class="card accordion-item">
-                <h2 class="accordion-header" id="headingTwo">
+              <div className="card accordion-item">
+                <h2 className="accordion-header" id="headingTwo">
                   <button
                     type="button"
-                    class="accordion-button collapsed"
+                    className="accordion-button collapsed"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionTwo"
                     aria-expanded="false"
                     aria-controls="accordionTwo"
                   >
-                    Do I need to purchase a license for each website?
+                    How accurate is the growth tracking data?
                   </button>
                 </h2>
                 <div
                   id="accordionTwo"
-                  class="accordion-collapse collapse"
+                  className="accordion-collapse collapse"
                   aria-labelledby="headingTwo"
                   data-bs-parent="#accordionExample"
                 >
-                  <div class="accordion-body">
-                    Dessert ice cream donut oat cake jelly-o pie sugar plum
-                    cheesecake. Bear claw dragée oat cake dragée ice cream
-                    halvah tootsie roll. Danish cake oat cake pie macaroon tart
-                    donut gummies. Jelly beans candy canes carrot cake.
-                    Fruitcake chocolate chupa chups.
+                  <div className="accordion-body">
+                    The system is based on standardized growth charts from
+                    health organizations. However, for the most accurate
+                    tracking, it is recommended to consult a pediatrician
+                    regularly.
                   </div>
                 </div>
               </div>
-              <div class="card accordion-item active">
-                <h2 class="accordion-header" id="headingThree">
+              <div className="card accordion-item active">
+                <h2 className="accordion-header" id="headingThree">
                   <button
                     type="button"
-                    class="accordion-button"
+                    className="accordion-button"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionThree"
                     aria-expanded="false"
                     aria-controls="accordionThree"
                   >
-                    What is regular license?
+                    Can I track vaccinations along with growth milestones?
                   </button>
                 </h2>
                 <div
                   id="accordionThree"
-                  class="accordion-collapse collapse show"
+                  className="accordion-collapse collapse show"
                   aria-labelledby="headingThree"
                   data-bs-parent="#accordionExample"
                 >
-                  <div class="accordion-body">
-                    Regular license can be used for end products that do not
-                    charge users for access or service(access is free and there
-                    will be no monthly subscription fee). Single regular license
-                    can be used for single end product and end product can be
-                    used by you or your client. If you want to sell end product
-                    to multiple clients then you will need to purchase separate
-                    license for each client. The same rule applies if you want
-                    to use the same end product on multiple domains(unique
-                    setup). For more info on regular license you can check
-                    official description.
+                  <div className="accordion-body">
+                    Yes, the system includes a vaccination tracker where you can
+                    log completed vaccines and upcoming doses to ensure your
+                    child follows the recommended immunization schedule.
                   </div>
                 </div>
               </div>
-              <div class="card accordion-item">
-                <h2 class="accordion-header" id="headingFour">
+              <div className="card accordion-item">
+                <h2 className="accordion-header" id="headingFour">
                   <button
                     type="button"
-                    class="accordion-button collapsed"
+                    className="accordion-button collapsed"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionFour"
                     aria-expanded="false"
                     aria-controls="accordionFour"
                   >
-                    What is extended license?
+                    Is my child’s data secure?
                   </button>
                 </h2>
                 <div
                   id="accordionFour"
-                  class="accordion-collapse collapse"
+                  className="accordion-collapse collapse"
                   aria-labelledby="headingFour"
                   data-bs-parent="#accordionExample"
                 >
-                  <div class="accordion-body">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Nobis et aliquid quaerat possimus maxime! Mollitia
-                    reprehenderit neque repellat deleniti delectus architecto
-                    dolorum maxime, blanditiis earum ea, incidunt quam possimus
-                    cumque.
+                  <div className="accordion-body">
+                    Yes, we prioritize data security and use encryption to
+                    protect your child’s growth and health information from
+                    unauthorized access.
                   </div>
                 </div>
               </div>
-              <div class="card accordion-item">
-                <h2 class="accordion-header" id="headingFive">
+              <div className="card accordion-item">
+                <h2 className="accordion-header" id="headingFive">
                   <button
                     type="button"
-                    class="accordion-button collapsed"
+                    className="accordion-button collapsed"
                     data-bs-toggle="collapse"
                     data-bs-target="#accordionFive"
                     aria-expanded="false"
                     aria-controls="accordionFive"
                   >
-                    Which license is applicable for SASS application?
+                    Can multiple caregivers access the child's records?
                   </button>
                 </h2>
                 <div
                   id="accordionFive"
-                  class="accordion-collapse collapse"
+                  className="accordion-collapse collapse"
                   aria-labelledby="headingFive"
                   data-bs-parent="#accordionExample"
                 >
-                  <div class="accordion-body">
-                    Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-                    Sequi molestias exercitationem ab cum nemo facere voluptates
-                    veritatis quia, eveniet veniam at et repudiandae mollitia
-                    ipsam quasi labore enim architecto non!
+                  <div className="accordion-body">
+                    Yes, parents can share access with caregivers, such as
+                    grandparents or babysitters, so they can contribute to and
+                    monitor the child's growth data.
                   </div>
                 </div>
               </div>

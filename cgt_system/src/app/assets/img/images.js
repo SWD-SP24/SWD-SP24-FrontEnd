@@ -1,8 +1,10 @@
 const Images = {
   heroBg: require("./front-pages/backgrounds/hero-bg.png"),
   heroDashboard: require("./front-pages/landing-page/hero-dashboard-light.png"),
+  heroDashboardDark: require("./front-pages/landing-page/hero-dashboard-dark.png"),
   joinCommunityArrow: require("./front-pages/icons/Join-community-arrow.png"),
   heroElement: require("./front-pages/landing-page/hero-elements-light.png"),
+  heroElementDark: require("./front-pages/landing-page/hero-elements-dark.png"),
   sectionTitleIcon: require("./front-pages/icons/section-title-icon.png"),
   lightLogo1: require("./front-pages/branding/logo_1-light.png"),
   lightLogo2: require("./front-pages/branding/logo_2-light.png"),
@@ -21,8 +23,8 @@ const Images = {
   teamMember4: require("./front-pages/landing-page/team-member-4.png"),
   pricingPlansArrow: require("./front-pages/icons/pricing-plans-arrow.png"),
   basicPlanIcon: require("./front-pages/icons/paper-airplane.png"),
-  favouritePlanIcon: require("./front-pages/icons/plane.png"),
-  standardPlanIcon: require("./front-pages/icons/shuttle-rocket.png"),
+  standardPlanIcon: require("./front-pages/icons/plane.png"),
+  PremiumPlanIcon: require("./front-pages/icons/shuttle-rocket.png"),
   avatar1: require("./avatars/1.png"),
   avatar2: require("./avatars/2.png"),
   avatar3: require("./avatars/3.png"),
@@ -30,6 +32,7 @@ const Images = {
   avatar5: require("./avatars/5.png"),
   faqBoyImage: require("./front-pages/landing-page/faq-boy-with-logos.png"),
   ctaLightBg: require("./front-pages/backgrounds/cta-bg-light.png"),
+  ctaDarkBg: require("./front-pages/landing-page/cta-bg-dark.png"),
   ctaDashboardBg: require("./front-pages/landing-page/cta-dashboard.png"),
   contactBorder: require("./front-pages/icons/contact-border.png"),
   contactCustomerService: require("./front-pages/landing-page/contact-customer-service.png"),
@@ -37,6 +40,10 @@ const Images = {
   appleIcon: require("./front-pages/landing-page/apple-icon.png"),
   googleIcon: require("./front-pages/landing-page/google-play-icon.png"),
   navItemCol: require("./front-pages/misc/nav-item-col-img.png"),
+  WHO: require("./front-pages/branding/who-world-health-organization-seeklogo.png"),
+  UNICEF: require("./front-pages/branding/unicef-seeklogo.png"),
+  CDC: require("./front-pages/branding/cdc-seeklogo.png"),
+  Gavi: require("./front-pages/branding/gavi-seeklogo.png"),
 };
 
 export default Images;

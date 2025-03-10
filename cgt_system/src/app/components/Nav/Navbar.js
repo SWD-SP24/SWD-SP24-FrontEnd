@@ -16,7 +16,18 @@ export default function Navbar({ user }) {
     setIsShowDropdownUser((prev) => !prev);
     navigate(path);
   };
+  const [currentTheme, setCurrentTheme] = useState(
+    document.documentElement.getAttribute("data-bs-theme")
+  );
 
+  const handleSetTheme = (theme) => {
+    setCurrentTheme(theme);
+    const isDark =
+      document.documentElement.getAttribute("data-bs-theme") === theme;
+    if (!isDark) {
+      document.documentElement.setAttribute("data-bs-theme", theme);
+    }
+  };
   return (
     <nav
       className={`${styles.layout_navbar} layout-navbar container-xxl navbar-detached navbar navbar-expand-xl align-items-center bg-navbar-theme`}
@@ -67,13 +78,57 @@ export default function Navbar({ user }) {
           </div>
         </div>
         <ul className="navbar-nav flex-row align-items-center ms-md-auto">
-          <li className="nav-item dropdown-language dropdown me-2 me-xl-0">
-            <button
+          <li className="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
+            <a
               className="nav-link dropdown-toggle hide-arrow"
+              id="nav-theme"
+              href="javascript:void(0);"
               data-bs-toggle="dropdown"
             >
-              <i className="icon-base bx bx-globe icon-md"></i>
-            </button>
+              <i className="icon-base bx bx-sun icon-lg theme-icon-active"></i>
+              <span className="d-none ms-2" id="nav-theme-text">
+                Toggle theme
+              </span>
+            </a>
+            <ul
+              className="dropdown-menu dropdown-menu-end"
+              aria-labelledby="nav-theme-text"
+            >
+              <li>
+                <button
+                  type="button"
+                  className={`dropdown-item align-items-center ${
+                    currentTheme === "light" ? "active" : ""
+                  }`}
+                  onClick={() => handleSetTheme("light")}
+                >
+                  <span>
+                    <i
+                      className="icon-base bx bx-sun icon-md me-3"
+                      data-icon="sun"
+                    ></i>
+                    Light
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  className={`dropdown-item align-items-center ${
+                    currentTheme === "dark" ? "active" : ""
+                  }`}
+                  onClick={() => handleSetTheme("dark")}
+                >
+                  <span>
+                    <i
+                      className="icon-base bx bx-moon icon-md me-3"
+                      data-icon="moon"
+                    ></i>
+                    Dark
+                  </span>
+                </button>
+              </li>
+            </ul>
           </li>
 
           {/* Notifications */}

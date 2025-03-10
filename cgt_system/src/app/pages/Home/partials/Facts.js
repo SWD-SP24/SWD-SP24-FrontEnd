@@ -28,9 +28,9 @@ const Funfact = () => {
                     />
                   </svg>
                 </div>
-                <h3 class="mb-0">7.1k+</h3>
+                <h3 class="mb-0">3.1k+</h3>
                 <p class="fw-medium mb-0">
-                  Support Tickets
+                  Contact Tickets
                   <br />
                   Resolved
                 </p>
@@ -66,11 +66,11 @@ const Funfact = () => {
                     </g>
                   </svg>
                 </div>
-                <h3 class="mb-0">50k+</h3>
+                <h3 class="mb-0">20k+</h3>
                 <p class="fw-medium mb-0">
-                  Join Creatives
+                  Parents has
                   <br />
-                  Community
+                  registered
                 </p>
               </div>
             </div>
@@ -110,7 +110,7 @@ const Funfact = () => {
                 <p class="fw-medium mb-0">
                   Highly Rated
                   <br />
-                  Products
+                  on Trusted
                 </p>
               </div>
             </div>
@@ -142,9 +142,9 @@ const Funfact = () => {
                 </div>
                 <h3 class="mb-0">100%</h3>
                 <p class="fw-medium mb-0">
-                  Money Back
+                  Satisfaction and
                   <br />
-                  Guarantee
+                  Certified
                 </p>
               </div>
             </div>

@@ -20,25 +20,49 @@
   vertical-align: baseline;
   border-radius: var(--bs-badge-border-radius);
 }
+:root {
+  /* Default Light Theme */
+  --badge-a-bg: #eaf6ff;
+  --badge-a-color: #1f3a5f;
+  --badge-b-bg: #e6faef;
+  --badge-b-color: #1c5a3f;
+  --badge-ab-bg: #f4ebfc;
+  --badge-ab-color: #452a63;
+  --badge-o-bg: #ffeded;
+  --badge-o-color: #7a1f1f;
+}
+
+/* Dark Theme */
+[data-bs-theme="dark"] {
+  --badge-a-bg: #1f3a5f;
+  --badge-a-color: #eaf6ff;
+  --badge-b-bg: #1c5a3f;
+  --badge-b-color: #e6faef;
+  --badge-ab-bg: #452a63;
+  --badge-ab-color: #f4ebfc;
+  --badge-o-bg: #7a1f1f;
+  --badge-o-color: #ffeded;
+}
+
 .badge-a {
-  background-color: #eaf6ff; /* Softest Pastel Blue */
-  color: #1f3a5f; /* Deep Navy Blue */
-} /* A - Gentle Blue */
+  background-color: var(--badge-a-bg);
+  color: var(--badge-a-color);
+}
 
 .badge-b {
-  background-color: #e6faef; /* Softest Pastel Green */
-  color: #1c5a3f; /* Deep Forest Green */
-} /* B - Gentle Green */
+  background-color: var(--badge-b-bg);
+  color: var(--badge-b-color);
+}
 
 .badge-ab {
-  background-color: #f4ebfc; /* Softest Pastel Purple */
-  color: #452a63; /* Deep Royal Purple */
-} /* AB - Gentle Purple */
+  background-color: var(--badge-ab-bg);
+  color: var(--badge-ab-color);
+}
 
 .badge-o {
-  background-color: #ffeded; /* Softest Pastel Red */
-  color: #7a1f1f; /* Deep Burgundy Red */
-} /* O - Gentle Red */
+  background-color: var(--badge-o-bg);
+  color: var(--badge-o-color);
+}
 
 .child-avatar {
   width: 40px;
