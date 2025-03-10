@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import Avatar from "../../../../components/Avatar/Avatar";
-import useApi from "../../../../hooks/useApi";
-import Cookies from "js-cookie";
 import default_avatar from "../../../../assets/img/avatars/default-avatar.jpg";
+import Avatar from "../../../../components/Avatar/Avatar";
 import API_URLS from "../../../../config/apiUrls";
+import useApi from "../../../../hooks/useApi";
 import showToast from "../../../../util/showToast";
 
 export default function AvatarForm({ userData, setUser, apiUrl }) {

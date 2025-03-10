@@ -10,7 +10,6 @@ export default function EditChildButton({ childData, refetch }) {
   });
 
   const fullNameRef = useRef(null);
-  const avatarRef = useRef(null);
   const genderRef = useRef(null);
   const dobRef = useRef(null);
   const allergiesRef = useRef(null);
@@ -19,7 +18,6 @@ export default function EditChildButton({ childData, refetch }) {
 
   useEffect(() => {
     fullNameRef.current.value = childData.fullName;
-    avatarRef.current.value = childData.avatar;
     genderRef.current.value = childData.gender;
     dobRef.current.value = childData.dob;
     allergiesRef.current.value = childData.allergies;
@@ -31,7 +29,6 @@ export default function EditChildButton({ childData, refetch }) {
     e.preventDefault();
     const data = {
       fullName: fullNameRef.current.value,
-      avatar: avatarRef.current.value,
       gender: genderRef.current.value,
       dob: dobRef.current.value,
       allergies: allergiesRef.current.value,
@@ -85,17 +82,7 @@ export default function EditChildButton({ childData, refetch }) {
                       className="form-control"
                     />
                   </div>
-                  <div className="mb-3">
-                    <label htmlFor="avatarUrl" className="form-label">
-                      Avatar
-                    </label>
-                    <input
-                      ref={avatarRef}
-                      type="text"
-                      id="avatarUrl"
-                      className="form-control"
-                    />
-                  </div>
+
                   <div className="mb-3">
                     <label htmlFor="genderSelect" className="form-label">
                       Gender

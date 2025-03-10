@@ -4,8 +4,6 @@ import { ages } from "../../../constants/ages.js";
 import useApi from "../../../hooks/useApi";
 export default function AddChildButton({ refetch }) {
   const fullNameRef = useRef(null);
-  const ageRef = useRef(null);
-  const avatarRef = useRef(null);
   const genderRef = useRef(null);
   const dobRef = useRef(null);
   const bloodRef = useRef(null);
@@ -20,7 +18,6 @@ export default function AddChildButton({ refetch }) {
     e.preventDefault();
     const data = {
       fullName: fullNameRef.current.value,
-      avatar: avatarRef.current.value,
       gender: genderRef.current.value,
       dob: dobRef.current.value,
       bloodType: bloodRef.current.value,
@@ -75,20 +72,7 @@ export default function AddChildButton({ refetch }) {
                     />
                   </div>
                 </div>
-                <div class="row">
-                  <div class="col mb-3">
-                    <label for="avatarUrl" class="form-label">
-                      Avatar
-                    </label>
-                    <input
-                      ref={avatarRef}
-                      type="text"
-                      id="avatarUrl"
-                      class="form-control"
-                      placeholder="Enter Avatar Link"
-                    />
-                  </div>
-                </div>
+
                 <div class="row g-2 mb-3">
                   <div class="col mb-0">
                     <label for="genderSelect" class="form-label">

@@ -11,6 +11,7 @@ import RemoveChildButton from "./partials/RemoveChildButton";
 import LatestRecord from "./partials/LatestRecord";
 import baby_girl from "../../assets/img/illustrations/baby_girl.jpg";
 import baby_boy from "../../assets/img/illustrations/baby_boy.jpg";
+import ChildAvatar from "../../components/Avatar/ChildAvatar";
 export default function ChildLayout() {
   const params = useParams();
   console.log("Params in ChildLayout:", params); // Debugging
@@ -93,21 +94,13 @@ export default function ChildLayout() {
               <li></li>
             </ul>
             <div className="user-avatar-section">
-              <div className=" d-flex align-items-center flex-column">
-                <Avatar
-                  src={
-                    response.data.avatar
-                      ? response.data.avatar
-                      : response.data.gender === "male"
-                      ? baby_boy
-                      : baby_girl
-                  }
-                  className="img-fluid border rounded mb-4"
-                />
-                <div className="user-info text-center">
-                  <h4 className="te xt-data">{response.data.fullName}</h4>
-                </div>
-              </div>
+              <ChildAvatar
+                childData={response.data}
+                src={response.data.avatar}
+                className={"img-fluid border rounded mb-4"}
+                apiUrl={apiUrl}
+                refetch={callApi}
+              />
             </div>
             <div className="d-flex justify-content-around flex-wrap my-6 gap-0 gap-md-3 gap-lg-4">
               <LatestRecord id={id} />
