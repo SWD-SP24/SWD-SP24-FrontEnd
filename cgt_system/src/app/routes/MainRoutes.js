@@ -36,6 +36,7 @@ import PricingPlan from "../pages/PricingPlan/PricingPlan";
 import Profile from "../pages/Profile/Profile";
 import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
 import MemberRoutes from "./MemberRoutes";
+import AboutUs from "../pages/AboutUs/AboutUs";
 
 export default function MainRoutes() {
   return (
@@ -45,6 +46,7 @@ export default function MainRoutes() {
         <Route element={<VisitorLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/pricing" element={<PricingPlan />} />
+          <Route path="/about-us" element={<AboutUs />} />
         </Route>
 
         {/* Các trang liên quan đến Auth */}
