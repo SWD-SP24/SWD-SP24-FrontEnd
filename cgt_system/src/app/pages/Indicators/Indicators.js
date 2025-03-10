@@ -9,7 +9,7 @@ import EditIndicators from "./partials/EditIndicators.js";
 import RemoveIndicators from "./partials/RemoveIndicators.js";
 import AIAnalysis from "./partials/AIAnalysis.js";
 export default function Indicators() {
-  const childId = useParams().id;
+  const childId = useParams().childId;
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
   const [page, setPage] = useState(1);

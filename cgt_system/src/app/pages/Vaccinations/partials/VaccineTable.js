@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 import { signify } from "react-signify";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
@@ -9,7 +9,7 @@ export const sVaccineId = signify("");
 export const sDose = signify("");
 export const sVaccineName = signify("");
 export default function VaccineTable({ vaccineList, refetch }) {
-  const childId = useParams().id;
+  const childId = useParams().childId;
   const { response, callApi } = useApi({
     url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childrenId=${childId}`,
     method: "GET",
@@ -160,7 +160,7 @@ export default function VaccineTable({ vaccineList, refetch }) {
                     aria-label="Project: Activate to remove sorting"
                     tabindex="0"
                   >
-                    <span class="dt-column-title">Recommend Age</span>
+                    <span class="dt-column-title">Age mo.</span>
                     <span class="dt-column-order"></span>
                   </th>
                   <th
@@ -217,9 +217,14 @@ export default function VaccineTable({ vaccineList, refetch }) {
                           </div>
                         </td>
                         <td>
-                          <span class="text-heading">
-                            {vaccine.vaccineName}
-                          </span>
+                          <Link
+                            to={`/member/children/${childId}/vaccine/${vaccine.vaccineId}`}
+                            state={{ doseNumber: vaccine.doseNumber }}
+                          >
+                            <span className="text-heading">
+                              {vaccine.vaccineName}
+                            </span>
+                          </Link>
                         </td>
                         <td className="text-center">
                           <div class="d-flex align-items-center">

@@ -10,7 +10,7 @@ import "react-perfect-scrollbar/dist/css/styles.css";
 import PerfectScrollbar from "react-perfect-scrollbar";
 
 export default function Overview() {
-  const { id } = useParams();
+  const id = useParams().childId;
   const url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${id}`;
   const { response, callApi } = useApi({
     url: url,

@@ -10,7 +10,10 @@ import EditChildButton from "./partials/EditChildButton";
 import RemoveChildButton from "./partials/RemoveChildButton";
 import LatestRecord from "./partials/LatestRecord";
 export default function ChildLayout() {
-  const id = useParams().id;
+  const params = useParams();
+  console.log("Params in ChildLayout:", params); // Debugging
+  const id = params.childId;
+
   const storedUser = Cookies.get("user");
   const parent = JSON.parse(storedUser);
   const apiUrl = `${API_URLS.CHILDREN.GET_CHILDREN_WITH_ID}${id}`;
@@ -26,20 +29,25 @@ export default function ChildLayout() {
   }, []);
 
   useEffect(() => {
-    if (response?.data) {  // Chắc chắn rằng response.data đã tồn tại
-      console.log("API Response:", response.data);  // Debug dữ liệu nhận được
+    if (response?.data) {
+      // Chắc chắn rằng response.data đã tồn tại
+      console.log("API Response:", response.data); // Debug dữ liệu nhận được
       if (response.data.dob) {
         const age = calculateAge(response.data.dob);
         const bloodType = response.data.bloodType;
         const gender = response.data.gender;
         localStorage.setItem("userAge", age);
-        localStorage.setItem("bloodType", bloodType)
-        localStorage.setItem("gender", gender)
-        console.log("Lưu tuổi và máu vào localStorage:", age, bloodType, gender); // Kiểm tra xem có lưu được không
+        localStorage.setItem("bloodType", bloodType);
+        localStorage.setItem("gender", gender);
+        console.log(
+          "Lưu tuổi và máu vào localStorage:",
+          age,
+          bloodType,
+          gender
+        ); // Kiểm tra xem có lưu được không
       }
     }
   }, [response]);
-
 
   if (!response) {
     return <div> loading</div>;

@@ -798,9 +798,7 @@ export default function Teeth() {
             />
           </div>
         </div>
-        <AIAnalysis indicators={response?.data || []} />
       </div>
-
     </div>
   );
 }

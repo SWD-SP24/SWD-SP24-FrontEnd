@@ -6,10 +6,11 @@ import debounce from "../../util/debounce";
 import styles from "./manageUser.module.scss";
 import ActionDropdown from "./partials/ActionDropdown.js";
 import AddUserButton from "./partials/AddUserButton.js";
+import Skeleton from "react-loading-skeleton";
 const cx = classNames.bind(styles);
 export default function ManageUser() {
   const { response, error, callApi } = useApi({
-    url: API_URLS.USER.GET_USERS_LIST,
+    url: `${API_URLS.USER.GET_USERS_LIST}?pageNumber=1&pageSize=8`,
     method: "GET",
   });
 
@@ -173,42 +174,41 @@ export default function ManageUser() {
                 </tr>
               </thead>
               {/* <!-- First Row --> */}
-              {response ? (
-                response &&
-                response.data
-                  .filter((user) => {
-                    if (filterRole != "" && !user.role.includes(filterRole)) {
-                      return false;
-                    }
-                    if (
-                      filterMembership != "" &&
-                      !(user.membershipPackageId == filterMembership)
-                    ) {
-                      return false;
-                    }
-                    if (filterStatus != "" && !(user.status === filterStatus)) {
-                      return false;
-                    }
-                    if (
-                      filterSearch != "" &&
-                      !user.fullName
-                        .toLowerCase()
-                        .includes(filterSearch.toLowerCase())
-                    ) {
-                      if (!user.email.includes(filterSearch)) {
-                        return false;
-                      }
-                    }
-                    return true;
-                  })
-                  .map((user) => {
-                    return (
-                      <tbody class="table-border-bottom-0">
+              <tbody className="table-border-bottom-0">
+                {response
+                  ? response.data
+                      .filter((user) => {
+                        if (
+                          filterRole !== "" &&
+                          !user.role.includes(filterRole)
+                        )
+                          return false;
+                        if (
+                          filterMembership !== "" &&
+                          !(user.membershipPackageId == filterMembership)
+                        )
+                          return false;
+                        if (
+                          filterStatus !== "" &&
+                          !(user.status === filterStatus)
+                        )
+                          return false;
+                        if (
+                          filterSearch !== "" &&
+                          !user.fullName
+                            .toLowerCase()
+                            .includes(filterSearch.toLowerCase())
+                        ) {
+                          if (!user.email.includes(filterSearch)) return false;
+                        }
+                        return true;
+                      })
+                      .map((user) => (
                         <tr key={user.id}>
                           <td>
                             <input
                               type="checkbox"
-                              class="selectRow form-check-input"
+                              className="selectRow form-check-input"
                             />
                           </td>
                           <td className={cx("user-content")}>
@@ -231,58 +231,50 @@ export default function ManageUser() {
                           </td>
                           <td>{user.role}</td>
                           <td>
-                            <span class="badge bg-label-success me-1">
+                            <span className="badge bg-label-success me-1">
                               {user.status === "active" ? "Active" : "Inactive"}
                             </span>
                           </td>
                           <td>
-                            {/* <div class="dropdown">
-                              <button
-                                type="button"
-                                class="btn p-0 dropdown-toggle hide-arrow"
-                                data-bs-toggle="dropdown"
-                              >
-                                <i class="bx bx-dots-vertical-rounded"></i>
-                              </button>
-                              <div class="dropdown-menu">
-                                <a
-                                  class="dropdown-item"
-                                  href="javascript:void(0);"
-                                >
-                                  <i class="bx bx-edit-alt me-1"></i> Edit
-                                </a>
-                                <a
-                                  class="dropdown-item"
-                                  href="javascript:void(0);"
-                                >
-                                  <i class="bx bx-trash me-1"></i> Delete
-                                </a>
-                              </div>
-                            </div> */}
                             <ActionDropdown id={user.userId} />
                           </td>
                         </tr>
-                      </tbody>
-                    );
-                  })
-              ) : (
-                <>
-                  <div
-                    className="container-xxl flex-grow-1 container-p-y d-flex justify-content-center align-items-center"
-                    style={{ height: "100vh" }}
-                  >
-                    <span
-                      className="spinner-border spinner-border-lg text-primary"
-                      role="status"
-                      style={{
-                        width: "3rem",
-                        height: "3rem",
-                        borderWidth: "0.5rem",
-                      }}
-                    ></span>
-                  </div>
-                </>
-              )}
+                      ))
+                  : // Show skeleton loader if data is not yet loaded
+                    [...Array(8)].map((_, index) => (
+                      <tr key={index}>
+                        <td>
+                          <Skeleton width={16} height={16} />
+                        </td>
+                        <td className={cx("user-content")}>
+                          <Skeleton circle width={32} height={32} />
+                          <div style={{ marginLeft: "10px" }}>
+                            <Skeleton width={100} height={12} />
+                            <Skeleton
+                              width={80}
+                              height={10}
+                              style={{ marginTop: "4px" }}
+                            />
+                          </div>
+                        </td>
+                        <td>
+                          <Skeleton width={160} height={12} />
+                        </td>
+                        <td style={{ textAlign: "center" }}>
+                          <Skeleton width={30} height={12} />
+                        </td>
+                        <td>
+                          <Skeleton width={60} height={12} />
+                        </td>
+                        <td>
+                          <Skeleton width={50} height={20} />
+                        </td>
+                        <td>
+                          <Skeleton width={30} height={16} />
+                        </td>
+                      </tr>
+                    ))}
+              </tbody>
 
               {/* <!-- Second Row --> */}
             </table>

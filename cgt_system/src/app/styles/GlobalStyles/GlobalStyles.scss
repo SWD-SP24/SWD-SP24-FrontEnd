@@ -36275,40 +36275,4 @@ $toast-colors: (
   }
 }
 /* Background effect */
-.pattern-bg {
-  --size: 15px;
 
-  background: conic-gradient(
-    from 180deg at 50% 70%,
-    hsla(0, 0%, 80%, 1) 0deg,
-    /* Darker gray */ #e0b000 72deg,
-    /* Dark gold */ #d94545 144deg,
-    /* Darker red */ #5b8ab0 216deg,
-    /* Deeper blue */ #2ed191 288deg,
-    /* Richer green */ hsla(0, 0%, 80%, 1) 1turn /* Darker gray */
-  );
-
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 0;
-
-  opacity: 0.85; /* Increased contrast */
-  pointer-events: none;
-
-  mask: radial-gradient(circle at 50% 50%, white 2px, transparent 2.5px) 50% 50% /
-      var(--size) var(--size),
-    url("https://assets.codepen.io/605876/noise-mask.png") 256px 50% / 256px
-      256px;
-  mask-composite: intersect;
-
-  animation: flicker 20s infinite cubic-bezier(0.74, -0.1, 0.05, 1.42);
-}
-
-@keyframes flicker {
-  to {
-    mask-position: 50% 50%, 0 50%;
-  }
-}

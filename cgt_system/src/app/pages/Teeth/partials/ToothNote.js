@@ -7,7 +7,7 @@ import UpdateToothRecord from "./UpdateToothRecord";
 import CreateToothRecord from "./CreateToothRecord";
 
 export default function ToothNote({ toothNumber, setToothRecord }) {
-  const id = useParams().id;
+  const id = useParams().childId;
   const [toothData, setToothData] = useState({
     recordId: "",
     eruptionDate: "",
@@ -27,7 +27,6 @@ export default function ToothNote({ toothNumber, setToothRecord }) {
       const tooth = response.data.find(
         (tooth) => tooth.toothId === toothNumber + 2
       );
-      console.log("tooth nay ne", tooth);
       if (tooth) {
         setToothData({
           recordId: tooth.id,
@@ -37,7 +36,6 @@ export default function ToothNote({ toothNumber, setToothRecord }) {
       } else {
         setToothData({ eruptionDate: "", note: "" });
       }
-      console.log("tooth data day ne", toothData);
       setToothRecord(response.data);
     }
   }, [response, toothNumber]);

@@ -9,7 +9,7 @@ export default function AddVaccineModal({ refetch }) {
   const doseValue = sDose.use();
   const vaccineNameValue = sVaccineName.use();
   const vaccineIdValue = sVaccineId.use();
-  const childId = useParams().id;
+  const childId = useParams().childId;
   const { response, callApi } = useApi({
     url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}`,
     method: "POST",
@@ -66,11 +66,26 @@ export default function AddVaccineModal({ refetch }) {
                   <label for="vaccineSelect" class="form-label">
                     Vaccine
                   </label>
-                  <select id="vaccineSelect" class="form-select" disabled>
-                    <option selected value={sDose.value}>
-                      Dose {sDose.value}
-                    </option>
-                  </select>
+
+                  {sDose.value !== "" ? (
+                    <select id="vaccineSelect" class="form-select" disabled>
+                      <option selected value={sDose.value}>
+                        Dose {sDose.value}
+                      </option>
+                    </select>
+                  ) : (
+                    <select
+                      id="vaccineSelect"
+                      class="form-select"
+                      onChange={(e) => sDose.set(e.target.value)}
+                    >
+                      <option selected value="1">
+                        Dose 1
+                      </option>
+                      <option value="2">Dose 2</option>
+                      <option value="3">Dose 3</option>
+                    </select>
+                  )}
                 </div>
               </div>
               <div class="row">

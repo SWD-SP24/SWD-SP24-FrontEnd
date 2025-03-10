@@ -63,14 +63,15 @@ export default function UpdateToothRecord({
               <span>Tooth Note: </span>
               <div>
                 <textarea
-                  value={toothData.note || "Note your child tooth here"}
+                  value={toothData.note} // Don't provide a default text here
                   onChange={(e) =>
                     setToothData((prev) => ({ ...prev, note: e.target.value }))
                   }
-                  class="form-control"
+                  className="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
-                ></textarea>
+                  placeholder="Note your child tooth here"
+                />
               </div>
             </div>
           </div>

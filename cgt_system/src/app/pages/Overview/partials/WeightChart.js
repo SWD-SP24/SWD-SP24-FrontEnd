@@ -11,7 +11,7 @@ export default function WeightChart() {
   const [yearList, setYearList] = useState([]);
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
-  const { id } = useParams();
+  const id = useParams().childId;
   let url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${id}`;
 
   const { response, callApi } = useApi({

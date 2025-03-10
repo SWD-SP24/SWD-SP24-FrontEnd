@@ -5,7 +5,7 @@ import useApi from "../../../hooks/useApi";
 import { toDMY } from "../../../util/dateFormat";
 import showToast from "../../../util/showToast";
 export default function CreateToothRecord({ toothId, refetch }) {
-  const id = useParams().id;
+  const id = useParams().childId;
   const eruptionDate = useRef(null);
   const note = useRef(null);
   const { response, callApi } = useApi({

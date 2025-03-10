@@ -18,31 +18,30 @@ const DropdownMenu = ({ id }) => {
   };
 
   return (
-    <div
-      className="dropdown"
-      style={{ position: "relative", textAlign: "center" }}
-    >
+    <div class="btn-group">
       <button
-        type="button "
-        className="dropdown-toggle btn btn-primary btn-icon rounded-pill hide-arrow"
-        onClick={handleToggle}
+        type="button"
+        class="btn btn-primary btn-icon rounded-pill dropdown-toggle hide-arrow"
+        data-bs-toggle="dropdown"
         aria-expanded="false"
       >
-        <i class="bx bx-dots-vertical-rounded" style={{ color: "white" }}></i>
+        <i
+          class="icon-base bx bx-dots-vertical-rounded"
+          style={{ color: "white" }}
+        ></i>
       </button>
-      {show && (
-        <button
-          className="dropdown-menu show "
-          style={{ position: "absolute", left: "auto", right: 0 }}
-        >
-          <button className="dropdown-item" onClick={handleEdit}>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li>
+          <a class="dropdown-item" onClick={handleEdit}>
             &#128065; View
-          </button>
-          <button className="dropdown-item" onClick={handleDelete}>
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item" onClick={handleDelete}>
             &#128465; Block
-          </button>
-        </button>
-      )}
+          </a>
+        </li>
+      </ul>
     </div>
   );
 };

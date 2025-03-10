@@ -11,7 +11,7 @@ export default function BMIChart() {
   const [yearList, setYearList] = useState([]);
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
-  const { id } = useParams();
+  const id = useParams().childId;
   const [ticks, setTicks] = useState([2]);
   let url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${id}`;
 
