@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { API_KEY } from "../../../../chatbotKey";
+import { API_KEY } from "../../../../chatbotkey";
 
 const API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";

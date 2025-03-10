@@ -9,6 +9,9 @@ import {
   addDoc,
   doc,
   updateDoc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
 } from "firebase/firestore";
 import "./chat.css";
 import image from "../../assets/img/avatars/default-avatar.jpg";
@@ -25,6 +28,7 @@ export default function Chat() {
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
 
+  // Lấy tất cả cuộc trò chuyện của user
   useEffect(() => {
     if (!user) return;
 
@@ -38,28 +42,110 @@ export default function Chat() {
       orderBy("lastTimestamp", "desc")
     );
 
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const conversations = snapshot.docs.map((doc) => {
-        const data = doc.data();
-        return {
-          id: doc.id,
-          participants: data.participants,
-          [data.participants[0]]: data[data.participants[0]] || {},
-          [data.participants[1]]: data[data.participants[1]] || {},
-          lastSenderId: data.lastSenderId,
-          lastSenderName: data.lastSenderName,
-          lastSenderAvatar: data.lastSenderAvatar,
-          lastMessage: data.lastMessage || "",
-          lastTimestamp: data.lastTimestamp,
-          unreadCounts: data.unreadCounts?.[user.userId] || 0,
-        };
-      });
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const conversations = await Promise.all(
+        snapshot.docs.map(async (docc) => {
+          const data = docc.data();
+          const partnerId = data.participants.find((id) => id !== user.userId);
+
+          let isOnline = false;
+          let lastSeen = 0;
+          let unsubscribePartner = null;
+
+          if (partnerId) {
+            try {
+              const partnerRef = doc(db, "activeUsers", String(partnerId));
+
+              // Lắng nghe realtime
+              unsubscribePartner = onSnapshot(partnerRef, (partnerSnap) => {
+                if (partnerSnap.exists()) {
+                  isOnline = partnerSnap.data().isOnline || false;
+                  lastSeen = partnerSnap.data().lastSeen || 0;
+                } else {
+                  isOnline = false;
+                  lastSeen = 0;
+                }
+
+                // Cập nhật danh sách trò chuyện khi trạng thái online thay đổi
+                setConversations((prevConversations) =>
+                  prevConversations.map((conv) =>
+                    conv.id === docc.id
+                      ? { ...conv, isPartnerOnline: isOnline }
+                      : conv
+                  )
+                );
+              });
+            } catch (error) {
+              console.error("Error fetching partner status:", error);
+            }
+          }
+
+          return {
+            id: docc.id,
+            participants: data.participants,
+            [data.participants[0]]: data[data.participants[0]] || {},
+            [data.participants[1]]: data[data.participants[1]] || {},
+            lastSenderId: data.lastSenderId,
+            lastSenderName: data.lastSenderName,
+            lastSenderAvatar: data.lastSenderAvatar,
+            lastMessage: data.lastMessage || "",
+            lastTimestamp: data.lastTimestamp,
+            unreadCounts: data.unreadCounts?.[user.userId] || 0,
+            isPartnerOnline: isOnline,
+            partnerLastSeen: lastSeen,
+            unsubscribePartner,
+          };
+        })
+      );
 
       setConversations(conversations);
       setIsLoading(false);
     });
 
     return () => unsubscribe();
+  }, [user]);
+
+  // Cập nhật trạng thái online khi vào chat
+  useEffect(() => {
+    if (!user) return;
+
+    const userId = String(user.userId);
+    const userRef = doc(db, "activeUsers", userId);
+
+    const setUserOnline = async () => {
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        // Nếu user đã tồn tại, cập nhật trạng thái online
+        await updateDoc(userRef, {
+          isOnline: true,
+          lastSeen: serverTimestamp(),
+        });
+      } else {
+        // Nếu user chưa tồn tại, tạo mới
+        await setDoc(userRef, {
+          isOnline: true,
+          lastSeen: serverTimestamp(),
+        });
+      }
+    };
+
+    setUserOnline();
+
+    // Cập nhật trạng thái offline khi rời trang
+    const handleOffline = async () => {
+      await updateDoc(userRef, {
+        isOnline: false,
+        lastSeen: serverTimestamp(),
+      });
+    };
+
+    window.addEventListener("beforeunload", handleOffline);
+
+    return () => {
+      handleOffline();
+      window.removeEventListener("beforeunload", handleOffline);
+    };
   }, [user]);
 
   // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
@@ -221,7 +307,13 @@ export default function Chat() {
                       onClick={() => selectConversation(conversation)}
                     >
                       <a className="d-flex align-items-center">
-                        <div className="flex-shrink-0 avatar avatar-online">
+                        <div
+                          className={`flex-shrink-0 avatar ${
+                            conversation.isPartnerOnline
+                              ? "avatar-online"
+                              : "avatar-offline"
+                          }`}
+                        >
                           <img
                             src={chatPartner.avatar || image}
                             alt="Avatar"
@@ -234,7 +326,7 @@ export default function Chat() {
                               className={`chat-contact-name text-truncate m-0 ${
                                 conversation.unreadCounts > 0 &&
                                 conversation.lastSenderId !== user.userId &&
-                                conversation.id !== selectedConversation.id
+                                conversation?.id !== selectedConversation?.id
                                   ? "fw-bold"
                                   : "fw-normal"
                               }  `}
@@ -249,7 +341,7 @@ export default function Chat() {
                             className={`chat-contact-status text-truncate ${
                               conversation.unreadCounts > 0 &&
                               conversation.lastSenderId !== user.userId &&
-                              conversation.id !== selectedConversation.id &&
+                              conversation?.id !== selectedConversation?.id &&
                               "fw-bold"
                             }`}
                             style={{
@@ -330,6 +422,8 @@ export default function Chat() {
             }
             messages={messages}
             conversationId={selectedConversation.id}
+            isOnline={selectedConversation.isPartnerOnline}
+            lastSeenPartner={selectedConversation.partnerLastSeen}
           />
         ) : (
           <div

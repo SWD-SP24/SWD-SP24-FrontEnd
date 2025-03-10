@@ -31,7 +31,6 @@ export default function MemberRoutes() {
           <Route path="children/:id/vaccinations" element={<Vaccinations />} />
         </Route>
         <Route path="upgrade-plan/checkout" element={<Checkout />} />
-        <Route path="consultations" element={<Chat />} />
         <Route path="*" element={<ComingSoon />} />
       </Route>
     </Routes>

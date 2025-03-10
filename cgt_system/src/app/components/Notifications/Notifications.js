@@ -12,7 +12,8 @@ import { Link, useNavigate } from "react-router";
 import { db } from "../../config/firebase";
 import useUser from "../../hooks/useUser";
 import default_avatar from "../../assets/img/avatars/default-avatar.jpg";
-import { Tooltip } from "bootstrap";
+import { Dropdown, Tooltip } from "bootstrap";
+import "./notifications.css";
 
 export default function Notifications() {
   const { user } = useUser();
@@ -67,6 +68,14 @@ export default function Notifications() {
     // Đánh dấu đã đọc
     const msgRef = doc(db, "notifications", userId, "messages", msg.id);
     await updateDoc(msgRef, { isRead: true });
+
+    const dropdownEl = document.querySelector(
+      ".dropdown-notifications .dropdown-toggle"
+    );
+    if (dropdownEl) {
+      const bsDropdown = Dropdown.getInstance(dropdownEl);
+      bsDropdown?.hide();
+    }
   };
 
   const getNotificationIcon = (type) => {
@@ -136,11 +145,16 @@ export default function Notifications() {
         aria-expanded="false"
       >
         <span className="position-relative">
-          <i className="icon-base bx bx-bell icon-md"></i>
+          <i
+            className={`icon-base bx bx-bell icon-md ${
+              notifications.some((msg) => !msg.isRead) ? "shake-animation" : ""
+            }`}
+          ></i>
           <span
             className={`badge rounded-pill ${
-              notifications.filter((msg) => !msg.isRead).length > 0 &&
-              "bg-danger badge-dot badge-notifications"
+              notifications.some((msg) => !msg.isRead)
+                ? "bg-danger badge-dot badge-notifications"
+                : ""
             } border`}
           ></span>
         </span>
