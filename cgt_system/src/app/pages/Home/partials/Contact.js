@@ -1,4 +1,5 @@
 //img
+import { API_KEY } from "../../../../chatbotkey.js";
 import Images from "../../../assets/img/images.js";
 
 const Contact = () => {
@@ -49,6 +50,7 @@ const Contact = () => {
                             href="mailto:example@gmail.com"
                             class="text-heading"
                           >
+                            {console.log({API_KEY})}
                             example@gmail.com
                           </a>
                         </h6>
