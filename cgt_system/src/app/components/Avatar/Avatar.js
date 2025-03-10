@@ -4,15 +4,6 @@ const Avatar = ({ src, alt, className }) => {
   if (src != null && src != undefined && src != "") {
     imageSrc = src;
   }
-  return (
-    <img
-      src={imageSrc}
-      alt={alt}
-      class={className}
-      height="100"
-      width="100"
-      id="uploadedAvatar"
-    />
-  );
+  return <img src={imageSrc} alt={alt} class={className} id="uploadedAvatar" />;
 };
 export default Avatar;

@@ -75,7 +75,8 @@ export default function AvatarForm({ userData, setUser, apiUrl }) {
       <Avatar
         src={image ? image : userData?.avatar || default_avatar}
         alt="User"
-        className="d-block rounded"
+        className="d-block rounded avatar-profile"
+        style={{ width: "100px", height: "100px" }}
       />
       <div className="button-wrapper">
         {image ? (

@@ -7,6 +7,7 @@ import styles from "./manageUser.module.scss";
 import ActionDropdown from "./partials/ActionDropdown.js";
 import AddUserButton from "./partials/AddUserButton.js";
 import Skeleton from "react-loading-skeleton";
+import Avatar from "../../components/Avatar/Avatar.js";
 const cx = classNames.bind(styles);
 export default function ManageUser() {
   const { response, error, callApi } = useApi({
@@ -212,7 +213,7 @@ export default function ManageUser() {
                             />
                           </td>
                           <td className={cx("user-content")}>
-                            <img
+                            <Avatar
                               src={user.avatar}
                               className={cx("user-content-avatar")}
                             />
