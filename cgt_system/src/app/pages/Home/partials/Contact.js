@@ -50,7 +50,6 @@ const Contact = () => {
                             href="mailto:example@gmail.com"
                             class="text-heading"
                           >
-                            {console.log({API_KEY})}
                             example@gmail.com
                           </a>
                         </h6>
