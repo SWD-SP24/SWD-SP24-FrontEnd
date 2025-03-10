@@ -4,6 +4,7 @@ import { navbarItems } from "../../constants/navbarItems";
 import { useNavigate } from "react-router";
 import useUser from "../../hooks/useUser";
 import default_avatar from "../../assets/img/avatars/default-avatar.jpg";
+import Notifications from "../Notifications/Notifications";
 
 export default function Navbar({ user }) {
   const menuItems = navbarItems[user.role] || [];
@@ -74,19 +75,10 @@ export default function Navbar({ user }) {
               <i className="icon-base bx bx-globe icon-md"></i>
             </button>
           </li>
-          <li className="nav-item dropdown-notifications navbar-dropdown dropdown me-3 me-xl-2">
-            <button
-              className="nav-link dropdown-toggle hide-arrow"
-              data-bs-toggle="dropdown"
-              data-bs-auto-close="outside"
-              aria-expanded="false"
-            >
-              <span className="position-relative">
-                <i className="icon-base bx bx-bell icon-md"></i>
-                <span className="badge rounded-pill bg-danger badge-dot badge-notifications border"></span>
-              </span>
-            </button>
-          </li>
+
+          {/* Notifications */}
+          <Notifications />
+
           <li className="nav-item navbar-dropdown dropdown-user dropdown">
             <button
               className="nav-link dropdown-toggle hide-arrow p-0 show"

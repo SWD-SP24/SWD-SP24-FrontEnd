@@ -6,6 +6,8 @@ import "./ManageChildren.scss";
 import ActionButton from "./partials/ActionButton";
 import Avatar from "../../components/Avatar/Avatar";
 import { Link } from "react-router";
+import baby_girl from "../../assets/img/illustrations/baby_girl.jpg";
+import baby_boy from "../../assets/img/illustrations/baby_boy.jpg";
 export default function ManageChildren() {
   const { response, callApi } = useApi({
     url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
@@ -192,7 +194,13 @@ export default function ManageChildren() {
                               >
                                 <div>
                                   <Avatar
-                                    src={child.avatar}
+                                    src={
+                                      child?.avatar
+                                        ? child?.avatar
+                                        : child?.gender === "male"
+                                        ? baby_boy
+                                        : baby_girl
+                                    }
                                     className="child-avatar"
                                   />
                                 </div>

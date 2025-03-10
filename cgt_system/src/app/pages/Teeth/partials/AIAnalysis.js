@@ -1,29 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { API_KEY } from "../../../../chatbotkey";
+import { API_KEY } from "../../../../chatbotKey";
 
 const API_URL =
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
+  "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
 export default function AIAnalysis({ indicators }) {
-    const [aiResponse, setAiResponse] = useState("");
-    const age = localStorage.getItem("userAge");
-    const bloodType = localStorage.getItem("bloodType");
-    const gender = localStorage.getItem("gender");
+  const [aiResponse, setAiResponse] = useState("");
+  const age = localStorage.getItem("userAge");
+  const bloodType = localStorage.getItem("bloodType");
+  const gender = localStorage.getItem("gender");
 
-    useEffect(() => {
-        if (!indicators || indicators.length === 0) return;
+  useEffect(() => {
+    if (!indicators || indicators.length === 0) return;
 
-        const fetchAIResponse = async () => {
-            try {
-                const response = await fetch(`${API_URL}?key=${API_KEY}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        contents: [
-                            {
-                                parts: [
-                                    {
-                                        text: `
+    const fetchAIResponse = async () => {
+      try {
+        const response = await fetch(`${API_URL}?key=${API_KEY}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [
+              {
+                parts: [
+                  {
+                    text: `
                                         📊 **AI Analysis - Tiêm Chủng & Sức Khỏe Răng Miệng**
                                         **Thông tin cá nhân:**
                                         - **Tuổi:** ${age}
@@ -37,41 +37,45 @@ export default function AIAnalysis({ indicators }) {
                                         - Nên có thói quen vệ sinh răng miệng như thế nào?
                                         - Khi nào cần đi khám nha khoa định kỳ?
                                         Trả lời với độ dài vừa phải, không quá dài
-                                        `
-                                    }
-                                ]
-                            }
-                        ]
-                    })
+                                        `,
+                  },
+                ],
+              },
+            ],
+          }),
+        });
 
-                });
+        const data = await response.json();
+        if (data && data.candidates) {
+          let rawText =
+            data.candidates[0]?.content?.parts[0]?.text || "Không có phản hồi.";
+          let formattedText = rawText
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bôi đậm
+            .replace(/\*(.*?)\*/g, "<em>$1</em>") // In nghiêng
+            .replace(/\n/g, "<br />") // Xuống dòng
+            .replace(/\- /g, "• "); // Thay thế dấu "-" thành "•"
 
-                const data = await response.json();
-                if (data && data.candidates) {
-                    let rawText = data.candidates[0]?.content?.parts[0]?.text || "Không có phản hồi.";
-                    let formattedText = rawText
-                        .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>") // Bôi đậm
-                        .replace(/\*(.*?)\*/g, "<em>$1</em>") // In nghiêng
-                        .replace(/\n/g, "<br />") // Xuống dòng
-                        .replace(/\- /g, "• "); // Thay thế dấu "-" thành "•"
+          setAiResponse(formattedText);
+        }
+      } catch (error) {
+        console.error("Lỗi khi gọi API AI:", error);
+        setAiResponse("Lỗi khi lấy phản hồi từ AI.");
+      }
+    };
 
-                    setAiResponse(formattedText);
-                }
-            } catch (error) {
-                console.error("Lỗi khi gọi API AI:", error);
-                setAiResponse("Lỗi khi lấy phản hồi từ AI.");
-            }
-        };
+    fetchAIResponse();
+  }, [indicators]);
 
-        fetchAIResponse();
-    }, [indicators]);
-
-    return (
-        <div className="card mt-4">
-            <h5 className="card-header">AI Analysis</h5>
-            <div className="card-body">
-                <div dangerouslySetInnerHTML={{ __html: aiResponse || "Đang phân tích..." }} />
-            </div>
-        </div>
-    );
+  return (
+    <div className="card mt-4">
+      <h5 className="card-header">AI Analysis</h5>
+      <div className="card-body">
+        <div
+          dangerouslySetInnerHTML={{
+            __html: aiResponse || "Đang phân tích...",
+          }}
+        />
+      </div>
+    </div>
+  );
 }

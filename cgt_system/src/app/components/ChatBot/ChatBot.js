@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import "./Chatbot.scss";
 import { AiOutlineClose, AiOutlineMessage } from "react-icons/ai";
-import { API_KEY } from "../../../chatbotkey";
+import { API_KEY } from "../../../chatbotKey";
 const Chatbot = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
