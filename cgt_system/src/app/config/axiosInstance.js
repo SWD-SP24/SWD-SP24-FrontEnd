@@ -48,7 +48,11 @@ const setupInterceptors = () => {
           showButtons: true,
           confirmText: "Log In",
           cancelText: "",
-          onConfirm: () => (window.location.href = "/login"),
+          onConfirm: () => {
+            Cookies.remove("auth_token");
+            Cookies.remove("user");
+            window.location.href = "/login";
+          },
           onCancle: null,
           disableOutsideClick: true,
           targetElement: document.body,

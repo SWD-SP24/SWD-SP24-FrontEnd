@@ -40,6 +40,7 @@ export default function MemberRoutes() {
         </Route>
         <Route path="upgrade-plan/checkout" element={<Checkout />} />
         <Route path="*" element={<ComingSoon />} />
+        <Route path="consultations" element={<Chat />} />
       </Route>
     </Routes>
   );
