@@ -326,8 +326,3 @@ nav.layout-navbar .menu-text {
 .landing-footer .footer-form label {
   color: #d5d5e2;
 }
-.pricing-list::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-  display: none;
-}

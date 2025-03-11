@@ -64,6 +64,7 @@
     ]
   },
   "devDependencies": {
+    "postcss-normalize": "^13.0.1",
     "sass": "^1.83.1"
   }
 }

@@ -1,3 +1,12 @@
+:root {
+  /* Default Light Theme */
+  --bs-paper-bg: #f5f5f9;
+}
+
+[data-bs-theme="dark"] {
+  --bs-paper-bg: #232333;
+}
+
 body {
   margin: 0;
   background-color: var(--bs-paper-bg);
