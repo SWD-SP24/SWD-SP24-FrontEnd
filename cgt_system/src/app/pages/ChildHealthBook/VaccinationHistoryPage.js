@@ -1,46 +1,61 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./childHealthBook.module.scss";
+import API_URLS from "../../config/apiUrls";
+import useApi from "../../hooks/useApi";
 
-const VaccinationHistoryPage = () => (
-  <>
-    <h2>💉Vaccination History</h2>
-    <table className={styles.infoTable_indicators}>
-      <colgroup>
-        <col style={{ width: "25%" }} />
-        <col style={{ width: "25%" }} />
-        <col style={{ width: "25%" }} />
-        <col style={{ width: "25%" }} />
-      </colgroup>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Dose Number</th>
-          <th>Date</th>
-          <th>Notes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Hepatitis B</td>
-          <td>1/2</td>
-          <td>2024-01-05</td>
-          <td>No reaction</td>
-        </tr>
-        <tr>
-          <td>Hepatitis B</td>
-          <td>1/2</td>
-          <td>2024-01-05</td>
-          <td>No reaction</td>
-        </tr>
-        <tr>
-          <td>Hepatitis B</td>
-          <td>1/2</td>
-          <td>2024-01-05</td>
-          <td>No reaction</td>
-        </tr>
-      </tbody>
-    </table>
-  </>
-);
+export default function VaccinationHistoryPage({ childId }) {
+  const [vaccinations, setVaccinations] = useState([]);
+  const url = `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childrenId=${childId}&pageNumber=1&pageSize=999`;
 
-export default VaccinationHistoryPage;
+  const { response, callApi } = useApi({
+    url: url,
+    method: "GET",
+  });
+
+  useEffect(() => {
+    callApi();
+  }, []);
+
+  useEffect(() => {
+    if (response?.status === "successful") {
+      const vaccinations = response.data;
+      setVaccinations(vaccinations);
+    }
+  }, [response]);
+
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return dateString.replace(/\//g, "-");
+  };
+  return (
+    <>
+      <h2>💉Vaccination History</h2>
+      <table className={styles.infoTable_indicators}>
+        <colgroup>
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "25%" }} />
+          <col style={{ width: "25%" }} />
+        </colgroup>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Dose Number</th>
+            <th>Date</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>
+          {vaccinations?.map((vaccination) => (
+            <tr key={vaccination.vaccineRecordId}>
+              <td>{vaccination.vaccineName}</td>
+              <td>{vaccination.dose}</td>
+              <td>{formatDate(vaccination.administeredDate)}</td>
+              <td>None</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </>
+  );
+}

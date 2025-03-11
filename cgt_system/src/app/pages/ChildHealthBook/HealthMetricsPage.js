@@ -19,9 +19,7 @@ export default function HealthMetricsPage({ childId }) {
   useEffect(() => {
     if (response?.status === "successful") {
       const allIndicators = response.data;
-
-      const first16Indicators = allIndicators.slice(0, 16);
-      setIndicators(first16Indicators);
+      setIndicators(allIndicators);
     }
   }, [response]);
 
