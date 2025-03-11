@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
-import "../Teeth/teeth.scss";
+import "../../pages/Teeth/teeth.scss";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import { toothDList } from "../../constants/toothDList";
-export default function Teeth() {
+import ToothNote from "./ToothNote";
+// import AIAnalysis from "./partials/AIAnalysis";
+export default function Teeth({ childId }) {
   const { response, callApi } = useApi({
     url: `${API_URLS.TEETH.TEETH}`,
     method: "GET",
@@ -50,7 +52,7 @@ export default function Teeth() {
         `[data-key="${toothNumber}"]`
       );
       if (toothPolygon) {
-        toothPolygon.setAttribute("fill", "#F5E6CC"); // Change color to red
+        toothPolygon.setAttribute("fill", "pink"); // Change color to red
       }
     });
   }
@@ -76,10 +78,10 @@ export default function Teeth() {
             xmlnsXlink="http://www.w3.org/1999/xlink"
             x="0px"
             y="0px"
+            width={300}
             viewBox="0 0 450 700"
             enable-background="new 0 0 450 700"
             xmlSpace="preserve"
-            width={300}
           >
             <g class="toothLabels">
               <text
@@ -752,6 +754,11 @@ export default function Teeth() {
           </svg>
         </div>
       </div>
+      <ToothNote
+        id={childId}
+        toothNumber={toothNumber}
+        setToothRecord={setToothRecord}
+      />
     </div>
   );
 }
