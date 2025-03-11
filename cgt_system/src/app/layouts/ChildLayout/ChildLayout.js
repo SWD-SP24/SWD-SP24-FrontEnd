@@ -96,7 +96,13 @@ export default function ChildLayout() {
             <div className="user-avatar-section">
               <ChildAvatar
                 childData={response.data}
-                src={response.data.avatar}
+                src={
+                  response.data.avatar
+                    ? response.data.avatar
+                    : response.data.gender === "male"
+                    ? baby_boy
+                    : baby_girl
+                }
                 className={"img-fluid border rounded mb-4"}
                 apiUrl={apiUrl}
                 refetch={callApi}

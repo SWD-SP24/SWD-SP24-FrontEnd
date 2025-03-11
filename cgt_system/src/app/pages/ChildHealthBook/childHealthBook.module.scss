@@ -26,49 +26,8 @@ $label-font: 'Caveat', cursive;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   width: 100vw;
-  overflow: hidden;
-  background-color: #fdf6e3;
   position: relative;
-}
-
-// Tạo hiệu ứng hoa bay lên xuống
-@keyframes floating {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-20px) rotate(10deg);
-    opacity: 0.7;
-  }
-  100% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 1;
-  }
-}
-
-// Tạo nhiều bông hoa ngẫu nhiên
-.flower {
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  background-color: pink;
-  border-radius: 50%;
-  opacity: 0.8;
-  animation: floating 3s ease-in-out infinite;
-}
-
-// Định vị hoa ở nhiều chỗ khác nhau
-@for $i from 1 through 50 {
-  .flower:nth-child(#{$i}) {
-    top: random(100) + vh;
-    left: random(100) + vw;
-    animation-duration: (random(4) + 2) + s;
-    width: (random(20) + 10) + px;
-    height: (random(20) + 10) + px;
-  }
 }
 
 // Main page styling
@@ -80,7 +39,7 @@ $label-font: 'Caveat', cursive;
     font-family: $info-font;
     padding: 20px;
     position: relative;
-    overflow: hidden;
+    // overflow: hidden;
     
     // Decorative cloud elements
     &::before,

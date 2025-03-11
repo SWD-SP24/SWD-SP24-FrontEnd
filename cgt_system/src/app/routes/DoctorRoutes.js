@@ -16,6 +16,7 @@ export default function DoctorRoutes() {
         }
       >
         <Route path="consultations" element={<Chat />} />
+        <Route path="consultations/child-details" element={<Chat />} />
       </Route>
     </Routes>
   );

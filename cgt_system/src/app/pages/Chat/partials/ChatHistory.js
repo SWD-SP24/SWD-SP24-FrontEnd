@@ -18,6 +18,7 @@ import boy from "../../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
+import { useNavigate } from "react-router";
 
 export default function ChatHistory({
   currentUser,
@@ -26,8 +27,8 @@ export default function ChatHistory({
   messages,
   conversationId,
 }) {
+  const [childIdFromMessage, setChildIdFromMessage] = useState(null);
   const [draggingChild, setDraggingChild] = useState(null);
-  const [isDraggingOver, setIsDraggingOver] = useState(false);
   const [newMessage, setNewMessage] = useState("");
   const [isRecipientOnline, setIsRecipientOnline] = useState(false);
   const [childs, setChilds] = useState([]);
@@ -37,6 +38,8 @@ export default function ChatHistory({
     url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
     method: "GET",
   });
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     callApi();
@@ -296,7 +299,14 @@ export default function ChatHistory({
                           />
                           <div className="card-body d-flex flex-column text-center">
                             <h5 className="card-title">Văn Hậu</h5>
-                            <button className="btn btn-outline-primary mt-auto">
+                            <button
+                              className="btn btn-outline-primary mt-auto"
+                              onClick={() =>
+                                setChildIdFromMessage(message.childId)
+                              }
+                              data-bs-toggle="modal"
+                              data-bs-target="#childHealthBookModal"
+                            >
                               View Details
                             </button>
                           </div>
@@ -374,7 +384,8 @@ export default function ChatHistory({
         tabIndex="-1"
         aria-modal="true"
         role="dialog"
-        draggable
+        draggable={true}
+        onDragOver={(e) => e.preventDefault()}
       >
         <div className="modal-dialog modal-xl modal-simple modal-dialog-centered">
           <div
@@ -388,10 +399,6 @@ export default function ChatHistory({
           >
             <div
               className="modal-body p-4 d-flex flex-wrap gap-3 justify-content-center"
-              onDragOver={(e) => {
-                e.preventDefault();
-                setIsDraggingOver(true);
-              }}
               onDrop={handleDropOutside}
               draggable={true}
             >
@@ -428,6 +435,7 @@ export default function ChatHistory({
           </div>
         </div>
       </div>
+      <ChildHealthBook childId={childIdFromMessage} />
     </div>
   );
 }

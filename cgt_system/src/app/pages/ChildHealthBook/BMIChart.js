@@ -3,10 +3,11 @@ import { LineChart } from "../../pages/Overview/partials/myChart";
 import { getDate, getYear } from "../../util/dateFormat";
 import API_URLS from "../../config/apiUrls";
 import useApi from "../../hooks/useApi";
-export default function HeightChart({ childId }) {
+export default function BMIChart({ childId }) {
   const [labels, setLabels] = useState([]);
-  const [heightDatasets, setHeightDatasets] = useState([]);
+  const [BMI, setBMI] = useState([]);
   const [yearList, setYearList] = useState([]);
+  const [ticks, setTicks] = useState([2]);
   let url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}`;
 
   const { response, callApi } = useApi({
@@ -35,11 +36,12 @@ export default function HeightChart({ childId }) {
       const newLabels = reversedData.map((record) =>
         getDate(record.recordTime)
       );
-      const newHeightDatasets = reversedData.map((record) => record.height);
+      const newBMIList = reversedData.map((record) => record.weight);
 
       // Update state
       setLabels(newLabels);
-      setHeightDatasets(newHeightDatasets);
+      setBMI(newBMIList);
+      setTicks(Math.max(2, Math.ceil(BMI.length / 25)));
     }
   }, [response]);
   return (
@@ -62,14 +64,14 @@ export default function HeightChart({ childId }) {
             labels={labels}
             datasets={[
               {
-                label: "Height",
-                data: heightDatasets,
+                label: "BMI",
+                data: BMI,
                 borderColor: "#696cff",
                 backgroundColor: "rgba(105, 108, 255, 0.5)",
-                tension: 0.4,
+                tension: 0.4, // Smooth line
               },
             ]}
-            xLabel={"Date"}
+            ticks={ticks}
           />
         </div>
       </div>
