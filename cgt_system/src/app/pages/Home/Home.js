@@ -32,8 +32,7 @@ import "../../../../node_modules/nouislider/distribute/nouislider.css";
 
 //page CSS
 import "./styles/front-page-landing.css";
-import "../../styles/core.css";
-import "../../styles/demo.css";
+
 //core modules
 
 import "bootstrap";
