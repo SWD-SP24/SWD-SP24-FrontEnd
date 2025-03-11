@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { LineChart } from "../../pages/Overview/partials/myChart";
 import { getDate, getYear } from "../../util/dateFormat";
-import API_URLS from "../../config/apiUrls";
 import useApi from "../../hooks/useApi";
-export default function HeightChart({ childId }) {
+import API_URLS from "../../config/apiUrls";
+import { LineChart } from "../Overview/partials/myChart";
+export default function WeightChart({ childId }) {
   const [labels, setLabels] = useState([]);
-  const [heightDatasets, setHeightDatasets] = useState([]);
+  const [weightDatasets, setWeightDatasets] = useState([]);
   const [yearList, setYearList] = useState([]);
   let url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}`;
 
@@ -35,13 +35,14 @@ export default function HeightChart({ childId }) {
       const newLabels = reversedData.map((record) =>
         getDate(record.recordTime)
       );
-      const newHeightDatasets = reversedData.map((record) => record.height);
+      const newWeightDatasets = reversedData.map((record) => record.weight);
 
       // Update state
       setLabels(newLabels);
-      setHeightDatasets(newHeightDatasets);
+      setWeightDatasets(newWeightDatasets);
     }
   }, [response]);
+
   return (
     <div style={{ width: "100%", minHeight: "100vh", height: "auto" }}>
       <div
@@ -62,14 +63,13 @@ export default function HeightChart({ childId }) {
             labels={labels}
             datasets={[
               {
-                label: "Height",
-                data: heightDatasets,
+                label: "Weight",
+                data: weightDatasets,
                 borderColor: "#696cff",
                 backgroundColor: "rgba(105, 108, 255, 0.5)",
-                tension: 0.4,
+                tension: 0.4, // Smooth line
               },
             ]}
-            xLabel={"Date"}
           />
         </div>
       </div>

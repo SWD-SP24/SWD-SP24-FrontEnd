@@ -6,6 +6,8 @@ import OverviewPage from "./OverviewPage";
 import HealthMetricsPage from "./HealthMetricsPage";
 import DentalPage from "./DentalPage";
 import VaccinationHistoryPage from "./VaccinationHistoryPage";
+import WeightChart from "./WeightChart";
+import BMIChart from "./BMIChart";
 
 const ChildHealthBook = ({ childId }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -94,6 +96,28 @@ const ChildHealthBook = ({ childId }) => {
                   </div>
                   <div className={styles.page}>
                     <OverviewPage childId={childId} />
+                  </div>
+                  <div className={styles.page}>
+                    <div className="card-header header-elements w-100 mt-10">
+                      <div className="w-100 d-flex flex-column justify-between mb-2 mt-8">
+                        <h5 className="card-title mb-0">Weight Chart</h5>
+                        <small className="text-body-secondary">
+                          Present the weight of the child overtime
+                        </small>
+                      </div>
+                    </div>
+                    <WeightChart childId={childId} />
+                  </div>
+                  <div className={styles.page}>
+                    <div className="card-header header-elements w-100 mt-10">
+                      <div className="w-100 d-flex flex-column justify-between mb-2 mt-8">
+                        <h5 className="card-title mb-0">BMI Chart</h5>
+                        <small className="text-body-secondary">
+                          Present the bmi of the child overtime
+                        </small>
+                      </div>
+                    </div>
+                    <BMIChart childId={childId} />
                   </div>
                   <div className={styles.page}>
                     <HealthMetricsPage childId={childId} />

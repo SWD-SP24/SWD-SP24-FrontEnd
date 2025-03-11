@@ -384,7 +384,8 @@ export default function ChatHistory({
         tabIndex="-1"
         aria-modal="true"
         role="dialog"
-        draggable
+        draggable={true}
+        onDragOver={(e) => e.preventDefault()}
       >
         <div className="modal-dialog modal-xl modal-simple modal-dialog-centered">
           <div

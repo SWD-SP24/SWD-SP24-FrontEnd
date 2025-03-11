@@ -1,7 +1,7 @@
 import React from "react";
 import HeightChart from "./HeightChart,.js";
 
-const OverviewPage = () => (
+const OverviewPage = ({ childId }) => (
   <>
     <h2>📊 Overview</h2>
     <div className="card-header header-elements w-100">
@@ -12,7 +12,7 @@ const OverviewPage = () => (
         </small>
       </div>
     </div>
-    <HeightChart />
+    <HeightChart childId={childId} />
   </>
 );
 

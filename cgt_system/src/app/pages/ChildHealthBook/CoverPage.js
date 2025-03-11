@@ -25,6 +25,15 @@ export default function CoverPage({ childId }) {
     }
   }, [response]);
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   if (!response) {
     return <div>Loading...</div>;
   }
@@ -61,7 +70,7 @@ export default function CoverPage({ childId }) {
           </tr>
           <tr>
             <td className="pe-4">📅 Date of Birth:</td>
-            <td className="mb-0">{data.dob}</td>
+            <td className="mb-0">{formatDate(data.dob)}</td>
           </tr>
           <tr>
             <td className="pe-4">🩸 Blood Type:</td>
