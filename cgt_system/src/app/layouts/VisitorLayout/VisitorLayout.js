@@ -5,7 +5,7 @@ import Footer from "./FooterUser";
 
 export default function VisitorLayout() {
   return (
-    <div>
+    <div className="visitor-layout">
       <Navbar />
       <Outlet />
       <Footer />

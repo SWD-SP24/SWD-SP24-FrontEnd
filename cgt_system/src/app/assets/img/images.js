@@ -44,6 +44,13 @@ const Images = {
   UNICEF: require("./front-pages/branding/unicef-seeklogo.png"),
   CDC: require("./front-pages/branding/cdc-seeklogo.png"),
   Gavi: require("./front-pages/branding/gavi-seeklogo.png"),
+  manWithLap: require("./illustrations/man-with-laptop-light.png"),
+  boyWithStatis: require("./illustrations/boy-with-statistic.png"),
+  chartSuccess: require("./icons/unicons/chart-success.png"),
+  walletInfo: require("./icons/unicons/wallet-info.png"),
+  paypal: require("./icons/unicons/paypal.png"),
+  ccPrimary: require("./icons/unicons/cc-primary.png"),
+  wallet: require("./icons/unicons/wallet.png"),
 };
 
 export default Images;

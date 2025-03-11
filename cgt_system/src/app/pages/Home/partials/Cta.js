@@ -1,9 +1,31 @@
-//img
+import { useEffect, useState } from "react";
 import Images from "../../../assets/img/images.js";
 
 const Cta = () => {
-  const isDarkMode =
-    document.documentElement.getAttribute("data-bs-theme") === "dark";
+  // State to track the theme
+  const [isDarkMode, setIsDarkMode] = useState(
+    document.documentElement.getAttribute("data-bs-theme") === "dark"
+  );
+
+  useEffect(() => {
+    // Function to update the theme state
+    const updateTheme = () => {
+      setIsDarkMode(
+        document.documentElement.getAttribute("data-bs-theme") === "dark"
+      );
+    };
+
+    // Observe theme changes
+    const observer = new MutationObserver(updateTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ["data-bs-theme"],
+    });
+
+    // Cleanup observer on component unmount
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <section
       id="landingCTA"
@@ -12,7 +34,7 @@ const Cta = () => {
       <img
         src={isDarkMode ? Images.ctaDarkBg : Images.ctaLightBg}
         className="position-absolute bottom-0 end-0 scaleX-n1-rtl h-100 w-100 z-n1"
-        alt="cta image"
+        alt="cta background"
       />
       <div className="container">
         <div className="row align-items-center gy-12">

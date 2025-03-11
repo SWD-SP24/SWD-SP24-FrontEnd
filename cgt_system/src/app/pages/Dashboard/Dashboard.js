@@ -1,16 +1,21 @@
 import React from "react";
-
+import Images from "../../assets/img/images";
+import Cookies from "js-cookie";
 export default function Dashboard() {
+  const storedUser = Cookies.get("user");
+  const user = JSON.parse(storedUser);
+  console.log(user);
   return (
     <div>
       <div class="row">
+        {/* <!-- User Stats --> */}
         <div class="col-lg-8 mb-4 order-0">
           <div class="card">
             <div class="d-flex align-items-end row">
               <div class="col-sm-7">
                 <div class="card-body">
                   <h5 class="card-title text-primary">
-                    Congratulations John! 🎉
+                    Welcome back {user.fullName}! 🎉
                   </h5>
                   <p class="mb-4">
                     You have done <span class="fw-bold">72%</span> more sales
@@ -25,7 +30,7 @@ export default function Dashboard() {
               <div class="col-sm-5 text-center text-sm-left">
                 <div class="card-body pb-0 px-0 px-md-4">
                   <img
-                    src="../assets/img/illustrations/man-with-laptop-light.png"
+                    src={Images.boyWithStatis}
                     height="140"
                     alt="View Badge User"
                     data-app-dark-img="illustrations/man-with-laptop-dark.png"
@@ -36,6 +41,8 @@ export default function Dashboard() {
             </div>
           </div>
         </div>
+
+        {/* <!-- Transactions --> */}
         <div class="col-lg-4 col-md-4 order-1">
           <div class="row">
             <div class="col-lg-6 col-md-12 col-6 mb-4">
@@ -44,33 +51,10 @@ export default function Dashboard() {
                   <div class="card-title d-flex align-items-start justify-content-between">
                     <div class="avatar flex-shrink-0">
                       <img
-                        src="../assets/img/icons/unicons/chart-success.png"
+                        src={Images.chartSuccess}
                         alt="chart success"
                         class="rounded"
                       />
-                    </div>
-                    <div class="dropdown">
-                      <button
-                        class="btn p-0"
-                        type="button"
-                        id="cardOpt3"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="cardOpt3"
-                      >
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          View More
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          Delete
-                        </a>
-                      </div>
                     </div>
                   </div>
                   <span class="fw-semibold d-block mb-1">Profit</span>
@@ -87,36 +71,13 @@ export default function Dashboard() {
                   <div class="card-title d-flex align-items-start justify-content-between">
                     <div class="avatar flex-shrink-0">
                       <img
-                        src="../assets/img/icons/unicons/wallet-info.png"
+                        src={Images.walletInfo}
                         alt="Credit Card"
                         class="rounded"
                       />
                     </div>
-                    <div class="dropdown">
-                      <button
-                        class="btn p-0"
-                        type="button"
-                        id="cardOpt6"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="cardOpt6"
-                      >
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          View More
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          Delete
-                        </a>
-                      </div>
-                    </div>
                   </div>
-                  <span>Sales</span>
+                  <span>Revenue</span>
                   <h3 class="card-title text-nowrap mb-1">$4,679</h3>
                   <small class="text-success fw-semibold">
                     <i class="bx bx-up-arrow-alt"></i> +28.42%
@@ -136,34 +97,7 @@ export default function Dashboard() {
               </div>
               <div class="col-md-4">
                 <div class="card-body">
-                  <div class="text-center">
-                    <div class="dropdown">
-                      <button
-                        class="btn btn-sm btn-outline-primary dropdown-toggle"
-                        type="button"
-                        id="growthReportId"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        2022
-                      </button>
-                      <div
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="growthReportId"
-                      >
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          2021
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          2020
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          2019
-                        </a>
-                      </div>
-                    </div>
-                  </div>
+                  <div class="text-center"></div>
                 </div>
                 <div id="growthChart"></div>
                 <div class="text-center fw-semibold pt-3 mb-2">
@@ -207,40 +141,14 @@ export default function Dashboard() {
                   <div class="card-title d-flex align-items-start justify-content-between">
                     <div class="avatar flex-shrink-0">
                       <img
-                        src="../assets/img/icons/unicons/paypal.png"
+                        src={Images.paypal}
                         alt="Credit Card"
                         class="rounded"
                       />
                     </div>
-                    <div class="dropdown">
-                      <button
-                        class="btn p-0"
-                        type="button"
-                        id="cardOpt4"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div
-                        class="dropdown-menu dropdown-menu-end"
-                        aria-labelledby="cardOpt4"
-                      >
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          View More
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          Delete
-                        </a>
-                      </div>
-                    </div>
                   </div>
-                  <span class="d-block mb-1">Payments</span>
+                  <span class="d-block mb-1">Total Children</span>
                   <h3 class="card-title text-nowrap mb-2">$2,456</h3>
-                  <small class="text-danger fw-semibold">
-                    <i class="bx bx-down-arrow-alt"></i> -14.82%
-                  </small>
                 </div>
               </div>
             </div>
@@ -250,37 +158,16 @@ export default function Dashboard() {
                   <div class="card-title d-flex align-items-start justify-content-between">
                     <div class="avatar flex-shrink-0">
                       <img
-                        src="../assets/img/icons/unicons/cc-primary.png"
+                        src={Images.ccPrimary}
                         alt="Credit Card"
                         class="rounded"
                       />
                     </div>
-                    <div class="dropdown">
-                      <button
-                        class="btn p-0"
-                        type="button"
-                        id="cardOpt1"
-                        data-bs-toggle="dropdown"
-                        aria-haspopup="true"
-                        aria-expanded="false"
-                      >
-                        <i class="bx bx-dots-vertical-rounded"></i>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="cardOpt1">
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          View More
-                        </a>
-                        <a class="dropdown-item" href="javascript:void(0);">
-                          Delete
-                        </a>
-                      </div>
-                    </div>
                   </div>
-                  <span class="fw-semibold d-block mb-1">Transactions</span>
+                  <span class="fw-semibold d-block mb-1">
+                    Vaccine Completion
+                  </span>
                   <h3 class="card-title mb-2">$14,857</h3>
-                  <small class="text-success fw-semibold">
-                    <i class="bx bx-up-arrow-alt"></i> +28.14%
-                  </small>
                 </div>
               </div>
             </div>
@@ -320,32 +207,6 @@ export default function Dashboard() {
               <div class="card-title mb-0">
                 <h5 class="m-0 me-2">Order Statistics</h5>
                 <small class="text-muted">42.82k Total Sales</small>
-              </div>
-              <div class="dropdown">
-                <button
-                  class="btn p-0"
-                  type="button"
-                  id="orederStatistics"
-                  data-bs-toggle="dropdown"
-                  aria-haspopup="true"
-                  aria-expanded="false"
-                >
-                  <i class="bx bx-dots-vertical-rounded"></i>
-                </button>
-                <div
-                  class="dropdown-menu dropdown-menu-end"
-                  aria-labelledby="orederStatistics"
-                >
-                  <a class="dropdown-item" href="javascript:void(0);">
-                    Select All
-                  </a>
-                  <a class="dropdown-item" href="javascript:void(0);">
-                    Refresh
-                  </a>
-                  <a class="dropdown-item" href="javascript:void(0);">
-                    Share
-                  </a>
-                </div>
               </div>
             </div>
             <div class="card-body">
@@ -445,11 +306,7 @@ export default function Dashboard() {
                     Income
                   </button>
                 </li>
-                <li class="nav-item">
-                  <button type="button" class="nav-link" role="tab">
-                    Expenses
-                  </button>
-                </li>
+
                 <li class="nav-item">
                   <button type="button" class="nav-link" role="tab">
                     Profit
@@ -466,10 +323,7 @@ export default function Dashboard() {
                 >
                   <div class="d-flex p-4 pt-3">
                     <div class="avatar flex-shrink-0 me-3">
-                      <img
-                        src="../assets/img/icons/unicons/wallet.png"
-                        alt="User"
-                      />
+                      <img src={Images.wallet} alt="User" />
                     </div>
                     <div>
                       <small class="text-muted d-block">Total Balance</small>

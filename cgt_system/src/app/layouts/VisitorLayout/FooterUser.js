@@ -1,3 +1,4 @@
+import { Link } from "react-router";
 import Images from "../../assets/img/images";
 
 const Footer = () => {
@@ -141,41 +142,33 @@ const Footer = () => {
             <div class="col-lg-2 col-md-4 col-sm-6">
               <ul class="list-unstyled">
                 <li class="mb-4">
-                  <a href="pricing-page.html" class="footer-link">
+                  <Link to={"/"} class="footer-link">
                     Home
-                  </a>
+                  </Link>
                 </li>
                 <li class="mb-4">
-                  <a href="payment-page.html" class="footer-link">
+                  <Link to={"/pricing"} class="footer-link">
                     Pricing<span class="badge bg-primary ms-2">New</span>
-                  </a>
+                  </Link>
                 </li>
                 <li class="mb-4">
-                  <a href="checkout-page.html" class="footer-link">
+                  <Link to={"/about-us"} class="footer-link">
                     About us
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>
             <div class="col-lg-2 col-md-4 col-sm-6">
               <ul class="list-unstyled">
                 <li class="mb-4">
-                  <a
-                    href="../vertical-menu-template/"
-                    target="_blank"
-                    class="footer-link"
-                  >
+                  <Link to="/login" class="footer-link">
                     Login
-                  </a>
+                  </Link>
                 </li>
                 <li class="mb-4">
-                  <a
-                    href="../horizontal-menu-template/"
-                    target="_blank"
-                    class="footer-link"
-                  >
+                  <Link to="/register" class="footer-link">
                     Register
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

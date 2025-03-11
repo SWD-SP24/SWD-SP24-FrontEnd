@@ -1,12 +1,51 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./PricingPlan.module.scss";
 import classNames from "classnames/bind";
-
+import API_URLS from "../../config/apiUrls";
+import useApi from "../../hooks/useApi";
+import Images from "../../assets/img/images.js";
+import { Link, useNavigate } from "react-router";
+import showToast from "../../util/showToast.js";
 const cx = classNames.bind(styles);
 export default function PricingPlan() {
   const [currentTheme, setCurrentTheme] = useState(
     document.documentElement.getAttribute("data-bs-theme")
   );
+  const navigate = useNavigate();
+  const { response, callApi } = useApi({
+    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}`,
+    method: "GET",
+  });
+
+  useEffect(() => {
+    callApi();
+  }, []);
+
+  useEffect(() => {
+    console.log(response);
+  }, [response]);
+
+  const checkType = (type) => {
+    if (type === "Basic") {
+      return Images.basicPlanIcon;
+    }
+    if (type === "Standard") {
+      return Images.standardPlanIcon;
+    }
+    if (type === "Enterprise") {
+      return Images.PremiumPlanIcon;
+    }
+  };
+  const handleBuy = (e) => {
+    e.preventDefault();
+    showToast({
+      icon: "warning",
+      text: "You need to login first",
+      showButtons: true,
+      onConfirm: () => navigate("/login"),
+      onCancel: null,
+    });
+  };
   return (
     <div className={cx("content-wrapper")}>
       {/* <!-- Content --> */}
@@ -25,242 +64,90 @@ export default function PricingPlan() {
 
               <div class="row mx-0 px-lg-12 gy-6 mt-6">
                 {/* <!-- Basic --> */}
-                <div class="col-xl mb-md-0 px-3">
-                  <div class="card border rounded shadow-none">
-                    <div class="card-body pt-12">
-                      <div class="mt-3 mb-5 text-center">
-                        <img
-                          src="../../assets/img/icons/unicons/bookmark.png"
-                          alt="Basic Image"
-                          width="120"
-                        />
-                      </div>
-                      <h4 class="card-title text-center text-capitalize mb-1">
-                        Basic
-                      </h4>
-                      <p class="text-center mb-5">
-                        A simple start for everyone
-                      </p>
-                      <div class="text-center h-px-50">
-                        <div class="d-flex justify-content-center">
-                          <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">
-                            $
-                          </sup>
-                          <h1 class="mb-0 text-primary">0</h1>
-                          <sub class="h6 text-body pricing-duration mt-auto mb-1">
-                            /month
-                          </sub>
-                        </div>
-                      </div>
-
-                      <ul class="list-group my-5 pt-9">
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>100 responses a month</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Unlimited forms and surveys</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Unlimited fields</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Basic form creation tools</span>
-                        </li>
-                        <li class="mb-0 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Up to 2 subdomains</span>
-                        </li>
-                      </ul>
-
-                      <a
-                        href="auth-register-basic.html"
-                        class="btn btn-label-success d-grid w-100"
-                      >
-                        Your Current Plan
-                      </a>
-                    </div>
-                  </div>
-                </div>
 
                 {/* <!-- Pro --> */}
-                <div class="col-xl mb-md-0 px-3">
-                  <div class="card border-primary border shadow-none">
-                    <div class="card-body position-relative pt-4">
-                      <div class="position-absolute end-0 me-5 top-0 mt-4">
-                        <span class="badge bg-label-primary rounded-1">
-                          Popular
-                        </span>
-                      </div>
-                      <div class="my-5 pt-6 text-center">
-                        <img
-                          src="../../assets/img/icons/unicons/wallet-round.png"
-                          alt="Pro Image"
-                          width="120"
-                        />
-                      </div>
-                      <h4 class="card-title text-center text-capitalize mb-1">
-                        Standard
-                      </h4>
-                      <p class="text-center mb-5">
-                        For small to medium businesses
-                      </p>
-                      <div class="text-center h-px-50">
-                        <div class="d-flex justify-content-center">
-                          <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">
-                            $
-                          </sup>
-                          <h1 class="price-toggle price-yearly text-primary mb-0">
-                            7
-                          </h1>
-                          <h1 class="price-toggle price-monthly text-primary mb-0 d-none">
-                            9
-                          </h1>
-                          <sub class="h6 text-body pricing-duration mt-auto mb-1">
-                            /month
-                          </sub>
+                {response &&
+                  response.data.map((pkg) => {
+                    return (
+                      <div className="col-xl-4 col-lg-6">
+                        <div
+                          className="card d-flex flex-column pricing-list"
+                          style={{
+                            height: "750px",
+                            overflowY: "hidden",
+                          }}
+                        >
+                          <div className="card-header">
+                            <div className="text-center">
+                              <img
+                                src={checkType(pkg.membershipPackageName)}
+                                alt="paper airplane icon"
+                                className="mb-8 pb-2"
+                              />
+                              <h4 className="mb-0">
+                                {pkg.membershipPackageName}
+                              </h4>
+                              <div className="d-flex align-items-center justify-content-center">
+                                <span
+                                  className={
+                                    "price-monthly h2 text-primary fw-extrabold mb-0 d-none"
+                                  }
+                                >
+                                  {pkg.price}
+                                </span>
+                                <span
+                                  className={
+                                    "price-yearly h2 text-primary fw-extrabold mb-0 d-none"
+                                  }
+                                >
+                                  {pkg.price === 0 ? "Free" : pkg.price}
+                                </span>
+                                <sub className="h6 text-body-secondary mb-n1 ms-1">
+                                  /mo
+                                </sub>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div
+                            className="card-body d-flex flex-column"
+                            style={{ flexGrow: 1, overflow: "hidden" }}
+                          >
+                            {/* Limit height for permissions */}
+                            <ul
+                              className="list-unstyled pricing-list flex-grow-1"
+                              style={{ maxHeight: "400px", overflowY: "auto" }}
+                            >
+                              {pkg.permissions.map((permission, index) => {
+                                return (
+                                  <li key={index}>
+                                    <h6 className="d-flex align-items-center mb-3">
+                                      <span className="badge badge-center rounded-pill bg-label-primary p-0 me-3">
+                                        <i className="icon-base bx bx-check icon-12px"></i>
+                                      </span>
+                                      {permission.description}
+                                    </h6>
+                                  </li>
+                                );
+                              })}
+                            </ul>
+
+                            {/* Button stays at the bottom */}
+                            <div className="d-grid mt-auto">
+                              <Link
+                                onClick={(e) => handleBuy(e)}
+                                className="btn btn-label-primary"
+                              >
+                                Get Started
+                              </Link>
+                            </div>
+                          </div>
                         </div>
-                        <small class="price-yearly price-yearly-toggle text-body-secondary">
-                          USD 480 / year
-                        </small>
                       </div>
-
-                      <ul class="list-group my-5 pt-9">
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Unlimited responses</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Unlimited forms and surveys</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Instagram profile page</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Google Docs integration</span>
-                        </li>
-                        <li class="mb-0 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Custom “Thank you” page</span>
-                        </li>
-                      </ul>
-
-                      <a
-                        href="auth-register-basic.html"
-                        class="btn btn-primary d-grid w-100"
-                      >
-                        Upgrade
-                      </a>
-                    </div>
-                  </div>
-                </div>
+                    );
+                  })}
 
                 {/* <!-- Enterprise --> */}
-                <div class="col-xl px-3">
-                  <div class="card border rounded shadow-none">
-                    <div class="card-body pt-12">
-                      <div class="mt-3 mb-5 text-center">
-                        <img
-                          src="../../assets/img/icons/unicons/briefcase-round.png"
-                          alt="Pro Image"
-                          width="120"
-                        />
-                      </div>
-                      <h4 class="card-title text-center text-capitalize mb-1">
-                        Enterprise
-                      </h4>
-                      <p class="text-center mb-5">
-                        Solution for big organizations
-                      </p>
-
-                      <div class="text-center h-px-50">
-                        <div class="d-flex justify-content-center">
-                          <sup class="h6 text-body pricing-currency mt-2 mb-0 me-1">
-                            $
-                          </sup>
-                          <h1 class="price-toggle price-yearly text-primary mb-0">
-                            16
-                          </h1>
-                          <h1 class="price-toggle price-monthly text-primary mb-0 d-none">
-                            19
-                          </h1>
-                          <sub class="h6 text-body pricing-duration mt-auto mb-1">
-                            /month
-                          </sub>
-                        </div>
-                        <small class="price-yearly price-yearly-toggle text-body-secondary">
-                          USD 960 / year
-                        </small>
-                      </div>
-
-                      <ul class="list-group my-5 pt-9">
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>PayPal payments</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Logic Jumps</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>File upload with 5GB storage</span>
-                        </li>
-                        <li class="mb-4 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Custom domain support</span>
-                        </li>
-                        <li class="mb-0 d-flex align-items-center">
-                          <span class="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                            <i class="icon-base bx bx-check icon-xs"></i>
-                          </span>
-                          <span>Stripe integration</span>
-                        </li>
-                      </ul>
-
-                      <a
-                        href="auth-register-basic.html"
-                        class="btn btn-label-primary d-grid w-100"
-                      >
-                        Upgrade
-                      </a>
-                    </div>
-                  </div>
-                </div>
               </div>
             </div>
           </div>
