@@ -12,16 +12,24 @@ import "swiper/css/pagination";
 import "swiper/css/effect-coverflow";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
-import { addDoc, collection, serverTimestamp } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 import { db } from "../../config/firebase";
 import { Modal } from "bootstrap";
+import default_avatar from "../../assets/img/avatars/default-avatar.jpg";
+import Skeleton from "react-loading-skeleton";
 
 export default function DoctorListModal({
   user,
   conversations,
   onSelectConversation,
 }) {
-  const { response, callApi } = useApi({
+  const { isLoading, response, callApi } = useApi({
     url: API_URLS.USER.GET_DOCTORS_LIST,
     method: "GET",
   });
@@ -68,7 +76,10 @@ export default function DoctorListModal({
       onSelectConversation(existingConversation);
     } else {
       // Nếu chưa, tạo cuộc trò chuyện mới
-      const newConversationRef = await addDoc(collection(db, "conversations"), {
+      const conversationId = `${user.userId}_${doctor.userId}`;
+      const conversationRef = doc(db, "conversations", conversationId);
+      await setDoc(conversationRef, {
+        id: `${user.userId}_${doctor.userId}`,
         participants: [user.userId, doctor.userId],
         lastSenderId: "",
         lastSenderName: "",
@@ -81,7 +92,7 @@ export default function DoctorListModal({
       });
 
       const newConversation = {
-        id: newConversationRef.id,
+        id: conversationRef.id,
         participants: [user.userId, doctor.userId],
         lastSenderId: "",
         lastSenderName: "",
@@ -125,7 +136,7 @@ export default function DoctorListModal({
               aria-label="Close"
             ></button>
             <h3 className="text-center text-primary fw-bold mb-3">
-              Consult a Doctor
+              Consult A Doctor
             </h3>
             <p className="text-center text-muted mb-4">
               Find the best doctors to get expert advice on your child's health.
@@ -155,54 +166,75 @@ export default function DoctorListModal({
               pagination={{ clickable: true }}
               className="pt-3"
             >
-              {doctors.map((doctor) => (
-                <SwiperSlide key={doctor.userId}>
-                  <div
-                    className="card border-0 shadow-sm p-4 text-center"
-                    style={{
-                      borderRadius: "20px",
-                      transition: "transform 0.3s ease-in-out",
-                      background: "linear-gradient(135deg, #E3F2FD, #FFFFFF)",
-                    }}
-                  >
-                    <div className="d-flex justify-content-center">
+              {isLoading
+                ? [...Array(5)].map((_, index) => (
+                    <SwiperSlide key={index}>
+                      <div className="card border-0 shadow-sm p-4 text-center rounded-4">
+                        <div className="d-flex justify-content-center">
+                          <Skeleton circle={true} height={170} width={170} />
+                        </div>
+                        <div className="card-body">
+                          <Skeleton height={20} width="60%" className="mb-2" />
+                          <Skeleton height={15} width="40%" className="mb-2" />
+                          <Skeleton height={15} width="50px" className="mb-3" />
+                          <Skeleton height={40} width="100%" />
+                        </div>
+                      </div>
+                    </SwiperSlide>
+                  ))
+                : doctors.map((doctor) => (
+                    <SwiperSlide key={doctor.userId}>
                       <div
-                        className="rounded-circle overflow-hidden border shadow-sm"
+                        className="card border-0 shadow-sm p-4 text-center"
                         style={{
-                          width: "170px",
-                          height: "170px",
-                          border: "4px solid #0d6efd",
+                          borderRadius: "20px",
+                          transition: "transform 0.3s ease-in-out",
+                          background:
+                            "linear-gradient(135deg, #E3F2FD, #FFFFFF)",
                         }}
                       >
-                        <img
-                          src={doctor.avatar}
-                          alt={doctor.fullName}
-                          className="w-100 h-100 object-fit-cover"
-                        />
+                        <div className="d-flex justify-content-center">
+                          <div
+                            className="rounded-circle overflow-hidden border shadow-sm"
+                            style={{
+                              width: "170px",
+                              height: "170px",
+                              border: "4px solid #0d6efd",
+                            }}
+                          >
+                            <img
+                              src={doctor.avatar || default_avatar}
+                              alt={doctor.fullName}
+                              className="w-100 h-100 object-fit-cover"
+                            />
+                          </div>
+                        </div>
+                        <div className="card-body">
+                          <h5 className="card-title fw-bold text-dark">
+                            {doctor.fullName}
+                          </h5>
+                          <div className="d-flex justify-content-center align-items-center mb-1">
+                            <i className="bx bx-first-aid me-2"></i>
+                            <span className="text-normal small">
+                              {doctor.specialization}
+                            </span>
+                          </div>
+                          <div className="d-flex justify-content-center align-items-center mb-3">
+                            <i className="bx bx-buildings me-2"></i>
+                            <span className="text-normal small">
+                              {doctor.hospital}
+                            </span>
+                          </div>
+                          <button
+                            className="btn btn-primary mt-6 w-100"
+                            onClick={() => handleChatWithDoctor(doctor)}
+                          >
+                            Chat Now
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                    <div className="card-body">
-                      <h5 className="card-title fw-bold text-dark">
-                        {doctor.fullName}
-                      </h5>
-                      <p className="text-muted small">
-                        {doctor.specialization}
-                      </p>
-                      <div className="d-flex justify-content-center align-items-center mb-3">
-                        <span className="text-primary ms-2 small">
-                          {doctor.hospital}
-                        </span>
-                      </div>
-                      <button
-                        className="btn btn-primary mt-6 w-100"
-                        onClick={() => handleChatWithDoctor(doctor)}
-                      >
-                        Chat Now
-                      </button>
-                    </div>
-                  </div>
-                </SwiperSlide>
-              ))}
+                    </SwiperSlide>
+                  ))}
             </Swiper>
           </div>
         </div>

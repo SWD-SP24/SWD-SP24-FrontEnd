@@ -37,6 +37,8 @@ import Profile from "../pages/Profile/Profile";
 import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
 import MemberRoutes from "./MemberRoutes";
 import AboutUs from "../pages/AboutUs/AboutUs";
+import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
+import DoctorRoutes from "./DoctorRoutes";
 
 export default function MainRoutes() {
   return (
@@ -48,6 +50,7 @@ export default function MainRoutes() {
           <Route path="/pricing" element={<PricingPlan />} />
           <Route path="/about-us" element={<AboutUs />} />
         </Route>
+        <Route path="test" element={<ChildHealthBook />} />
 
         {/* Các trang liên quan đến Auth */}
         <Route path="login" element={<Login />} />
@@ -78,7 +81,7 @@ export default function MainRoutes() {
         <Route element={<MainLayout />}>
           {/* Admin Routes */}
           <Route path="admin/*" element={<AdminRoutes />} />
-          <Route path="consultations" element={<Chat />} />
+          <Route path="doctor/*" element={<DoctorRoutes />} />
           <Route path="/dashboard" element={<ComingSoon />} />
 
           {/* Member Routes */}
