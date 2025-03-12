@@ -20,12 +20,13 @@ import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
 
-export default function ChatHistory({}) {
-  const chatState = JSON.parse(sessionStorage.getItem("chatState")) || {};
-
-  const { currentUser, recipientId, recipient, messages, conversationId } =
-    chatState;
-
+export default function ChatHistory({
+  currentUser,
+  recipientId,
+  recipient,
+  messages,
+  conversationId,
+}) {
   const [childIdFromMessage, setChildIdFromMessage] = useState(null);
   const [draggingChild, setDraggingChild] = useState(null);
   const [newMessage, setNewMessage] = useState("");
@@ -261,7 +262,6 @@ export default function ChatHistory({}) {
               const isCurrentUser = message.senderId === currentUser.userId;
               const childId = message.childId || "";
               const child = childs.find((c) => c.childrenId === childId);
-              console.log(child);
 
               return (
                 <li

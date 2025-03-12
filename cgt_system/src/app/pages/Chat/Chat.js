@@ -21,13 +21,14 @@ import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
 import DoctorListModal from "../DoctorListModal/DoctorListModal";
 import { Outlet, useNavigate } from "react-router";
+import ChatHistory from "./partials/ChatHistory";
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
+  const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
 
-  const navigate = useNavigate();
   // Lấy tất cả cuộc trò chuyện của user
   useEffect(() => {
     if (!user) return;
@@ -164,13 +165,7 @@ export default function Chat() {
 
   const selectConversation = (conversation) => {
     setSelectedConversation(conversation);
-
-    const recipientId = conversation
-      ? conversation.participants.find((id) => id !== user.userId)
-      : null;
-    const recipient = conversation
-      ? conversation[conversation.participants.find((id) => id !== user.userId)]
-      : null;
+    setMessages([]);
 
     const conversationId = conversation.id;
 
@@ -195,19 +190,7 @@ export default function Chat() {
         ...doc.data(),
       }));
 
-      const chatState = {
-        currentUser: user,
-        recipientId,
-        recipient,
-        messages: messagesData,
-        conversationId,
-      };
-
-      sessionStorage.setItem("chatState", null);
-
-      sessionStorage.setItem("chatState", JSON.stringify(chatState));
-
-      navigate(`${conversation.id}`);
+      setMessages(messagesData);
     });
 
     return () => unsubscribe();
@@ -423,7 +406,27 @@ export default function Chat() {
 
         {/* Chat History */}
         {selectedConversation ? (
-          <Outlet />
+          <ChatHistory
+            currentUser={user}
+            recipientId={
+              selectedConversation
+                ? selectedConversation.participants.find(
+                    (id) => id !== user.userId
+                  )
+                : null
+            }
+            recipient={
+              selectedConversation
+                ? selectedConversation[
+                    selectedConversation.participants.find(
+                      (id) => id !== user.userId
+                    )
+                  ]
+                : null
+            }
+            messages={messages}
+            conversationId={selectedConversation.id}
+          />
         ) : (
           <div
             class="col app-chat-conversation d-flex align-items-center justify-content-center flex-column"
