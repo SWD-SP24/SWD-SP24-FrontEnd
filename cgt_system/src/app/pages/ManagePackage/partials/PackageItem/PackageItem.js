@@ -66,6 +66,15 @@ export default function PackageItem({
   }, [response, error]);
 
   const handleChangeStatus = () => {
+    if (totalUserUse > 0) {
+      showToast({
+        icon: "warning",
+        text: "This package is currently in use and cannot be inactive.",
+        targetElement: document.querySelector(".content-wrapper"),
+      });
+      return;
+    }
+
     const customUrl = `${API_URLS.MEMBERSHIP_PACKAGE.PATCH}/${packageItem.membershipPackageId}/status`;
     callApi(
       { status: packageItem.status === "active" ? "inactive" : "active" },
@@ -127,7 +136,9 @@ export default function PackageItem({
             position: "fixed",
             bottom: "10%",
             left: "55%",
-            transform: "translate(-50%, 50%)",
+            transform: isDraggingOver
+              ? "translate(-50%, 50%) scale(1.2)"
+              : "translate(-50%, 50%)",
             zIndex: 1,
             width: "120px",
             height: "120px",
@@ -136,7 +147,9 @@ export default function PackageItem({
             alignItems: "center",
             justifyContent: "center",
             opacity: 0.8,
-            transition: "opacity 0.3s ease, background-color 0.3s ease",
+            transition:
+              "opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease",
+            backgroundColor: isDraggingOver ? "#f8d7da" : "transparent",
           }}
           onDrop={(e) => {
             setIsDraggingOver(false);
@@ -153,7 +166,12 @@ export default function PackageItem({
         >
           <i
             className="bx bx-trash"
-            style={{ fontSize: "50px", color: isDraggingOver ? "red" : "grey" }}
+            style={{
+              fontSize: "50px",
+              color: isDraggingOver ? "red" : "grey",
+              transition: "color 0.3s ease, transform 0.3s ease",
+              transform: isDraggingOver ? "rotate(-20deg)" : "none",
+            }}
           ></i>
         </div>
       )}
