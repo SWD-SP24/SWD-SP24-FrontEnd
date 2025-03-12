@@ -27,14 +27,14 @@ export default function AIAnalysis({ indicators }) {
                     )}.  
                                                Tuổi: ${age}, Nhóm máu: ${bloodType}, Giới tính: ${gender}.  
                                                Hãy phân tích và phản hồi theo đúng format sau:  
-                                               ---  
-📊                                            **Phân tích của AI**  
+                                            
+📊                                            **Phân tích của chuyên gia**  
  **Nhận xét:** {Đánh giá nhanh về tình trạng hiện tại, ví dụ: cân nặng hợp lý, BMI hơi thấp, tăng trưởng tốt, so với mặt bằng chung về độ tuổi, giới tính, nhóm máu}.  
 **Lời khuyên:**  
 - **Dinh dưỡng:** {Gợi ý thực phẩm cụ thể phù hợp với độ tuổi, ví dụ: Nếu thiếu cân, nên bổ sung protein, sữa, ngũ cốc nguyên hạt; nếu thừa cân, nên hạn chế đồ ngọt, tăng rau xanh}.  
 - **Vận động:** {Gợi ý bài tập hoặc hoạt động phù hợp với độ tuổi, ví dụ: Nếu cần cải thiện chiều cao, nên tập bơi lội, nhảy dây; nếu muốn kiểm soát cân nặng, nên đi bộ, đạp xe}.  
 - **Theo dõi:** {Khuyến nghị kiểm tra sức khỏe định kỳ hoặc cách tự theo dõi chỉ số}.  
----  
+
 Không thêm nội dung nào ngoài format trên.`,
                   },
                 ],
@@ -70,7 +70,7 @@ Không thêm nội dung nào ngoài format trên.`,
       <div className="card-body">
         <div
           dangerouslySetInnerHTML={{
-            __html: aiResponse || "Đang phân tích...",
+            __html: aiResponse || "Analyzing...",
           }}
         />
       </div>

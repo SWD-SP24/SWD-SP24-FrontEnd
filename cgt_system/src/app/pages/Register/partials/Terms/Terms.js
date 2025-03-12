@@ -33,7 +33,7 @@ export default function Terms({ onIsAgreeChange }) {
       />
       <label className="form-check-label" htmlFor="terms-conditions">
         I agree to
-        <a href="javascript:void(0);"> privacy policy & terms</a>
+        <a href="/term-and-policy"> privacy policy & terms</a>
       </label>
       {error && (
         <div className="fv-plugins-message-container fv-plugins-message-container--enabled invalid-feedback">

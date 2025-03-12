@@ -5,7 +5,9 @@ import API_URLS from "../../config/apiUrls";
 import { toothDList } from "../../constants/toothDList";
 import ToothNote from "./partials/ToothNote";
 import AIAnalysis from "./partials/AIAnalysis";
+import { useOutletContext } from "react-router";
 export default function Teeth() {
+  const permissions = useOutletContext();
   const { response, callApi } = useApi({
     url: `${API_URLS.TEETH.TEETH}`,
     method: "GET",
@@ -56,6 +58,12 @@ export default function Teeth() {
       }
     });
   }
+
+  const permissionsJson = JSON.parse(permissions);
+  const isHasPermission = (permission) => {
+    return permissionsJson.map((p) => p.permissionName).includes(permission);
+  };
+
   return (
     <div className="col-12  mb-6">
       <div className="card">
@@ -798,6 +806,27 @@ export default function Teeth() {
             />
           </div>
         </div>
+      </div>
+      <div className="card mb-6 mt-6">
+        {isHasPermission("AI_HEALTH_DATA_ANALYSIS") ? (
+          <AIAnalysis toothRecords={toothRecord} />
+        ) : (
+          <div className="card p-4 bg-gray-100 text-center">
+            <h3 className="text-lg font-semibold text-gray-700">
+              🔒 Advance Feature Locked
+            </h3>
+            <p className="text-gray-500 mt-1">
+              Upgrade now to access AI health analysis!
+            </p>
+            <button
+              className="col-12 btn btn-primary me-2"
+              data-bs-toggle="modal"
+              data-bs-target="#upgradePlanModal"
+            >
+              Upgrade Now 🚀
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

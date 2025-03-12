@@ -42,10 +42,7 @@ export default function MemberRoutes() {
         </Route>
         <Route path="upgrade-plan/checkout" element={<Checkout />} />
         <Route path="*" element={<ComingSoon />} />
-        <Route path="consultations" element={<Chat />}>
-          <Route path=":chatId" element={<ChatHistory />} />
-        </Route>
-
+        <Route path="consultations" element={<Chat />} />
         <Route
           path="consultations/child-details"
           element={<ChildHealthBook />}

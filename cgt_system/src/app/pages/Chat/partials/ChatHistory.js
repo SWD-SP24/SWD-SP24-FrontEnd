@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Cookies from "js-cookie";
 import image from "../../../assets/img/avatars/default-avatar.jpg";
 import { motion } from "framer-motion";
 import {
@@ -18,23 +19,27 @@ import boy from "../../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
-import { useLocation } from "react-router";
+import { useNavigate } from "react-router";
 
-export default function ChatHistory({}) {
-  const location = useLocation();
-  const { currentUser, recipientId, recipient, messages, conversationId } =
-    location.state;
-
+export default function ChatHistory({
+  currentUser,
+  recipientId,
+  recipient,
+  messages,
+  conversationId,
+}) {
   const [childIdFromMessage, setChildIdFromMessage] = useState(null);
   const [draggingChild, setDraggingChild] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [isRecipientOnline, setIsRecipientOnline] = useState(false);
+  const [isRecipientTyping, setIsRecipientTyping] = useState(false);
   const [childs, setChilds] = useState([]);
   const [lastSeen, setLastSeen] = useState("");
+  const navigate = useNavigate();
   const chatEndRef = useRef(null);
   const { response, callApi } = useApi({
     url:
-      currentUser.role === "member"
+      currentUser?.role === "member"
         ? `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`
         : `${API_URLS.CHILDREN.GET_CHILDREN_LIST}/admin`,
     method: "GET",
@@ -113,6 +118,7 @@ export default function ChatHistory({}) {
           recipientId: recipientId,
           text: message,
           timestamp: serverTimestamp(),
+          isRead: false,
         }
       );
 
@@ -167,9 +173,11 @@ export default function ChatHistory({}) {
       if (snapshot.exists()) {
         setIsRecipientOnline(snapshot.data().isOnline || false);
         setLastSeen(snapshot.data().lastSeen || "");
+        setIsRecipientTyping(snapshot.data().isTyping || false);
       } else {
         setIsRecipientOnline(false);
         setLastSeen("");
+        setIsRecipientTyping(false);
       }
     });
 
@@ -177,8 +185,31 @@ export default function ChatHistory({}) {
   }, [recipientId]);
 
   useEffect(() => {
+    if (!conversationId || !recipientId) return;
+
+    const messagesRef = collection(
+      db,
+      "conversations",
+      conversationId,
+      "messages"
+    );
+    const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
+      snapshot.forEach((doc) => {
+        if (
+          doc.data().recipientId === currentUser.userId &&
+          !doc.data().isRead
+        ) {
+          updateDoc(doc.ref, { isRead: true });
+        }
+      });
+    });
+
+    return () => unsubscribe();
+  }, [conversationId, recipientId]);
+
+  useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "auto" });
-  }, [messages]);
+  }, [messages, isRecipientTyping]);
 
   const handleDragStart = (e, child) => {
     e.dataTransfer.setData("childId", child.childrenId);
@@ -207,6 +238,19 @@ export default function ChatHistory({}) {
     }
 
     setDraggingChild(null);
+  };
+
+  const handleTyping = () => {
+    const currentUserRef = doc(db, "activeUsers", String(currentUser.userId));
+    updateDoc(currentUserRef, {
+      isTyping: true,
+    });
+
+    setTimeout(() => {
+      updateDoc(currentUserRef, {
+        isTyping: false,
+      });
+    }, 3000);
   };
 
   return (
@@ -246,7 +290,9 @@ export default function ChatHistory({}) {
                 <small class="user-status text-body">
                   {isRecipientOnline
                     ? "Active now"
-                    : lastSeen && `Active ${timeAgo(lastSeen)}`}
+                    : lastSeen &&
+                      timeAgo(lastSeen) &&
+                      `Active ${timeAgo(lastSeen)}`}
                 </small>
               </div>
             </div>
@@ -255,12 +301,26 @@ export default function ChatHistory({}) {
 
         {/* Chat History Body */}
         <div className="chat-history-body overflow-auto">
+          <div className="d-flex flex-column justify-content-center align-items-center my-4">
+            <img
+              className="img-fluid rounded-circle"
+              src={recipient?.avatar || image}
+              height="80"
+              width="80"
+              alt="User avatar"
+            />
+            <div className="user-info text-center mt-3">
+              <h6 className="mb-1">{recipient?.name || "Unknown"}</h6>
+              <p className="mt-2 fw-bold">
+                You are now connected with {recipient?.name || "the user"}
+              </p>
+            </div>
+          </div>
           <ul className="list-unstyled chat-history">
             {messages.map((message, index) => {
               const isCurrentUser = message.senderId === currentUser.userId;
               const childId = message.childId || "";
               const child = childs.find((c) => c.childrenId === childId);
-              console.log(child);
 
               return (
                 <li
@@ -331,7 +391,11 @@ export default function ChatHistory({}) {
                         }`}
                       >
                         {isCurrentUser && (
-                          <i className="icon-base bx bx-check-double icon-16px text-success me-1"></i>
+                          <i
+                            className={`icon-base bx bx-check-double icon-16px ${
+                              message.isRead ? "text-success" : "text-secondary"
+                            } me-1`}
+                          ></i>
                         )}
                         <small>{formatTimestamp(message.timestamp)}</small>
                       </div>
@@ -353,6 +417,30 @@ export default function ChatHistory({}) {
                 </li>
               );
             })}
+            {isRecipientTyping && (
+              <li className="chat-message">
+                <div className="d-flex overflow-hidden">
+                  <div className="user-avatar flex-shrink-0 me-4">
+                    <div className="avatar avatar-sm">
+                      <img
+                        src={recipient?.avatar || image}
+                        alt="Avatar"
+                        className="rounded-circle"
+                      />
+                    </div>
+                  </div>
+                  <div className="chat-message-wrapper flex-grow-1 d-flex flex-column align-items-start">
+                    <div className="chat-message-text p-2 rounded bg-light">
+                      <div className="typing-indicator">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            )}
           </ul>
           <div ref={chatEndRef} />
         </div>
@@ -367,7 +455,10 @@ export default function ChatHistory({}) {
               className="form-control message-input border-0 me-4 shadow-none"
               placeholder="Type your message here..."
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={(e) => {
+                setNewMessage(e.target.value);
+                handleTyping();
+              }}
             />
             <div className="message-actions d-flex align-items-center">
               {currentUser.role === "member" && (
@@ -415,35 +506,85 @@ export default function ChatHistory({}) {
               onDrop={handleDropOutside}
               draggable={true}
             >
-              {childs.map((child) => (
-                <motion.div
-                  key={child.childrenId}
-                  className="text-center"
-                  draggable={true}
-                  onDragStart={(e) => handleDragStart(e, child)}
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    opacity:
-                      draggingChild?.childrenId === child.childrenId ? 0.5 : 1,
-                  }}
-                >
-                  <img
-                    src={child.gender === "male" ? boy : girl}
-                    alt={child.fullName}
-                    className="rounded-circle"
-                    width="400"
-                    height="400"
-                  />
-                  <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
-                    {child.fullName}
+              {childs.length > 0 ? (
+                childs.map((child) => (
+                  <motion.div
+                    key={child.childrenId}
+                    className="text-center"
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, child)}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      opacity:
+                        draggingChild?.childrenId === child.childrenId
+                          ? 0.5
+                          : 1,
+                    }}
+                  >
+                    <img
+                      src={child.gender === "male" ? boy : girl}
+                      alt={child.fullName}
+                      className="rounded-circle"
+                      width="400"
+                      height="400"
+                    />
+                    <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
+                      {child.fullName}
+                    </p>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="d-flex flex-column align-items-center text-center">
+                  <div
+                    className="d-flex flex-column justify-between align-items-center mb-4 p-2"
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      border: "2px dashed #aaa",
+                      borderRadius: "20%",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      background: "transparent",
+                      opacity: 0.9,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.1)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                    onClick={() => {
+                      const modalElement =
+                        document.getElementById("childsModal");
+                      if (modalElement) {
+                        const modalInstance = Modal.getInstance(modalElement);
+                        if (modalInstance) {
+                          modalInstance.hide();
+                        }
+                      }
+                      navigate("/member/children");
+                    }}
+                  >
+                    <span
+                      className="mb-3 p-3 d-flex flex-column justify-between align-items-center"
+                      style={{ fontSize: "140px", color: "#aaa" }}
+                    >
+                      +
+                    </span>
+                  </div>
+                  <p
+                    className="text-normal fw-bold"
+                    style={{ fontSize: "24px" }}
+                  >
+                    No children added yet. Please add a new child!
                   </p>
-                </motion.div>
-              ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

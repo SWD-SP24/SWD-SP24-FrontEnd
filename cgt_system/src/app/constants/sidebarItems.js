@@ -21,7 +21,6 @@ export const sidebarItems = {
     },
   ],
   doctor: [
-    { title: "Dashboard", path: "/doctor/dashboard", icon: "bx bx-home" },
     {
       title: "Consultations",
       icon: "bx bx-message-rounded-dots",
@@ -38,13 +37,13 @@ export const sidebarItems = {
     },
   ],
   member: [
-    { title: "Dashboard", path: "/member/dashboard", icon: "bx bx-home" },
     {
       title: "Child Management",
       icon: "bx bx-face",
       path: "/member/children",
     },
     {
+      permission: "DOCTOR_CHAT",
       title: "Doctor Consultations",
       path: "/member/consultations",
       icon: "bx bx-chat",

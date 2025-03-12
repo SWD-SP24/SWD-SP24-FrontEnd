@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import useApi from "../../../hooks/useApi";
 import splitName from "../../../util/splitName.js";
 import showToast from "../../../util/showToast.js";
+
 export default function UpdateForm({ userData, setUser, apiUrl }) {
   console.log(userData);
 
@@ -38,7 +39,7 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
     if (response) {
       showToast({
         icon: "success",
-        text: "Information updated successful !",
+        text: "Information updated successfully!",
         targetElement: document.querySelector(".info"),
       });
       setUser(response.data);
@@ -48,9 +49,15 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Kiểm tra và thêm số 0 vào đầu số điện thoại nếu chưa có
+    let formattedPhone = phone;
+    if (!formattedPhone.startsWith("0") && formattedPhone) {
+      formattedPhone = "0" + formattedPhone;
+    }
+
     const data = {
       fullName: `${firstName} ${lastName}`,
-      phoneNumber: phone,
+      phoneNumber: formattedPhone, // Sử dụng số điện thoại đã định dạng
       address: address,
       state: state,
       zipcode: zipCode,
@@ -58,18 +65,19 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
       specialization: specialization,
       hospital: hospital,
     };
+
     await callApi(data);
   };
 
   return (
     <form id="formAccountSettings" onSubmit={handleSubmit}>
-      <div class="row">
-        <div class="mb-3 col-md-6">
-          <label for="firstName" class="form-label">
+      <div className="row">
+        <div className="mb-3 col-md-6">
+          <label htmlFor="firstName" className="form-label">
             First Name
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             id="firstName"
             name="firstName"
@@ -79,12 +87,12 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             autoFocus
           />
         </div>
-        <div class="mb-3 col-md-6">
-          <label for="lastName" class="form-label">
+        <div className="mb-3 col-md-6">
+          <label htmlFor="lastName" className="form-label">
             Last Name
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             name="lastName"
             id="lastName"
@@ -93,29 +101,29 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
             onChange={(e) => setLastName(e.target.value)}
           />
         </div>
-        <div class="mb-3 col-md-6">
-          <label class="form-label" for="phoneNumber">
+        <div className="mb-3 col-md-6">
+          <label className="form-label" htmlFor="phoneNumber">
             Phone Number
           </label>
-          <div class="input-group input-group-merge">
-            <span class="input-group-text">VN (+84)</span>
+          <div className="input-group input-group-merge">
+            <span className="input-group-text">VN (+84)</span>
             <input
               type="text"
               id="phoneNumber"
               name="phoneNumber"
-              class="form-control"
-              placeholder="xxx-xxx-xxx"
+              className="form-control"
+              placeholder="xxxx-xxx-xxx"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
             />
           </div>
         </div>
-        <div class="mb-3 col-md-6">
-          <label for="address" class="form-label">
+        <div className="mb-3 col-md-6">
+          <label htmlFor="address" className="form-label">
             Address
           </label>
           <input
-            class="form-control"
+            className="form-control"
             type="text"
             name="address"
             id="address"
@@ -126,12 +134,12 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
         </div>
         {userData.role === "doctor" && (
           <>
-            <div class="mb-3 col-md-6">
-              <label for="specialization" class="form-label">
+            <div className="mb-3 col-md-6">
+              <label htmlFor="specialization" className="form-label">
                 Specialization
               </label>
               <input
-                class="form-control"
+                className="form-control"
                 type="text"
                 name="specialization"
                 id="specialization"
@@ -140,12 +148,12 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
                 onChange={(e) => setSpecialization(e.target.value)}
               />
             </div>
-            <div class="mb-3 col-md-6">
-              <label for="hospital" class="form-label">
+            <div className="mb-3 col-md-6">
+              <label htmlFor="hospital" className="form-label">
                 Hospital
               </label>
               <input
-                class="form-control"
+                className="form-control"
                 type="text"
                 name="hospital"
                 id="hospital"
@@ -157,8 +165,8 @@ export default function UpdateForm({ userData, setUser, apiUrl }) {
           </>
         )}
       </div>
-      <div class="mt-2">
-        <button type="submit" class="btn btn-primary me-2">
+      <div className="mt-2">
+        <button type="submit" className="btn btn-primary me-2">
           {isLoading ? (
             <>
               <span

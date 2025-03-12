@@ -1,10 +1,6 @@
 import React from "react";
-import { Link } from "react-router";
-import default_avatar from "../../../../assets/img/avatars/default-avatar.jpg";
 
 export default function BillingRow({ index, billingItem }) {
-  console.log(billingItem);
-
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);

@@ -1,0 +1,31 @@
+.delete-icon {
+    position: fixed;
+    bottom: 10%;
+    left: 55%;
+    transform: translate(-50%, 50%);
+    z-index: 1;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.8;
+    transition: opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .delete-icon.dragging-over {
+    background-color: #f8d7da;
+    transform: translate(-50%, 50%) scale(1.2);
+  }
+  
+  .trash-icon {
+    font-size: 50px;
+    color: grey;
+    transition: color 0.3s ease, transform 0.3s ease;
+  }
+  
+  .trash-icon.dragging-over {
+    color: red;
+    transform: rotate(-20deg);
+  }

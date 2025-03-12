@@ -289,10 +289,7 @@ export default function EditPackageModal({ users }) {
                           name={"validityPeriod"}
                           type={"text"}
                           placeholder={"Enter validity period"}
-                          value={membershipPackage?.validityPeriod}
-                          validate={validateField}
-                          onFieldChange={handleFieldChange}
-                          reset={isReset}
+                          value={"30 days"}
                         />
                       </div>
                     </div>
@@ -312,7 +309,7 @@ export default function EditPackageModal({ users }) {
                       </div>
                       <div className="col-md-6 p-2 form-control-validation fv-plugins-icon-container">
                         <InputField
-                          label={"Percent Discount (%)"}
+                          label={"Percent Discount (%/month)"}
                           name={"percentDiscount"}
                           type={"text"}
                           placeholder={"Enter percent discount"}

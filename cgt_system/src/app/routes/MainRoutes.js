@@ -39,6 +39,7 @@ import MemberRoutes from "./MemberRoutes";
 import AboutUs from "../pages/AboutUs/AboutUs";
 import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
 import DoctorRoutes from "./DoctorRoutes";
+import TermAndPolicy from "../pages/TermAndPolicy/TermAndPolicy";
 
 export default function MainRoutes() {
   return (
@@ -49,6 +50,7 @@ export default function MainRoutes() {
           <Route path="/" element={<Home />} />
           <Route path="/pricing" element={<PricingPlan />} />
           <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/term-and-policy" element={<TermAndPolicy />} />
         </Route>
         <Route path="test" element={<ChildHealthBook />} />
 

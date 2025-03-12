@@ -38,6 +38,7 @@ export default function PricingPlan() {
   };
   const handleBuy = (e) => {
     e.preventDefault();
+
     showToast({
       icon: "warning",
       text: "You need to login first",
