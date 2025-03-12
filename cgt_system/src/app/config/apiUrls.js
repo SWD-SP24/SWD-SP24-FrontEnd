@@ -47,6 +47,7 @@ const API_URLS = {
     DELETE_CHILD: "/api/Children/",
     GET_CHILDREN_WITH_ID: "/api/Children/child/",
     EDIT_CHILD: "/api/Children/edit/",
+    GET_CHILD: "/api/Children/",
   },
   INDICATORS: {
     INDICATORS: "/api/GrowthIndicators",

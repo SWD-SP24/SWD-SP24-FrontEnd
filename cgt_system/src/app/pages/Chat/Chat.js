@@ -18,16 +18,16 @@ import image from "../../assets/img/avatars/default-avatar.jpg";
 import doctor_image from "../../assets/img/illustrations/doctor.png";
 import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
-import ChatHistory from "./partials/ChatHistory";
 import DoctorListModal from "../DoctorListModal/DoctorListModal";
+import { Outlet, useNavigate } from "react-router";
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
-  const [messages, setMessages] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
   const { user } = useUser();
 
+  const navigate = useNavigate();
   // Lấy tất cả cuộc trò chuyện của user
   useEffect(() => {
     if (!user) return;
@@ -164,10 +164,19 @@ export default function Chat() {
 
   const selectConversation = (conversation) => {
     setSelectedConversation(conversation);
-    setMessages([]);
+
+    const recipientId = conversation
+      ? conversation.participants.find((id) => id !== user.userId)
+      : null;
+    const recipient = conversation
+      ? conversation[conversation.participants.find((id) => id !== user.userId)]
+      : null;
+
+    const conversationId = conversation.id;
 
     // Đánh dấu tin nhắn đã đọc bằng cách đặt unreadCount = 0
-    const conversationRef = doc(db, "conversations", conversation.id);
+    const conversationRef = doc(db, "conversations", conversationId);
+
     updateDoc(conversationRef, {
       [`unreadCounts.${user.userId}`]: 0,
     });
@@ -175,7 +184,7 @@ export default function Chat() {
     const messagesRef = collection(
       db,
       "conversations",
-      conversation.id,
+      conversationId,
       "messages"
     );
     const q = query(messagesRef, orderBy("timestamp", "asc"));
@@ -186,7 +195,15 @@ export default function Chat() {
         ...doc.data(),
       }));
 
-      setMessages(messagesData);
+      navigate(`${conversation.id}`, {
+        state: {
+          currentUser: user,
+          recipientId,
+          recipient,
+          messages: messagesData,
+          conversationId,
+        },
+      });
     });
 
     return () => unsubscribe();
@@ -402,29 +419,7 @@ export default function Chat() {
 
         {/* Chat History */}
         {selectedConversation ? (
-          <ChatHistory
-            currentUser={user}
-            recipientId={
-              selectedConversation
-                ? selectedConversation.participants.find(
-                    (id) => id !== user.userId
-                  )
-                : null
-            }
-            recipient={
-              selectedConversation
-                ? selectedConversation[
-                    selectedConversation.participants.find(
-                      (id) => id !== user.userId
-                    )
-                  ]
-                : null
-            }
-            messages={messages}
-            conversationId={selectedConversation.id}
-            isOnline={selectedConversation.isPartnerOnline}
-            lastSeenPartner={selectedConversation.partnerLastSeen}
-          />
+          <Outlet />
         ) : (
           <div
             class="col app-chat-conversation d-flex align-items-center justify-content-center flex-column"

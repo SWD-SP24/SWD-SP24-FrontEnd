@@ -8,8 +8,10 @@ import DentalPage from "./DentalPage";
 import VaccinationHistoryPage from "./VaccinationHistoryPage";
 import WeightChart from "./WeightChart";
 import BMIChart from "./BMIChart";
+import useUser from "../../hooks/useUser";
 
 const ChildHealthBook = ({ childId }) => {
+  const { user } = useUser();
   const [modalOpen, setModalOpen] = useState(false);
   const flipBookRef = useRef(null);
 
@@ -92,7 +94,7 @@ const ChildHealthBook = ({ childId }) => {
                     className={`${styles.page} ${styles.cover}`}
                     data-density="hard"
                   >
-                    <CoverPage childId={childId} />
+                    <CoverPage childId={childId} user={user} />
                   </div>
                   <div className={styles.page}>
                     <OverviewPage childId={childId} />

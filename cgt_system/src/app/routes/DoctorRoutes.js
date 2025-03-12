@@ -1,6 +1,7 @@
 import { Route, Routes, useOutletContext } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
 import Chat from "../pages/Chat";
+import ChatHistory from "../pages/Chat/partials/ChatHistory";
 
 export default function DoctorRoutes() {
   const { user } = useOutletContext();
@@ -15,8 +16,9 @@ export default function DoctorRoutes() {
           />
         }
       >
-        <Route path="consultations" element={<Chat />} />
-        <Route path="consultations/child-details" element={<Chat />} />
+        <Route path="consultations" element={<Chat />}>
+          <Route path=":chatId" element={<ChatHistory />} />
+        </Route>
       </Route>
     </Routes>
   );
