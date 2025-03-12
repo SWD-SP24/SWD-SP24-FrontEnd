@@ -21,6 +21,7 @@ const useUserStore = create((set) => {
       set({ user: null });
       Cookies.remove("user");
       Cookies.remove("auth_token");
+      Cookies.remove("permissions");
     },
   };
 });

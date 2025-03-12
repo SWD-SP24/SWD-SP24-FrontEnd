@@ -14,8 +14,9 @@ import baby_boy from "../../assets/img/illustrations/baby_boy.jpg";
 import ChildAvatar from "../../components/Avatar/ChildAvatar";
 export default function ChildLayout() {
   const params = useParams();
-  console.log("Params in ChildLayout:", params); // Debugging
   const id = params.childId;
+
+  const permissions = Cookies.get("permissions");
 
   const storedUser = Cookies.get("user");
   const parent = JSON.parse(storedUser);
@@ -214,7 +215,7 @@ export default function ChildLayout() {
           </ul>
         </div>
         {/* <!--/ User Pills --> */}
-        <Outlet childId={response.data.childrenId} />
+        <Outlet context={permissions} childId={response.data.childrenId} />
       </div>
     </div>
   );

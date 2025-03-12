@@ -5,7 +5,7 @@ export const validateField = (name, value) => {
     if (!value) {
       error = "Please enter email";
     } else if (!value.includes("@")) {
-      error = "Email must include @gmail.com";
+      error = "Email must be valid";
     }
   }
 

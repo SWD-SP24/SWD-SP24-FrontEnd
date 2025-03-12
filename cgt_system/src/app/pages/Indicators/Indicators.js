@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from "react-router";
+import { useOutletContext, useParams } from "react-router";
 import API_URLS from "../../config/apiUrls.js";
 import useApi from "../../hooks/useApi.js";
 import AddIndicators from "./partials/AddIndicators.js";
@@ -9,6 +9,8 @@ import EditIndicators from "./partials/EditIndicators.js";
 import RemoveIndicators from "./partials/RemoveIndicators.js";
 import AIAnalysis from "./partials/AIAnalysis.js";
 export default function Indicators() {
+  const permissions = useOutletContext();
+
   const childId = useParams().childId;
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
@@ -32,6 +34,11 @@ export default function Indicators() {
     setPage(index);
     const customUrl = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${childId}&pageNumber=${index}&pageSize=6`;
     callApi(null, customUrl);
+  };
+
+  const permissionsJson = JSON.parse(permissions);
+  const isHasPermission = (permission) => {
+    return permissionsJson.map((p) => p.permissionName).includes(permission);
   };
 
   return (
@@ -236,8 +243,27 @@ export default function Indicators() {
           </div>
         </div>
       </div>
+
       <div className="card mb-6">
-        <AIAnalysis indicators={response?.data || []} />
+        {isHasPermission("AI_HEALTH_DATA_ANALYSIS") ? (
+          <AIAnalysis indicators={response?.data || []} />
+        ) : (
+          <div className="card p-4 bg-gray-100 text-center">
+            <h3 className="text-lg font-semibold text-gray-700">
+              🔒 Advance Feature Locked
+            </h3>
+            <p className="text-gray-500 mt-1">
+              Upgrade now to access AI health analysis!
+            </p>
+            <button
+              className="col-12 btn btn-primary me-2"
+              data-bs-toggle="modal"
+              data-bs-target="#upgradePlanModal"
+            >
+              Upgrade Now 🚀
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
