@@ -31,11 +31,11 @@ export default function Button({ data, buttonTag }) {
               break;
 
             case "member":
-              navigate("/member/dashboard");
+              navigate("/member/children");
               break;
 
             case "doctor":
-              navigate("/doctor/dashboard");
+              navigate("/doctor/consultations");
               break;
 
             default:

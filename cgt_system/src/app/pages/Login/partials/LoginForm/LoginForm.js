@@ -65,7 +65,7 @@ export default function LoginForm() {
         />
       </div>
       <div className={cx("my-7", "d-flex", "justify-content-between")}>
-        <RememberMe onRememberMeChange={handleRememberMeChange} />
+        {/* <RememberMe onRememberMeChange={handleRememberMeChange} /> */}
         <Link
           to={
             isParent
