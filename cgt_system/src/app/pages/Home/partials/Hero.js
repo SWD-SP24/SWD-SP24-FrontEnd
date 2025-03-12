@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Images from "../../../assets/img/images";
+import { useNavigate } from "react-router";
 
 const Hero = () => {
   // State to track theme
@@ -10,7 +11,7 @@ const Hero = () => {
   // Refs for images
   const heroDashboardRef = useRef(null);
   const heroElementsRef = useRef(null);
-
+  const nav = useNavigate();
   useEffect(() => {
     // Function to update theme state
     const updateTheme = () => {
@@ -61,9 +62,9 @@ const Hero = () => {
                   className="scaleX-n1-rtl"
                 />
               </span>
-              <a href="#landingPricing" className="btn btn-primary btn-lg">
+              <button className="btn btn-primary btn-lg" onClick={() => nav("register")} >
                 Get started
-              </a>
+              </button>
             </div>
           </div>
           <div id="heroDashboardAnimation" className="hero-animation-img">
