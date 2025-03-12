@@ -1,11 +1,52 @@
-import React from "react";
+import React, { useEffect } from "react";
+import API_URLS from "../../../config/apiUrls";
+import useApi from "../../../hooks/useApi";
 
 export default function TotalUsers() {
+  const { response, callApi } = useApi({
+    url: `${API_URLS.USER.GET_USERS_LIST}`,
+    method: "GET",
+  });
+
+  const { response: membershipPkg, callApi: callApiMP } = useApi({
+    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}`,
+    method: "GET",
+  });
+  useEffect(() => {
+    callApi();
+    callApiMP();
+  }, []);
+  useEffect(() => {
+    if (response != null && membershipPkg != null) {
+      console.log(response);
+      console.log(membershipPkg);
+    }
+  }, [response, membershipPkg]);
+
+  if (response === null || membershipPkg === null) {
+    return <div>Loading</div>;
+  }
+  const countUsersByMembership = (users, packages) => {
+    // Create a mapping of membership ID to name
+    const packageMap = packages.reduce((acc, pkg) => {
+      acc[pkg.membershipPackageId] = pkg.membershipPackageName;
+      return acc;
+    }, {});
+
+    // Count users by membership package ID
+    const membershipCounts = users.reduce((acc, user) => {
+      const packageName = packageMap[user.membershipPackageId] || "Unknown";
+      acc[packageName] = (acc[packageName] || 0) + 1;
+      return acc;
+    }, {});
+
+    return membershipCounts;
+  };
+
+  const result = countUsersByMembership(response.data, membershipPkg.data);
+  console.log(result);
   return (
-    <div
-      class="col-md-6 col-lg-4 col-xl-4 order-0 mb-4"
-      style={{ height: "335px" }}
-    >
+    <div class="col-4 order-2 mb-4 h-100">
       <div class="card h-100">
         <div class="card-header d-flex align-items-center justify-content-between pb-0">
           <div class="card-title mb-0">
@@ -15,7 +56,7 @@ export default function TotalUsers() {
         <div class="card-body">
           <div class="d-flex justify-content-between align-items-center mb-3">
             <div class="d-flex flex-column align-items-center gap-1">
-              <h2 class="mb-2">8,258</h2>
+              <h2 class="mb-2">{response && response.data.length}</h2>
               <span>Subcriptions</span>
             </div>
             <div id="orderStatisticsChart"></div>
@@ -30,10 +71,10 @@ export default function TotalUsers() {
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <h6 class="mb-0">Basic</h6>
-                  <small class="text-muted">Mobile, Earbuds, TV</small>
+                  <small class="text-muted">Basic Features</small>
                 </div>
                 <div class="user-progress">
-                  <small class="fw-semibold">82.5k</small>
+                  <small class="fw-semibold">{result.Basic}</small>
                 </div>
               </div>
             </li>
@@ -46,10 +87,10 @@ export default function TotalUsers() {
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <h6 class="mb-0">Standard</h6>
-                  <small class="text-muted">T-shirt, Jeans, Shoes</small>
+                  <small class="text-muted">Necessary features contained</small>
                 </div>
                 <div class="user-progress">
-                  <small class="fw-semibold">23.8k</small>
+                  <small class="fw-semibold">{result.Standard}</small>
                 </div>
               </div>
             </li>
@@ -62,10 +103,12 @@ export default function TotalUsers() {
               <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div class="me-2">
                   <h6 class="mb-0">Enterprise</h6>
-                  <small class="text-muted">Fine Art, Dining</small>
+                  <small class="text-muted">
+                    Premium with special features
+                  </small>
                 </div>
                 <div class="user-progress">
-                  <small class="fw-semibold">849k</small>
+                  <small class="fw-semibold">{result.Enterprise}</small>
                 </div>
               </div>
             </li>

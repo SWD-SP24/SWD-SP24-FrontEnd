@@ -1,8 +1,9 @@
 import { use, useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { signify } from "react-signify";
 
 const Navbar = () => {
+  const location = useLocation();
   const [currentTheme, setCurrentTheme] = useState(
     document.documentElement.getAttribute("data-bs-theme")
   );
@@ -150,12 +151,20 @@ const Navbar = () => {
               <i className="icon-base bx bx-x icon-lg"></i>
             </button>
             <ul className="navbar-nav me-auto">
-              <li className="nav-item">
+              <li
+                className={`nav-item ${
+                  location.pathname === "/" ? "active" : ""
+                }`}
+              >
                 <Link to={"/"} className="nav-link fw-medium">
                   Home
                 </Link>
               </li>
-              <li className="nav-item">
+              <li
+                className={`nav-item ${
+                  location.pathname === "/pricing" ? "active" : ""
+                }`}
+              >
                 <Link to={"/pricing"} className="nav-link fw-medium">
                   Pricing
                 </Link>
@@ -186,14 +195,14 @@ const Navbar = () => {
                   </li>
                 </div>
               </li> */}
-              <li className="nav-item">
-                <a
-                  className="nav-link fw-medium"
-                  href="/about-us"
-                  target="_blank"
-                >
+              <li
+                className={`nav-item ${
+                  location.pathname === "/about-us" ? "active" : ""
+                }`}
+              >
+                <Link className="nav-link fw-medium" to={"/about-us"}>
                   About us
-                </a>
+                </Link>
               </li>
             </ul>
           </div>

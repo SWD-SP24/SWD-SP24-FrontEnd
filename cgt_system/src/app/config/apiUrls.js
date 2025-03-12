@@ -60,6 +60,11 @@ const API_URLS = {
     MONTHLY_REVENUE: "/api/Dashboard/monthly-revenue",
     USER_GROWTH: "/api/Dashboard/user-growth-over-time",
     EXPIRED_MEMBERSHIP: "/api/Dashboard/expired-memberships",
+    ABNORMAL_CHILDREN:
+      "/api/Dashboard/children-with-abnormal-growth-deviations",
+    VACCINATIONS_SCHEDULE_COMPLIANT_RATE:
+      "/api/Dashboard/vaccination-schedule-compliance",
+    AVERAGE_GROWTH_RATE: "/api/Dashboard/average-growth-rate-all",
   },
   IMAGE: {
     GET_URL: "/Utilities/UploadImage",

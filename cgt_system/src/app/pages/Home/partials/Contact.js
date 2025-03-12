@@ -50,7 +50,7 @@ const Contact = () => {
                             href="mailto:example@gmail.com"
                             class="text-heading"
                           >
-                            example@gmail.com
+                            daihoc.hcm@fpt.edu.vn
                           </a>
                         </h6>
                       </div>
@@ -65,7 +65,7 @@ const Contact = () => {
                         <p class="mb-0">Phone</p>
                         <h6 class="mb-0">
                           <a href="tel:+1234-568-963" class="text-heading">
-                            +1234 568 963
+                            (028) 7300 5588
                           </a>
                         </h6>
                       </div>

@@ -125,51 +125,58 @@ export default function Indicators() {
                     </tr>
                   </thead>
                   <tbody>
-                    {response &&
-                      response.data.map((record) => {
-                        return (
-                          <tr key={record.growthIndicatorsId}>
-                            <td class="sorting_1">
-                              <div class="d-flex justify-content-left align-items-center">
-                                <div class="d-flex flex-column gap-50">
-                                  <span class="text-truncate fw-medium text-heading">
-                                    {record.recordTime}
-                                  </span>
-                                </div>
+                    {response && response.data.length > 0 ? (
+                      response.data.map((record) => (
+                        <tr key={record.growthIndicatorsId}>
+                          <td class="sorting_1">
+                            <div class="d-flex justify-content-left align-items-center">
+                              <div class="d-flex flex-column gap-50">
+                                <span class="text-truncate fw-medium text-heading">
+                                  {record.recordTime}
+                                </span>
                               </div>
-                            </td>
-                            <td>
-                              <span class="text-heading">{record.weight}</span>
-                            </td>
-                            <td>
-                              <div class="d-flex align-items-center">
-                                <div class="d-flex flex-column gap-50">
-                                  <span class=" text-heading">
-                                    {record.height}
-                                  </span>
-                                </div>
+                            </div>
+                          </td>
+                          <td>
+                            <span class="text-heading">{record.weight}</span>
+                          </td>
+                          <td>
+                            <div class="d-flex align-items-center">
+                              <div class="d-flex flex-column gap-50">
+                                <span class=" text-heading">
+                                  {record.height}
+                                </span>
                               </div>
-                            </td>
-                            <td class="dt-type-numeric">
-                              <div class="d-flex align-items-center">
-                                <BMIProgressBar bmi={record.bmi} />
-                                <span class="text-heading">{record.bmi}</span>
-                              </div>
-                            </td>
-                            <td class="d-flex gap-5">
-                              <EditIndicators
-                                indicatorId={record.growthIndicatorsId}
-                                refetch={callApi}
-                              />
-                              <RemoveIndicators
-                                indicatorId={record.growthIndicatorsId}
-                                refetch={callApi}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
+                            </div>
+                          </td>
+                          <td class="dt-type-numeric">
+                            <div class="d-flex align-items-center">
+                              <BMIProgressBar bmi={record.bmi} />
+                              <span class="text-heading">{record.bmi}</span>
+                            </div>
+                          </td>
+                          <td class="d-flex gap-5">
+                            <EditIndicators
+                              indicatorId={record.growthIndicatorsId}
+                              refetch={callApi}
+                            />
+                            <RemoveIndicators
+                              indicatorId={record.growthIndicatorsId}
+                              refetch={callApi}
+                            />
+                          </td>
+                        </tr>
+                      ))
+                    ) : (
+                      <tr>
+                        <td colSpan="5" class="text-center py-4">
+                          No growth indicators available. Add new indicators to
+                          track your child's growth.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
+
                   <tfoot></tfoot>
                 </table>
               </div>

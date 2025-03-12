@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
 import { formatDate, toDMY } from "../../../util/dateFormat";
+import showToast from "../../../util/showToast";
 export default function AddIndicators({ refetch, childId }) {
   const heightRef = useRef(null);
   const weightRef = useRef(null);
@@ -12,12 +13,28 @@ export default function AddIndicators({ refetch, childId }) {
   });
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const height = heightRef.current.value.trim();
+    const weight = weightRef.current.value.trim();
+    const recordTime = recordTimeRef.current.value.trim();
+
+    if (!height || !weight) {
+      const target = document.querySelector(".content-wrapper");
+      showToast({
+        icon: "warning",
+        text: "All fields are required. Please fill in all fields before submitting.",
+        targetElement: target,
+      });
+      return;
+    }
+
     const data = {
       childrenId: childId,
-      height: heightRef.current.value,
-      weight: weightRef.current.value,
-      recordTime: toDMY(recordTimeRef.current.value),
+      height,
+      weight,
+      recordTime: toDMY(recordTime),
     };
+
     console.log(data);
     await callApi(data);
     refetch();

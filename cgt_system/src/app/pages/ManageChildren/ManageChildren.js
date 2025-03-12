@@ -183,76 +183,59 @@ export default function ManageChildren() {
                   </tr>
                 </thead>
                 <tbody>
-                  {response
-                    ? filteredChildren.map((child) => {
-                        return (
-                          <tr>
-                            <td className="sorting_1">
-                              <Link
-                                to={`${child.childrenId}`}
-                                className="d-flex justify-content-start align-items-center user-name"
-                              >
-                                <div>
-                                  <Avatar
-                                    src={
-                                      child?.avatar
-                                        ? child?.avatar
-                                        : child?.gender === "male"
-                                        ? baby_boy
-                                        : baby_girl
-                                    }
-                                    className="child-avatar"
-                                  />
-                                </div>
-                                <div className="d-flex flex-column">
-                                  <a
-                                    href="app-user-view-account.html"
-                                    className="text-heading text-truncate"
-                                  >
-                                    <span className="text-truncate">
-                                      {child.fullName}
-                                    </span>
-                                  </a>
-                                </div>
-                              </Link>
-                            </td>
-                            <td className="sorting_1">
-                              <div className="d-flex justify-content-start align-items-center user-name">
-                                <div className="avatar-wrapper"></div>
-                                <div className="d-flex flex-column text-truncate">
-                                  <span className="text-truncate">
-                                    {child.gender === "male" ? (
-                                      <span className="badge bg-label-info">
-                                        Male
-                                      </span>
-                                    ) : (
-                                      <span className="badge bg-label-danger">
-                                        Female
-                                      </span>
-                                    )}
-                                  </span>
-                                </div>
-                              </div>
-                            </td>
-
-                            <td>
-                              <span className="text-truncate">{child.dob}</span>
-                            </td>
-                            <td>
-                              <span className="text-truncate ">
-                                {<BloodTypeLabel bType={child.bloodType} />}
-                              </span>
-                            </td>
-                            <td>
-                              <ActionButton
-                                childId={child.childrenId}
-                                refetch={callApi}
+                  {filteredChildren.length > 0 ? (
+                    filteredChildren.map((child) => (
+                      <tr key={child.childrenId}>
+                        <td className="sorting_1">
+                          <Link
+                            to={`${child.childrenId}`}
+                            className="d-flex justify-content-start align-items-center user-name"
+                          >
+                            <div>
+                              <Avatar
+                                src={
+                                  child?.avatar
+                                    ? child?.avatar
+                                    : child?.gender === "male"
+                                    ? baby_boy
+                                    : baby_girl
+                                }
+                                className="child-avatar"
                               />
-                            </td>
-                          </tr>
-                        );
-                      })
-                    : null}
+                            </div>
+                            <div className="d-flex flex-column">
+                              <span className="text-truncate">
+                                {child.fullName}
+                              </span>
+                            </div>
+                          </Link>
+                        </td>
+                        <td>
+                          <span className="badge bg-label-info">
+                            {child.gender === "male" ? "Male" : "Female"}
+                          </span>
+                        </td>
+                        <td>
+                          <span className="text-truncate">{child.dob}</span>
+                        </td>
+                        <td>
+                          <BloodTypeLabel bType={child.bloodType} />
+                        </td>
+                        <td>
+                          <ActionButton
+                            childId={child.childrenId}
+                            refetch={callApi}
+                          />
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td colSpan="5" className="text-center p-4">
+                        No children found. Please add a new child.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>

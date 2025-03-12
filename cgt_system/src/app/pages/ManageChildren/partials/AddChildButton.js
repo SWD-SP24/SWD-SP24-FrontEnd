@@ -72,20 +72,7 @@ export default function AddChildButton({ refetch }) {
                     />
                   </div>
                 </div>
-                <div class="row ">
-                  <div class="col mb-3">
-                    <label for="fullName" class="form-label">
-                      Full Name
-                    </label>
-                    <input
-                      ref={fullNameRef}
-                      type="text"
-                      id="fullName"
-                      class="form-control"
-                      placeholder="Enter Child Name"
-                    />
-                  </div>
-                </div>
+
                 <div class="row g-2 mb-3">
                   <div class="col mb-0">
                     <label for="genderSelect" class="form-label">
@@ -109,7 +96,7 @@ export default function AddChildButton({ refetch }) {
                       ref={dobRef}
                       class="form-control"
                       type="date"
-                      defaultValue="2021-06-18"
+                      defaultValue={new Date().toISOString().split("T")[0]}
                       id="dobInput"
                       max={new Date().toISOString().split("T")[0]}
                     />

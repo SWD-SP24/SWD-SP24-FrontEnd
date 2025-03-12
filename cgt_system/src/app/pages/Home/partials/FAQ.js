@@ -26,7 +26,7 @@ const FAQ = () => {
           <div className="col-lg-5">
             <div className="text-center">
               <img
-                src={Images.faqBoyImage}
+                src={Images.faq}
                 alt="Child Growth FAQ"
                 className="faq-image"
               />

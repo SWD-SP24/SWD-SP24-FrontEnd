@@ -51,6 +51,8 @@ const Images = {
   paypal: require("./icons/unicons/paypal.png"),
   ccPrimary: require("./icons/unicons/cc-primary.png"),
   wallet: require("./icons/unicons/wallet.png"),
+  childCare: require("./front-pages/landing-page/child_care.png"),
+  faq: require("./front-pages/landing-page/faq.png"),
 };
 
 export default Images;

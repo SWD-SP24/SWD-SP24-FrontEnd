@@ -35,3 +35,21 @@ export const getDate = (dateString) => {
   const [day, month, year] = dateString.split("/");
   return day;
 };
+
+export const getShortMonthName = (monthNumber) => {
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  return monthNames[monthNumber - 1] || "Invalid Month";
+};
