@@ -20,12 +20,22 @@ export default function CreateToothRecord({ toothId, refetch }) {
     e.preventDefault();
     let target = document.querySelector(".content-wrapper");
 
+    if (!note.current.value.trim()) {
+      showToast({
+        icon: "error",
+        text: "Tooth Note cannot be empty",
+        targetElement: target,
+      });
+      return;
+    }
+
     const data = {
       childId: id,
       toothId: toothId,
       eruptionDate: toDMY(eruptionDate.current.value),
       note: note.current.value,
     };
+
     await callApi(data);
     showToast({
       icon: "success",
@@ -34,6 +44,7 @@ export default function CreateToothRecord({ toothId, refetch }) {
     });
     refetch();
   };
+
   return (
     <div>
       <div
@@ -54,6 +65,7 @@ export default function CreateToothRecord({ toothId, refetch }) {
               <div>
                 <input
                   ref={eruptionDate}
+                  value={new Date().toISOString().split("T")[0]}
                   className="form-control"
                   type="date"
                   id="fromDateInput"
@@ -72,11 +84,12 @@ export default function CreateToothRecord({ toothId, refetch }) {
                 />
               </div>
             </div>
-            <div className="d-flex justify-content-center mt-3">
+            <div className="button-container">
               <button
                 className="btn btn-primary"
                 type="submit"
                 onClick={(e) => handleSubmit(e)}
+                style={{ width: "160px" }}
               >
                 Create Record
               </button>

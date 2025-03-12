@@ -93,7 +93,7 @@ export default function ManageUser() {
                 onChange={handleFilterRole}
               >
                 <option value="" selected>
-                  Select Role
+                  All Role
                 </option>
                 <option value="member">Member</option>
                 <option value="doctor">Doctor</option>

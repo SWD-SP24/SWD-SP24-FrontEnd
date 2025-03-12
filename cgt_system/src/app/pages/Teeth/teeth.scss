@@ -56,7 +56,6 @@
   font-size: 12px;
   font-weight: 600;
   color: #696cff; /* Primary color */
-  margin-bottom: 4px;
 }
 .tooth-label textarea {
   width: 100%;
@@ -71,5 +70,23 @@
 
 .tooth-label textarea:focus {
   border-color: #696cff;
-  box-shadow: 0 0 5px rgba(105, 108, 255, 0.5);
+  box-shadow: 0 0 3px rgba(105, 108, 255, 0.5);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 60px; /* Ensures both button areas have the same height */
+  margin-top: 16px; /* Adjust if needed */
+  button.btn-primary {
+    width: 160px; /* Ensures same width */
+    height: 40px; /* Ensures same height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap; /* Prevents text from wrapping */
+  }
 }

@@ -38,7 +38,7 @@ export default function Indicators() {
     <>
       <div class="card mb-6">
         <h5 class="card-header pb-0 text-md-start text-center">
-          Projects List
+          Growth Indicator List
         </h5>
         <div class="table-responsive mb-4">
           <div

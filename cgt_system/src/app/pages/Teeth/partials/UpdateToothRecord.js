@@ -74,15 +74,16 @@ export default function UpdateToothRecord({
                 />
               </div>
             </div>
-          </div>
-          <div className="d-flex justify-content-center mt-3">
-            <button
-              className="btn btn-primary"
-              type="submit"
-              onClick={(e) => handleSubmit(e)}
-            >
-              Update Record
-            </button>
+            <div className="button-container">
+              <button
+                className="btn btn-primary"
+                type="submit"
+                onClick={(e) => handleSubmit(e)}
+                style={{ width: "160px" }}
+              >
+                Update Record
+              </button>
+            </div>
           </div>
         </form>
       </div>

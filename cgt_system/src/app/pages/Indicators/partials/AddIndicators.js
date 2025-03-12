@@ -91,7 +91,7 @@ export default function AddIndicators({ refetch, childId }) {
                       ref={recordTimeRef}
                       class="form-control"
                       type="date"
-                      defaultValue="2021-06-18"
+                      defaultValue={new Date().toISOString().split("T")[0]}
                       id="dobInput"
                       max={new Date().toISOString().split("T")[0]}
                     />
