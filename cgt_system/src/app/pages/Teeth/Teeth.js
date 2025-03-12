@@ -56,6 +56,7 @@ export default function Teeth() {
       }
     });
   }
+
   return (
     <div className="col-12  mb-6">
       <div className="card">
@@ -799,6 +800,7 @@ export default function Teeth() {
           </div>
         </div>
       </div>
+      <AIAnalysis toothRecords={toothRecord} />
     </div>
   );
 }

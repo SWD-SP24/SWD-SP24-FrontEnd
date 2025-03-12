@@ -30,7 +30,7 @@ export default function AIAnalysis({ indicators }) {
                                     - **Nhóm máu:** ${bloodType}
                                     - **Giới tính:** ${gender}
 
-                                    **Phân tích AI:** 
+                                    **Phân tích của chuyên gia:** 
                                     Dựa trên độ tuổi, nhóm máu và giới tính, hãy đưa ra nhận xét về tình trạng tiêm chủng phù hợp.
                                     
                                     **Lời khuyên:**
@@ -73,7 +73,7 @@ export default function AIAnalysis({ indicators }) {
       <div className="card-body">
         <div
           dangerouslySetInnerHTML={{
-            __html: aiResponse || "Đang phân tích...",
+            __html: aiResponse || "Analyzing...",
           }}
         />
       </div>
