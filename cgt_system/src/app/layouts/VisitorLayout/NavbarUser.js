@@ -187,13 +187,14 @@ const Navbar = () => {
                 </div>
               </li> */}
               <li className="nav-item">
-                <a
+
+                <button
                   className="nav-link fw-medium"
-                  href="/about-us"
                   target="_blank"
+                  onClick={() => nav("about-us")}
                 >
                   About us
-                </a>
+                </button>
               </li>
             </ul>
           </div>
@@ -221,9 +222,8 @@ const Navbar = () => {
                 <li>
                   <button
                     type="button"
-                    className={`dropdown-item align-items-center ${
-                      currentTheme === "light" ? "active" : ""
-                    }`}
+                    className={`dropdown-item align-items-center ${currentTheme === "light" ? "active" : ""
+                      }`}
                     onClick={() => handleSetTheme("light")}
                   >
                     <span>
@@ -238,9 +238,8 @@ const Navbar = () => {
                 <li>
                   <button
                     type="button"
-                    className={`dropdown-item align-items-center ${
-                      currentTheme === "dark" ? "active" : ""
-                    }`}
+                    className={`dropdown-item align-items-center ${currentTheme === "dark" ? "active" : ""
+                      }`}
                     onClick={() => handleSetTheme("dark")}
                   >
                     <span>
