@@ -10,10 +10,12 @@ export default function AddUserButton({ refetch }) {
   const [role, setRole] = useState(1);
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [passwordConfirmError, setPasswordConfirmError] = useState("");
   const email = useRef(null);
   const password = useRef(null);
+  const passwordConfirm = useRef(null);
 
-  const { response, error, callApi } = useApi({
+  const { response, callApi } = useApi({
     method: "POST",
   });
 
@@ -23,12 +25,6 @@ export default function AddUserButton({ refetch }) {
     }
   }, [response]);
 
-  useEffect(() => {
-    if (error) {
-      showToast("error", "", error?.message);
-      console.error("API Error:", error);
-    }
-  }, [error]);
   const handleRoleSelect = (e) => {
     e.preventDefault();
     setRole(Number(e.target.value));
@@ -40,28 +36,64 @@ export default function AddUserButton({ refetch }) {
       email: email.current.value,
       password: password.current.value,
     };
+    const passConfirm = passwordConfirm.current.value;
 
-    if (validateField("email", data.email) != "") {
-      setEmailError(validateField("email", data.email));
-    }
+    let hasError = false;
+    const emailValidation = validateField("email", data.email);
+    const passwordValidation = validateField("password", data.password);
 
-    if (validateField("password", data.password) != "") {
-      setPasswordError(validateField("password", data.password));
-    }
-    if (emailError != "" || passwordError != "") {
-      return;
+    if (emailValidation !== "") {
+      setEmailError(emailValidation);
+      hasError = true;
     } else {
-      const url =
-        role == 1 ? API_URLS.AUTH.REGISTER : API_URLS.ADMIN.CREATE_DOCTOR;
-      console.log(data);
-      await callApi(data, url);
-      await refetch();
-      showToast("success", "User created successfully");
-      email.current.value = "";
-      password.current.value = "";
       setEmailError("");
+    }
+
+    if (passwordValidation !== "") {
+      setPasswordError(passwordValidation);
+      hasError = true;
+    } else {
       setPasswordError("");
     }
+
+    if (passConfirm !== data.password) {
+      setPasswordConfirmError("The password confirmation does not match");
+      hasError = true;
+    } else {
+      setPasswordConfirmError("");
+    }
+
+    if (hasError) return; // Stop execution if there's an error
+
+    const url =
+      role == 1 ? API_URLS.AUTH.REGISTER : API_URLS.ADMIN.CREATE_DOCTOR;
+    console.log(data);
+    await callApi(data, url);
+    await refetch();
+
+    showToast({
+      icon: "success",
+      text: "Add user successfully",
+      targetElement: document.querySelector(".content-wrapper"),
+    });
+
+    email.current.value = "";
+    password.current.value = "";
+    passwordConfirm.current.value = "";
+    setEmailError("");
+    setPasswordError("");
+    setPasswordConfirmError("");
+    document.querySelector("[data-bs-dismiss='modal']").click();
+  };
+
+  const handleClose = (e) => {
+    e.preventDefault();
+    email.current.value = "";
+    password.current.value = "";
+    passwordConfirm.current.value = "";
+    setEmailError("");
+    setPasswordError("");
+    setPasswordConfirmError("");
   };
   return (
     <>
@@ -131,6 +163,23 @@ export default function AddUserButton({ refetch }) {
                 </div>
                 <div class="row">
                   <div class="col mb-3">
+                    <label for="newUserPassword" class="form-label">
+                      Password
+                    </label>
+                    <input
+                      type="password"
+                      id="newUserPassword"
+                      class="form-control"
+                      placeholder="Enter Password"
+                      ref={passwordConfirm}
+                    />
+                    {passwordConfirmError && (
+                      <div className="error">{passwordConfirmError}</div>
+                    )}
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col mb-3">
                     <label for="roleSelect" class="form-label">
                       Role
                     </label>
@@ -152,14 +201,11 @@ export default function AddUserButton({ refetch }) {
                   type="reset"
                   class="btn btn-outline-secondary"
                   data-bs-dismiss="modal"
+                  onClick={(e) => handleClose(e)}
                 >
                   Close
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
+                <button type="submit" class="btn btn-primary">
                   Save changes
                 </button>
               </div>

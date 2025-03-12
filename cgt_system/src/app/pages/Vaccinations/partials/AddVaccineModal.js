@@ -98,7 +98,7 @@ export default function AddVaccineModal({ refetch }) {
                     ref={shotDateRef}
                     class="form-control"
                     type="date"
-                    defaultValue="2021-06-18"
+                    defaultValue={new Date().toISOString().split("T")[0]}
                     id="shotDateInput"
                     max={new Date().toISOString().split("T")[0]}
                   />

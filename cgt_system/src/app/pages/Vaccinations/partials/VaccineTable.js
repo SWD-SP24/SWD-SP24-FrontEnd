@@ -11,7 +11,7 @@ export const sVaccineName = signify("");
 export default function VaccineTable({ vaccineList, refetch }) {
   const childId = useParams().childId;
   const { response, callApi } = useApi({
-    url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childrenId=${childId}`,
+    url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childId=${childId}`,
     method: "GET",
   });
   const [page, setPage] = useState(1);

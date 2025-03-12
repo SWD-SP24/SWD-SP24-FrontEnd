@@ -1,6 +1,6 @@
 import Cookies from "js-cookie";
 import React, { useEffect, useState } from "react";
-import { Outlet, useNavigate, useParams } from "react-router";
+import { Outlet, useLocation, useNavigate, useParams } from "react-router";
 import Avatar from "../../components/Avatar/Avatar";
 import API_URLS from "../../config/apiUrls";
 import useApi from "../../hooks/useApi";
@@ -17,7 +17,7 @@ export default function ChildLayout() {
   const id = params.childId;
 
   const permissions = Cookies.get("permissions");
-
+  const location = useLocation();
   const storedUser = Cookies.get("user");
   const parent = JSON.parse(storedUser);
   const apiUrl = `${API_URLS.CHILDREN.GET_CHILDREN_WITH_ID}${id}`;
@@ -53,26 +53,26 @@ export default function ChildLayout() {
     }
   }, [response]);
 
+  useEffect(() => {
+    const active = Object.keys(pillRoutes).find(
+      (key) => pillRoutes[key] === location.pathname
+    );
+    setActivePill(active || "");
+  }, [location.pathname]);
+
+  const handlePillClick = (pill) => {
+    nav(pillRoutes[pill]);
+  };
+  const pillRoutes = {
+    "": `/member/children/${id}`,
+    indicators: `/member/children/${id}/indicators`,
+    teeth: `/member/children/${id}/teeth`,
+    vaccinations: `/member/children/${id}/vaccinations`,
+  };
   if (!response) {
     return <div> loading</div>;
   }
-
-  const handlePillClick = (pill) => {
-    setActivePill(pill);
-    if (pill === "") {
-      nav(`/member/children/${id}`);
-    }
-    if (pill === "indicators") {
-      nav(`/member/children/${id}/indicators`);
-    }
-    if (pill === "teeth") {
-      nav(`/member/children/${id}/teeth`);
-    }
-    if (pill === "vaccinations") {
-      nav(`/member/children/${id}/vaccinations`);
-    }
-  };
-
+  console.log(location.pathname);
   return (
     <div className="row">
       <div className="col-xl-4 col-lg-5 order-1 order-md-0 ">
@@ -171,47 +171,18 @@ export default function ChildLayout() {
         {/* <!-- User Pills --> */}
         <div className="nav-align-top">
           <ul className="nav nav-pills flex-column flex-md-row mb-6 flex-wrap row-gap-2">
-            <li className="nav-item" role="button">
-              <button
-                className={"nav-link " + (activePill === "" ? "active" : "")}
-                onClick={() => handlePillClick("")}
-              >
-                <i className="icon-base bx bx-line-chart icon-sm me-1_5"></i>
-                Overview
-              </button>
-            </li>
-            <li className="nav-item" role="button">
-              <button
-                className={
-                  "nav-link " + (activePill === "indicators" ? "active" : "")
-                }
-                onClick={() => handlePillClick("indicators")}
-              >
-                <i className="icon-base bx bx-list-ol icon-sm me-1_5"></i>
-                Indicators
-              </button>
-            </li>
-            <li className="nav-item" role="button">
-              <button
-                className={
-                  "nav-link " + (activePill === "teeth" ? "active" : "")
-                }
-                onClick={() => handlePillClick("teeth")}
-              >
-                <i className="icon-base bx bx-smile icon-sm me-1_5"></i>Teeth
-              </button>
-            </li>
-            <li className="nav-item" role="button">
-              <button
-                className={
-                  "nav-link " + (activePill === "vaccinations" ? "active" : "")
-                }
-                onClick={() => handlePillClick("vaccinations")}
-              >
-                <i className="icon-base bx bx-injection icon-sm me-1_5"></i>
-                Vaccinations
-              </button>
-            </li>
+            {Object.keys(pillRoutes).map((key) => (
+              <li className="nav-item" role="button" key={key}>
+                <button
+                  className={`nav-link ${activePill === key ? "active" : ""}`}
+                  onClick={() => handlePillClick(key)}
+                >
+                  {key === ""
+                    ? "Overview"
+                    : key.charAt(0).toUpperCase() + key.slice(1)}
+                </button>
+              </li>
+            ))}
           </ul>
         </div>
         {/* <!--/ User Pills --> */}

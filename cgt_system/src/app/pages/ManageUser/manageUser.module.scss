@@ -69,6 +69,11 @@
     flex-direction: row;
     gap: 24px;
   }
+  .add-button {
+    display: flex;
+    align-items: center; /* Ensure the button aligns with the middle of the filters */
+    margin-left: auto; /* Push the button to the right */
+  }
 }
 .table-banner-search {
   height: 56px;

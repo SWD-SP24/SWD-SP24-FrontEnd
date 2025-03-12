@@ -1,3 +1,9 @@
+:root {
+  --tooth-info-color: #333;
+}
+[data-bs-theme="dark"] {
+  --tooth-info-color: #fff;
+}
 .tooth-chart {
   width: 315px;
   height: 435px;
@@ -47,7 +53,7 @@
 }
 
 .tooth-info span:last-child {
-  color: #333;
+  color: var(--tooth-info-color);
 }
 
 /* New CSS for the tooth label */

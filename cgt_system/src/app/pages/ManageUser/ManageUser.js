@@ -82,55 +82,57 @@ export default function ManageUser() {
       <div class="container-xxl flex-grow-1 container-p-y">
         <div class="card">
           <div className={cx("table-banner")}>
-            <div className={cx("table-banner-title")}>Search filters</div>
+            <div className={cx("table-banner-title")}>Search Filters</div>
             <div className={cx("table-banner-filters")}>
-              <select
-                className={cx("form-select", "table-banner-search")}
-                onChange={handleFilterRole}
-              >
-                <option value="" selected>
-                  All Role
-                </option>
-                <option value="member">Member</option>
-                <option value="doctor">Doctor</option>
-              </select>
-              <select
-                className={cx("form-select", "table-banner-search")}
-                onChange={handleFilterMembership}
-              >
-                <option value="" selected>
-                  Select Membership
-                </option>
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select>
-              <select
-                className={cx("form-select", "table-banner-search")}
-                onChange={handleFilterStatus}
-              >
-                <option value="" selected>
-                  Select Status
-                </option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
+              <div className={cx("filter-group")}>
+                <select
+                  className={cx("form-select")}
+                  value={filterRole}
+                  onChange={handleFilterRole}
+                >
+                  <option value="">All Roles</option>
+                  <option value="member">Member</option>
+                  <option value="doctor">Doctor</option>
+                </select>
+              </div>
+              <div className={cx("filter-group")}>
+                <select
+                  className={cx("form-select")}
+                  value={filterMembership}
+                  onChange={handleFilterMembership}
+                >
+                  <option value="">Select Membership</option>
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+              <div className={cx("filter-group ")}>
+                <select
+                  className={cx("form-select")}
+                  value={filterStatus}
+                  onChange={handleFilterStatus}
+                >
+                  <option value="">Select Status</option>
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                </select>
+              </div>
+              <div className={cx("filter-group ")}>
+                <input
+                  className={cx("form-control", "search-bar")}
+                  type="search"
+                  placeholder="Search by name, email"
+                  onChange={debounce(handleSearch, 300)}
+                  style={{ width: "200px" }}
+                />
+              </div>
+              <div className={cx("add-button")}>
+                <AddUserButton refetch={callApi} />
+              </div>
             </div>
           </div>
-          <hr className="m-0" />
-          <div className={cx("p-6", "table-header")}>
 
-            <div className={cx("table-header-left-banner")}>
-              <input
-                className={cx("form-control", "search-bar")}
-                type="search"
-                placeholder="Search by name, email"
-                id="html5-search-input"
-                onChange={debounce(handleSearch, 300)}
-              />
-              <AddUserButton refetch={callApi} />
-            </div>
-          </div>
           <div class="table-responsive text-nowrap">
             <table class="table table-hover">
               <thead>
@@ -147,97 +149,97 @@ export default function ManageUser() {
               <tbody className="table-border-bottom-0">
                 {response
                   ? response.data
-                    .filter((user) => {
-                      if (
-                        filterRole !== "" &&
-                        !user.role.includes(filterRole)
-                      )
-                        return false;
-                      if (
-                        filterMembership !== "" &&
-                        !(user.membershipPackageId == filterMembership)
-                      )
-                        return false;
-                      if (
-                        filterStatus !== "" &&
-                        !(user.status === filterStatus)
-                      )
-                        return false;
-                      if (
-                        filterSearch !== "" &&
-                        !user.fullName
-                          .toLowerCase()
-                          .includes(filterSearch.toLowerCase())
-                      ) {
-                        if (!user.email.includes(filterSearch)) return false;
-                      }
-                      return true;
-                    })
-                    .map((user) => (
-                      <tr key={user.id}>
+                      .filter((user) => {
+                        if (
+                          filterRole !== "" &&
+                          !user.role.includes(filterRole)
+                        )
+                          return false;
+                        if (
+                          filterMembership !== "" &&
+                          !(user.membershipPackageId == filterMembership)
+                        )
+                          return false;
+                        if (
+                          filterStatus !== "" &&
+                          !(user.status === filterStatus)
+                        )
+                          return false;
+                        if (
+                          filterSearch !== "" &&
+                          !user.fullName
+                            .toLowerCase()
+                            .includes(filterSearch.toLowerCase())
+                        ) {
+                          if (!user.email.includes(filterSearch)) return false;
+                        }
+                        return true;
+                      })
+                      .map((user) => (
+                        <tr key={user.id}>
+                          <td className={cx("user-content")}>
+                            <Avatar
+                              src={user.avatar}
+                              className={cx("user-content-avatar")}
+                            />
+                            <div className={cx("user-content-name")}>
+                              <div className={cx("user-content-name-title")}>
+                                {user.fullName}
+                              </div>
+                              <div className={cx("user-content-subtitle")}>
+                                @{user.fullName}
+                              </div>
+                            </div>
+                          </td>
+                          <td>{user.email}</td>
+                          <td style={{ textAlign: "center" }}>
+                            {user.membershipPackageId}
+                          </td>
+                          <td>{user.role}</td>
+                          <td>
+                            <span className="badge bg-label-success me-1">
+                              {user.status === "active" ? "Active" : "Inactive"}
+                            </span>
+                          </td>
+                          <td>
+                            <ActionDropdown id={user.userId} />
+                          </td>
+                        </tr>
+                      ))
+                  : // Show skeleton loader if data is not yet loaded
+                    [...Array(8)].map((_, index) => (
+                      <tr key={index}>
+                        <td>
+                          <Skeleton width={16} height={16} />
+                        </td>
                         <td className={cx("user-content")}>
-                          <Avatar
-                            src={user.avatar}
-                            className={cx("user-content-avatar")}
-                          />
-                          <div className={cx("user-content-name")}>
-                            <div className={cx("user-content-name-title")}>
-                              {user.fullName}
-                            </div>
-                            <div className={cx("user-content-subtitle")}>
-                              @{user.fullName}
-                            </div>
+                          <Skeleton circle width={32} height={32} />
+                          <div style={{ marginLeft: "10px" }}>
+                            <Skeleton width={100} height={12} />
+                            <Skeleton
+                              width={80}
+                              height={10}
+                              style={{ marginTop: "4px" }}
+                            />
                           </div>
                         </td>
-                        <td>{user.email}</td>
+                        <td>
+                          <Skeleton width={160} height={12} />
+                        </td>
                         <td style={{ textAlign: "center" }}>
-                          {user.membershipPackageId}
-                        </td>
-                        <td>{user.role}</td>
-                        <td>
-                          <span className="badge bg-label-success me-1">
-                            {user.status === "active" ? "Active" : "Inactive"}
-                          </span>
+                          <Skeleton width={30} height={12} />
                         </td>
                         <td>
-                          <ActionDropdown id={user.userId} />
+                          <Skeleton width={60} height={12} />
+                        </td>
+                        <td>
+                          <Skeleton width={50} height={20} />
+                        </td>
+                        <td>
+                          <Skeleton width={30} height={16} />
                         </td>
                       </tr>
-                    ))
-                  : // Show skeleton loader if data is not yet loaded
-                  [...Array(8)].map((_, index) => (
-                    <tr key={index}>
-                      <td>
-                        <Skeleton width={16} height={16} />
-                      </td>
-                      <td className={cx("user-content")}>
-                        <Skeleton circle width={32} height={32} />
-                        <div style={{ marginLeft: "10px" }}>
-                          <Skeleton width={100} height={12} />
-                          <Skeleton
-                            width={80}
-                            height={10}
-                            style={{ marginTop: "4px" }}
-                          />
-                        </div>
-                      </td>
-                      <td>
-                        <Skeleton width={160} height={12} />
-                      </td>
-                      <td style={{ textAlign: "center" }}>
-                        <Skeleton width={30} height={12} />
-                      </td>
-                      <td>
-                        <Skeleton width={60} height={12} />
-                      </td>
-                      <td>
-                        <Skeleton width={50} height={20} />
-                      </td>
-                      <td>
-                        <Skeleton width={30} height={16} />
-                      </td>
-                    </tr>
-                  ))}
+                    ))}
               </tbody>
 
               {/* <!-- Second Row --> */}

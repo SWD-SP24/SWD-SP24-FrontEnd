@@ -18,7 +18,7 @@ export default function VaccineInfo() {
   const { doseNumber } = location.state || {};
   console.log("doseNumber", doseNumber);
   const { response, callApi } = useApi({
-    url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childrenId=${childId}`,
+    url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childId=${childId}`,
     method: "GET",
   });
 
