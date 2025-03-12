@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import Cookies from "js-cookie";
 import image from "../../../assets/img/avatars/default-avatar.jpg";
 import { motion } from "framer-motion";
 import {
@@ -18,12 +19,12 @@ import boy from "../../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
-import { useLocation } from "react-router";
 
 export default function ChatHistory({}) {
-  const location = useLocation();
+  const chatState = JSON.parse(sessionStorage.getItem("chatState")) || {};
+
   const { currentUser, recipientId, recipient, messages, conversationId } =
-    location.state;
+    chatState;
 
   const [childIdFromMessage, setChildIdFromMessage] = useState(null);
   const [draggingChild, setDraggingChild] = useState(null);
@@ -34,7 +35,7 @@ export default function ChatHistory({}) {
   const chatEndRef = useRef(null);
   const { response, callApi } = useApi({
     url:
-      currentUser.role === "member"
+      currentUser?.role === "member"
         ? `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`
         : `${API_URLS.CHILDREN.GET_CHILDREN_LIST}/admin`,
     method: "GET",
