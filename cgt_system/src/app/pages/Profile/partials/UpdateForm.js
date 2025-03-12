@@ -3,6 +3,8 @@ import useApi from "../../../hooks/useApi";
 import splitName from "../../../util/splitName.js";
 import showToast from "../../../util/showToast.js";
 export default function UpdateForm({ userData, setUser, apiUrl }) {
+  console.log(userData);
+
   const { isLoading, response, callApi } = useApi({
     url: apiUrl,
     method: "PUT",

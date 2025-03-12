@@ -110,7 +110,7 @@ export default function Button({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (usersUse.length > 0) {
+    if (usersUse && usersUse.length > 0) {
       showToast({
         icon: "warning",
         text: "This package is currently in use and cannot be deleted.",

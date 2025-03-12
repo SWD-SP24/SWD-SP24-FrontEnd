@@ -12,7 +12,7 @@ export default function HeightChart() {
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
   const id = useParams().childId;
-  let url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${26}`;
+  let url = `${API_URLS.INDICATORS.INDICATORS}?childrenId=${id}`;
 
   const { response, callApi } = useApi({
     url: url,
