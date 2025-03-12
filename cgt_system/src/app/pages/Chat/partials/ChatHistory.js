@@ -19,6 +19,7 @@ import boy from "../../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
+import { useNavigate } from "react-router";
 
 export default function ChatHistory({
   currentUser,
@@ -34,6 +35,7 @@ export default function ChatHistory({
   const [isRecipientTyping, setIsRecipientTyping] = useState(false);
   const [childs, setChilds] = useState([]);
   const [lastSeen, setLastSeen] = useState("");
+  const navigate = useNavigate();
   const chatEndRef = useRef(null);
   const { response, callApi } = useApi({
     url:
@@ -116,6 +118,7 @@ export default function ChatHistory({
           recipientId: recipientId,
           text: message,
           timestamp: serverTimestamp(),
+          isRead: false,
         }
       );
 
@@ -180,6 +183,29 @@ export default function ChatHistory({
 
     return () => unsubscribe();
   }, [recipientId]);
+
+  useEffect(() => {
+    if (!conversationId || !recipientId) return;
+
+    const messagesRef = collection(
+      db,
+      "conversations",
+      conversationId,
+      "messages"
+    );
+    const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
+      snapshot.forEach((doc) => {
+        if (
+          doc.data().recipientId === currentUser.userId &&
+          !doc.data().isRead
+        ) {
+          updateDoc(doc.ref, { isRead: true });
+        }
+      });
+    });
+
+    return () => unsubscribe();
+  }, [conversationId, recipientId]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -275,6 +301,21 @@ export default function ChatHistory({
 
         {/* Chat History Body */}
         <div className="chat-history-body overflow-auto">
+          <div className="d-flex flex-column justify-content-center align-items-center my-4">
+            <img
+              className="img-fluid rounded-circle"
+              src={recipient?.avatar || image}
+              height="80"
+              width="80"
+              alt="User avatar"
+            />
+            <div className="user-info text-center mt-3">
+              <h6 className="mb-1">{recipient?.name || "Unknown"}</h6>
+              <p className="mt-2 fw-bold">
+                You are now connected with {recipient?.name || "the user"}
+              </p>
+            </div>
+          </div>
           <ul className="list-unstyled chat-history">
             {messages.map((message, index) => {
               const isCurrentUser = message.senderId === currentUser.userId;
@@ -350,7 +391,11 @@ export default function ChatHistory({
                         }`}
                       >
                         {isCurrentUser && (
-                          <i className="icon-base bx bx-check-double icon-16px text-success me-1"></i>
+                          <i
+                            className={`icon-base bx bx-check-double icon-16px ${
+                              message.isRead ? "text-success" : "text-secondary"
+                            } me-1`}
+                          ></i>
                         )}
                         <small>{formatTimestamp(message.timestamp)}</small>
                       </div>
@@ -461,35 +506,85 @@ export default function ChatHistory({
               onDrop={handleDropOutside}
               draggable={true}
             >
-              {childs.map((child) => (
-                <motion.div
-                  key={child.childrenId}
-                  className="text-center"
-                  draggable={true}
-                  onDragStart={(e) => handleDragStart(e, child)}
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    opacity:
-                      draggingChild?.childrenId === child.childrenId ? 0.5 : 1,
-                  }}
-                >
-                  <img
-                    src={child.gender === "male" ? boy : girl}
-                    alt={child.fullName}
-                    className="rounded-circle"
-                    width="400"
-                    height="400"
-                  />
-                  <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
-                    {child.fullName}
+              {childs.length > 0 ? (
+                childs.map((child) => (
+                  <motion.div
+                    key={child.childrenId}
+                    className="text-center"
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, child)}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      opacity:
+                        draggingChild?.childrenId === child.childrenId
+                          ? 0.5
+                          : 1,
+                    }}
+                  >
+                    <img
+                      src={child.gender === "male" ? boy : girl}
+                      alt={child.fullName}
+                      className="rounded-circle"
+                      width="400"
+                      height="400"
+                    />
+                    <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
+                      {child.fullName}
+                    </p>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="d-flex flex-column align-items-center text-center">
+                  <div
+                    className="d-flex flex-column justify-between align-items-center mb-4 p-2"
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      border: "2px dashed #aaa",
+                      borderRadius: "20%",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      background: "transparent",
+                      opacity: 0.9,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.1)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                    onClick={() => {
+                      const modalElement =
+                        document.getElementById("childsModal");
+                      if (modalElement) {
+                        const modalInstance = Modal.getInstance(modalElement);
+                        if (modalInstance) {
+                          modalInstance.hide();
+                        }
+                      }
+                      navigate("/member/children");
+                    }}
+                  >
+                    <span
+                      className="mb-3 p-3 d-flex flex-column justify-between align-items-center"
+                      style={{ fontSize: "140px", color: "#aaa" }}
+                    >
+                      +
+                    </span>
+                  </div>
+                  <p
+                    className="text-normal fw-bold"
+                    style={{ fontSize: "24px" }}
+                  >
+                    No children added yet. Please add a new child!
                   </p>
-                </motion.div>
-              ))}
+                </div>
+              )}
             </div>
           </div>
         </div>

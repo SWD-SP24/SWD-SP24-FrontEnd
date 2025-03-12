@@ -185,7 +185,7 @@ export default function DoctorListModal({
                 : doctors.map((doctor) => (
                     <SwiperSlide key={doctor.userId}>
                       <div
-                        className="card border-0 shadow-sm p-4 text-center"
+                        className="card border shadow-none p-4 text-center"
                         style={{
                           borderRadius: "20px",
                           transition: "transform 0.3s ease-in-out",
