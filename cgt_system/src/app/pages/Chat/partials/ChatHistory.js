@@ -118,6 +118,7 @@ export default function ChatHistory({
           recipientId: recipientId,
           text: message,
           timestamp: serverTimestamp(),
+          isRead: false,
         }
       );
 
@@ -182,6 +183,29 @@ export default function ChatHistory({
 
     return () => unsubscribe();
   }, [recipientId]);
+
+  useEffect(() => {
+    if (!conversationId || !recipientId) return;
+
+    const messagesRef = collection(
+      db,
+      "conversations",
+      conversationId,
+      "messages"
+    );
+    const unsubscribe = onSnapshot(messagesRef, (snapshot) => {
+      snapshot.forEach((doc) => {
+        if (
+          doc.data().recipientId === currentUser.userId &&
+          !doc.data().isRead
+        ) {
+          updateDoc(doc.ref, { isRead: true });
+        }
+      });
+    });
+
+    return () => unsubscribe();
+  }, [conversationId, recipientId]);
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "auto" });
@@ -277,6 +301,21 @@ export default function ChatHistory({
 
         {/* Chat History Body */}
         <div className="chat-history-body overflow-auto">
+          <div className="d-flex flex-column justify-content-center align-items-center my-4">
+            <img
+              className="img-fluid rounded-circle"
+              src={recipient?.avatar || image}
+              height="80"
+              width="80"
+              alt="User avatar"
+            />
+            <div className="user-info text-center mt-3">
+              <h6 className="mb-1">{recipient?.name || "Unknown"}</h6>
+              <p className="mt-2 fw-bold">
+                You are now connected with {recipient?.name || "the user"}
+              </p>
+            </div>
+          </div>
           <ul className="list-unstyled chat-history">
             {messages.map((message, index) => {
               const isCurrentUser = message.senderId === currentUser.userId;
@@ -352,7 +391,11 @@ export default function ChatHistory({
                         }`}
                       >
                         {isCurrentUser && (
-                          <i className="icon-base bx bx-check-double icon-16px text-success me-1"></i>
+                          <i
+                            className={`icon-base bx bx-check-double icon-16px ${
+                              message.isRead ? "text-success" : "text-secondary"
+                            } me-1`}
+                          ></i>
                         )}
                         <small>{formatTimestamp(message.timestamp)}</small>
                       </div>
