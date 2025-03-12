@@ -102,6 +102,7 @@ const InputField = React.memo(
           placeholder={placeholder}
           value={fieldValue}
           onChange={handleChange}
+          disabled={name === "validityPeriod"}
           autoFocus={name === "packageName"}
           autoComplete={isPassword ? "current-password" : ""}
         />
