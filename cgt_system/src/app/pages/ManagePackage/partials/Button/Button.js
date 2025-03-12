@@ -110,23 +110,18 @@ export default function Button({
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (usersUse && usersUse.length > 0) {
-      showToast({
-        icon: "warning",
-        text: "This package is currently in use and cannot be deleted.",
-        targetElement: document.querySelector(".content-wrapper"),
-      });
-      return;
-    }
+    // if (usersUse && usersUse.length > 0) {
+    //   showToast({
+    //     icon: "warning",
+    //     text: "This package is currently in use and cannot be updated.",
+    //     targetElement: document.querySelector(".content-wrapper"),
+    //   });
+    //   return;
+    // }
 
     const packageNameError = validateField("packageName", formData.packageName);
     const priceError = validateField("price", formData.price);
-    const validityPeriodError = validateField(
-      "validityPeriod",
-      formData.validityPeriod
-    );
     const summaryError = validateField("summary", formData.summary);
-
     const permissionsError = validateField(
       "selectedPermissions",
       selectedPermissions
@@ -138,7 +133,6 @@ export default function Button({
     if (
       packageNameError ||
       priceError ||
-      validityPeriodError ||
       permissionsError ||
       summaryError ||
       imageError
@@ -146,7 +140,6 @@ export default function Button({
       sFormError.set({
         packageName: packageNameError,
         price: priceError,
-        validityPeriod: validityPeriodError,
         permissions: permissionsError,
         summary: summaryError,
         image: imageError,
@@ -196,7 +189,7 @@ export default function Button({
       image: imageUrl,
       price: formData.price,
       status: buttonTag === "Submit" ? "inactive" : data?.status,
-      validityPeriod: formData.validityPeriod,
+      validityPeriod: 30,
       permissions: selectedPermissions,
     };
 
