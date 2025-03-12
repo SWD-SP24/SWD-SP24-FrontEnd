@@ -25,7 +25,22 @@ export default function Button({ data, buttonTag }) {
         if (authToken) {
           Cookies.set("auth_token", authToken);
           Cookies.set("user", JSON.stringify(user));
-          navigate("/dashboard");
+          switch (user.role) {
+            case "admin":
+              navigate("/admin/dashboard");
+              break;
+
+            case "member":
+              navigate("/member/dashboard");
+              break;
+
+            case "doctor":
+              navigate("/doctor/dashboard");
+              break;
+
+            default:
+              break;
+          }
         }
       }
     };

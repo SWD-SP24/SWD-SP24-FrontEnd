@@ -5,11 +5,15 @@ import API_URLS from "../../config/apiUrls";
 import calculateAge from "../../util/calculateAge";
 import boy from "../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../assets/img/illustrations/baby-girl-Photoroom.png";
+import Skeleton from "react-loading-skeleton";
 
-export default function CoverPage({ childId }) {
+export default function CoverPage({ childId, user }) {
   const [data, setData] = useState({});
-  const { response, callApi } = useApi({
-    url: `${API_URLS.CHILDREN.GET_CHILDREN_WITH_ID}${childId}`,
+  const { isLoading, response, callApi } = useApi({
+    url:
+      user.role === "member"
+        ? `${API_URLS.CHILDREN.GET_CHILDREN_WITH_ID}${childId}`
+        : `${API_URLS.CHILDREN.GET_CHILD}${childId}`,
     method: "GET",
   });
 
@@ -34,58 +38,64 @@ export default function CoverPage({ childId }) {
     return `${day}-${month}-${year}`;
   };
 
-  if (!response) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div className={`${styles.coverContent} text-center`}>
       <div className="position-relative">
-        <div
-          className={`${styles.titleSection} d-flex align-items-center justify-content-center`}
-        >
-          <h2 className="ms-2 fw-bold">Child Health Record</h2>
-        </div>
+        {isLoading ? (
+          <Skeleton width={426} height={106} />
+        ) : (
+          <div
+            className={`${styles.titleSection} d-flex align-items-center justify-content-center`}
+          >
+            <h2 className="ms-2 fw-bold">Child Health Record</h2>
+          </div>
+        )}
       </div>
+
       <div className={`${styles.childProfile} mt-3 p-3`}>
-        <img
-          src={data.avatar ? data.avatar : data.gender === "male" ? boy : girl}
-          alt="Child Avatar"
-          className="me-3"
-          width={150}
-        />
-        <h3 className={`${styles.childName} mt-2`}>{data.fullName}</h3>
+        {isLoading ? (
+          <Skeleton circle width={150} height={150} />
+        ) : (
+          <img
+            src={
+              data.avatar ? data.avatar : data.gender === "male" ? boy : girl
+            }
+            alt="Child Avatar"
+            className="me-3"
+            width={150}
+          />
+        )}
+        <h3 className={`${styles.childName} mt-2`}>
+          {isLoading ? <Skeleton width={120} height={20} /> : data.fullName}
+        </h3>
       </div>
+
       <table className={styles.infoTable}>
         <tbody className="d-flex flex-column">
-          <tr>
-            <td className="pe-4">🎂 Age:</td>
-            <td className="mb-0">{calculateAge(data.dob)}</td>
-          </tr>
-          <tr>
-            <td className="pe-4">🩺 Gender:</td>
-            <td className="mb-0">
-              {data.gender === "male" ? "Male" : "Female"}
-            </td>
-          </tr>
-          <tr>
-            <td className="pe-4">📅 Date of Birth:</td>
-            <td className="mb-0">{formatDate(data.dob)}</td>
-          </tr>
-          <tr>
-            <td className="pe-4">🩸 Blood Type:</td>
-            <td className="mb-0">{data.bloodType}</td>
-          </tr>
-          <tr>
-            <td className="pe-4">⚠️ Allergies:</td>
-            <td className="mb-0">{data.allergies || "None"}</td>
-          </tr>
-          <tr>
-            <td className="pe-4">🏥 Chronic Condition:</td>
-            <td className="mb-0">{data.chronicConditions || "None"}</td>
-          </tr>
+          {[
+            { label: "🎂 Age:", value: calculateAge(data.dob) },
+            {
+              label: "🩺 Gender:",
+              value: data.gender === "male" ? "Male" : "Female",
+            },
+            { label: "📅 Date of Birth:", value: formatDate(data.dob) },
+            { label: "🩸 Blood Type:", value: data.bloodType },
+            { label: "⚠️ Allergies:", value: data.allergies || "None" },
+            {
+              label: "🏥 Chronic Condition:",
+              value: data.chronicConditions || "None",
+            },
+          ].map((item, index) => (
+            <tr key={index}>
+              <td className="pe-4">{item.label}</td>
+              <td className="mb-0">
+                {isLoading ? <Skeleton width={100} height={16} /> : item.value}
+              </td>
+            </tr>
+          ))}
         </tbody>
       </table>
+
       <div className={`${styles.doodle} ${styles.star}`}>✶</div>
       <div className={`${styles.doodle} ${styles.heart}`}>♥</div>
       <div className={styles.handwrittenNote}>Keep me healthy!</div>

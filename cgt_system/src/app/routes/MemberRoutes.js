@@ -12,6 +12,7 @@ import Chat from "../pages/Chat";
 import Vaccinations from "../pages/Vaccinations/Vaccinations";
 import VaccineInfo from "../pages/VaccineInfo/VaccineInfo";
 import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
+import ChatHistory from "../pages/Chat/partials/ChatHistory";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
@@ -41,7 +42,10 @@ export default function MemberRoutes() {
         </Route>
         <Route path="upgrade-plan/checkout" element={<Checkout />} />
         <Route path="*" element={<ComingSoon />} />
-        <Route path="consultations" element={<Chat />} />
+        <Route path="consultations" element={<Chat />}>
+          <Route path=":chatId" element={<ChatHistory />} />
+        </Route>
+
         <Route
           path="consultations/child-details"
           element={<ChildHealthBook />}

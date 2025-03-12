@@ -15,12 +15,12 @@ export default function Sidebar({ role }) {
     let found = false;
 
     menuItems.forEach((item) => {
-      if (item.path === location.pathname) {
+      if (location.pathname.startsWith(item.path)) {
         setActiveSubMenu(item.title);
         found = true;
       }
       item.submenu?.forEach((subItem) => {
-        if (subItem.path === location.pathname) {
+        if (location.pathname.startsWith(subItem.path)) {
           setActiveSubMenu(subItem.title);
           found = true;
         }

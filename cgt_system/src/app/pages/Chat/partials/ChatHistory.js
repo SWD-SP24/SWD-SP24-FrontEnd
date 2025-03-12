@@ -18,15 +18,13 @@ import boy from "../../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
-import { useNavigate } from "react-router";
+import { useLocation } from "react-router";
 
-export default function ChatHistory({
-  currentUser,
-  recipientId,
-  recipient,
-  messages,
-  conversationId,
-}) {
+export default function ChatHistory({}) {
+  const location = useLocation();
+  const { currentUser, recipientId, recipient, messages, conversationId } =
+    location.state;
+
   const [childIdFromMessage, setChildIdFromMessage] = useState(null);
   const [draggingChild, setDraggingChild] = useState(null);
   const [newMessage, setNewMessage] = useState("");
@@ -35,11 +33,12 @@ export default function ChatHistory({
   const [lastSeen, setLastSeen] = useState("");
   const chatEndRef = useRef(null);
   const { response, callApi } = useApi({
-    url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
+    url:
+      currentUser.role === "member"
+        ? `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`
+        : `${API_URLS.CHILDREN.GET_CHILDREN_LIST}/admin`,
     method: "GET",
   });
-
-  const navigate = useNavigate();
 
   useEffect(() => {
     callApi();
@@ -138,7 +137,9 @@ export default function ChatHistory({
           "message",
           "New Message ✉️",
           `You have new message from ${currentUser.fullName}`,
-          `/consultations`
+          currentUser.role === "doctor"
+            ? `/member/consultations`
+            : "/doctor/consultations"
         );
       }
     } catch (error) {
@@ -153,7 +154,7 @@ export default function ChatHistory({
     const message = newMessage;
     setNewMessage("");
 
-    sendMessage(message);
+    sendMessage("text", "", message);
   };
 
   useEffect(() => {
@@ -257,6 +258,10 @@ export default function ChatHistory({
           <ul className="list-unstyled chat-history">
             {messages.map((message, index) => {
               const isCurrentUser = message.senderId === currentUser.userId;
+              const childId = message.childId || "";
+              const child = childs.find((c) => c.childrenId === childId);
+              console.log(child);
+
               return (
                 <li
                   key={index}
@@ -293,12 +298,18 @@ export default function ChatHistory({
                         >
                           <img
                             className="card-img-top"
-                            src={boy}
+                            src={
+                              child?.avatar
+                                ? child.avatar
+                                : child?.gender === "male"
+                                ? boy
+                                : girl
+                            }
                             alt="Card image cap"
                             style={{ height: "auto", objectFit: "cover" }}
                           />
                           <div className="card-body d-flex flex-column text-center">
-                            <h5 className="card-title">Văn Hậu</h5>
+                            <h5 className="card-title">{child?.fullName}</h5>
                             <button
                               className="btn btn-outline-primary mt-auto"
                               onClick={() =>
@@ -359,13 +370,15 @@ export default function ChatHistory({
               onChange={(e) => setNewMessage(e.target.value)}
             />
             <div className="message-actions d-flex align-items-center">
-              <span
-                class="btn btn-text-primary btn-icon rounded-pill cursor-pointer me-2"
-                data-bs-toggle="modal"
-                data-bs-target="#childsModal"
-              >
-                <i class="speech-to-text icon-base bx bx-share-alt icon-md text-heading"></i>
-              </span>
+              {currentUser.role === "member" && (
+                <span
+                  class="btn btn-text-primary btn-icon rounded-pill cursor-pointer me-2"
+                  data-bs-toggle="modal"
+                  data-bs-target="#childsModal"
+                >
+                  <i class="speech-to-text icon-base bx bx-share-alt icon-md text-heading"></i>
+                </span>
+              )}
               <button className="btn btn-primary d-flex send-msg-btn">
                 <span className="align-middle d-md-inline-block d-none">
                   Send
