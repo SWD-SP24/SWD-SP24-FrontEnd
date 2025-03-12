@@ -19,6 +19,7 @@ import boy from "../../../assets/img/illustrations/baby-boy-Photoroom.png";
 import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
+import { useNavigate } from "react-router";
 
 export default function ChatHistory({
   currentUser,
@@ -34,6 +35,7 @@ export default function ChatHistory({
   const [isRecipientTyping, setIsRecipientTyping] = useState(false);
   const [childs, setChilds] = useState([]);
   const [lastSeen, setLastSeen] = useState("");
+  const navigate = useNavigate();
   const chatEndRef = useRef(null);
   const { response, callApi } = useApi({
     url:
@@ -461,35 +463,85 @@ export default function ChatHistory({
               onDrop={handleDropOutside}
               draggable={true}
             >
-              {childs.map((child) => (
-                <motion.div
-                  key={child.childrenId}
-                  className="text-center"
-                  draggable={true}
-                  onDragStart={(e) => handleDragStart(e, child)}
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{
-                    duration: 1.5,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                  }}
-                  style={{
-                    opacity:
-                      draggingChild?.childrenId === child.childrenId ? 0.5 : 1,
-                  }}
-                >
-                  <img
-                    src={child.gender === "male" ? boy : girl}
-                    alt={child.fullName}
-                    className="rounded-circle"
-                    width="400"
-                    height="400"
-                  />
-                  <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
-                    {child.fullName}
+              {childs.length > 0 ? (
+                childs.map((child) => (
+                  <motion.div
+                    key={child.childrenId}
+                    className="text-center"
+                    draggable={true}
+                    onDragStart={(e) => handleDragStart(e, child)}
+                    animate={{ y: [0, -10, 0] }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                    }}
+                    style={{
+                      opacity:
+                        draggingChild?.childrenId === child.childrenId
+                          ? 0.5
+                          : 1,
+                    }}
+                  >
+                    <img
+                      src={child.gender === "male" ? boy : girl}
+                      alt={child.fullName}
+                      className="rounded-circle"
+                      width="400"
+                      height="400"
+                    />
+                    <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
+                      {child.fullName}
+                    </p>
+                  </motion.div>
+                ))
+              ) : (
+                <div className="d-flex flex-column align-items-center text-center">
+                  <div
+                    className="d-flex flex-column justify-between align-items-center mb-4 p-2"
+                    style={{
+                      width: "150px",
+                      height: "150px",
+                      border: "2px dashed #aaa",
+                      borderRadius: "20%",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      background: "transparent",
+                      opacity: 0.9,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = "scale(1.1)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = "scale(1)";
+                    }}
+                    onClick={() => {
+                      const modalElement =
+                        document.getElementById("childsModal");
+                      if (modalElement) {
+                        const modalInstance = Modal.getInstance(modalElement);
+                        if (modalInstance) {
+                          modalInstance.hide();
+                        }
+                      }
+                      navigate("/member/children");
+                    }}
+                  >
+                    <span
+                      className="mb-3 p-3 d-flex flex-column justify-between align-items-center"
+                      style={{ fontSize: "140px", color: "#aaa" }}
+                    >
+                      +
+                    </span>
+                  </div>
+                  <p
+                    className="text-normal fw-bold"
+                    style={{ fontSize: "24px" }}
+                  >
+                    No children added yet. Please add a new child!
                   </p>
-                </motion.div>
-              ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
