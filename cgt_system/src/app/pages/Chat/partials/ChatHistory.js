@@ -31,6 +31,7 @@ export default function ChatHistory({
   const [draggingChild, setDraggingChild] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [isRecipientOnline, setIsRecipientOnline] = useState(false);
+  const [isRecipientTyping, setIsRecipientTyping] = useState(false);
   const [childs, setChilds] = useState([]);
   const [lastSeen, setLastSeen] = useState("");
   const chatEndRef = useRef(null);
@@ -169,9 +170,11 @@ export default function ChatHistory({
       if (snapshot.exists()) {
         setIsRecipientOnline(snapshot.data().isOnline || false);
         setLastSeen(snapshot.data().lastSeen || "");
+        setIsRecipientTyping(snapshot.data().isTyping || false);
       } else {
         setIsRecipientOnline(false);
         setLastSeen("");
+        setIsRecipientTyping(false);
       }
     });
 
@@ -180,7 +183,7 @@ export default function ChatHistory({
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: "auto" });
-  }, [messages]);
+  }, [messages, isRecipientTyping]);
 
   const handleDragStart = (e, child) => {
     e.dataTransfer.setData("childId", child.childrenId);
@@ -209,6 +212,19 @@ export default function ChatHistory({
     }
 
     setDraggingChild(null);
+  };
+
+  const handleTyping = () => {
+    const currentUserRef = doc(db, "activeUsers", String(currentUser.userId));
+    updateDoc(currentUserRef, {
+      isTyping: true,
+    });
+
+    setTimeout(() => {
+      updateDoc(currentUserRef, {
+        isTyping: false,
+      });
+    }, 3000);
   };
 
   return (
@@ -248,7 +264,9 @@ export default function ChatHistory({
                 <small class="user-status text-body">
                   {isRecipientOnline
                     ? "Active now"
-                    : lastSeen && `Active ${timeAgo(lastSeen)}`}
+                    : lastSeen &&
+                      timeAgo(lastSeen) &&
+                      `Active ${timeAgo(lastSeen)}`}
                 </small>
               </div>
             </div>
@@ -354,6 +372,30 @@ export default function ChatHistory({
                 </li>
               );
             })}
+            {isRecipientTyping && (
+              <li className="chat-message">
+                <div className="d-flex overflow-hidden">
+                  <div className="user-avatar flex-shrink-0 me-4">
+                    <div className="avatar avatar-sm">
+                      <img
+                        src={recipient?.avatar || image}
+                        alt="Avatar"
+                        className="rounded-circle"
+                      />
+                    </div>
+                  </div>
+                  <div className="chat-message-wrapper flex-grow-1 d-flex flex-column align-items-start">
+                    <div className="chat-message-text p-2 rounded bg-light">
+                      <div className="typing-indicator">
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                        <span className="dot"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            )}
           </ul>
           <div ref={chatEndRef} />
         </div>
@@ -368,7 +410,10 @@ export default function ChatHistory({
               className="form-control message-input border-0 me-4 shadow-none"
               placeholder="Type your message here..."
               value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
+              onChange={(e) => {
+                setNewMessage(e.target.value);
+                handleTyping();
+              }}
             />
             <div className="message-actions d-flex align-items-center">
               {currentUser.role === "member" && (
