@@ -53,7 +53,14 @@ const API_URLS = {
     INDICATORS: "/api/GrowthIndicators",
     LATEST_RECORD: "/api/GrowthIndicators/latest",
   },
-
+  DASHBOARD: {
+    TOTAL_CHILDREN: "/api/Dashboard/total-children",
+    TOTAL_REVENUE: "/api/Dashboard/revenue",
+    VACCINE_COMPLETE: "/api/Dashboard/vaccination-completion",
+    MONTHLY_REVENUE: "/api/Dashboard/monthly-revenue",
+    USER_GROWTH: "/api/Dashboard/user-growth-over-time",
+    EXPIRED_MEMBERSHIP: "/api/Dashboard/expired-memberships",
+  },
   IMAGE: {
     GET_URL: "/Utilities/UploadImage",
   },
