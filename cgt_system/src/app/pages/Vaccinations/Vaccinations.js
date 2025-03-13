@@ -11,6 +11,7 @@ export default function Vaccinations() {
   const permissions = useOutletContext();
   const url = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=1&pageSize=7&sortByAge=true`;
   const [vaccinations, setVaccinations] = useState([]);
+  const [page, setPage] = useState(1);
 
   const { response, callApi } = useApi({
     url: url,
@@ -24,6 +25,11 @@ export default function Vaccinations() {
   useEffect(() => {
     console.log("Vaccine Schedule ne", response);
   }, [response]);
+  const handlePage = (index) => {
+    setPage(index);
+    const customUrl = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=${index}&pageSize=7&sortByAge=true`;
+    callApi(null, customUrl);
+  };
 
   const permissionsJson = JSON.parse(permissions);
   const isHasPermission = (permission) => {
@@ -50,6 +56,65 @@ export default function Vaccinations() {
           refetch={callApi}
           onSetVaccinations={setVaccinations}
         />
+        <div class="row mx-2 justify-content-between">
+          <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto px-4 mt-0">
+            <div
+              class="dt-info"
+              aria-live="polite"
+              id="DataTables_Table_0_info"
+              role="status"
+            >
+              {response &&
+                `Showing ${1 + 6 * (page - 1)} to ${Math.min(
+                  1 + 6 * page,
+                  Math.ceil(response.pagination.total)
+                )} of ${response.pagination.total} entries`}
+            </div>
+          </div>
+          <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
+            <div class="dt-paging">
+              <nav aria-label="pagination">
+                <ul class="pagination">
+                  <li class="page-item next">
+                    <a class="page-link" onClick={() => handlePage(1)}>
+                      <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-18px"></i>
+                    </a>
+                  </li>
+
+                  {response &&
+                    [...Array(response.pagination.lastVisiblePage)].map(
+                      (_, index) => {
+                        return (
+                          <li class="page-item">
+                            <a
+                              className={
+                                "page-link " +
+                                (index + 1 === page ? "active" : "")
+                              }
+                              key={index}
+                              onClick={() => handlePage(index + 1)}
+                            >
+                              {index + 1}
+                            </a>
+                          </li>
+                        );
+                      }
+                    )}
+                  <li class="page-item next">
+                    <a
+                      class="page-link"
+                      onClick={() =>
+                        handlePage(response.pagination.lastVisiblePage)
+                      }
+                    >
+                      <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-18px"></i>
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="card mb-6 mt-6">

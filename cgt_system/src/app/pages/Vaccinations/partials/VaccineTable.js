@@ -18,14 +18,8 @@ export default function VaccineTable({
     url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childId=${childId}`,
     method: "GET",
   });
-  const [page, setPage] = useState(1);
   const [filterName, setFilterName] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
-  const handlePage = (index) => {
-    setPage(index);
-    const customUrl = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=${index}&pageSize=7&sortByAge=true`;
-    refetch(null, customUrl);
-  };
 
   useEffect(() => {
     callApi();
@@ -264,67 +258,8 @@ export default function VaccineTable({
             </table>
           </div>
         </div>
-        <div class="row mx-2 justify-content-between">
-          <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto px-4 mt-0">
-            <div
-              class="dt-info"
-              aria-live="polite"
-              id="DataTables_Table_0_info"
-              role="status"
-            >
-              {vaccineList &&
-                response &&
-                `Showing ${1 + 6 * (page - 1)} to ${Math.min(
-                  1 + 6 * page,
-                  Math.ceil(vaccineList.pagination.total)
-                )} of ${vaccineList.pagination.total} entries`}
-            </div>
-          </div>
-          <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
-            <div class="dt-paging">
-              <nav aria-label="pagination">
-                <ul class="pagination">
-                  <li class="page-item next">
-                    <a class="page-link" onClick={() => handlePage(1)}>
-                      <i class="icon-base bx bx-chevron-left scaleX-n1-rtl icon-18px"></i>
-                    </a>
-                  </li>
-
-                  {vaccineList &&
-                    [...Array(vaccineList.pagination.lastVisiblePage)].map(
-                      (_, index) => {
-                        return (
-                          <li class="page-item">
-                            <a
-                              className={
-                                "page-link " +
-                                (index + 1 === page ? "active" : "")
-                              }
-                              key={index}
-                              onClick={() => handlePage(index + 1)}
-                            >
-                              {index + 1}
-                            </a>
-                          </li>
-                        );
-                      }
-                    )}
-                  <li class="page-item next">
-                    <a
-                      class="page-link"
-                      onClick={() =>
-                        handlePage(vaccineList.pagination.lastVisiblePage)
-                      }
-                    >
-                      <i class="icon-base bx bx-chevron-right scaleX-n1-rtl icon-18px"></i>
-                    </a>
-                  </li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
       </div>
+
       <AddVaccineModal refetch={callApi} />
     </div>
   );
