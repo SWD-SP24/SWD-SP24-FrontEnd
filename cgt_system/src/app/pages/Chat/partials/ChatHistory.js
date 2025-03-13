@@ -35,6 +35,7 @@ export default function ChatHistory({
   const [isRecipientTyping, setIsRecipientTyping] = useState(false);
   const [childs, setChilds] = useState([]);
   const [lastSeen, setLastSeen] = useState("");
+  const [showDropZone, setShowDropZone] = useState(false);
   const navigate = useNavigate();
   const chatEndRef = useRef(null);
   const { response, callApi } = useApi({
@@ -215,6 +216,7 @@ export default function ChatHistory({
     e.dataTransfer.setData("childId", child.childrenId);
 
     setDraggingChild(child);
+    setShowDropZone(true);
   };
 
   const handleDropOutside = (e) => {
@@ -238,6 +240,7 @@ export default function ChatHistory({
     }
 
     setDraggingChild(null);
+    setShowDropZone(false);
   };
 
   const handleTyping = () => {
@@ -277,7 +280,7 @@ export default function ChatHistory({
                 <img
                   src={recipient?.avatar || image}
                   alt="Avatar"
-                  className="rounded-circle"
+                  className="rounded-circle border"
                   data-bs-toggle="sidebar"
                   data-overlay=""
                   data-target="#app-chat-sidebar-right"
@@ -303,7 +306,7 @@ export default function ChatHistory({
         <div className="chat-history-body overflow-auto">
           <div className="d-flex flex-column justify-content-center align-items-center my-4">
             <img
-              className="img-fluid rounded-circle"
+              className="img-fluid rounded-circle border"
               src={recipient?.avatar || image}
               height="80"
               width="80"
@@ -337,7 +340,7 @@ export default function ChatHistory({
                           <img
                             src={recipient?.avatar || image}
                             alt="Avatar"
-                            className="rounded-circle"
+                            className="rounded-circle border"
                           />
                         </div>
                       </div>
@@ -501,6 +504,8 @@ export default function ChatHistory({
             }}
             draggable
           >
+            {/* Hướng dẫn thả */}
+            {showDropZone && <div className="drop-zone"></div>}
             <div
               className="modal-body p-4 d-flex flex-wrap gap-3 justify-content-center"
               onDrop={handleDropOutside}
@@ -589,6 +594,7 @@ export default function ChatHistory({
           </div>
         </div>
       </div>
+
       <ChildHealthBook childId={childIdFromMessage} />
     </div>
   );
