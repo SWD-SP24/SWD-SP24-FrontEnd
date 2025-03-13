@@ -20,15 +20,6 @@ export default function CreateToothRecord({ toothId, refetch }) {
     e.preventDefault();
     let target = document.querySelector(".content-wrapper");
 
-    if (!note.current.value.trim()) {
-      showToast({
-        icon: "error",
-        text: "Tooth Note cannot be empty",
-        targetElement: target,
-      });
-      return;
-    }
-
     const data = {
       childId: id,
       toothId: toothId,
@@ -81,6 +72,7 @@ export default function CreateToothRecord({ toothId, refetch }) {
                   class="form-control"
                   id="exampleFormControlTextarea1"
                   rows="3"
+                  placeholder="This tooth has erupted."
                 />
               </div>
             </div>
