@@ -80,7 +80,7 @@ export default function Sidebar({ role }) {
         }}
       >
         <div className="app-brand demo">
-          <Link to={"/member/children"} className="app-brand-link">
+          <Link to={"/"} className="app-brand-link">
             <AppBrandLogo />
           </Link>
           <Link className="layout-menu-toggle menu-link text-large ms-auto d-block">
