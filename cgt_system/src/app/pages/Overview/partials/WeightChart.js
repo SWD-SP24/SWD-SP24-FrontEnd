@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useParams } from "react-router";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
-import { getDate, getYear } from "../../../util/dateFormat";
+import { getDate, getMonth, getYear } from "../../../util/dateFormat";
 import DateRangePicker from "../../Indicators/partials/DateRangePicker";
 import { LineChart } from "./myChart";
 export default function WeightChart() {
@@ -37,8 +37,9 @@ export default function WeightChart() {
       }
 
       // Extract data
-      const newLabels = reversedData.map((record) =>
-        getDate(record.recordTime)
+      const newLabels = reversedData.map(
+        (record) =>
+          getDate(record.recordTime) + "/" + getMonth(record.recordTime)
       );
       const newWeightDatasets = reversedData.map((record) => record.weight);
 
