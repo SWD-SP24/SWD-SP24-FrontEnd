@@ -20,6 +20,7 @@ import girl from "../../../assets/img/illustrations/baby-girl-Photoroom.png";
 import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
 import { useNavigate } from "react-router";
+import Tippy from "@tippyjs/react";
 
 export default function ChatHistory({
   currentUser,
@@ -513,35 +514,40 @@ export default function ChatHistory({
             >
               {childs.length > 0 ? (
                 childs.map((child) => (
-                  <motion.div
-                    key={child.childrenId}
-                    className="text-center"
-                    draggable={true}
-                    onDragStart={(e) => handleDragStart(e, child)}
-                    animate={{ y: [0, -10, 0] }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                    }}
-                    style={{
-                      opacity:
-                        draggingChild?.childrenId === child.childrenId
-                          ? 0.5
-                          : 1,
-                    }}
+                  <Tippy
+                    content="Drag outside to share child's info"
+                    placement="top"
                   >
-                    <img
-                      src={child.gender === "male" ? boy : girl}
-                      alt={child.fullName}
-                      className="rounded-circle"
-                      width="400"
-                      height="400"
-                    />
-                    <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
-                      {child.fullName}
-                    </p>
-                  </motion.div>
+                    <motion.div
+                      key={child.childrenId}
+                      className="text-center"
+                      draggable={true}
+                      onDragStart={(e) => handleDragStart(e, child)}
+                      animate={{ y: [0, -10, 0] }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        ease: "easeInOut",
+                      }}
+                      style={{
+                        opacity:
+                          draggingChild?.childrenId === child.childrenId
+                            ? 0.5
+                            : 1,
+                      }}
+                    >
+                      <img
+                        src={child.gender === "male" ? boy : girl}
+                        alt={child.fullName}
+                        className="rounded-circle"
+                        width="400"
+                        height="400"
+                      />
+                      <p className="mt-2 fw-bold" style={{ fontSize: "30px" }}>
+                        {child.fullName}
+                      </p>
+                    </motion.div>
+                  </Tippy>
                 ))
               ) : (
                 <div className="d-flex flex-column align-items-center text-center">
