@@ -50,7 +50,7 @@ export default function AIAnalysis({ toothRecords }) {
       **🏥 Khi nào nên đi khám nha khoa?**  
       - {Gợi ý tần suất khám răng định kỳ, dấu hiệu cần đi khám sớm}.  
 
-      Không thêm nội dung nào ngoài format trên.`,
+      Không thêm nội dung nào ngoài format trên và chuyển tất cả thành tiếng anh.`,
                   },
                 ],
               },
@@ -82,11 +82,15 @@ export default function AIAnalysis({ toothRecords }) {
     <div className="card mt-4">
       <h5 className="card-header">Analysis</h5>
       <div className="card-body">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: aiResponse || "Analyzing...",
-          }}
-        />
+        {toothRecords.length > 0 ? (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: aiResponse || "Analyzing...",
+            }}
+          />
+        ) : (
+          <div>No data to analyzie</div>
+        )}
       </div>
     </div>
   );

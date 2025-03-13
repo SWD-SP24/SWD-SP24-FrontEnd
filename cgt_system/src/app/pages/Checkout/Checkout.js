@@ -11,6 +11,7 @@ import SummarySkeleton from "./partials/Summary/SummarySkeleton";
 export default function Checkout() {
   const location = useLocation();
   const { planId, isYearly } = location.state || {};
+
   const [checkoutInfo, setCheckoutInfo] = useState(null);
 
   const { isLoading, response, error, callApi } = useApi({
@@ -26,7 +27,7 @@ export default function Checkout() {
 
   useEffect(() => {
     callApi();
-  }, [isYearly]);
+  }, [planId, isYearly]);
 
   useEffect(() => {
     if (response) {

@@ -107,10 +107,7 @@ export default function BillingAndPlans() {
                     </>
                   ) : (
                     <>
-                      <BillingTable
-                        billings={billings}
-                        onFetchBillings={fetchBillings}
-                      />
+                      <BillingTable billings={billings} />
                     </>
                   )}
                   <Pagination
