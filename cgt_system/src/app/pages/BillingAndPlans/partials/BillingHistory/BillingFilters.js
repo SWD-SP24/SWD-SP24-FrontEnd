@@ -40,22 +40,6 @@ export default function BillingFilters({ onFetchBillings }) {
           </select>
           <label for="dt-length-1"></label>
         </div>
-        <div class="dt-buttons btn-group flex-wrap justify-content-center">
-          <div class="btn-group">
-            <button
-              class="btn btn-secondary buttons-collection btn-label-secondary dropdown-toggle float-sm-end mb-3 mb-md-0 mt-md-0 mt-5"
-              tabindex="0"
-              aria-controls="DataTables_Table_1"
-              type="button"
-              aria-haspopup="dialog"
-              aria-expanded="false"
-            >
-              <span>
-                <i class="icon-base bx bx-export icon-sm me-2"></i>Export
-              </span>
-            </button>
-          </div>{" "}
-        </div>
       </div>
     </div>
   );

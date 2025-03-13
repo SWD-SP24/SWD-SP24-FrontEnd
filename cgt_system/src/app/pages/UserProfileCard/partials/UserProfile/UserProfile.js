@@ -41,33 +41,39 @@ export default function UserProfile({ user, callApiGetUser }) {
           />
           <div className="user-info text-center">
             <h5 className="mb-1">{user.fullName}</h5>
-            <span
-              className={`d-flex align-items-center badge ${
-                user.emailActivation === "unactivated"
-                  ? "bg-label-secondary"
-                  : "bg-label-success"
-              }`}
-            >
+
+            {user.role === "member" && (
               <span
-                class={`badge badge-center rounded-pill ${
+                className={`d-flex align-items-center badge ${
                   user.emailActivation === "unactivated"
-                    ? "text-bg-secondary"
-                    : "text-bg-success"
-                } me-1`}
-                style={{ width: "13px", height: "13px" }}
+                    ? "bg-label-secondary"
+                    : "bg-label-success"
+                }`}
               >
-                <i
-                  class={`icon-base bx ${
-                    user.emailActivation === "unactivated" ? "bx-x" : "bx-check"
-                  } `}
-                ></i>
+                <span
+                  className={`badge badge-center rounded-pill ${
+                    user.emailActivation === "unactivated"
+                      ? "text-bg-secondary"
+                      : "text-bg-success"
+                  } me-1`}
+                  style={{ width: "13px", height: "13px" }}
+                >
+                  <i
+                    className={`icon-base bx ${
+                      user.emailActivation === "unactivated"
+                        ? "bx-x"
+                        : "bx-check"
+                    }`}
+                  ></i>
+                </span>
+                <p className="mb-0">
+                  {user.emailActivation === "unactivated"
+                    ? "Not verified"
+                    : "Verified"}
+                </p>
               </span>
-              <p className="mb-0">
-                {user.emailActivation === "unactivated"
-                  ? "Not verified"
-                  : "Verified"}
-              </p>
-            </span>
+            )}
+
             {isLoading ? (
               <span
                 className="spinner-border text-primary spinner-border-sm"
@@ -75,7 +81,8 @@ export default function UserProfile({ user, callApiGetUser }) {
                 aria-hidden="true"
               ></span>
             ) : (
-              user.emailActivation === "unactivated" && (
+              user.emailActivation === "unactivated" &&
+              user.role === "member" && (
                 <Link onClick={() => callApi()}>
                   <p className="mb-0 mt-1" style={{ fontSize: "13px" }}>
                     Verify now
