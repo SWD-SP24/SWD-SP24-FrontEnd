@@ -11,7 +11,7 @@ import AIAnalysis from "./partials/AIAnalysis.js";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Animations } from "../../assets/js/Animations.js";
 import { signify } from "react-signify";
-
+import "./indicator.scss";
 export const sHeight = signify("");
 export const sWeight = signify("");
 export default function Indicators() {
