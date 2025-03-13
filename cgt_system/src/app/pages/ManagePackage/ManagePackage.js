@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./managePackage.scss";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
@@ -11,12 +11,16 @@ import PackageTableSkeleton from "./partials/PackageTable/PackageTableSkeleton";
 import AddPackageModal from "./partials/AddPackageModal/AddPackageModal";
 import EditPackageModal from "./partials/EditPackageModal/EditPackageModal";
 import PackageList from "./partials/PackageList/PackageList";
+import debounce from "lodash.debounce";
 
 export default function ManagePackages() {
   const packages = sPackages.use();
   const usersAndPackages = sUserAndPackages.use();
   const pagination = sPagination.use();
   const [users, setUsers] = useState([]);
+
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedPackage, setSelectedPackage] = useState("");
 
   const { isLoading, response, error, callApi } = useApi({
     method: "GET",
@@ -123,8 +127,22 @@ export default function ManagePackages() {
     callApi(null, customUrl);
   };
 
-  const fetchUsersAndPackages = (page, pageSize) => {
-    const customUrl = `${API_URLS.USER.USERS_AND_MEMBERSHIP}?pageNumber=${page}&pageSize=${pageSize}`;
+  const fetchUsersAndPackages = (
+    page,
+    pageSize,
+    search = searchValue,
+    packageId = selectedPackage
+  ) => {
+    let customUrl = `${API_URLS.USER.USERS_AND_MEMBERSHIP}?pageNumber=${page}&pageSize=${pageSize}`;
+
+    if (search) {
+      customUrl += `&userName=${encodeURIComponent(search)}`;
+    }
+
+    if (packageId) {
+      customUrl += `&membershipPackageId=${packageId}`;
+    }
+
     getUserAndPackageCallApi(null, customUrl);
   };
 
@@ -132,8 +150,28 @@ export default function ManagePackages() {
     sPagination.set((prev) => {
       prev.value.currentPage = page;
     });
+
     fetchUsersAndPackages(page, pagination.itemsPerPage);
   };
+
+  const debouncedSearch = useCallback(
+    debounce((search) => {
+      fetchUsersAndPackages(
+        pagination.currentPage,
+        pagination.itemsPerPage,
+        search
+      );
+    }, 500),
+    []
+  );
+
+  useEffect(() => {
+    if (searchValue) {
+      debouncedSearch(searchValue);
+    } else {
+      fetchUsersAndPackages(pagination.currentPage, pagination.itemsPerPage);
+    }
+  }, [searchValue, selectedPackage]);
 
   return (
     <>
@@ -166,6 +204,11 @@ export default function ManagePackages() {
                 className="dt-container dt-bootstrap5 dt-empty-footer"
               >
                 <PackageFilters
+                  searchValue={searchValue}
+                  setSearchValue={setSearchValue}
+                  selectedPackage={selectedPackage}
+                  setSelectedPackage={setSelectedPackage}
+                  packages={packages}
                   onFetchUsersAndPackages={fetchUsersAndPackages}
                 />
                 {getUserAndPackageLoading ? (
