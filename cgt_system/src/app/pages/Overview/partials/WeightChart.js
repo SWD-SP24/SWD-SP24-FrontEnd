@@ -39,7 +39,7 @@ export default function WeightChart() {
       // Extract data
       const newLabels = reversedData.map(
         (record) =>
-          getDate(record.recordTime) + "/" + getMonth(record.recordTime)
+          getDate(record.recordTime) + "/" + getMonth(record.recordTime) + "/" + getYear(record.recordTime)
       );
       const newWeightDatasets = reversedData.map((record) => record.weight);
 

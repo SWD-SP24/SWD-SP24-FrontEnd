@@ -13,6 +13,7 @@
     "bootstrap": "^5.3.3",
     "boxicons": "^2.1.4",
     "chart.js": "^4.4.8",
+    "chartjs-plugin-zoom": "^2.2.0",
     "classnames": "^2.5.1",
     "cra-template": "1.2.0",
     "firebase": "^11.4.0",

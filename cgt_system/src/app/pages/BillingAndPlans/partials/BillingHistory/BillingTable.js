@@ -1,7 +1,9 @@
 import React from "react";
 import BillingRow from "./BillingRow";
 
-export default function BillingTable({ billings, onFetchBillings }) {
+export default function BillingTable({ billings }) {
+  console.log(billings);
+
   return (
     <div className="justify-content-between dt-layout-table">
       <div className="d-md-flex justify-content-between align-items-center table-responsive dt-layout-full">
@@ -102,7 +104,7 @@ export default function BillingTable({ billings, onFetchBillings }) {
             </tr>
           </thead>
           <tbody>
-            {billings ? (
+            {billings.length > 0 ? (
               billings.map((billingItem, index) => (
                 <BillingRow
                   key={billingItem.paymentId}
