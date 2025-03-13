@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
+import { Animations } from "../../../assets/js/Animations";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function TotalUsers() {
   const { response, callApi } = useApi({
@@ -24,7 +26,11 @@ export default function TotalUsers() {
   }, [response, membershipPkg]);
 
   if (response === null || membershipPkg === null) {
-    return <div>Loading</div>;
+    return (
+      <div className="col-4 order-2 mb-4 h-100" style={{ height: "300px" }}>
+        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      </div>
+    );
   }
   const countUsersByMembership = (users, packages) => {
     // Create a mapping of membership ID to name

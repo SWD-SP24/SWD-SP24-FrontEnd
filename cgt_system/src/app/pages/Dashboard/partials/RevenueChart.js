@@ -16,6 +16,8 @@ import {
 } from "chart.js";
 import useApi from "../../../hooks/useApi";
 import API_URLS from "../../../config/apiUrls";
+import { Animations } from "../../../assets/js/Animations";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 ChartJS.register(
   CategoryScale,
@@ -98,7 +100,13 @@ export default function RevenueChart() {
       },
     ],
   };
-
+  if (response === null) {
+    return (
+      <div className="card order-1" style={{ height: "300px" }}>
+        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      </div>
+    );
+  }
   return (
     <div className="col-8 order-1 order-md-3 order-lg-2 mb-4">
       <div className="card h-100">

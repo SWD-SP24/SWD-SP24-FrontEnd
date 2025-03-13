@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 import useApi from "../../../hooks/useApi";
 import API_URLS from "../../../config/apiUrls";
+import { Animations } from "../../../assets/js/Animations";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function OverviewVaccine() {
   const { response, callApi } = useApi({
@@ -42,7 +44,11 @@ export default function OverviewVaccine() {
     totalVaccine === null ||
     administeredDoses === null
   ) {
-    return <div>Loading</div>;
+    return (
+      <div className="card" style={{ height: "300px" }}>
+        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      </div>
+    );
   }
   return (
     <div className="col-4 order-2 mb-4 h-100">
