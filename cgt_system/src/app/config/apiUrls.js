@@ -53,6 +53,7 @@ const API_URLS = {
   INDICATORS: {
     INDICATORS: "/api/GrowthIndicators",
     LATEST_RECORD: "/api/GrowthIndicators/latest",
+    INDICATOR_WITH_ID: "/api/GrowthIndicators/",
   },
   DASHBOARD: {
     TOTAL_CHILDREN: "/api/Dashboard/total-children",
