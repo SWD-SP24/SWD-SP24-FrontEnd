@@ -53,6 +53,10 @@ const Images = {
   wallet: require("./icons/unicons/wallet.png"),
   childCare: require("./front-pages/landing-page/child_care.png"),
   faq: require("./front-pages/landing-page/faq.png"),
+  ladyDoc: require("./front-pages/landing-page/ladyDoc.png"),
+  manDoc1: require("./front-pages/landing-page/manDoc.png"),
+  manDoc2: require("./front-pages/landing-page/manDoc2.png"),
+  manDoc3: require("./front-pages/landing-page/manDoc3.png"),
 };
 
 export default Images;

@@ -28,7 +28,7 @@ const Teams = () => {
             <div className="card mt-3 mt-lg-0 shadow-none">
               <div className="bg-label-primary border border-bottom-0 border-primary-subtle position-relative team-image-box">
                 <img
-                  src={Images.teamMember1}
+                  src={Images.ladyDoc}
                   className="position-absolute card-img-position bottom-0 start-50"
                   alt="human image"
                 />
@@ -45,7 +45,7 @@ const Teams = () => {
             <div className="card mt-3 mt-lg-0 shadow-none">
               <div className="bg-label-info border border-bottom-0 border-info-subtle position-relative team-image-box">
                 <img
-                  src={Images.teamMember2}
+                  src={Images.manDoc1}
                   className="position-absolute card-img-position bottom-0 start-50"
                   alt="human image"
                 />
@@ -60,7 +60,7 @@ const Teams = () => {
             <div className="card mt-3 mt-lg-0 shadow-none">
               <div className="bg-label-danger border border-bottom-0 border-danger-subtle position-relative team-image-box">
                 <img
-                  src={Images.teamMember3}
+                  src={Images.manDoc2}
                   className="position-absolute card-img-position bottom-0 start-50"
                   alt="human image"
                 />
@@ -75,7 +75,7 @@ const Teams = () => {
             <div className="card mt-3 mt-lg-0 shadow-none">
               <div className="bg-label-success border border-bottom-0 border-success-subtle position-relative team-image-box">
                 <img
-                  src={Images.teamMember4}
+                  src={Images.manDoc3}
                   className="position-absolute card-img-position bottom-0 start-50"
                   alt="human image"
                 />
