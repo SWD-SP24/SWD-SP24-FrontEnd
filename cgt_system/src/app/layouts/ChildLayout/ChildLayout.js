@@ -15,7 +15,7 @@ import ChildAvatar from "../../components/Avatar/ChildAvatar";
 export default function ChildLayout() {
   const params = useParams();
   const id = params.childId;
-
+  const vaccineId = params.vaccineId;
   const permissions = Cookies.get("permissions");
   const location = useLocation();
   const storedUser = Cookies.get("user");
@@ -56,20 +56,28 @@ export default function ChildLayout() {
   }, [response]);
 
   useEffect(() => {
-    const active = Object.keys(pillRoutes).find(
-      (key) => pillRoutes[key] === location.pathname
-    );
+    let active = Object.keys(pillRoutes).find((key) => {
+      if (key === "vaccinations") {
+        return (
+          location.pathname.includes(`/member/children/${id}/vaccinations`) ||
+          location.pathname.includes(`/member/children/${id}/vaccine/`)
+        );
+      }
+      return pillRoutes[key] === location.pathname;
+    });
     setActivePill(active || "");
-  }, [location.pathname]);
+  }, [location.pathname, id]);
 
   const handlePillClick = (pill) => {
     nav(pillRoutes[pill]);
   };
   const pillRoutes = {
-    "": `/member/children/${id}`,
+    overview: `/member/children/${id}/overview`,
     indicators: `/member/children/${id}/indicators`,
     teeth: `/member/children/${id}/teeth`,
-    vaccinations: `/member/children/${id}/vaccinations`,
+    vaccinations:
+      `/member/children/${id}/vaccinations` ||
+      `/member/children/${id}/vaccine/${vaccineId}`,
   };
   if (!response) {
     return <div> loading</div>;
@@ -179,7 +187,7 @@ export default function ChildLayout() {
                   className={`nav-link ${activePill === key ? "active" : ""}`}
                   onClick={() => handlePillClick(key)}
                 >
-                  {key === ""
+                  {key === "overview"
                     ? "Overview"
                     : key.charAt(0).toUpperCase() + key.slice(1)}
                 </button>

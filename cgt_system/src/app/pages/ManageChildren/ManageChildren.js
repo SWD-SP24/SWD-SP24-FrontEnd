@@ -188,7 +188,7 @@ export default function ManageChildren() {
                       <tr key={child.childrenId}>
                         <td className="sorting_1">
                           <Link
-                            to={`${child.childrenId}`}
+                            to={`${child.childrenId}/overview`}
                             className="d-flex justify-content-start align-items-center user-name"
                           >
                             <div>

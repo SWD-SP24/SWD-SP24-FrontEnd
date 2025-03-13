@@ -27,7 +27,7 @@ export default function MemberRoutes() {
       >
         <Route path="children" element={<ManageChildren />} />
         <Route element={<ChildLayout />}>
-          <Route path="children/:childId" element={<Overview />} />
+          <Route path="children/:childId/overview" element={<Overview />} />
           <Route path="children/:childId/indicators" element={<Indicators />} />
           <Route path="children/:childId/teeth" element={<Teeth />} />
           <Route

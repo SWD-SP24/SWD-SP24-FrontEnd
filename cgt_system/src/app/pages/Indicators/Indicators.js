@@ -8,6 +8,8 @@ import DateRangePicker from "./partials/DateRangePicker.js";
 import EditIndicators from "./partials/EditIndicators.js";
 import RemoveIndicators from "./partials/RemoveIndicators.js";
 import AIAnalysis from "./partials/AIAnalysis.js";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Animations } from "../../assets/js/Animations.js";
 export default function Indicators() {
   const permissions = useOutletContext();
 
@@ -41,6 +43,13 @@ export default function Indicators() {
     return permissionsJson.map((p) => p.permissionName).includes(permission);
   };
 
+  if (response === null) {
+    return (
+      <div className="card" style={{ height: "300px" }}>
+        <DotLottieReact src={Animations.AmongUs} loop autoplay />
+      </div>
+    );
+  }
   return (
     <>
       <div class="card mb-6">
@@ -132,7 +141,7 @@ export default function Indicators() {
                     </tr>
                   </thead>
                   <tbody>
-                    {response && response.data.length > 0 ? (
+                    {response.data.length > 0 ? (
                       response.data.map((record) => (
                         <tr key={record.growthIndicatorsId}>
                           <td class="sorting_1">

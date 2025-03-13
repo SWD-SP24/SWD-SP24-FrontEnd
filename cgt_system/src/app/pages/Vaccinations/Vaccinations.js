@@ -5,6 +5,8 @@ import useApi from "../../hooks/useApi";
 import VaccineTable from "./partials/VaccineTable";
 import AIAnalysis from "./partials/AIAnalysis";
 import "./vaccine.scss";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Animations } from "../../assets/js/Animations";
 export default function Vaccinations() {
   const permissions = useOutletContext();
   const url = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=1&pageSize=7&sortByAge=true`;
@@ -27,7 +29,13 @@ export default function Vaccinations() {
   const isHasPermission = (permission) => {
     return permissionsJson.map((p) => p.permissionName).includes(permission);
   };
-
+  if (response === null) {
+    return (
+      <div className="card" style={{ height: "300px" }}>
+        <DotLottieReact src={Animations.AmongUs} loop autoplay />
+      </div>
+    );
+  }
   return (
     <>
       <div class="card mb-6">

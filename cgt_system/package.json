@@ -6,6 +6,7 @@
     "@dnd-kit/core": "^6.3.1",
     "@iconify/icons-bx": "^1.2.6",
     "@iconify/react": "^5.2.0",
+    "@lottiefiles/dotlottie-react": "^0.13.2",
     "@popperjs/core": "^2.11.8",
     "@simonwep/pickr": "^1.9.1",
     "axios": "^1.7.9",

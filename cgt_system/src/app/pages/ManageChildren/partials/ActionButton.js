@@ -13,7 +13,7 @@ export default function ActionButton({ childId, refetch }) {
   const navigate = useNavigate();
 
   const handleViewDetail = () => {
-    navigate(`${childId}`);
+    navigate(`${childId}/overview`);
   };
   const handleDelete = async (e) => {
     e.preventDefault();

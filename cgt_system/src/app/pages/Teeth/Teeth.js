@@ -6,6 +6,8 @@ import { toothDList } from "../../constants/toothDList";
 import ToothNote from "./partials/ToothNote";
 import AIAnalysis from "./partials/AIAnalysis";
 import { useOutletContext } from "react-router";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import { Animations } from "../../assets/js/Animations";
 export default function Teeth() {
   const permissions = useOutletContext();
   const { response, callApi } = useApi({
@@ -63,7 +65,13 @@ export default function Teeth() {
   const isHasPermission = (permission) => {
     return permissionsJson.map((p) => p.permissionName).includes(permission);
   };
-
+  if (response === null) {
+    return (
+      <div className="card" style={{ height: "300px" }}>
+        <DotLottieReact src={Animations.AmongUs} loop autoplay />
+      </div>
+    );
+  }
   return (
     <div className="col-12  mb-6">
       <div className="card">
