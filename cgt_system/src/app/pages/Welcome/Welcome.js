@@ -17,7 +17,7 @@ export default function Welcome() {
           </p>
           <p className="mb-6 mx-2">Let's make every step memorable! 🎉</p>
           <Link
-            to={"/member/dashboard"}
+            to={"/member/children"}
             className={cx("btn", "btn-primary", "btn-animated")}
           >
             Start Exploring
