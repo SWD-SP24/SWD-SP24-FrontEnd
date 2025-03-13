@@ -311,6 +311,7 @@
                 box-shadow 0.4s ease;
             text-align: center;
             overflow: hidden;
+            color: #384551;
 
             &:hover {
                 transform: translateY(-10px);
@@ -377,7 +378,9 @@
         padding: 50px;
         overflow: hidden;
         position: relative;
-
+        .partner {
+            color: #384551;
+        }
         .partners-wrapper {
             display: flex;
             overflow: hidden;
@@ -431,6 +434,10 @@
         background: #dfe6e9;
         border-radius: 10px;
         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+        color: #384551;
+        .contact {
+            color: #384551;
+        }
     }
 }
 
