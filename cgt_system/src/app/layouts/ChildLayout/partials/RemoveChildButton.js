@@ -7,8 +7,8 @@ import showToast from "../../../util/showToast";
 export default function RemoveChildButton({ childId }) {
   const navigate = useNavigate();
   const { response, callApi } = useApi({
-    url: `${API_URLS.CHILDREN.DELETE_CHILD}${childId}`,
-    method: "DELETE",
+    url: `${API_URLS.CHILDREN.EDIT_CHILD}${childId}`,
+    method: "PUT",
   });
 
   useEffect(() => {
@@ -17,7 +17,8 @@ export default function RemoveChildButton({ childId }) {
 
   const handleRemove = async (e) => {
     e.preventDefault();
-    await callApi();
+    const data = { status: 0 };
+    await callApi(data);
     let target = document.querySelector(".content-wrapper");
     showToast({
       icon: "success",
