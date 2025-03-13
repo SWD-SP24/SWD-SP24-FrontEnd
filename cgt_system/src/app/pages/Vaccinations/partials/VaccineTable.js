@@ -8,7 +8,11 @@ import AddVaccineModal from "./AddVaccineModal";
 export const sVaccineId = signify("");
 export const sDose = signify("");
 export const sVaccineName = signify("");
-export default function VaccineTable({ vaccineList, refetch }) {
+export default function VaccineTable({
+  vaccineList,
+  refetch,
+  onSetVaccinations,
+}) {
   const childId = useParams().childId;
   const { response, callApi } = useApi({
     url: `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childId=${childId}`,
@@ -28,7 +32,10 @@ export default function VaccineTable({ vaccineList, refetch }) {
   }, []);
 
   useEffect(() => {
-    console.log(response);
+    if (response?.status === "successful") {
+      const vaccinations = response.data || [];
+      onSetVaccinations(vaccinations);
+    }
   }, [response]);
 
   const handleStatus = (vaccineId, dose, recordList) => {
