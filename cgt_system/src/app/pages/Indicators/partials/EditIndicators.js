@@ -3,11 +3,13 @@ import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
 import showToast from "../../../util/showToast.js";
 import { signify } from "react-signify";
-
+import { sHeight, sWeight } from "../Indicators.js";
 const sUrl = signify("");
 export default function EditIndicators({ refetch, indicatorId }) {
-  const heightRef = useRef(null);
-  const weightRef = useRef(null);
+  const heightRef = useRef(sHeight);
+  const weightRef = useRef(sWeight);
+  const heightCurrent = sHeight.use();
+  const weightCurrent = sWeight.use();
   const { callApi } = useApi({
     method: "PUT",
   });
@@ -83,7 +85,7 @@ export default function EditIndicators({ refetch, indicatorId }) {
                       type="text"
                       id="weight"
                       class="form-control"
-                      placeholder="Enter Child Weight"
+                      placeholder={weightCurrent}
                     />
                   </div>
                   <div class="col mb-3">
@@ -95,7 +97,7 @@ export default function EditIndicators({ refetch, indicatorId }) {
                       type="text"
                       id="height"
                       class="form-control"
-                      placeholder="Enter Child height"
+                      placeholder={heightCurrent}
                     />
                   </div>
                 </div>
