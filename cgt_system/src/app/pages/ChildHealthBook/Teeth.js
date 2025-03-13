@@ -4,6 +4,7 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import { toothDList } from "../../constants/toothDList";
 import ToothNote from "./ToothNote";
+import Tippy from "@tippyjs/react";
 // import AIAnalysis from "./partials/AIAnalysis";
 export default function Teeth({ childId }) {
   const { response, callApi } = useApi({
@@ -52,10 +53,24 @@ export default function Teeth({ childId }) {
         `[data-key="${toothNumber}"]`
       );
       if (toothPolygon) {
-        toothPolygon.setAttribute("fill", "pink"); // Change color to red
+        toothPolygon.setAttribute("fill", "pink");
       }
     });
   }
+
+  const getToothInfo = (toothId) => {
+    const foundTooth = toothRecord.find((t) => t.toothId - 2 === toothId);
+
+    if (foundTooth) {
+      return {
+        color: "pink",
+        tooltip: `Eruption Date: ${foundTooth.eruptionDate} \nNote: ${
+          foundTooth.note || "Normal"
+        }`,
+      };
+    }
+    return { tooltip: "Not erupted yet" };
+  };
   return (
     <div style={{ width: "100%", minHeight: "100vh", height: "auto" }}>
       <div
@@ -247,210 +262,252 @@ export default function Teeth({ childId }) {
             </g>
 
             <g class="spots">
-              <polygon
-                id="ToothT"
-                fill="#FFFFFF"
-                data-key="29"
-                points="65.7,373.5 74,375.2 82,380.8 86.3,384.8 90.3,390.2 92.7,395.8 93,404.8 93,416.8 
+              <Tippy content={getToothInfo(29).tooltip} placement="top">
+                <polygon
+                  id="ToothT"
+                  fill="#FFFFFF"
+                  data-key="29"
+                  points="65.7,373.5 74,375.2 82,380.8 86.3,384.8 90.3,390.2 92.7,395.8 93,404.8 93,416.8 
 		93,424.5 94.3,432.2 95.7,438.5 94.7,444.2 92.3,450.2 89,453.5 77.7,456.5 68.7,460.5 64.3,461.2 54.7,456.5 48.3,450.2 42,442.2 
 		36.3,425.2 33.3,407.8 34.3,399.5 36,392.8 39.7,383.5 47,377.2 57,373.2 	"
-                onClick={() => {
-                  handleToothClick(29);
-                }}
-              />
-              <polygon
-                id="ToothS"
-                fill="#FFFFFF"
-                data-key="28"
-                points="93.7,456.2 82.7,455.8 70.7,460.8 66.3,467.2 63.7,474.2 62,487.2 63.3,500.2 
+                  onClick={() => {
+                    handleToothClick(29);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(28).tooltip} placement="top">
+                <polygon
+                  id="ToothS"
+                  fill="#FFFFFF"
+                  data-key="28"
+                  points="93.7,456.2 82.7,455.8 70.7,460.8 66.3,467.2 63.7,474.2 62,487.2 63.3,500.2 
 		66.3,509.5 70.3,517.2 76.3,524.8 85.3,531.2 93.3,534.8 102.3,535.8 109.3,534.5 119,529.8 121.7,521.2 122,510.2 120.7,502.8 
 		114.3,484.5 108.7,470.8 103,462.5 	"
-                onClick={() => {
-                  handleToothClick(28);
-                }}
-              />
-              <polygon
-                id="ToothR"
-                fill="#FFFFFF"
-                data-key="27"
-                points="129.3,532.2 137,535.2 142.7,541.2 146,548.8 147.7,557.8 144.7,565.2 136.7,570.5 
+                  onClick={() => {
+                    handleToothClick(28);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(27).tooltip} placement="top">
+                <polygon
+                  id="ToothR"
+                  fill="#FFFFFF"
+                  data-key="27"
+                  points="129.3,532.2 137,535.2 142.7,541.2 146,548.8 147.7,557.8 144.7,565.2 136.7,570.5 
 		123,573.8 113,574.2 105,572.8 101.3,564.8 103,551.2 107.3,541.2 111.3,535.5 124,531.5 	"
-                onClick={() => {
-                  handleToothClick(27);
-                }}
-              />
-              <polygon
-                id="ToothQ"
-                fill="#FFFFFF"
-                data-key="26"
-                points="164.3,564.5 168.3,568.8 173,592.2 172,598.2 169.3,601.8 162,601.8 152,599.8 
+                  onClick={() => {
+                    handleToothClick(27);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(26).tooltip} placement="top">
+                <polygon
+                  id="ToothQ"
+                  fill="#FFFFFF"
+                  data-key="26"
+                  points="164.3,564.5 168.3,568.8 173,592.2 172,598.2 169.3,601.8 162,601.8 152,599.8 
 		142.3,595.5 131,586.8 130.7,584.5 135,575.8 140.3,570.2 149.7,564.5 159,562.8 	"
-                onClick={() => {
-                  handleToothClick(26);
-                }}
-              />
-              <polygon
-                id="ToothP"
-                fill="#FFFFFF"
-                data-key="25"
-                points="208,576.5 218,607.2 214,611.5 206.7,613.2 191,612.8 179,606.8 172.3,601.5 
+                  onClick={() => {
+                    handleToothClick(26);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(25).tooltip} placement="top">
+                <polygon
+                  id="ToothP"
+                  fill="#FFFFFF"
+                  data-key="25"
+                  points="208,576.5 218,607.2 214,611.5 206.7,613.2 191,612.8 179,606.8 172.3,601.5 
 		174,597.8 190.3,578.2 199.7,571.8 205.7,573.8 	"
-                onClick={() => {
-                  handleToothClick(25);
-                }}
-              />
-              <polygon
-                id="ToothO"
-                fill="#FFFFFF"
-                data-key="24"
-                points="244.3,574.2 235.7,575.2 230.7,581.8 225.7,593.5 221.7,604.5 220.3,609.8 224,613.5 
+                  onClick={() => {
+                    handleToothClick(25);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(24).tooltip} placement="top">
+                <polygon
+                  id="ToothO"
+                  fill="#FFFFFF"
+                  data-key="24"
+                  points="244.3,574.2 235.7,575.2 230.7,581.8 225.7,593.5 221.7,604.5 220.3,609.8 224,613.5 
 		234.3,615.5 248.7,613.8 258.7,610.8 264,606.2 265.3,598.8 	"
-                onClick={() => {
-                  handleToothClick(24);
-                }}
-              />
-              <polygon
-                id="ToothN"
-                fill="#FFFFFF"
-                data-key="23"
-                points="306.3,575.8 298.7,569.2 289.7,566.2 280.7,564.2 275.3,566.8 272,572.2 268.7,583.8 
+                  onClick={() => {
+                    handleToothClick(24);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(23).tooltip} placement="top">
+                <polygon
+                  id="ToothN"
+                  fill="#FFFFFF"
+                  data-key="23"
+                  points="306.3,575.8 298.7,569.2 289.7,566.2 280.7,564.2 275.3,566.8 272,572.2 268.7,583.8 
 		267.3,593.2 266.3,599.2 266.7,603.8 270.7,607.8 276.3,608.8 286.7,605.2 300,597.5 307.7,590.5 309,583.5 	"
-                onClick={() => {
-                  handleToothClick(23);
-                }}
-              />
-              <polygon
-                id="ToothM"
-                fill="#FFFFFF"
-                data-key="22"
-                points="335,532.2 341.7,546.5 343.3,562.8 339.7,570.5 331.7,573.5 309,572.5 302,569.2 
+                  onClick={() => {
+                    handleToothClick(23);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(22).tooltip} placement="top">
+                <polygon
+                  id="ToothM"
+                  fill="#FFFFFF"
+                  data-key="22"
+                  points="335,532.2 341.7,546.5 343.3,562.8 339.7,570.5 331.7,573.5 309,572.5 302,569.2 
 		298,564.5 299.7,548.2 303,539.5 307.3,531.8 315.3,525.2 321.3,525.2 325,525.5 	"
-                onClick={() => {
-                  handleToothClick(22);
-                }}
-              />
-              <polygon
-                id="ToothL"
-                fill="#FFFFFF"
-                data-key="21"
-                points="354,450.2 365.7,453.8 377,459.5 384.3,469.2 385,481.5 382.7,491.8 369.7,517.8 
+                  onClick={() => {
+                    handleToothClick(22);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(21).tooltip} placement="top">
+                <polygon
+                  id="ToothL"
+                  fill="#FFFFFF"
+                  data-key="21"
+                  points="354,450.2 365.7,453.8 377,459.5 384.3,469.2 385,481.5 382.7,491.8 369.7,517.8 
 		357.3,527.8 340.7,532.2 331.7,528.5 324.3,523.5 321,515.2 320.7,504.2 325.3,489.5 330.3,470.2 335,460.5 343.7,453.2 	"
-                onClick={() => {
-                  handleToothClick(21);
-                }}
-              />
-              <polygon
-                id="ToothK"
-                fill="#FFFFFF"
-                data-key="20"
-                points="391.7,370.2 379,367.8 366.7,370.2 356.3,378.8 350.3,388.2 347.7,396.2 348,411.5 
+                  onClick={() => {
+                    handleToothClick(21);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(20).tooltip} placement="top">
+                <polygon
+                  id="ToothK"
+                  fill="#FFFFFF"
+                  data-key="20"
+                  points="391.7,370.2 379,367.8 366.7,370.2 356.3,378.8 350.3,388.2 347.7,396.2 348,411.5 
 		346.7,427.8 347.7,438.5 352,445.2 364.7,453.2 374.3,455.5 381.7,454.8 389.7,451.8 394.3,445.8 397.7,433.8 401.7,421.5 
 		406.7,413.5 409.7,400.5 408.7,390.5 404.3,380.2 	"
-                onClick={() => {
-                  handleToothClick(20);
-                }}
-              />
-              <polygon
-                id="ToothJ"
-                fill="#FFFFFF"
-                data-key="13"
-                points="384.3,231.2 391.3,232.5 402.3,241.5 409,253.8 414.3,267.2 416,281.8 413.7,300.2 
+                  onClick={() => {
+                    handleToothClick(20);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(13).tooltip} placement="top">
+                <polygon
+                  id="ToothJ"
+                  fill="#FFFFFF"
+                  data-key="13"
+                  points="384.3,231.2 391.3,232.5 402.3,241.5 409,253.8 414.3,267.2 416,281.8 413.7,300.2 
 		409.3,308.8 400.3,314.5 386,317.2 375,314.8 367.3,310.5 358.7,303.5 353.7,291.5 353.7,277.8 354.7,267.8 350.3,259.8 
 		351.7,248.2 357.7,239.5 367.7,237.5 	"
-                onClick={() => {
-                  handleToothClick(13);
-                }}
-              />
-              <polygon
-                id="ToothI"
-                fill="#FFFFFF"
-                data-key="12"
-                points="359.3,167.2 367.3,169.8 375.3,182.5 384,199.8 389.7,211.8 389.3,220.5 386,227.5 
+                  onClick={() => {
+                    handleToothClick(13);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(12).tooltip} placement="top">
+                <polygon
+                  id="ToothI"
+                  fill="#FFFFFF"
+                  data-key="12"
+                  points="359.3,167.2 367.3,169.8 375.3,182.5 384,199.8 389.7,211.8 389.3,220.5 386,227.5 
 		377.3,233.5 363.3,238.5 355.3,237.5 348.3,233.2 343.3,224.8 337,211.5 330.7,195.8 328,186.8 332.7,175.2 342.7,168.5 	"
-                onClick={() => {
-                  handleToothClick(12);
-                }}
-              />
-              <polygon
-                id="ToothH"
-                fill="#FFFFFF"
-                data-key="11"
-                points="305.7,136.5 303,143.8 301,150.5 304,161.5 313,170.2 323,172.8 331.7,172.5 
+                  onClick={() => {
+                    handleToothClick(12);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(11).tooltip} placement="top">
+                <polygon
+                  id="ToothH"
+                  fill="#FFFFFF"
+                  data-key="11"
+                  points="305.7,136.5 303,143.8 301,150.5 304,161.5 313,170.2 323,172.8 331.7,172.5 
 		339.3,168.8 346,162.5 350.3,152.2 351.3,141.2 347.3,134.5 343,132.2 334,131.5 322.3,130.2 316,129.8 	"
-                onClick={() => {
-                  handleToothClick(11);
-                }}
-              />
-              <polygon
-                id="ToothG"
-                fill="#FFFFFF"
-                data-key="10"
-                points="277.3,98.8 276.7,107.2 276,119.2 276,129.5 279.7,138.2 285.7,141.2 293.3,141.5 
+                  onClick={() => {
+                    handleToothClick(11);
+                  }}
+                />
+              </Tippy>
+
+              <Tippy content={getToothInfo(10).tooltip} placement="top">
+                <polygon
+                  id="ToothG"
+                  fill="#FFFFFF"
+                  data-key="10"
+                  points="277.3,98.8 276.7,107.2 276,119.2 276,129.5 279.7,138.2 285.7,141.2 293.3,141.5 
 		301.7,135.8 316.7,126.8 320,122.5 320,116.2 316.3,109.8 301.7,101.8 294.7,98.8 282,97.5 	"
-                onClick={() => {
-                  handleToothClick(10);
-                }}
-              />
-              <polygon
-                id="ToothF"
-                fill="#FFFFFF"
-                data-key="9"
-                points="222,87.5 222.7,93.8 226.7,98.2 231,107.8 236.7,121.5 242,125.8 248,126.8 257,120.2 
+                  onClick={() => {
+                    handleToothClick(10);
+                  }}
+                />
+              </Tippy>
+
+              <Tippy content={getToothInfo(9).tooltip} placement="top">
+                <polygon
+                  id="ToothF"
+                  fill="#FFFFFF"
+                  data-key="9"
+                  points="222,87.5 222.7,93.8 226.7,98.2 231,107.8 236.7,121.5 242,125.8 248,126.8 257,120.2 
 		275.3,101.5 276,95.2 273.7,92.2 266,85.8 248.7,80.5 236.3,80.2 229,81.8 	"
-                onClick={() => {
-                  handleToothClick(9);
-                }}
-              />
-              <polygon
-                id="ToothE"
-                fill="#FFFFFF"
-                data-key="8"
-                points="168.3,94.5 172,103.5 175.3,107.5 184,120.5 190.3,127.5 198.7,128.5 203.3,124.8 
+                  onClick={() => {
+                    handleToothClick(9);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(8).tooltip} placement="top">
+                <polygon
+                  id="ToothE"
+                  fill="#FFFFFF"
+                  data-key="8"
+                  points="168.3,94.5 172,103.5 175.3,107.5 184,120.5 190.3,127.5 198.7,128.5 203.3,124.8 
 		209.7,115.2 219.7,92.5 218.7,85.8 209,83.8 191.3,82.5 182,84.2 173.7,88.2 	"
-                onClick={() => {
-                  handleToothClick(8);
-                }}
-              />
-              <polygon
-                id="ToothD"
-                fill="#FFFFFF"
-                data-key="7"
-                points="123.7,124.2 131.3,131.2 143.3,137.5 151.3,141.8 159,142.5 165.7,137.5 169.3,125.8 
+                  onClick={() => {
+                    handleToothClick(8);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(7).tooltip} placement="top">
+                <polygon
+                  id="ToothD"
+                  fill="#FFFFFF"
+                  data-key="7"
+                  points="123.7,124.2 131.3,131.2 143.3,137.5 151.3,141.8 159,142.5 165.7,137.5 169.3,125.8 
 		169,108.8 169.7,100.2 165,95.5 158.3,95.2 145.7,97.8 138.7,102.5 130,108.2 124.3,114.2 	"
-                onClick={() => {
-                  handleToothClick(7);
-                }}
-              />
-              <polygon
-                id="ToothC"
-                fill="#FFFFFF"
-                data-key="6"
-                points="106.7,132.2 118,132.2 130.3,132.5 139.7,138.2 144.7,147.8 144.7,160.8 134.3,173.8 
+                  onClick={() => {
+                    handleToothClick(7);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(6).tooltip} placement="top">
+                <polygon
+                  id="ToothC"
+                  fill="#FFFFFF"
+                  data-key="6"
+                  points="106.7,132.2 118,132.2 130.3,132.5 139.7,138.2 144.7,147.8 144.7,160.8 134.3,173.8 
 		121.7,180.2 115,180.2 107.7,174.5 100,169.8 98.7,156.8 97.3,147.8 98.3,138.8 104.7,133.2 	"
-                onClick={() => {
-                  handleToothClick(6);
-                }}
-              />
-              <polygon
-                id="ToothB"
-                fill="#FFFFFF"
-                data-key="5"
-                points="90.2,242.2 97.3,236.1 106.3,224.2 114.9,200.1 117.3,189.4 113,179.1 95.7,169.8 
+                  onClick={() => {
+                    handleToothClick(6);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(5).tooltip} placement="top">
+                <polygon
+                  id="ToothB"
+                  fill="#FFFFFF"
+                  data-key="5"
+                  points="90.2,242.2 97.3,236.1 106.3,224.2 114.9,200.1 117.3,189.4 113,179.1 95.7,169.8 
 		86.2,169.8 71.9,179.1 63.5,191.3 58.6,202.5 54,215.2 55.8,227.2 65.8,238.9 79.1,242.2 	"
-                onClick={() => {
-                  handleToothClick(5);
-                }}
-              />
-              <polygon
-                id="ToothA"
-                fill="#FFFFFF"
-                data-key="4"
-                points="55.2,236.1 60,237.2 69.8,240.2 86.9,243.3 92,247 95.7,255.8 95.7,271.2 94.7,286.5 
+                  onClick={() => {
+                    handleToothClick(5);
+                  }}
+                />
+              </Tippy>
+              <Tippy content={getToothInfo(4).tooltip} placement="top">
+                <polygon
+                  id="ToothA"
+                  fill="#FFFFFF"
+                  data-key="4"
+                  points="55.2,236.1 60,237.2 69.8,240.2 86.9,243.3 92,247 95.7,255.8 95.7,271.2 94.7,286.5 
 		90.2,305.2 82.8,312.8 72,318.5 56.7,319.3 48.8,317.5 40.8,311.5 33,300.3 31.3,284.7 34.2,273.8 39.3,256.3 42.3,248 	"
-                onClick={() => {
-                  handleToothClick(4);
-                }}
-              />
+                  onClick={() => {
+                    handleToothClick(4);
+                  }}
+                />
+              </Tippy>
             </g>
             <g id="child-outlines">
               <g id="XMLID_9_">
