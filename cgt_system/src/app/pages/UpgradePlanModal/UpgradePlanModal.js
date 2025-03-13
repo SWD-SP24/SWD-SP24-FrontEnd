@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import UpgradePlanModalSkeleton from "./UpgradePlanModalSkeleton";
 import { useNavigate } from "react-router";
-import { auto } from "@popperjs/core";
+import useUser from "../../hooks/useUser";
 
 export default function UpgradePlanModal() {
   const [isAnnually, setIsAnnually] = useState(false);
   const [pricingPlans, setPricingPlans] = useState([]);
   const [maxDiscount, setMaxDiscount] = useState(null);
+  const { user } = useUser();
 
   const navigate = useNavigate();
 
@@ -98,7 +99,33 @@ export default function UpgradePlanModal() {
                   comprehensive child development tracking. Choose the best plan
                   to fit your needs.
                 </p>
-                <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 pt-12 pb-4">
+
+                {user?.emailActivation === "unactivated" && (
+                  <div
+                    class="alert alert-warning mb-0 mt-3 d-flex align-items-center gap-3"
+                    role="alert"
+                  >
+                    <h5 class="alert-heading d-flex align-items-center justify-between mb-0">
+                      <span class="alert-icon rounded-circle">
+                        <span
+                          style={{ fontSize: "54px" }}
+                          class="icon-base bx bx-error icon-md"
+                        ></span>
+                      </span>
+                    </h5>
+                    <div className="d-flex flex-column">
+                      <h5 className="text-warning mb-0 fw-bold">
+                        Your account is not activated yet!
+                      </h5>
+                      <span>
+                        Please activate your account before purchasing a
+                        membership package. Check your email for the activation
+                        link or contact support if you need help.
+                      </span>
+                    </div>
+                  </div>
+                )}
+                <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 pt-7 pb-4">
                   <label className="switch switch-sm ms-sm-12 ps-sm-12 me-0">
                     <span className="switch-label fs-6 text-body">Monthly</span>
                     <input
@@ -209,8 +236,9 @@ export default function UpgradePlanModal() {
                                   className="btn btn-label-primary d-grid w-100"
                                   data-bs-dismiss="modal"
                                   disabled={
-                                    activePlanIndex !== -1 &&
-                                    index < activePlanIndex
+                                    (activePlanIndex !== -1 &&
+                                      index < activePlanIndex) ||
+                                    user?.emailActivation === "unactivated"
                                   }
                                   onClick={
                                     activePlanIndex !== -1 &&

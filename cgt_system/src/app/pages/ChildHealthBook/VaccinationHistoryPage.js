@@ -5,7 +5,7 @@ import useApi from "../../hooks/useApi";
 
 export default function VaccinationHistoryPage({ childId }) {
   const [vaccinations, setVaccinations] = useState([]);
-  const url = `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childrenId=${childId}&pageNumber=1&pageSize=999`;
+  const url = `${API_URLS.VACCINE_RECORD.VACCINE_RECORD}?childId=${childId}`;
 
   const { response, callApi } = useApi({
     url: url,

@@ -37,6 +37,7 @@ const API_URLS = {
     GET_DOCTORS_LIST: "/api/Users/doctors",
     USERS_AND_MEMBERSHIP: "/api/Users/list-user-active-memberships",
     PAYMENT_HISTORY: "api/PaymentTransactions/history",
+    VERIFY_EMAIL: "/api/Users/resend-verification-email",
   },
   ADMIN: {
     CREATE_DOCTOR: "/api/AdminAuth/registerDoctor",
