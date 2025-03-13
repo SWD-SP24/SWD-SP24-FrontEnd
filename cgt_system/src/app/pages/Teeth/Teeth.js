@@ -9,7 +9,7 @@ import { useOutletContext } from "react-router";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Animations } from "../../assets/js/Animations";
 export default function Teeth() {
-  const permissions = useOutletContext();
+  const { permissions, childrenData } = useOutletContext();
   const { response, callApi } = useApi({
     url: `${API_URLS.TEETH.TEETH}`,
     method: "GET",

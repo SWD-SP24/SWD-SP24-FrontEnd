@@ -8,7 +8,7 @@ import "./vaccine.scss";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Animations } from "../../assets/js/Animations";
 export default function Vaccinations() {
-  const permissions = useOutletContext();
+  const { permissions, childrenData } = useOutletContext();
   const url = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=1&pageSize=7&sortByAge=true`;
   const [vaccinations, setVaccinations] = useState([]);
   const [page, setPage] = useState(1);

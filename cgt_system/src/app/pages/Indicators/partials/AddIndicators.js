@@ -1,9 +1,13 @@
 import React, { useRef } from "react";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
-import { formatDate, toDMY } from "../../../util/dateFormat";
+import {
+  convertToISOString,
+  formatDate,
+  toDMY,
+} from "../../../util/dateFormat";
 import showToast from "../../../util/showToast";
-export default function AddIndicators({ refetch, childId }) {
+export default function AddIndicators({ refetch, childId, dob }) {
   const heightRef = useRef(null);
   const weightRef = useRef(null);
   const recordTimeRef = useRef(null);
@@ -110,6 +114,7 @@ export default function AddIndicators({ refetch, childId }) {
                       type="date"
                       defaultValue={new Date().toISOString().split("T")[0]}
                       id="dobInput"
+                      min={convertToISOString(dob)}
                       max={new Date().toISOString().split("T")[0]}
                     />
                   </div>
