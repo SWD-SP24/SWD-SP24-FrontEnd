@@ -20,14 +20,24 @@ import doctor_image from "../../assets/img/illustrations/doctor.png";
 import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
 import DoctorListModal from "../DoctorListModal/DoctorListModal";
-import { Outlet, useNavigate } from "react-router";
 import ChatHistory from "./partials/ChatHistory";
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const { user } = useUser();
+
+  // Debounce giá trị search 300ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [search]);
 
   // Lấy tất cả cuộc trò chuyện của user
   useEffect(() => {
@@ -99,12 +109,21 @@ export default function Chat() {
         })
       );
 
-      setConversations(conversations);
+      // Lọc danh sách hội thoại có tên đối phương chứa search
+      const filteredConversations = conversations.filter((conv) => {
+        const recipientId = conv.participants.find((id) => id !== user.userId);
+        const recipientName = conv[recipientId]?.name || "";
+        return recipientName
+          .toLowerCase()
+          .includes(debouncedSearch.toLowerCase());
+      });
+
+      setConversations(filteredConversations);
       setIsLoading(false);
     });
 
     return () => unsubscribe();
-  }, [user]);
+  }, [user, debouncedSearch]);
 
   // Cập nhật trạng thái online khi vào chat
   useEffect(() => {
@@ -227,6 +246,8 @@ export default function Chat() {
                   className="form-control chat-search-input"
                   placeholder="Search..."
                   aria-label="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   aria-describedby="basic-addon-search31"
                 />
               </div>
