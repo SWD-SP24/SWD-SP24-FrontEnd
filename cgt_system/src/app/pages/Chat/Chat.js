@@ -299,7 +299,7 @@ export default function Chat() {
                           <img
                             src={chatPartner.avatar || image}
                             alt="Avatar"
-                            className="rounded-circle"
+                            className="rounded-circle border"
                           />
                         </div>
                         <div className="chat-contact-info flex-grow-1 ms-4">
