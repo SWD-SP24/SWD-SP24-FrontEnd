@@ -54,7 +54,7 @@ Hãy phân tích và phản hồi theo đúng format sau:
 **🏥 Khi nào cần đi khám bác sĩ?**  
 - {Gợi ý khi nào nên kiểm tra tình trạng miễn dịch, dấu hiệu bất thường sau tiêm cần thăm khám}.  
 
-Không thêm nội dung nào ngoài format trên.
+Không thêm nội dung nào ngoài format trên và chuyển tất cả thành tiếng anh.
 
                                     `,
                   },
@@ -89,11 +89,15 @@ Không thêm nội dung nào ngoài format trên.
     <div className="card mt-4">
       <h5 className="card-header">Analysis</h5>
       <div className="card-body">
-        <div
-          dangerouslySetInnerHTML={{
-            __html: aiResponse || "Analyzing...",
-          }}
-        />
+        {vaccinations.length > 0 ? (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: aiResponse || "Analyzing...",
+            }}
+          />
+        ) : (
+          <div>No data to analyze</div>
+        )}
       </div>
     </div>
   );
