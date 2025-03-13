@@ -8,6 +8,7 @@ import "./vaccine.scss";
 export default function Vaccinations() {
   const permissions = useOutletContext();
   const url = `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}?pageNumber=1&pageSize=7&sortByAge=true`;
+  const [vaccinations, setVaccinations] = useState([]);
 
   const { response, callApi } = useApi({
     url: url,
@@ -36,12 +37,16 @@ export default function Vaccinations() {
         >
           Vaccine List
         </h5>
-        <VaccineTable vaccineList={response} refetch={callApi} />
+        <VaccineTable
+          vaccineList={response}
+          refetch={callApi}
+          onSetVaccinations={setVaccinations}
+        />
       </div>
 
       <div className="card mb-6 mt-6">
         {isHasPermission("AI_HEALTH_DATA_ANALYSIS") ? (
-          <AIAnalysis indicators={response?.data || []} />
+          <AIAnalysis vaccinations={vaccinations} />
         ) : (
           <div className="card p-4 bg-gray-100 text-center">
             <h3 className="text-lg font-semibold text-gray-700">

@@ -4,14 +4,22 @@ import "../vaccine.scss";
 const API_URL =
   "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
-export default function AIAnalysis({ indicators }) {
+export default function AIAnalysis({ vaccinations }) {
   const [aiResponse, setAiResponse] = useState("");
+  const name = localStorage.getItem("name");
   const age = localStorage.getItem("userAge");
   const bloodType = localStorage.getItem("bloodType");
   const gender = localStorage.getItem("gender");
 
+  const vaccinationInfo = vaccinations
+    .map(
+      (vaccination) =>
+        `${vaccination.vaccineName} - Dose: ${vaccination.dose} - Note: none  - Status: Completed`
+    )
+    .join(", ");
+
   useEffect(() => {
-    if (!indicators || indicators.length === 0) return;
+    if (!vaccinations || vaccinations.length === 0) return;
 
     const fetchAIResponse = async () => {
       try {
@@ -24,20 +32,30 @@ export default function AIAnalysis({ indicators }) {
                 parts: [
                   {
                     text: `
-                                    📊 **AI Analysis - Tiêm Chủng**
-                                    **Thông tin cá nhân:**
-                                    - **Tuổi:** ${age}
-                                    - **Nhóm máu:** ${bloodType}
-                                    - **Giới tính:** ${gender}
+                                    Dưới đây là thông tin tiêm chủng của trẻ:  
+🧒 **Tên bé:** ${name}, **Tuổi:** ${age}, 🩸 **Nhóm máu:** ${bloodType}, ⚧️ **Giới tính:** ${gender}.  
+💉 **Lịch sử tiêm chủng:** ${vaccinationInfo}  
 
-                                    **Phân tích của chuyên gia:** 
-                                    Dựa trên độ tuổi, nhóm máu và giới tính, hãy đưa ra nhận xét về tình trạng tiêm chủng phù hợp.
-                                    
-                                    **Lời khuyên:**
-                                    - Những vắc-xin nào thường được khuyến nghị cho độ tuổi này?
-                                    - Nếu chưa được tiêm đầy đủ, các bước tiếp theo nên làm gì?
-                                    - Lưu ý nào quan trọng để đảm bảo sức khỏe tốt nhất?
-                                    
+Hãy phân tích và phản hồi theo đúng format sau:  
+
+📊 **Phân tích của chuyên gia**  
+
+**💉 Nhận xét:** {Đánh giá tổng quan về tình trạng tiêm chủng, ví dụ: đã tiêm đầy đủ theo lịch, còn thiếu mũi nào, có phản ứng sau tiêm không}.  
+
+**🔍 Nguy cơ tiềm ẩn:**  
+- {Nếu thiếu mũi tiêm quan trọng, hãy phân tích nguy cơ mắc bệnh và ảnh hưởng}.  
+- {Nếu đã tiêm đủ, xác nhận và nhấn mạnh tầm quan trọng của việc tiếp tục theo dõi}.  
+
+**🛡️ Lời khuyên chăm sóc:**  
+- **Tiêm chủng bổ sung:** {Nếu còn thiếu mũi, gợi ý thời gian và địa điểm tiêm}.  
+- **Theo dõi phản ứng sau tiêm:** {Cách quan sát dấu hiệu bất thường, khi nào cần đến bác sĩ}.  
+- **Tăng cường miễn dịch:** {Lời khuyên về dinh dưỡng, giấc ngủ giúp trẻ khỏe mạnh}.  
+
+**🏥 Khi nào cần đi khám bác sĩ?**  
+- {Gợi ý khi nào nên kiểm tra tình trạng miễn dịch, dấu hiệu bất thường sau tiêm cần thăm khám}.  
+
+Không thêm nội dung nào ngoài format trên.
+
                                     `,
                   },
                 ],
@@ -65,7 +83,7 @@ export default function AIAnalysis({ indicators }) {
     };
 
     fetchAIResponse();
-  }, [indicators]);
+  }, [vaccinations]);
 
   return (
     <div className="card mt-4">
