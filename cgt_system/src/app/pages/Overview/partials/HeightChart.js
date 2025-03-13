@@ -39,7 +39,7 @@ export default function HeightChart() {
       // Extract data
       const newLabels = reversedData.map(
         (record) =>
-          getDate(record.recordTime) + "/" + getMonth(record.recordTime)
+          getDate(record.recordTime) + "/" + getMonth(record.recordTime) + "/" + getYear(record.recordTime)
       );
       const newHeightDatasets = reversedData.map((record) => record.height);
 

@@ -8,8 +8,10 @@ import {
   Title,
   Tooltip,
 } from "chart.js";
+import zoomPlugin from "chartjs-plugin-zoom";
 import React from "react";
 import { Line } from "react-chartjs-2";
+
 ChartJS.register(
   CategoryScale,
   LinearScale,
@@ -17,8 +19,10 @@ ChartJS.register(
   Legend,
   PointElement,
   Title,
-  LineElement
+  LineElement,
+  zoomPlugin // Register the zoom plugin
 );
+
 export const LineChart = ({
   labels = [],
   datasets = [],
@@ -31,10 +35,10 @@ export const LineChart = ({
     data: dataset.data || [],
     borderColor:
       dataset.borderColor || ["#FF4500", "#4169E1", "#FFD700"][index], // Red, Blue, Yellow
-    backgroundColor: "transparent", // No fill
+    backgroundColor: "transparent",
     borderWidth: 3,
-    pointRadius: 0, // Hide points for smooth curves
-    tension: 0.4, // Smooth curves
+    pointRadius: 0,
+    tension: 0.4,
   }));
 
   const data = { labels, datasets: formattedDatasets };
@@ -46,41 +50,56 @@ export const LineChart = ({
       legend: {
         display: true,
         position: "top",
-        align: "center", // Aligns legend to the left
-
+        align: "center",
         labels: {
-          usePointStyle: true, // Changes the legend to a dot
-          pointStyle: "circle", // Ensures it's a circular dot
+          usePointStyle: true,
+          pointStyle: "circle",
           boxWidth: 5,
           boxHeight: 5,
           font: { size: 14 },
         },
       },
+      zoom: {
+        pan: {
+          enabled: true,
+          mode: "xy", // Allow panning in both directions
+        },
+        zoom: {
+          wheel: {
+            enabled: true, // Enable zooming with mouse wheel
+          },
+          pinch: {
+            enabled: true, // Enable zooming on touch devices
+          },
+          mode: "xy", // Zoom both X and Y axis
+        },
+      },
     },
     scales: {
       x: {
-        grid: { display: true }, // Hide x-axis grid
+        grid: { display: true },
         ticks: {
           font: { size: 13 },
           callback: function (value, index) {
             return index % ticks === 0 ? labels[index] : "";
           },
+          autoSkip: false,
         },
         title: {
           display: true,
-          text: xLabel, // X-axis Label
+          text: xLabel,
           font: { size: 12, weight: "bold" },
           padding: 10,
         },
       },
       y: {
-        grid: { color: "rgba(0, 0, 0, 0.1)", borderDash: [5, 5] }, // Light dashed lines
+        grid: { color: "rgba(0, 0, 0, 0.1)", borderDash: [5, 5] },
         ticks: { font: { size: 13 } },
-        suggestedMin: Math.min(...datasets.flatMap((d) => d.data)) * 0.95, // 5% padding
-        suggestedMax: Math.max(...datasets.flatMap((d) => d.data)) * 1.05, // 5% padding
+        suggestedMin: Math.min(...datasets.flatMap((d) => d.data)) * 0.95,
+        suggestedMax: Math.max(...datasets.flatMap((d) => d.data)) * 1.05,
         title: {
           display: true,
-          text: yLabel, // Y-axis Label
+          text: yLabel,
           font: { size: 12, weight: "bold" },
           padding: 10,
         },
