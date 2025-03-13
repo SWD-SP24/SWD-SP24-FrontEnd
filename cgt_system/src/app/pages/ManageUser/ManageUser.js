@@ -22,8 +22,9 @@ export default function ManageUser() {
   const [activePage, setActivePage] = useState(1);
 
   useEffect(() => {
-    callApi();
-  }, []);
+    const customUrl = `${API_URLS.USER.GET_USERS_LIST}?pageNumber=${activePage}&pageSize=8&role=${filterRole}&membershipPackageId=${filterMembership}&status=${filterStatus}&search=${filterSearch}`;
+    callApi(null, customUrl);
+  }, [filterRole, filterMembership, filterStatus, filterSearch]);
 
   useEffect(() => {
     if (response) {
@@ -54,7 +55,8 @@ export default function ManageUser() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setFilterSearch(e.target.value);
+    const searchValue = e.target.value; // Lấy giá trị mới ngay lập tức
+    setFilterSearch(searchValue);
   };
 
   const handleActivePage = (index) => {
@@ -101,7 +103,7 @@ export default function ManageUser() {
                   value={filterMembership}
                   onChange={handleFilterMembership}
                 >
-                  <option value="">Select Membership</option>
+                  <option value="">All Membership</option>
                   <option value="1">1</option>
                   <option value="2">2</option>
                   <option value="3">3</option>
@@ -113,7 +115,7 @@ export default function ManageUser() {
                   value={filterStatus}
                   onChange={handleFilterStatus}
                 >
-                  <option value="">Select Status</option>
+                  <option value="">All Status</option>
                   <option value="active">Active</option>
                   <option value="inactive">Inactive</option>
                 </select>
@@ -148,64 +150,37 @@ export default function ManageUser() {
               {/* <!-- First Row --> */}
               <tbody className="table-border-bottom-0">
                 {response
-                  ? response.data
-                      .filter((user) => {
-                        if (
-                          filterRole !== "" &&
-                          !user.role.includes(filterRole)
-                        )
-                          return false;
-                        if (
-                          filterMembership !== "" &&
-                          !(user.membershipPackageId == filterMembership)
-                        )
-                          return false;
-                        if (
-                          filterStatus !== "" &&
-                          !(user.status === filterStatus)
-                        )
-                          return false;
-                        if (
-                          filterSearch !== "" &&
-                          !user.fullName
-                            .toLowerCase()
-                            .includes(filterSearch.toLowerCase())
-                        ) {
-                          if (!user.email.includes(filterSearch)) return false;
-                        }
-                        return true;
-                      })
-                      .map((user) => (
-                        <tr key={user.id}>
-                          <td className={cx("user-content")}>
-                            <Avatar
-                              src={user.avatar}
-                              className={cx("user-content-avatar")}
-                            />
-                            <div className={cx("user-content-name")}>
-                              <div className={cx("user-content-name-title")}>
-                                {user.fullName}
-                              </div>
-                              <div className={cx("user-content-subtitle")}>
-                                @{user.fullName}
-                              </div>
+                  ? response.data.map((user) => (
+                      <tr key={user.id}>
+                        <td className={cx("user-content")}>
+                          <Avatar
+                            src={user.avatar}
+                            className={cx("user-content-avatar")}
+                          />
+                          <div className={cx("user-content-name")}>
+                            <div className={cx("user-content-name-title")}>
+                              {user.fullName}
                             </div>
-                          </td>
-                          <td>{user.email}</td>
-                          <td style={{ textAlign: "center" }}>
-                            {user.membershipPackageId}
-                          </td>
-                          <td>{user.role}</td>
-                          <td>
-                            <span className="badge bg-label-success me-1">
-                              {user.status === "active" ? "Active" : "Inactive"}
-                            </span>
-                          </td>
-                          <td>
-                            <ActionDropdown id={user.userId} />
-                          </td>
-                        </tr>
-                      ))
+                            <div className={cx("user-content-subtitle")}>
+                              @{user.fullName}
+                            </div>
+                          </div>
+                        </td>
+                        <td>{user.email}</td>
+                        <td style={{ textAlign: "center" }}>
+                          {user.membershipPackageId}
+                        </td>
+                        <td>{user.role}</td>
+                        <td>
+                          <span className="badge bg-label-success me-1">
+                            {user.status === "active" ? "Active" : "Inactive"}
+                          </span>
+                        </td>
+                        <td>
+                          <ActionDropdown id={user.userId} />
+                        </td>
+                      </tr>
+                    ))
                   : // Show skeleton loader if data is not yet loaded
                     [...Array(8)].map((_, index) => (
                       <tr key={index}>
