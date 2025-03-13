@@ -5,21 +5,28 @@ import useUser from "../hooks/useUser";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Navbar from "../components/Nav/Navbar";
 import Loading from "../components/Loading/Loading";
+import useApi from "../hooks/useApi";
+import API_URLS from "../config/apiUrls";
 
 export default function MainLayout() {
   const { user, setUser } = useUser();
 
+  const { response, callApi } = useApi({
+    url: `${API_URLS.USER.CURRENT_USER}`,
+    method: "GET",
+  });
+
   useEffect(() => {
-    const storedUser = Cookies.get("user");
-    if (storedUser) {
-      try {
-        const parsedUser = JSON.parse(storedUser);
-        setUser(parsedUser);
-      } catch (error) {
-        console.error("Error parsing user:", error);
-      }
-    }
+    callApi();
   }, []);
+
+  useEffect(() => {
+    if (response?.status === "successful") {
+      const user = response.data;
+      Cookies.set("user", JSON.stringify(user));
+      setUser(user);
+    }
+  }, [response]);
 
   if (user === null) {
     return <Loading />;
@@ -51,7 +58,7 @@ export default function MainLayout() {
             <Navbar user={user} />
             <div className="content-wrapper">
               <div className="container-xxl flex-grow-1 container-p-y">
-                <Outlet context={{ user, setUser }} />
+                <Outlet context={{ user, setUser, callApi }} />
               </div>
             </div>
           </div>
