@@ -88,7 +88,7 @@ const AboutUs = () => {
 
 
             <section className="partners-section">
-                <h2>Our Partners</h2>
+                <h2 className="partner">Our Partners</h2>
                 <div className="partners-wrapper">
                     <div className="partners">
                         {/* Nhân đôi danh sách để hiệu ứng trôi mượt */}
@@ -101,7 +101,7 @@ const AboutUs = () => {
 
 
             <section className="contact-section">
-                <h2>Contact Us</h2>
+                <h2 className="contact">Contact Us</h2>
                 <p>Email: info@growplus.com</p>
                 <p>Phone: 1-800-GROWPLUS</p>
             </section>

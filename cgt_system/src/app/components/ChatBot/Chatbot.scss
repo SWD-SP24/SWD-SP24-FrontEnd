@@ -90,6 +90,66 @@
             }
         }
 
+        .question-section {
+            padding: 10px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-bottom: 1px solid #ddd;
+
+            .question-list {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .question-item {
+                    font-size: 12px;
+                    background-color: #dae8f7;
+                    color: #333;
+                    padding: 8px 12px;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    transition: background 0.3s;
+                    border: 2px solid #c0deff;
+                    &:hover {
+                        background-color: #ddd;
+                    }
+                }
+            }
+        }
+
+        .categories-section {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            .category-button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 8px 16px;
+                cursor: pointer;
+                transition:
+                    background 0.3s,
+                    transform 0.3s;
+                font-size: 14px;
+
+                &:hover {
+                    background-color: #0056b3;
+                    transform: scale(1.1);
+                }
+
+                &.active {
+                    background-color: #0056b3;
+                }
+            }
+        }
+
         .chatbot-input {
             display: flex;
             padding: 10px;
@@ -121,7 +181,6 @@
     }
 }
 
-// Hiệu ứng chấm "..."
 @keyframes blink {
     0% {
         opacity: 0.3;

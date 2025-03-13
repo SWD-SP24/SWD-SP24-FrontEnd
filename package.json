@@ -1,1 +1,8 @@
-{}
+{
+  "dependencies": {
+    "@lottiefiles/dotlottie-react": "^0.13.2",
+    "@tippyjs/react": "^4.2.6",
+    "chartjs-plugin-zoom": "^2.2.0",
+    "tippy.js": "^6.3.7"
+  }
+}
