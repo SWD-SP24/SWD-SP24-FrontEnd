@@ -38,15 +38,44 @@ export default function PricingPlan() {
   };
   const handleBuy = (e) => {
     e.preventDefault();
-
-    showToast({
-      icon: "warning",
-      text: "You need to login first",
-      showButtons: true,
-      onConfirm: () => navigate("/login"),
-      onCancel: null,
-    });
+    navigate("/register");
   };
+  if (response === null) {
+    return <div>loading</div>;
+  }
+  function filterPermissions(membershipData) {
+    const packageMap = {};
+
+    membershipData.data.forEach((pkgData) => {
+      packageMap[pkgData.membershipPackageName] = new Set(
+        pkgData.permissions.map((p) => p.description)
+      );
+    });
+
+    return membershipData.data.map((pkgData) => {
+      let filteredPermissions = [...packageMap[pkgData.membershipPackageName]];
+
+      if (pkgData.membershipPackageName === "Enterprise") {
+        filteredPermissions = filteredPermissions.filter(
+          (p) => !packageMap["Standard"].has(p)
+        );
+      } else if (pkgData.membershipPackageName === "Standard") {
+        filteredPermissions = filteredPermissions.filter(
+          (p) => !packageMap["Basic"].has(p)
+        );
+      }
+
+      return {
+        membershipPackageName: pkgData.membershipPackageName,
+        permissions: filteredPermissions,
+      };
+    });
+  }
+
+  // Sample API response (replace this with your actual API response)
+
+  const filteredPermissions = filterPermissions(response);
+  console.log(filteredPermissions);
   return (
     <div className={cx("content-wrapper")}>
       {/* <!-- Content --> */}
@@ -74,7 +103,7 @@ export default function PricingPlan() {
                         <div
                           className="card d-flex flex-column pricing-list"
                           style={{
-                            height: "750px",
+                            height: "700px",
                             overflowY: "hidden",
                           }}
                         >
@@ -91,17 +120,10 @@ export default function PricingPlan() {
                               <div className="d-flex align-items-center justify-content-center">
                                 <span
                                   className={
-                                    "price-monthly h2 text-primary fw-extrabold mb-0 d-none"
+                                    "price-yearly h2 text-primary fw-extrabold mb-0 "
                                   }
                                 >
-                                  {pkg.price}
-                                </span>
-                                <span
-                                  className={
-                                    "price-yearly h2 text-primary fw-extrabold mb-0 d-none"
-                                  }
-                                >
-                                  {pkg.price === 0 ? "Free" : pkg.price}
+                                  {pkg.price === 0 ? "Free" : pkg.price + "$"}
                                 </span>
                                 <sub className="h6 text-body-secondary mb-n1 ms-1">
                                   /mo
@@ -119,18 +141,23 @@ export default function PricingPlan() {
                               className="list-unstyled pricing-list flex-grow-1"
                               style={{ maxHeight: "400px", overflowY: "auto" }}
                             >
-                              {pkg.permissions.map((permission, index) => {
-                                return (
-                                  <li key={index}>
-                                    <h6 className="d-flex align-items-center mb-3">
-                                      <span className="badge badge-center rounded-pill bg-label-primary p-0 me-3">
-                                        <i className="icon-base bx bx-check icon-12px"></i>
-                                      </span>
-                                      {permission.description}
-                                    </h6>
-                                  </li>
-                                );
-                              })}
+                              {filteredPermissions &&
+                                filteredPermissions
+                                  .find(
+                                    (p) =>
+                                      p.membershipPackageName ===
+                                      pkg.membershipPackageName
+                                  )
+                                  .permissions.map((permission, index) => (
+                                    <li key={index}>
+                                      <h6 className="d-flex align-items-center mb-3">
+                                        <span className="badge badge-center rounded-pill bg-label-primary p-0 me-3">
+                                          <i className="icon-base bx bx-check icon-12px"></i>
+                                        </span>
+                                        {permission}
+                                      </h6>
+                                    </li>
+                                  ))}
                             </ul>
 
                             {/* Button stays at the bottom */}

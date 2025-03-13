@@ -13,7 +13,7 @@ const Footer = () => {
         <div class="container">
           <div class="row gx-0 gy-6 g-lg-10">
             <div class="col-lg-5">
-              <a href="landing-page.html" class="app-brand-link mb-6">
+              <Link to={"/"} class="app-brand-link mb-6">
                 <span class="app-brand-logo demo">
                   <span class="text-primary">
                     <svg
@@ -113,7 +113,7 @@ const Footer = () => {
                 <span class="app-brand-text demo text-white fw-bold ms-2 ps-1">
                   Child Growth Tracker
                 </span>
-              </a>
+              </Link>
               <p class="footer-text footer-logo-description mb-6">
                 Track your child's growth, vaccinations, and milestones easily
                 with our user-friendly platform.

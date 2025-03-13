@@ -37,7 +37,7 @@ const Navbar = () => {
               <i className="icon-base bx bx-menu icon-lg align-middle text-heading fw-medium"></i>
             </button>
             {/* <!-- Mobile menu toggle: End--> */}
-            <a href="landing-page.html" className="app-brand-link">
+            <Link to={"/"} className="app-brand-link">
               <span className="app-brand-logo demo">
                 <span className="text-primary">
                   <svg
@@ -131,7 +131,7 @@ const Navbar = () => {
               <span className="app-brand-text demo menu-text fw-bold ms-2 ps-1">
                 Grow+
               </span>
-            </a>
+            </Link>
           </div>
           {/* <!-- Menu logo wrapper: End --> */}
           {/* <!-- Menu wrapper: Start --> */}
