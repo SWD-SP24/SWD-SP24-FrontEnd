@@ -42,7 +42,7 @@ export default function BMIChart() {
         (record) =>
           getDate(record.recordTime) + "/" + getMonth(record.recordTime) + "/" + getYear(record.recordTime)
       );
-      const newBMIList = reversedData.map((record) => record.weight);
+      const newBMIList = reversedData.map((record) => record.bmi);
 
       // Update state
       setLabels(newLabels);
@@ -69,7 +69,7 @@ export default function BMIChart() {
             />
           </div>
         </div>
-        <div className="card-body pt-2">
+        <div className="card-body pt-2" class={console.log(BMI)}>
           <LineChart
             labels={labels}
             datasets={[

@@ -62,7 +62,7 @@ export const LineChart = ({
       zoom: {
         pan: {
           enabled: true,
-          mode: "xy", // Allow panning in both directions
+          mode: "x", // Allow panning in both directions
         },
         zoom: {
           wheel: {
@@ -71,7 +71,7 @@ export const LineChart = ({
           pinch: {
             enabled: true, // Enable zooming on touch devices
           },
-          mode: "xy", // Zoom both X and Y axis
+          mode: "x", // Zoom both X and Y axis
         },
       },
     },
