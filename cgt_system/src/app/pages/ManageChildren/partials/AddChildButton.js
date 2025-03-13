@@ -2,6 +2,7 @@ import React, { useRef } from "react";
 import API_URLS from "../../../config/apiUrls";
 import { ages } from "../../../constants/ages.js";
 import useApi from "../../../hooks/useApi";
+import { convertToISOString } from "../../../util/dateFormat.js";
 export default function AddChildButton({ refetch }) {
   const fullNameRef = useRef(null);
   const genderRef = useRef(null);
@@ -28,6 +29,8 @@ export default function AddChildButton({ refetch }) {
     await callApi(data);
     refetch();
     e.target.reset();
+    let button = document.querySelector("#closeAddNewChild");
+    button.click();
   };
 
   return (
@@ -69,6 +72,7 @@ export default function AddChildButton({ refetch }) {
                       id="fullName"
                       class="form-control"
                       placeholder="Enter Child Name"
+                      required
                     />
                   </div>
                 </div>
@@ -82,6 +86,7 @@ export default function AddChildButton({ refetch }) {
                       id="genderSelect"
                       class="form-select"
                       ref={genderRef}
+                      required
                     >
                       <option value="male">Male</option>
                       <option value="female">Female</option>
@@ -99,6 +104,7 @@ export default function AddChildButton({ refetch }) {
                       defaultValue={new Date().toISOString().split("T")[0]}
                       id="dobInput"
                       max={new Date().toISOString().split("T")[0]}
+                      required
                     />
                   </div>
                 </div>
@@ -111,6 +117,7 @@ export default function AddChildButton({ refetch }) {
                       id="bloodTypeSelect"
                       class="form-select"
                       ref={bloodRef}
+                      required
                     >
                       <option value="A">A</option>
                       <option value="B">B</option>
@@ -150,15 +157,12 @@ export default function AddChildButton({ refetch }) {
                 <button
                   type="reset"
                   class="btn btn-outline-secondary"
+                  id="closeAddNewChild"
                   data-bs-dismiss="modal"
                 >
                   Close
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-primary"
-                  data-bs-dismiss="modal"
-                >
+                <button type="submit" class="btn btn-primary">
                   Save changes
                 </button>
               </div>

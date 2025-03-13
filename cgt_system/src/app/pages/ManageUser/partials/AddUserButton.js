@@ -83,18 +83,11 @@ export default function AddUserButton({ refetch }) {
     setEmailError("");
     setPasswordError("");
     setPasswordConfirmError("");
-    document.querySelector("[data-bs-dismiss='modal']").click();
+    let button = document.querySelector("#closeModalAddUser");
+    console.log(button);
+    button.click();
   };
 
-  const handleClose = (e) => {
-    e.preventDefault();
-    email.current.value = "";
-    password.current.value = "";
-    passwordConfirm.current.value = "";
-    setEmailError("");
-    setPasswordError("");
-    setPasswordConfirmError("");
-  };
   return (
     <>
       <button
@@ -200,8 +193,11 @@ export default function AddUserButton({ refetch }) {
                 <button
                   type="reset"
                   class="btn btn-outline-secondary"
+                  id="closeModalAddUser"
                   data-bs-dismiss="modal"
-                  onClick={(e) => handleClose(e)}
+                  onClick={() => {
+                    console.log("click ne");
+                  }}
                 >
                   Close
                 </button>

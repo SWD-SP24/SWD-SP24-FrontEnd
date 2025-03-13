@@ -79,7 +79,7 @@ export default function ChildLayout() {
       `/member/children/${id}/vaccinations` ||
       `/member/children/${id}/vaccine/${vaccineId}`,
   };
-  if (!response) {
+  if (!response || !permissions) {
     return <div> loading</div>;
   }
   console.log(location.pathname);
@@ -196,7 +196,9 @@ export default function ChildLayout() {
           </ul>
         </div>
         {/* <!--/ User Pills --> */}
-        <Outlet context={permissions} childId={response.data.childrenId} />
+        <Outlet
+          context={{ permissions: permissions, childrenData: response.data }}
+        />
       </div>
     </div>
   );

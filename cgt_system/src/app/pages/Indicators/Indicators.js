@@ -11,8 +11,7 @@ import AIAnalysis from "./partials/AIAnalysis.js";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Animations } from "../../assets/js/Animations.js";
 export default function Indicators() {
-  const permissions = useOutletContext();
-
+  const { permissions, childrenData } = useOutletContext();
   const childId = useParams().childId;
   const fromDateRef = useRef(null);
   const toDateRef = useRef(null);
@@ -71,7 +70,11 @@ export default function Indicators() {
                 />
               </div>
               <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
-                <AddIndicators refetch={callApi} childId={childId} />
+                <AddIndicators
+                  refetch={callApi}
+                  childId={childId}
+                  dob={childrenData.dob}
+                />
               </div>
             </div>
             <div class="justify-content-between dt-layout-table">

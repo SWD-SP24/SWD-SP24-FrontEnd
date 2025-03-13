@@ -53,3 +53,12 @@ export const getShortMonthName = (monthNumber) => {
   ];
   return monthNames[monthNumber - 1] || "Invalid Month";
 };
+
+export function convertToISOString(dateStr) {
+  const [year, month, day] = dateStr.split("-").map(Number);
+
+  // Create a Date object (UTC time zone)
+  const date = new Date(Date.UTC(year, month - 1, day));
+
+  return date.toISOString().split("T")[0];
+}
