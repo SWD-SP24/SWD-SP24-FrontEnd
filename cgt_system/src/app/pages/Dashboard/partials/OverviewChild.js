@@ -7,10 +7,7 @@ export default function OverviewChild() {
     url: `${API_URLS.DASHBOARD.TOTAL_CHILDREN}`,
     method: "GET",
   });
-  const { response: vaccineCompliantRate, callApi: callApiVSCR } = useApi({
-    url: `${API_URLS.DASHBOARD.VACCINATIONS_SCHEDULE_COMPLIANT_RATE}`,
-    method: "GET",
-  });
+
   const { response: abnormalChildren, callApi: callApiAC } = useApi({
     url: `${API_URLS.DASHBOARD.ABNORMAL_CHILDREN}`,
     method: "GET",
@@ -21,20 +18,21 @@ export default function OverviewChild() {
   });
   useEffect(() => {
     callApi();
-    callApiVSCR();
     callApiAC();
     callApiAGR();
   }, []);
 
   useEffect(() => {
-    if (response && vaccineCompliantRate && abnormalChildren && avgGrowRate) {
+    if (response && abnormalChildren && avgGrowRate) {
       console.log("Total Children", response);
-      console.log("VSCR", vaccineCompliantRate);
       console.log("Abnormal Children", abnormalChildren);
       console.log("Average Grow Rate", avgGrowRate);
     }
-  }, [response, abnormalChildren, vaccineCompliantRate, avgGrowRate]);
+  }, [response, abnormalChildren, avgGrowRate]);
 
+  if (response === null || abnormalChildren === null || avgGrowRate === null) {
+    return <div>Loading</div>;
+  }
   return (
     <div class="col-4 order-2 mb-4 h-100">
       <div class="card h-100">
@@ -54,28 +52,6 @@ export default function OverviewChild() {
           <ul class="p-0 m-0">
             <li class="d-flex mb-4 pb-1">
               <div class="avatar flex-shrink-0 me-3">
-                <span class="avatar-initial rounded bg-label-primary">
-                  <i class="bx bx-user-check"></i>
-                </span>
-              </div>
-              <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div class="me-2">
-                  <h6 class="mb-0">Vaccination Rate</h6>
-                  <small class="text-muted">
-                    Vaccination schedule compliant rate
-                  </small>
-                </div>
-                <div class="user-progress">
-                  <small class="fw-semibold">
-                    {vaccineCompliantRate &&
-                      Number(Number(vaccineCompliantRate.data).toFixed(2))}
-                    %
-                  </small>
-                </div>
-              </div>
-            </li>
-            <li class="d-flex mb-4 pb-1">
-              <div class="avatar flex-shrink-0 me-3">
                 <span class="avatar-initial rounded bg-label-success">
                   <i class="bx bx-child"></i>
                 </span>
@@ -86,7 +62,16 @@ export default function OverviewChild() {
                   <small class="text-muted">Children developing normally</small>
                 </div>
                 <div class="user-progress">
-                  <small class="fw-semibold">85.2%</small>
+                  <small class="fw-semibold">
+                    {Number(
+                      (response.data * 100) /
+                        (new Set(
+                          abnormalChildren.data.map((entry) => entry.childId)
+                        ).size +
+                          response.data)
+                    ).toFixed(2)}
+                    %
+                  </small>
                 </div>
               </div>
             </li>
@@ -105,8 +90,9 @@ export default function OverviewChild() {
                 </div>
                 <div class="user-progress">
                   <small class="fw-semibold">
-                    {avgGrowRate && avgGrowRate.data.averageHeightGrowRate}
-                    cm/month
+                    {Number(avgGrowRate.data.averageHeightGrowthRate).toFixed(
+                      2
+                    ) + " cm/month"}
                   </small>
                 </div>
               </div>
@@ -124,8 +110,9 @@ export default function OverviewChild() {
                 </div>
                 <div class="user-progress">
                   <small class="fw-semibold">
-                    {avgGrowRate && avgGrowRate.data.averageWeightGrowRate}
-                    kg/month
+                    {Number(avgGrowRate.data.averageWeightGrowthRate).toFixed(
+                      2
+                    ) + " kg/month"}
                   </small>
                 </div>
               </div>
@@ -143,10 +130,11 @@ export default function OverviewChild() {
                 </div>
                 <div class="user-progress">
                   <small class="fw-semibold">
-                    {abnormalChildren &&
+                    {
                       new Set(
                         abnormalChildren.data.map((entry) => entry.childId)
-                      ).size}
+                      ).size
+                    }
                   </small>
                 </div>
               </div>

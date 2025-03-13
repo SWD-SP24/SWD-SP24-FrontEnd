@@ -1,6 +1,49 @@
-import React from "react";
+import React, { useEffect } from "react";
+import useApi from "../../../hooks/useApi";
+import API_URLS from "../../../config/apiUrls";
 
 export default function OverviewVaccine() {
+  const { response, callApi } = useApi({
+    url: `${API_URLS.DASHBOARD.VACCINATIONS_SCHEDULE_COMPLIANT_RATE}`,
+    method: "GET",
+  });
+  const { response: missDoses, callApi: callApiMD } = useApi({
+    url: `${API_URLS.DASHBOARD.MISSED_DOSES}`,
+    method: "GET",
+  });
+  const { response: totalVaccine, callApi: callApiTV } = useApi({
+    url: `${API_URLS.VACCINATIONS.VACCINATIONS_SCHEDULE}`,
+    method: "GET",
+  });
+  const { response: administeredDoses, callApi: callApiAD } = useApi({
+    url: `${API_URLS.DASHBOARD.ADMINISTERED_DOSES}`,
+    method: "GET",
+  });
+
+  useEffect(() => {
+    callApi();
+    callApiMD();
+    callApiTV();
+    callApiAD();
+  }, []);
+
+  useEffect(() => {
+    if (response && missDoses && totalVaccine && administeredDoses) {
+      console.log("Compliant Rate", response);
+      console.log("Missed Doses", missDoses);
+      console.log("Total Vaccines", totalVaccine);
+      console.log("Administered Doses", administeredDoses);
+    }
+  }, [response, missDoses, totalVaccine, administeredDoses]);
+
+  if (
+    response === null ||
+    missDoses === null ||
+    totalVaccine === null ||
+    administeredDoses === null
+  ) {
+    return <div>Loading</div>;
+  }
   return (
     <div className="col-4 order-2 mb-4 h-100">
       <div className="card h-100">
@@ -12,9 +55,9 @@ export default function OverviewVaccine() {
         <div className="card-body">
           {/* Total Administered Doses */}
           <div className="d-flex justify-content-between align-items-center mb-3">
-            <div className="d-flex flex-column align-items-center gap-1">
-              <h2 className="mb-2">12,350</h2>
-              <span>Total Administered Doses</span>
+            <div class="d-flex flex-column align-items-center gap-1">
+              <h2 class="mb-2">{totalVaccine.data.length}</h2>
+              <span>Total Vaccines</span>
             </div>
             <div id="vaccineOverviewChart"></div>
           </div>
@@ -36,7 +79,13 @@ export default function OverviewVaccine() {
                   </small>
                 </div>
                 <div className="user-progress">
-                  <small className="fw-semibold">87.5%</small>
+                  <small className="fw-semibold">
+                    {Number(
+                      (administeredDoses.data * 100) /
+                        (administeredDoses.data + missDoses.data.length)
+                    ).toFixed(2)}
+                    %
+                  </small>
                 </div>
               </div>
             </li>
@@ -50,11 +99,13 @@ export default function OverviewVaccine() {
               </div>
               <div className="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div className="me-2">
-                  <h6 className="mb-0">Doses on Schedule</h6>
-                  <small className="text-muted">Vaccines given on time</small>
+                  <h6 className="mb-0">Administered Doses</h6>
+                  <small className="text-muted">Total administered doses</small>
                 </div>
                 <div className="user-progress">
-                  <small className="fw-semibold">92.3%</small>
+                  <small className="fw-semibold">
+                    {administeredDoses.data}
+                  </small>
                 </div>
               </div>
             </li>
@@ -68,13 +119,13 @@ export default function OverviewVaccine() {
               </div>
               <div className="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
                 <div className="me-2">
-                  <h6 className="mb-0">Pending Doses</h6>
-                  <small className="text-muted">
-                    Upcoming scheduled vaccines
-                  </small>
+                  <h6 className="mb-0"> Doses on Schedule </h6>
+                  <small className="text-muted">Vaccines given on time</small>
                 </div>
                 <div className="user-progress">
-                  <small className="fw-semibold">1,245</small>
+                  <small className="fw-semibold">
+                    {Number(response.data).toFixed(2)}%
+                  </small>
                 </div>
               </div>
             </li>
@@ -92,25 +143,7 @@ export default function OverviewVaccine() {
                   <small className="text-muted">Children behind schedule</small>
                 </div>
                 <div className="user-progress">
-                  <small className="fw-semibold">430</small>
-                </div>
-              </div>
-            </li>
-
-            {/* Adverse Reactions */}
-            <li className="d-flex mb-4 pb-1">
-              <div className="avatar flex-shrink-0 me-3">
-                <span className="avatar-initial rounded bg-label-info">
-                  <i className="bx bx-band-aid"></i>
-                </span>
-              </div>
-              <div className="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-                <div className="me-2">
-                  <h6 className="mb-0">Adverse Reactions</h6>
-                  <small className="text-muted">Reported side effects</small>
-                </div>
-                <div className="user-progress">
-                  <small className="fw-semibold">27 cases</small>
+                  <small className="fw-semibold">{missDoses.data.length}</small>
                 </div>
               </div>
             </li>

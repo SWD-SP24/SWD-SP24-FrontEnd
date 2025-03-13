@@ -65,6 +65,9 @@ const API_URLS = {
     VACCINATIONS_SCHEDULE_COMPLIANT_RATE:
       "/api/Dashboard/vaccination-schedule-compliance",
     AVERAGE_GROWTH_RATE: "/api/Dashboard/average-growth-rate-all",
+    MISSED_DOSES: "/api/Dashboard/missed-vaccinations",
+    ADMINISTERED_DOSES: "/api/Dashboard/doses-administered",
+    VACCINE_COMPLETE: "/api/Dashboard/vaccination-completion",
   },
   IMAGE: {
     GET_URL: "/Utilities/UploadImage",
