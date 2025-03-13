@@ -6,6 +6,7 @@ const API_URL =
 
 export default function AIAnalysis({ toothRecords }) {
   const [aiResponse, setAiResponse] = useState("");
+  const name = localStorage.getItem("name");
   const age = localStorage.getItem("userAge");
   const bloodType = localStorage.getItem("bloodType");
   const gender = localStorage.getItem("gender");
@@ -28,7 +29,7 @@ export default function AIAnalysis({ toothRecords }) {
                 parts: [
                   {
                     text: `Dưới đây là thông tin sức khỏe răng miệng của trẻ:  
-      🧒 **Tuổi:** ${age}, 🩸 **Nhóm máu:** ${bloodType}, ⚧️ **Giới tính:** ${gender}.  
+      🧒 **Tên bé:** ${name}, **Tuổi:** ${age}, 🩸 **Nhóm máu:** ${bloodType}, ⚧️ **Giới tính:** ${gender}.  
       🦷 **Các răng đã mọc:** ${toothInfo}  
       
       Hãy phân tích và phản hồi theo đúng format sau:  
@@ -79,7 +80,7 @@ export default function AIAnalysis({ toothRecords }) {
 
   return (
     <div className="card mt-4">
-      <h5 className="card-header">AI Analysis</h5>
+      <h5 className="card-header">Analysis</h5>
       <div className="card-body">
         <div
           dangerouslySetInnerHTML={{

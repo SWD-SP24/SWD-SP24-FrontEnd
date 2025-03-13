@@ -37,9 +37,11 @@ export default function ChildLayout() {
       // Chắc chắn rằng response.data đã tồn tại
       console.log("API Response:", response.data); // Debug dữ liệu nhận được
       if (response.data.dob) {
+        const name = response.data.fullName;
         const age = calculateAge(response.data.dob);
         const bloodType = response.data.bloodType;
         const gender = response.data.gender;
+        localStorage.setItem("name", name);
         localStorage.setItem("userAge", age);
         localStorage.setItem("bloodType", bloodType);
         localStorage.setItem("gender", gender);

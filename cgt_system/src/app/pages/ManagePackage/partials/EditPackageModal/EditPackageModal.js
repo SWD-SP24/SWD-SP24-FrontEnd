@@ -354,34 +354,47 @@ export default function EditPackageModal({ users }) {
                     >
                       <table className="table table-responsive">
                         <tbody>
-                          {permissions.map((permission) => (
-                            <tr key={permission.permissionId}>
-                              <td className="text-nowrap fw-medium text-heading">
-                                {permission.description}
-                              </td>
-                              <td>
-                                <div className="d-flex justify-content-end">
-                                  <div className="form-check mb-0 me-4 me-lg-12">
-                                    <input
-                                      className={`form-check-input ${
-                                        permissionsError && "is-invalid"
-                                      }`}
-                                      type="checkbox"
-                                      id={`permission-${permission.permissionId}`}
-                                      checked={selectedPermissions.includes(
-                                        permission.permissionId
-                                      )}
-                                      onChange={() =>
-                                        handlePermissionChange(
-                                          permission.permissionId
-                                        )
-                                      }
-                                    />
-                                  </div>
-                                </div>
-                              </td>
-                            </tr>
-                          ))}
+                          {isLoading
+                            ? Array(5)
+                                .fill(0)
+                                .map((_, index) => (
+                                  <tr key={index}>
+                                    <td>
+                                      <Skeleton height={18} width={250} />
+                                    </td>
+                                    <td>
+                                      <Skeleton height={18} width={18} />
+                                    </td>
+                                  </tr>
+                                ))
+                            : permissions.map((permission) => (
+                                <tr key={permission.permissionId}>
+                                  <td className="text-nowrap fw-medium text-heading">
+                                    {permission.description}
+                                  </td>
+                                  <td>
+                                    <div className="d-flex justify-content-end">
+                                      <div className="form-check mb-0 me-4 me-lg-12">
+                                        <input
+                                          className={`form-check-input ${
+                                            permissionsError && "is-invalid"
+                                          }`}
+                                          type="checkbox"
+                                          id={`permission-${permission.permissionId}`}
+                                          checked={selectedPermissions.includes(
+                                            permission.permissionId
+                                          )}
+                                          onChange={() =>
+                                            handlePermissionChange(
+                                              permission.permissionId
+                                            )
+                                          }
+                                        />
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
                         </tbody>
                       </table>
                       <Pagination

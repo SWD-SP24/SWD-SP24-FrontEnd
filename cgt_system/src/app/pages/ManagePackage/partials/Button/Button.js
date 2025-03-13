@@ -78,13 +78,8 @@ export default function Button({
     const handleApiResponse = () => {
       if (getPackageResponse?.status === "successful") {
         const packages = getPackageResponse.data || {};
-        const pagination = getPackageResponse.pagination || {};
         if (packages) {
           sPackages.set(packages);
-          sPagination.set((prev) => {
-            prev.value.totalPages = pagination.lastVisiblePage;
-            prev.value.totalItems = pagination.total;
-          });
         }
       }
     };
@@ -109,15 +104,6 @@ export default function Button({
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (usersUse && usersUse.length > 0) {
-    //   showToast({
-    //     icon: "warning",
-    //     text: "This package is currently in use and cannot be updated.",
-    //     targetElement: document.querySelector(".content-wrapper"),
-    //   });
-    //   return;
-    // }
 
     const packageNameError = validateField("packageName", formData.packageName);
     const priceError = validateField("price", formData.price);

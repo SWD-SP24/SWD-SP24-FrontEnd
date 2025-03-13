@@ -12,7 +12,6 @@ import Chat from "../pages/Chat";
 import Vaccinations from "../pages/Vaccinations/Vaccinations";
 import VaccineInfo from "../pages/VaccineInfo/VaccineInfo";
 import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
-import ChatHistory from "../pages/Chat/partials/ChatHistory";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
