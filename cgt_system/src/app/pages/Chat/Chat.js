@@ -125,49 +125,6 @@ export default function Chat() {
     return () => unsubscribe();
   }, [user, debouncedSearch]);
 
-  // Cập nhật trạng thái online khi vào chat
-  useEffect(() => {
-    if (!user) return;
-
-    const userId = String(user.userId);
-    const userRef = doc(db, "activeUsers", userId);
-
-    const setUserOnline = async () => {
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists()) {
-        // Nếu user đã tồn tại, cập nhật trạng thái online
-        await updateDoc(userRef, {
-          isOnline: true,
-          lastSeen: serverTimestamp(),
-        });
-      } else {
-        // Nếu user chưa tồn tại, tạo mới
-        await setDoc(userRef, {
-          isOnline: true,
-          lastSeen: serverTimestamp(),
-        });
-      }
-    };
-
-    setUserOnline();
-
-    // Cập nhật trạng thái offline khi rời trang
-    const handleOffline = async () => {
-      await updateDoc(userRef, {
-        isOnline: false,
-        lastSeen: serverTimestamp(),
-      });
-    };
-
-    window.addEventListener("beforeunload", handleOffline);
-
-    return () => {
-      handleOffline();
-      window.removeEventListener("beforeunload", handleOffline);
-    };
-  }, [user]);
-
   // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
   const timeAgo = (timestamp) => {
     if (!timestamp?.seconds) return "Just now";
@@ -358,29 +315,40 @@ export default function Chat() {
                             >
                               {chatPartner.name}
                             </h6>
+
+                            {conversation.unreadCounts > 0 &&
+                              conversation.lastSenderId !== user.userId &&
+                              conversation?.id !== selectedConversation?.id && (
+                                <span className="ms-2">
+                                  <span class="badge badge-dot"></span>
+                                </span>
+                              )}
+                          </div>
+
+                          <div className="d-flex justify-content-between">
+                            <small
+                              className={`chat-contact-status text-truncate ${
+                                conversation.unreadCounts > 0 &&
+                                conversation.lastSenderId !== user.userId &&
+                                conversation?.id !== selectedConversation?.id &&
+                                "fw-bold"
+                              }`}
+                              style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                maxWidth: "200px",
+                                display: "inline-block",
+                              }}
+                            >
+                              {user.userId === conversation.lastSenderId &&
+                                "You: "}{" "}
+                              {conversation.lastMessage}
+                            </small>
                             <small className="chat-contact-list-item-time">
                               {timeAgo(conversation.lastTimestamp)}
                             </small>
                           </div>
-                          <small
-                            className={`chat-contact-status text-truncate ${
-                              conversation.unreadCounts > 0 &&
-                              conversation.lastSenderId !== user.userId &&
-                              conversation?.id !== selectedConversation?.id &&
-                              "fw-bold"
-                            }`}
-                            style={{
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              maxWidth: "200px",
-                              display: "inline-block",
-                            }}
-                          >
-                            {user.userId === conversation.lastSenderId &&
-                              "You: "}{" "}
-                            {conversation.lastMessage}
-                          </small>
                         </div>
                       </a>
                     </li>
