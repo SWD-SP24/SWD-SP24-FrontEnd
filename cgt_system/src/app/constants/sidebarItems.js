@@ -26,7 +26,7 @@ export const sidebarItems = {
       icon: "bx bx-message-rounded-dots",
       path: "/doctor/consultations",
     },
-    { title: "Parent Reviews", path: "/doctor/reviews", icon: "bx bx-star" },
+    //{ title: "Parent Reviews", path: "/doctor/reviews", icon: "bx bx-star" },
     {
       title: "Account Settings",
       icon: "bx bx-user-circle",
