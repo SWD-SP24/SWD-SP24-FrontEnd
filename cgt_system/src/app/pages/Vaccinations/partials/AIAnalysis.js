@@ -87,7 +87,7 @@ Không thêm nội dung nào ngoài format trên.
 
   return (
     <div className="card mt-4">
-      <h5 className="card-header">AI Analysis</h5>
+      <h5 className="card-header">Analysis</h5>
       <div className="card-body">
         <div
           dangerouslySetInnerHTML={{

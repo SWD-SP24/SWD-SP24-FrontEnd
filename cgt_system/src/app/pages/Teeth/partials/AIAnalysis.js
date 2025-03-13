@@ -80,7 +80,7 @@ export default function AIAnalysis({ toothRecords }) {
 
   return (
     <div className="card mt-4">
-      <h5 className="card-header">AI Analysis</h5>
+      <h5 className="card-header">Analysis</h5>
       <div className="card-body">
         <div
           dangerouslySetInnerHTML={{
