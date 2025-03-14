@@ -1,9 +1,11 @@
 import React, { useRef } from "react";
 import API_URLS from "../../../config/apiUrls";
-import { ages } from "../../../constants/ages.js";
 import useApi from "../../../hooks/useApi";
-import { convertToISOString } from "../../../util/dateFormat.js";
-export default function AddChildButton({ refetch }) {
+export default function AddChildButton({
+  refetch,
+  permissions,
+  numberOfChild,
+}) {
   const fullNameRef = useRef(null);
   const genderRef = useRef(null);
   const dobRef = useRef(null);
@@ -35,16 +37,44 @@ export default function AddChildButton({ refetch }) {
 
   return (
     <>
-      <button
-        className="btn add-new btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#modalCenter"
-      >
-        <span>
-          <i className="icon-base bx bx-plus icon-sm me-0 me-sm-2"></i>
-          <span className="d-none d-sm-inline-block">Add New Child</span>
-        </span>
-      </button>
+      <div style={{ position: "relative", display: "inline-block" }}>
+        <button
+          className="btn add-new btn-primary"
+          data-bs-toggle="modal"
+          data-bs-target="#modalCenter"
+          disabled={
+            !permissions.some(
+              (p) => p.permissionName === "MANAGE_MULTIPLE_CHILDREN"
+            ) && numberOfChild >= 1
+          }
+          style={{ position: "relative" }}
+        >
+          <span>
+            <i className="icon-base bx bx-plus icon-sm me-0 me-sm-2"></i>
+            <span className="d-none d-sm-inline-block">Add New Child</span>
+          </span>
+        </button>
+
+        {/* Hiển thị biểu tượng khóa nếu button bị disabled */}
+        {!permissions.some(
+          (p) => p.permissionName === "MANAGE_MULTIPLE_CHILDREN"
+        ) &&
+          numberOfChild >= 1 && (
+            <i
+              className="bx bx-lock"
+              style={{
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                fontSize: "30px",
+                color: "var(--bs-primary)",
+                zIndex: 10,
+              }}
+            ></i>
+          )}
+      </div>
+
       <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
           <div class="modal-content">
