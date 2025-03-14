@@ -172,9 +172,15 @@ export default function ManageUser() {
                         </td>
                         <td>{user.role}</td>
                         <td>
-                          <span className="badge bg-label-success me-1">
-                            {user.status === "active" ? "Active" : "Inactive"}
-                          </span>
+                          {user.status === "active" ? (
+                            <span className="badge bg-label-success me-1">
+                              Active
+                            </span>
+                          ) : (
+                            <span className="badge bg-label-warning me-1">
+                              Inactive
+                            </span>
+                          )}
                         </td>
                         <td>
                           <ActionDropdown id={user.userId} refetch={callApi} />
