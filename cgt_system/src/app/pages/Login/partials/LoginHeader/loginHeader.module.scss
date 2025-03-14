@@ -1,0 +1,29 @@
+.app-brand {
+    display: flex;
+    flex-grow: 0;
+    flex-shrink: 0;
+    align-items: center;
+  
+    &.auth-cover-brand {
+        position: absolute;
+        z-index: 1;
+        inset-block-start: 2.1rem;
+        inset-inline-start: 2.5rem;
+    }
+  
+    .app-brand-text {
+        opacity: 1;
+        transition: opacity .3s ease-in-out;
+  
+      &.demo {
+        font-size: 1.75rem;
+        letter-spacing: -0.5px;
+      }
+  
+      &.text-heading {
+        --bs-text-opacity: 1;
+        color: var(--bs-heading-color) !important;
+      }
+    }
+  }
+  

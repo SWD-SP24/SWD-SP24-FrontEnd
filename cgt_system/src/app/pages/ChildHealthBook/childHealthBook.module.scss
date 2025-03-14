@@ -1,0 +1,372 @@
+// Import Google Fonts for handwriting styles
+@import url('https://fonts.googleapis.com/css2?family=Architects+Daughter&family=Caveat:wght@400;700&family=Gloria+Hallelujah&family=Indie+Flower&family=Kalam:wght@300;400;700&family=Patrick+Hand&display=swap');
+
+// Variables
+$primary-color: #5271ff;
+$secondary-color: #ffcce6;
+$accent-color: #a6e4ff;
+$background-gradient-start: #e6f7ff;
+$background-gradient-end: #fff;
+$highlight-color: #fff9c4;
+$border-radius-large: 20px;
+$border-radius-medium: 15px;
+$border-radius-extra-large: 30px;
+$box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+$box-shadow-light: 0 4px 10px rgba(0, 0, 0, 0.05);
+$text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+$text-shadow-light: 1px 1px 2px rgba(0, 0, 0, 0.1);
+
+// Handwriting font variables
+$title-font: 'Gloria Hallelujah', cursive;
+$name-font: 'Architects Daughter', cursive;
+$info-font: 'Patrick Hand', cursive;
+$label-font: 'Caveat', cursive;
+
+.bookContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  position: relative;
+}
+
+// Main page styling
+.page {
+  &.cover {
+    background: linear-gradient(to bottom, $background-gradient-start, $background-gradient-end);
+    border-radius: $border-radius-large;
+    box-shadow: $box-shadow;
+    font-family: $info-font;
+    padding: 20px;
+    position: relative;
+    // overflow: hidden;
+    
+    // Decorative cloud elements
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+    }
+    
+    &::before {
+      width: 100px;
+      height: 60px;
+      top: 10%;
+      left: 10%;
+    }
+    
+    &::after {
+      width: 80px;
+      height: 50px;
+      // bottom: 15%;
+      right: 5%;
+    }
+  }
+}
+
+// Cover content container
+.coverContent {
+  text-align: center;
+  position: relative;
+  
+  // Decorative flower elements
+  &::before,
+  &::after {
+    content: "✿";
+    position: absolute;
+    color: $secondary-color;
+    font-size: 30px;
+    font-family: $info-font;
+  }
+  
+  &::before {
+    top: 10px;
+    left: 10px;
+  }
+  
+  &::after {
+    bottom: 10px;
+    right: 10px;
+  }
+}
+
+// Title section
+.titleSection {
+  background-color: $secondary-color;
+  border-radius: $border-radius-extra-large;
+  padding: 15px;
+  margin-bottom: 20px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: float 6s ease-in-out infinite;
+  
+  &::before {
+    content: "📚";
+    font-size: 24px;
+    margin-right: 10px;
+  }
+  
+  &::after {
+    content: "🩺";
+    font-size: 24px;
+    margin-left: 10px;
+  }
+  
+  h2 {
+    color: darken($secondary-color, 30%);
+    font-size: 28px;
+    text-shadow: $text-shadow;
+    margin: 0;
+    padding: 5px 0;
+    font-weight: bold;
+    font-family: $title-font;
+    letter-spacing: 1px;
+  }
+}
+
+// Child profile section
+.childProfile {
+  background-color: #fff;
+  border: 5px solid $accent-color;
+  border-radius: $border-radius-large;
+  padding: 20px;
+  margin: 15px auto;
+  position: relative;
+  
+  &::before {
+    content: "";
+    position: absolute;
+    background: $highlight-color;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    top: -15px;
+    right: -15px;
+    z-index: -1;
+  }
+  
+  img {
+    border: 5px solid $secondary-color;
+    border-radius: 50%;
+    padding: 5px;
+    background-color: #fff;
+    width: 150px;
+    transition: transform 0.3s ease;
+    
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.childName {
+  color: $primary-color;
+  font-size: 28px;
+  font-weight: bold;
+  text-shadow: $text-shadow-light;
+  margin-top: 15px;
+  font-family: $name-font;
+  letter-spacing: 1px;
+  position: relative;
+  display: inline-block;
+}
+
+// Information table
+.infoTable {
+  background-color: #fff;
+  border-radius: $border-radius-medium;
+  box-shadow: $box-shadow-light;
+  margin: 0 auto;
+  padding: 10px;
+  width: 80%;
+  
+  tbody {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  tr {
+    border-bottom: 2px dotted $accent-color;
+    display: flex;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  td {
+    font-size: 17px;
+    padding: 5px;
+    font-family: $info-font;
+    
+    &:last-child {
+      color: $primary-color;
+      font-weight: bold;
+      padding-right: 1rem;
+      font-family: $label-font;
+      font-size: 19px;
+    }
+  }
+}
+
+.infoTable_indicators{
+  background-color: #fff;
+  border-radius: $border-radius-medium;
+  margin: 0 auto;
+  padding: 10px;
+  width: 100%;
+
+  th {
+    font-size: 16px;
+  }
+  
+  tr {
+    padding: 0 10px 0 10px;
+    border-bottom: 2px dotted $accent-color;
+    
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+  
+  td {
+    padding: 0 10px 0 10px;
+    color: $primary-color;
+    font-weight: bold;
+    padding-right: 1rem;
+    font-family: $label-font;
+    font-size: 19px;
+  }
+}
+
+// Handwritten notes effect
+.handwrittenNote {
+  position: absolute;
+  font-family: 'Indie Flower', cursive;
+  color: #6b6b6b;
+  font-size: 15px;
+  transform: rotate(-5deg);
+  bottom: 15px;
+  right: 20px;
+  background: $highlight-color;
+  padding: 5px 10px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
+  
+  &::before {
+    content: "✏️";
+    margin-right: 5px;
+  }
+}
+
+// Doodle elements
+.doodle {
+  position: absolute;
+  font-family: 'Indie Flower', cursive;
+  color: lighten($primary-color, 20%);
+  
+  &.star {
+    content: "✶";
+    font-size: 18px;
+    top: 70px;
+    left: 35px;
+    transform: rotate(15deg);
+  }
+  
+  &.heart {
+    content: "♥";
+    font-size: 18px;
+    bottom: 90px;
+    right: 45px;
+    transform: rotate(-10deg);
+  }
+}
+
+// Animation for title section
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+// Animation for handwriting effect
+@keyframes handwriting {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .titleSection {
+    h2 {
+      font-size: 24px;
+    }
+  }
+  
+  .childProfile {
+    max-width: 200px;
+  }
+  
+  .infoTable {
+    width: 95%;
+  }
+}
+
+.title-section {
+  animation: float 6s ease-in-out infinite;
+}
+
+.icon {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+}
+
+.infoSection p {
+  margin: 5px 0;
+  font-size: 18px;
+  color: #333;
+}
+
+.infoSection strong {
+  color: #ff6f61;
+}
+
+
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: $border-radius-medium;
+  box-shadow: $box-shadow-light;
+  border-radius: 15px;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.1);
+  border: 2px dashed #ff9a9e;
+}
+
+
+.chartContainer {
+  width: 100%;
+  height: 200px;
+  margin-top: 10px;
+}

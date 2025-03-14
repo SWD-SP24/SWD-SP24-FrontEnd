@@ -1,0 +1,98 @@
+:root {
+  --tooth-info-color: #333;
+}
+[data-bs-theme="dark"] {
+  --tooth-info-color: #fff;
+}
+.tooth-chart {
+  width: 315px;
+  height: 435px;
+}
+
+.spots {
+  polygon,
+  path {
+    -webkit-transition: fill 0.25s;
+    transition: fill 0.25s;
+
+    &:hover,
+    &:active {
+      fill: #696cff !important;
+    }
+  }
+}
+
+.header-container {
+  display: grid;
+  columns: 12;
+  .header-title-teeth {
+    column-span: 6;
+    flex-basis: 1;
+  }
+  .header-title-tooth {
+    column-span: 6;
+    flex-basis: 1;
+  }
+}
+
+.tooth-content {
+  max-width: 400px;
+}
+
+.tooth-info {
+  padding: 8px 0;
+}
+
+.tooth-info:last-child {
+  border-bottom: none;
+}
+
+.tooth-info span:first-child {
+  font-weight: bold;
+  color: #696cff; /* Primary color of your website */
+}
+
+.tooth-info span:last-child {
+  color: var(--tooth-info-color);
+}
+
+/* New CSS for the tooth label */
+.tooth-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: #696cff; /* Primary color */
+}
+.tooth-label textarea {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  outline: none;
+  resize: none; /* Disables textarea resizing */
+  transition: border-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.tooth-label textarea:focus {
+  border-color: #696cff;
+  box-shadow: 0 0 3px rgba(105, 108, 255, 0.5);
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 60px; /* Ensures both button areas have the same height */
+  margin-top: 16px; /* Adjust if needed */
+  button.btn-primary {
+    width: 160px; /* Ensures same width */
+    height: 40px; /* Ensures same height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    white-space: nowrap; /* Prevents text from wrapping */
+  }
+}

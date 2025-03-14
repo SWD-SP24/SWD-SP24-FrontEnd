@@ -1,0 +1,35 @@
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: var(--bs-menu-sub-active-bg); /* Màu hồng nhạt */
+}
+
+.loading-circle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--bs-purple);
+  opacity: 0.6;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.loading-text {
+  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  color: var(--bs-menu-sub-active-color);
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+}

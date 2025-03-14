@@ -1,0 +1,194 @@
+.chatbot-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+
+    .chatbot-toggle {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        transition: background 0.3s;
+
+        &:hover {
+            background-color: #0056b3;
+        }
+    }
+
+    .chatbot {
+        width: 350px;
+        height: 450px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .chatbot-header {
+            background-color: #007bff;
+            color: white;
+            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+
+            .close-icon {
+                cursor: pointer;
+                font-size: 18px;
+                transition: color 0.2s;
+
+                &:hover {
+                    color: #ffdddd;
+                }
+            }
+        }
+
+        .chatbot-messages {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+
+            .user-message,
+            .bot-message {
+                max-width: 80%;
+                padding: 8px 12px;
+                border-radius: 8px;
+                word-wrap: break-word;
+            }
+
+            .user-message {
+                align-self: flex-end;
+                background: #007bff;
+                color: white;
+            }
+
+            .bot-message {
+                align-self: flex-start;
+                background: #f1f1f1;
+                color: black;
+            }
+
+            .typing {
+                background: transparent;
+                font-weight: bold;
+                color: gray;
+                animation: blink 1.5s infinite;
+            }
+        }
+
+        .question-section {
+            padding: 10px;
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-bottom: 1px solid #ddd;
+
+            .question-list {
+                display: flex;
+                flex-direction: column;
+                gap: 6px;
+
+                .question-item {
+                    font-size: 12px;
+                    background-color: #dae8f7;
+                    color: #333;
+                    padding: 8px 12px;
+                    border-radius: 15px;
+                    cursor: pointer;
+                    transition: background 0.3s;
+                    border: 2px solid #c0deff;
+                    &:hover {
+                        background-color: #ddd;
+                    }
+                }
+            }
+        }
+
+        .categories-section {
+            padding: 10px;
+            background-color: #f9f9f9;
+            border-top: 1px solid #ddd;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            .category-button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 20px;
+                padding: 8px 16px;
+                cursor: pointer;
+                transition:
+                    background 0.3s,
+                    transform 0.3s;
+                font-size: 14px;
+
+                &:hover {
+                    background-color: #0056b3;
+                    transform: scale(1.1);
+                }
+
+                &.active {
+                    background-color: #0056b3;
+                }
+            }
+        }
+
+        .chatbot-input {
+            display: flex;
+            padding: 10px;
+            border-top: 1px solid #ddd;
+
+            input {
+                flex: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                outline: none;
+            }
+
+            button {
+                margin-left: 8px;
+                padding: 8px 12px;
+                background: #007bff;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+
+                &:hover {
+                    background: #0056b3;
+                }
+            }
+        }
+    }
+}
+
+@keyframes blink {
+    0% {
+        opacity: 0.3;
+    }
+    50% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0.3;
+    }
+}

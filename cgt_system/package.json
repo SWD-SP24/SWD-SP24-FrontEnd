@@ -3,10 +3,45 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@iconify/icons-bx": "^1.2.6",
+    "@iconify/react": "^5.2.0",
+    "@lottiefiles/dotlottie-react": "^0.13.2",
+    "@popperjs/core": "^2.11.8",
+    "@simonwep/pickr": "^1.9.1",
+    "@tippyjs/react": "^4.2.6",
+    "axios": "^1.7.9",
+    "bootstrap": "^5.3.3",
+    "boxicons": "^2.1.4",
+    "chart.js": "^4.4.8",
+    "chartjs-plugin-zoom": "^2.2.0",
+    "classnames": "^2.5.1",
     "cra-template": "1.2.0",
+    "firebase": "^11.4.0",
+    "framer-motion": "^12.4.10",
+    "js-cookie": "^3.0.5",
+    "lodash.debounce": "^4.0.8",
+    "lucide-react": "^0.477.0",
+    "nouislider-react": "^3.4.2",
+    "perfect-scrollbar": "^1.5.6",
+    "raphael": "^2.3.0",
     "react": "^19.0.0",
+    "react-bootstrap": "^2.10.7",
+    "react-chartjs-2": "^5.3.0",
+    "react-confetti": "^6.4.0",
     "react-dom": "^19.0.0",
-    "react-scripts": "5.0.1"
+    "react-icons": "^5.5.0",
+    "react-loading-skeleton": "^3.5.0",
+    "react-pageflip": "^2.0.3",
+    "react-perfect-scrollbar": "^1.5.8",
+    "react-raphael": "^0.9.0",
+    "react-router": "^7.1.1",
+    "react-scripts": "5.0.1",
+    "react-signify": "^1.5.6",
+    "sweetalert2": "^11.15.10",
+    "swiper": "^11.2.1",
+    "tippy.js": "^6.3.7",
+    "zustand": "^5.0.3"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,5 +66,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "postcss-normalize": "^13.0.1",
+    "sass": "^1.83.1"
   }
 }

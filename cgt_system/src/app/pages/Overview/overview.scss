@@ -1,0 +1,36 @@
+.scrollable-container {
+  max-height: 6 00px; /* Adjust the height as needed */
+  overflow-y: auto; /* Enables vertical scrolling */
+  overflow-x: hidden; /* Prevents horizontal scrolling */
+  padding: 10px; /* Optional: adds spacing inside */
+  background: #f5f5f9; /* Optional: ensures background stays consistent */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  box-shadow: 0px 3px 1px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-content {
+  scroll-behavior: smooth; // Smooth native scrolling
+  transition: transform 0.3s ease-out; // Smoother animations
+}
+
+/* Hide Y-axis scrollbar */
+.ps__rail-x {
+  display: none !important;
+}
+
+/* Style the X-axis scrollbar */
+.ps__rail-y {
+  opacity: 0.3; // Transparent until hover
+  transition: opacity 0.3s ease-in-out;
+}
+
+.ps__rail-y:hover {
+  opacity: 1; // Fully visible on hover
+}
+
+/* Smooth scrolling effect */
+.ps__thumb-y {
+  transition: transform 0.2s ease-out;
+}

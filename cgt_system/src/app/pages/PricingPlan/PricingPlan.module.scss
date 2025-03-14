@@ -1,0 +1,17 @@
+:root {
+  /* Default Light Theme */
+  --content-paper-color: #f5f5f9;
+  --content-text-color: #000000;
+}
+
+[data-bs-theme="dark"] {
+  --content-paper-color: #232333;
+  --content-text-color: #ffffff;
+}
+
+.content-wrapper {
+  padding-top: 100px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--content-paper-color);
+  color: var(--content-text-color);
+}
