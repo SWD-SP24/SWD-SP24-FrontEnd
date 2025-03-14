@@ -65,13 +65,22 @@ export const LineChart = ({
           mode: "x", // Allow panning in both directions
         },
         zoom: {
-          wheel: {
-            enabled: true, // Enable zooming with mouse wheel
+          pan: {
+            enabled: true,
+            mode: "x",
           },
-          pinch: {
-            enabled: true, // Enable zooming on touch devices
+          zoom: {
+            wheel: {
+              enabled: true,
+            },
+            pinch: {
+              enabled: true,
+            },
+            mode: "x",
+            limits: {
+              x: { min: 5, max: 100 }, // Adjust these values based on your data range
+            },
           },
-          mode: "x", // Zoom both X and Y axis
         },
       },
     },

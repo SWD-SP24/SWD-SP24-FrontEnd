@@ -54,19 +54,117 @@ const Reviews = () => {
           <div className="col-md-6 col-lg-7 col-xl-9">
             <div className="swiper-reviews-carousel overflow-hidden">
               <Swiper
-                id="swiper-reviews"
                 slidesPerView={3}
                 spaceBetween={25}
-                modules={[Navigation, Pagination, Autoplay]}
-                freeMode={true}
-                navigation={{
-                  prevEl: "#reviews-previous-btn",
-                  nextEl: "#reviews-next-btn",
-                }}
                 loop={true}
                 grabCursor={true}
                 autoplay={{ delay: 3000, disableOnInteraction: false }}
+                navigation={{
+                  nextEl: "#reviews-next-btn",
+                  prevEl: "#reviews-previous-btn",
+                }}
+                pagination={{ clickable: true }}
+                modules={[Navigation, Pagination, Autoplay]}
               >
+                <SwiperSlide>
+                  <div className="card h-100">
+                    <div className="card-body text-body d-flex flex-column justify-content-between h-100">
+                      <p>
+                        “This child growth tracking system has been a lifesaver!
+                        It helps me monitor my baby's milestones and vaccination
+                        schedule with ease.”
+                      </p>
+                      <div className="text-warning mb-4">
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <div className="avatar me-3 avatar-sm">
+                          <img
+                            src={Images.avatar1}
+                            alt="Avatar"
+                            className="rounded-circle"
+                          />
+                        </div>
+                        <div>
+                          <h6 className="mb-0">Emily Johnson</h6>
+                          <p className="small text-body-secondary mb-0">
+                            Mother of two
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <div className="card h-100">
+                    <div className="card-body text-body d-flex flex-column justify-content-between h-100">
+                      <p>
+                        “I love how this system provides personalized growth
+                        insights for my child. It makes parenting so much
+                        easier!”
+                      </p>
+                      <div className="text-warning mb-4">
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <div className="avatar me-3 avatar-sm">
+                          <img
+                            src={Images.avatar2}
+                            alt="Avatar"
+                            className="rounded-circle"
+                          />
+                        </div>
+                        <div>
+                          <h6 className="mb-0">David Martinez</h6>
+                          <p className="small text-body-secondary mb-0">
+                            Pediatrician
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
+                <SwiperSlide>
+                  <div className="card h-100">
+                    <div className="card-body text-body d-flex flex-column justify-content-between h-100">
+                      <p>
+                        “Tracking my child's weight and height progress has
+                        never been this simple! Highly recommended for all
+                        parents.”
+                      </p>
+                      <div className="text-warning mb-4">
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bxs-star"></i>
+                        <i className="icon-base bx bx-star"></i>
+                      </div>
+                      <div className="d-flex align-items-center">
+                        <div className="avatar me-3 avatar-sm">
+                          <img
+                            src={Images.avatar3}
+                            alt="Avatar"
+                            className="rounded-circle"
+                          />
+                        </div>
+                        <div>
+                          <h6 className="mb-0">Sarah Lee</h6>
+                          <p className="small text-body-secondary mb-0">
+                            New Parent
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </SwiperSlide>
                 <SwiperSlide>
                   <div className="card h-100">
                     <div className="card-body text-body d-flex flex-column justify-content-between h-100">

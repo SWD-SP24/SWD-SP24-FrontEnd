@@ -57,6 +57,8 @@ const Images = {
   manDoc1: require("./front-pages/landing-page/manDoc.png"),
   manDoc2: require("./front-pages/landing-page/manDoc2.png"),
   manDoc3: require("./front-pages/landing-page/manDoc3.png"),
+  landingHeroLight: require("./front-pages/landing-page/landing-image.png"),
+  landingHeroDark: require("./front-pages/landing-page/landing_image_black.png"),
 };
 
 export default Images;

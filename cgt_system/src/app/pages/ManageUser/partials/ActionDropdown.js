@@ -1,7 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router";
+import useApi from "../../../hooks/useApi";
+import API_URLS from "../../../config/apiUrls";
 
-const DropdownMenu = ({ id }) => {
+const DropdownMenu = ({ id, refetch }) => {
+  const { response, callApi } = useApi({
+    url: `${API_URLS.USER.USER_WITH_ID}${id}`,
+    method: "PUT",
+  });
   const [show, setShow] = useState(false);
   const navigate = useNavigate();
 
@@ -14,7 +20,10 @@ const DropdownMenu = ({ id }) => {
   };
 
   const handleDelete = () => {
-    console.log("Delete clicked");
+    const data = { status: "inactive" };
+    console.log("BLOCK USER", API_URLS.USER.USER_WITH_ID + id);
+    callApi(data);
+    refetch();
   };
 
   return (

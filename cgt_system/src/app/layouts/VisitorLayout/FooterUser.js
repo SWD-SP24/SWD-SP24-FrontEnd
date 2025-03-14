@@ -111,7 +111,7 @@ const Footer = () => {
                   </span>
                 </span>
                 <span class="app-brand-text demo text-white fw-bold ms-2 ps-1">
-                  Child Growth Tracker
+                  Grow+
                 </span>
               </Link>
               <p class="footer-text footer-logo-description mb-6">

@@ -177,7 +177,7 @@ export default function ManageUser() {
                           </span>
                         </td>
                         <td>
-                          <ActionDropdown id={user.userId} />
+                          <ActionDropdown id={user.userId} refetch={callApi} />
                         </td>
                       </tr>
                     ))

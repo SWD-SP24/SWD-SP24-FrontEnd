@@ -52,9 +52,15 @@ const Cta = () => {
           </div>
           <div className="col-lg-6 pt-lg-12 text-center text-lg-end">
             <img
-              src={Images.ctaDashboardBg}
+              src={Images.landingHeroDark}
               alt="child growth dashboard"
               className="img-fluid mt-lg-4"
+              style={{
+                maxWidth: "70%",
+                height: "auto",
+                borderTopLeftRadius: "0.75rem",
+                borderTopRightRadius: "0.75rem",
+              }}
             />
           </div>
         </div>

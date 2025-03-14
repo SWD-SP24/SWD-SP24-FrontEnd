@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import getMembershipPackages from "../../../modules/MembershipPackages/getMembershipPackages.js";
 import API_URLS from "../../../config/apiUrls.js";
 import useApi from "../../../hooks/useApi.js";
+import { Link } from "react-router";
 const Pricing = () => {
   const [priceSales, setPriceSales] = useState(true);
   const [membershipPackages, setMembershipPackages] = useState(null);
@@ -166,12 +167,9 @@ const Pricing = () => {
 
                     {/* Button stays at the bottom */}
                     <div className="d-grid mt-auto">
-                      <a
-                        href="payment-page.html"
-                        className="btn btn-label-primary"
-                      >
+                      <Link to={"/register"} className="btn btn-label-primary">
                         Get Started
-                      </a>
+                      </Link>
                     </div>
                   </div>
                 </div>

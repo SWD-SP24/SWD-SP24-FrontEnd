@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from "react";
 import Images from "../../../assets/img/images";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 const Hero = () => {
   // State to track theme
@@ -62,42 +62,38 @@ const Hero = () => {
                   className="scaleX-n1-rtl"
                 />
               </span>
-              <button className="btn btn-primary btn-lg" onClick={() => nav("register")} >
+              <button
+                className="btn btn-primary btn-lg"
+                onClick={() => nav("register")}
+              >
                 Get started
               </button>
             </div>
           </div>
           <div id="heroDashboardAnimation" className="hero-animation-img">
-            <a href="#" target="_blank">
+            <Link to={"/register"}>
               <div
                 id="heroAnimationImg"
                 className="position-relative hero-dashboard-img"
-                style={{
-                  transform:
-                    "perspective(1200px) rotateX(2.54deg) rotateY(-8.18deg) scale3d(1, 1, 1);",
-                }}
               >
                 <img
                   ref={heroDashboardRef}
-                  src={isDark ? Images.heroDashboardDark : Images.heroDashboard}
+                  src={
+                    isDark ? Images.landingHeroDark : Images.landingHeroLight
+                  }
                   alt="hero dashboard"
                   className="animation-img"
                   id="heroDashboard"
-                  style={{ visibility: "visible" }}
-                />
-                <img
-                  ref={heroElementsRef}
-                  src={isDark ? Images.heroElementDark : Images.heroElement}
-                  alt="hero elements"
-                  id="heroElements"
-                  className="position-absolute hero-elements-img animation-img top-0 start-0"
                   style={{
                     visibility: "visible",
-                    transform: "translateZ(1rem)",
+                    height: "530px",
+                    marginTop: "70px",
+                    borderRadius: "1.25rem",
+                    boxShadow: "0 0.5rem 1rem rgba(0, 0, 0, 0.13)",
                   }}
                 />
               </div>
-            </a>
+            </Link>
           </div>
         </div>
       </div>
