@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes, useOutletContext } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
 import ComingSoon from "../pages/ComingSoon";
+import Cookies from "js-cookie";
 import ManageChildren from "../pages/ManageChildren/ManageChildren";
 import ChildLayout from "../layouts/ChildLayout/ChildLayout";
 import Indicators from "../pages/Indicators/Indicators";
@@ -12,9 +13,11 @@ import Chat from "../pages/Chat";
 import Vaccinations from "../pages/Vaccinations/Vaccinations";
 import VaccineInfo from "../pages/VaccineInfo/VaccineInfo";
 import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
+import PermissionRoute from "./PermissionRoute";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
+  const permissions = JSON.parse(Cookies.get("permissions") || "[]");
   return (
     <Routes>
       <Route
@@ -41,7 +44,21 @@ export default function MemberRoutes() {
         </Route>
         <Route path="upgrade-plan/checkout" element={<Checkout />} />
         <Route path="*" element={<ComingSoon />} />
-        <Route path="consultations" element={<Chat />} />
+        <Route
+          element={
+            <PermissionRoute
+              isAllowed={permissions.some(
+                (p) =>
+                  p.permissionName === "DOCTOR_CHAT" ||
+                  p.permissionName === "DOCTOR_CHAT_VIP"
+              )}
+              redirectTo={"/not-authorized"}
+            />
+          }
+        >
+          <Route path="consultations" element={<Chat />} />
+        </Route>
+
         <Route
           path="consultations/child-details"
           element={<ChildHealthBook />}

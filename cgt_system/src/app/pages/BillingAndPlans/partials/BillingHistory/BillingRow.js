@@ -36,7 +36,9 @@ export default function BillingRow({ index, billingItem }) {
         {formatDate(billingItem.transactionDate)}
       </td>
       <td>
-        <span class="badge bg-label-success text-capitalized"> Paid </span>
+        <span class="badge bg-label-success text-capitalized">
+          {billingItem.status}
+        </span>
       </td>
     </tr>
   );
