@@ -25,8 +25,6 @@ export default function Button({ data, buttonTag }) {
         const user = response.data || {};
         const { token: authToken } = response.data || {};
         if (authToken) {
-          setUser(null);
-          Cookies.set("user", user);
           Cookies.set("auth_token", authToken);
           switch (user.role) {
             case "admin":

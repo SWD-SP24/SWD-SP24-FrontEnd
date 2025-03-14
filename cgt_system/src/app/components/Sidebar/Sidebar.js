@@ -7,8 +7,12 @@ import { sidebarItems } from "../../constants/sidebarItems";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import UpgradePlanModal from "../../pages/UpgradePlanModal/UpgradePlanModal";
+import useUser from "../../hooks/useUser";
+import { useLogout } from "../../hooks/useLogout";
 
 export default function Sidebar({ role }) {
+  const { setUser } = useUser();
+  const { logout } = useLogout();
   const location = useLocation();
   const menuItems = sidebarItems[role] || [];
 
@@ -80,9 +84,16 @@ export default function Sidebar({ role }) {
         }}
       >
         <div className="app-brand demo">
-          <Link to={"/"} className="app-brand-link">
+          <div
+            style={{ cursor: "pointer" }}
+            onClick={() => {
+              setUser(null);
+              logout();
+            }}
+            className="app-brand-link"
+          >
             <AppBrandLogo />
-          </Link>
+          </div>
         </div>
         <div className="menu-inner-shadow"></div>
         <ul className="menu-inner py-1">

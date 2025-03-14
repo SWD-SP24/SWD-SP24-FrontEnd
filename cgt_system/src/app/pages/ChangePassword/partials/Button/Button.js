@@ -6,7 +6,6 @@ import { sFormData, sFormError } from "../../changePasswordStore";
 import { useNavigate } from "react-router";
 import { validateField } from "../../schemas/changePasswordSchema";
 import showToast from "../../../../util/showToast";
-import { useLogout } from "../../../../hooks/useLogout";
 import useUser from "../../../../hooks/useUser";
 
 export default function Button({ buttonTag, onReset, user }) {
@@ -36,6 +35,7 @@ export default function Button({ buttonTag, onReset, user }) {
           confirmText: "Go to Login",
           cancelText: "",
           onConfirm: () => {
+            setUser(null);
             navigate(redirectTo);
           },
           onCancle: null,
