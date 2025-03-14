@@ -63,8 +63,7 @@ const Reviews = () => {
                   nextEl: "#reviews-next-btn",
                   prevEl: "#reviews-previous-btn",
                 }}
-                pagination={{ clickable: true }}
-                modules={[Navigation, Pagination, Autoplay]}
+                modules={[Navigation, Autoplay]}
               >
                 <SwiperSlide>
                   <div className="card h-100">
