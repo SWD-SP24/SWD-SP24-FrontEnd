@@ -1,8 +1,8 @@
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import React, { useEffect } from "react";
+import { Animations } from "../../../assets/js/Animations";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
-import { Animations } from "../../../assets/js/Animations";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
 export default function TotalUsers() {
   const { response, callApi } = useApi({
@@ -27,8 +27,15 @@ export default function TotalUsers() {
 
   if (response === null || membershipPkg === null) {
     return (
-      <div className="col-4 order-2 mb-4 h-100" style={{ height: "300px" }}>
-        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      <div className="col-4 order-2 mb-4 h-100 mb-4">
+        <div className="card h-100">
+          <DotLottieReact
+            src={Animations.dashboardLoading}
+            autoplay
+            loop
+            speed={2}
+          />
+        </div>
       </div>
     );
   }

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
-import { getShortMonthName } from "../../../util/dateFormat";
-import { Line, Pie } from "react-chartjs-2";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import {
-  Chart as ChartJS,
+  ArcElement,
   CategoryScale,
+  Chart as ChartJS,
+  Legend,
   LinearScale,
-  PointElement,
   LineElement,
+  PointElement,
   Title,
   Tooltip,
-  Legend,
-  ArcElement,
 } from "chart.js";
-import useApi from "../../../hooks/useApi";
-import API_URLS from "../../../config/apiUrls";
+import React, { useEffect, useState } from "react";
+import { Line, Pie } from "react-chartjs-2";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 import { Animations } from "../../../assets/js/Animations";
-import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import API_URLS from "../../../config/apiUrls";
+import useApi from "../../../hooks/useApi";
+import { getShortMonthName } from "../../../util/dateFormat";
 
 ChartJS.register(
   CategoryScale,
@@ -102,8 +102,15 @@ export default function RevenueChart() {
   };
   if (response === null) {
     return (
-      <div className="card order-1" style={{ height: "300px" }}>
-        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      <div className="col-8 order-1 order-md-3 order-lg-2 mb-4">
+        <div className="card h-100">
+          <DotLottieReact
+            src={Animations.dashboardLoading}
+            autoplay
+            loop
+            speed={2}
+          />
+        </div>
       </div>
     );
   }
@@ -119,7 +126,7 @@ export default function RevenueChart() {
               style={{ minHeight: "250px" }}
             >
               {isLoading ? (
-                <Skeleton height={200} width={"100%"} />
+                <Skeleton height={200} />
               ) : (
                 <Line data={lineData} options={lineOptions} />
               )}

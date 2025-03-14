@@ -1,9 +1,8 @@
-import React, { useEffect } from "react";
-import Images from "../../../assets/img/images";
-import useApi from "../../../hooks/useApi";
-import API_URLS from "../../../config/apiUrls";
-import { Animations } from "../../../assets/js/Animations";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import React, { useEffect } from "react";
+import { Animations } from "../../../assets/js/Animations";
+import API_URLS from "../../../config/apiUrls";
+import useApi from "../../../hooks/useApi";
 export default function TopStatic() {
   const { response, callApi } = useApi({
     url: `${API_URLS.DASHBOARD.VACCINE_COMPLETE}`,
@@ -22,8 +21,15 @@ export default function TopStatic() {
 
   if (response === null) {
     return (
-      <div className="card" style={{ height: "300px" }}>
-        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      <div className="col-4 order-5 mb-4">
+        <div className="card h-100">
+          <DotLottieReact
+            src={Animations.dashboardLoading}
+            autoplay
+            loop
+            speed={2}
+          />
+        </div>
       </div>
     );
   }

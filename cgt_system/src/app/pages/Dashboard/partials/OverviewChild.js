@@ -1,8 +1,8 @@
-import React, { use, useEffect, useState } from "react";
-import useApi from "../../../hooks/useApi";
-import API_URLS from "../../../config/apiUrls";
-import { Animations } from "../../../assets/js/Animations";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
+import React, { useEffect } from "react";
+import { Animations } from "../../../assets/js/Animations";
+import API_URLS from "../../../config/apiUrls";
+import useApi from "../../../hooks/useApi";
 
 export default function OverviewChild() {
   const { response, callApi } = useApi({
@@ -34,8 +34,15 @@ export default function OverviewChild() {
 
   if (response === null || abnormalChildren === null || avgGrowRate === null) {
     return (
-      <div className="card" style={{ height: "300px" }}>
-        <DotLottieReact src={Animations.dashboardLoading} loop autoplay />
+      <div className="col-4 order-2 mb-4 h-100">
+        <div className="card h-100">
+          <DotLottieReact
+            src={Animations.dashboardLoading}
+            autoplay
+            loop
+            speed={2}
+          />
+        </div>
       </div>
     );
   }
