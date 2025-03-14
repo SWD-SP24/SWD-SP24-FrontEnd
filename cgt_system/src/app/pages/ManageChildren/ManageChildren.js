@@ -10,7 +10,7 @@ import { Link } from "react-router";
 import baby_girl from "../../assets/img/illustrations/baby_girl.jpg";
 import baby_boy from "../../assets/img/illustrations/baby_boy.jpg";
 export default function ManageChildren() {
-  const permissions = JSON.parse(Cookies.get("permissions"));
+  const permissions = JSON.parse(Cookies.get("permissions") || "[]");
   const [numberOfChild, setNumberOfChild] = useState("");
   const { response, callApi } = useApi({
     url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
@@ -28,6 +28,10 @@ export default function ManageChildren() {
       setNumberOfChild(response.data.length);
     }
   }, [response]);
+
+  if (!permissions) {
+    return <div> Loading... </div>;
+  }
 
   if (!response) {
     return <div> Loading </div>;
