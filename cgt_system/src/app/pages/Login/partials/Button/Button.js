@@ -6,9 +6,11 @@ import { useNavigate } from "react-router";
 import { sFormData, sFormError } from "../../loginStore";
 import { validateField } from "../../schemas/loginSchema";
 import showToast from "../../../../util/showToast";
+import useUser from "../../../../hooks/useUser";
 
 export default function Button({ data, buttonTag }) {
   const formData = sFormData.use();
+  const { setUser } = useUser();
   const { isLoading, response, error, callApi } = useApi({
     url: API_URLS.AUTH.LOGIN,
     method: "POST",
@@ -23,6 +25,7 @@ export default function Button({ data, buttonTag }) {
         const user = response.data || {};
         const { token: authToken } = response.data || {};
         if (authToken) {
+          setUser(null);
           Cookies.set("auth_token", authToken);
           switch (user.role) {
             case "admin":

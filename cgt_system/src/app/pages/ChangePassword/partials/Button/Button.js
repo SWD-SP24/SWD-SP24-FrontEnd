@@ -36,7 +36,6 @@ export default function Button({ buttonTag, onReset, user }) {
           confirmText: "Go to Login",
           cancelText: "",
           onConfirm: () => {
-            setUser(null);
             navigate(redirectTo);
           },
           onCancle: null,
