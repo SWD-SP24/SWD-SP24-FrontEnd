@@ -129,6 +129,9 @@ export default function PricingPlan() {
                                   /mo
                                 </sub>
                               </div>
+                              <small className="text-muted text-center">
+                                {pkg.summary}
+                              </small>
                             </div>
                           </div>
 
