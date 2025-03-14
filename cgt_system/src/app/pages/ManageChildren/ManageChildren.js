@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 import AddChildButton from "./partials/AddChildButton";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
@@ -9,6 +10,8 @@ import { Link } from "react-router";
 import baby_girl from "../../assets/img/illustrations/baby_girl.jpg";
 import baby_boy from "../../assets/img/illustrations/baby_boy.jpg";
 export default function ManageChildren() {
+  const permissions = JSON.parse(Cookies.get("permissions"));
+  const [numberOfChild, setNumberOfChild] = useState("");
   const { response, callApi } = useApi({
     url: `${API_URLS.CHILDREN.GET_CHILDREN_LIST}`,
     method: "GET",
@@ -21,7 +24,9 @@ export default function ManageChildren() {
   }, []);
 
   useEffect(() => {
-    console.log(response);
+    if (response?.status === "successful") {
+      setNumberOfChild(response.data.length);
+    }
   }, [response]);
 
   if (!response) {
@@ -112,7 +117,11 @@ export default function ManageChildren() {
                   </select>
                 </div>
                 <div className="dt-buttons  flex-wrap d-flex gap-4 mb-md-0 mb-6">
-                  <AddChildButton refetch={callApi} />
+                  <AddChildButton
+                    refetch={callApi}
+                    permissions={permissions}
+                    numberOfChild={numberOfChild}
+                  />
                 </div>
               </div>
             </div>
