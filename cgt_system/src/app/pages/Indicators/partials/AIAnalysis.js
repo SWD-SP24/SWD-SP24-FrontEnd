@@ -27,29 +27,29 @@ export default function AIAnalysis({ indicators }) {
               {
                 parts: [
                   {
-                    text: `Dưới đây là thông tin sức khỏe tổng quát của trẻ:  
-🧒 **Tên bé:** ${name}, **Tuổi:** ${age}, 🩸 **Nhóm máu:** ${bloodType}, ⚧️ **Giới tính:** ${gender}.  
-📏 **Chiều cao:** ${currentIndicator.height} cm, ⚖️ **Cân nặng:** ${currentIndicator.weight} kg, 📊 **BMI:** ${currentIndicator.bmi}  
+                    text: `Below is the general health information of the child:  
+🧒 **Name:** ${name}, **Age:** ${age}, 🩸 **Blood Type:** ${bloodType}, ⚧️ **Gender:** ${gender}.  
+📏 **Height:** ${currentIndicator.height} cm, ⚖️ **Weight:** ${currentIndicator.weight} kg, 📊 **BMI:** ${currentIndicator.bmi}  
 
-Hãy phân tích và phản hồi theo đúng format sau:  
+Please analyze and respond strictly following this format:  
 
-📊 **Phân tích của chuyên gia**  
+📊 **Expert Analysis**  
 
-**📏 Nhận xét:** {Đánh giá tổng quan về chỉ số sức khỏe, ví dụ: chiều cao và cân nặng có phù hợp với độ tuổi không, BMI có ở mức bình thường không}.  
+**📏 Assessment:** {General evaluation of health indicators, e.g., whether height and weight are appropriate for age, and whether BMI is in the normal range}.  
 
-**🔍 Nguy cơ tiềm ẩn:**  
-- {Nếu BMI quá thấp/cao, phân tích nguyên nhân và nguy cơ}.  
-- {Nếu chỉ số ở mức bình thường, xác nhận và khuyến khích duy trì lối sống lành mạnh}.  
+**🔍 Potential Risks:**  
+- {If BMI is too low/high, analyze possible causes and risks}.  
+- {If indicators are within the normal range, confirm and encourage maintaining a healthy lifestyle}.  
 
-**🛡️ Lời khuyên chăm sóc:**  
-- **Chế độ dinh dưỡng:** {Gợi ý thực phẩm nên ăn hoặc tránh để duy trì cân nặng và chiều cao hợp lý}.  
-- **Hoạt động thể chất:** {Đề xuất các bài tập phù hợp với lứa tuổi để hỗ trợ phát triển thể chất}.  
-- **Thói quen tốt:** {Mẹo giúp trẻ khỏe mạnh như ngủ đủ giấc, uống nhiều nước, duy trì chế độ ăn cân đối}.  
+**🛡️ Care Recommendations:**  
+- **Nutrition:** {Suggest foods to eat or avoid to maintain appropriate weight and height}.  
+- **Physical Activity:** {Recommend suitable exercises for the child’s age to support physical development}.  
+- **Healthy Habits:** {Tips for maintaining good health, such as getting enough sleep, drinking plenty of water, and following a balanced diet}.  
 
-**🏥 Khi nào cần đi khám bác sĩ?**  
-- {Gợi ý khi nào cần tham khảo bác sĩ dinh dưỡng hoặc kiểm tra sức khỏe tổng quát}.  
+**🏥 When to See a Doctor?**  
+- {Suggest when to consult a nutritionist or undergo a general health check-up}.  
 
-Không thêm nội dung nào ngoài format trên và và chuyển tất cả thành tiếng anh.
+Do not include any content outside the format above.
 `,
                   },
                 ],

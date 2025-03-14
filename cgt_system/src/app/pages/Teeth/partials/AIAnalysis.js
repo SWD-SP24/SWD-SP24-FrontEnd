@@ -28,29 +28,29 @@ export default function AIAnalysis({ toothRecords }) {
               {
                 parts: [
                   {
-                    text: `Dưới đây là thông tin sức khỏe răng miệng của trẻ:  
-      🧒 **Tên bé:** ${name}, **Tuổi:** ${age}, 🩸 **Nhóm máu:** ${bloodType}, ⚧️ **Giới tính:** ${gender}.  
-      🦷 **Các răng đã mọc:** ${toothInfo}  
-      
-      Hãy phân tích và phản hồi theo đúng format sau:  
+                    text: `Below is the child's oral health information:  
+🧒 **Name:** ${name}, **Age:** ${age}, 🩸 **Blood Type:** ${bloodType}, ⚧️ **Gender:** ${gender}.  
+🦷 **Teeth erupted:** ${toothInfo}  
 
-      📊 **Phân tích của chuyên gia**  
-      
-      **🦷 Nhận xét:** {Đánh giá tổng quan về tình trạng răng miệng, ví dụ: răng mọc đúng tiến độ, có dấu hiệu mọc lệch, tình trạng sâu răng, viêm nướu...}  
-      
-      **🔍 Nguy cơ tiềm ẩn:**  
-      - {Nếu có vấn đề như răng mọc chậm, mọc lệch, sâu răng, hãy phân tích nguyên nhân và ảnh hưởng}.  
-      - {Nếu không có vấn đề đáng lo, hãy xác nhận và khuyến khích duy trì thói quen tốt}.  
-      
-      **🛡️ Lời khuyên chăm sóc:**  
-      - **Vệ sinh răng miệng:** {Hướng dẫn cách đánh răng đúng, số lần/ngày, có nên dùng chỉ nha khoa không}.  
-      - **Chế độ ăn uống:** {Thực phẩm nên ăn/tránh để bảo vệ răng miệng}.  
-      - **Thói quen tốt:** {Mẹo giúp răng khỏe như uống nhiều nước, hạn chế đồ ngọt, đi khám nha khoa định kỳ}.  
-      
-      **🏥 Khi nào nên đi khám nha khoa?**  
-      - {Gợi ý tần suất khám răng định kỳ, dấu hiệu cần đi khám sớm}.  
+Please analyze and respond strictly following this format:  
 
-      Không thêm nội dung nào ngoài format trên và chuyển tất cả thành tiếng anh.`,
+📊 **Expert Analysis**  
+
+**🦷 Assessment:** {General evaluation of oral health, e.g., whether teeth are developing on schedule, signs of misalignment, cavities, or gum inflammation}.  
+
+**🔍 Potential Risks:**  
+- {If issues such as delayed tooth eruption, misalignment, or cavities are present, analyze the causes and impact}.  
+- {If no significant concerns exist, confirm and encourage maintaining good oral hygiene}.  
+
+**🛡️ Care Recommendations:**  
+- **Oral Hygiene:** {Guide on proper brushing techniques, frequency per day, and whether to use dental floss}.  
+- **Dietary Recommendations:** {Foods to eat or avoid for good dental health}.  
+- **Healthy Habits:** {Tips for maintaining strong teeth, such as drinking plenty of water, limiting sugary foods, and visiting the dentist regularly}.  
+
+**🏥 When to See a Dentist?**  
+- {Suggest the recommended frequency of dental check-ups and signs indicating the need for an early visit}.  
+
+Do not include any content outside the format above.`,
                   },
                 ],
               },
