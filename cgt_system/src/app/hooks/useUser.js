@@ -11,8 +11,6 @@ const useUserStore = create((set) => {
     console.error("Error parsing user from localStorage:", error);
   }
 
-  console.log("User in hook: ", user);
-
   return {
     user,
     setUser: (user) => {
