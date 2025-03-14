@@ -22,11 +22,6 @@ export const navbarItems = {
       icon: "bx bx-cog",
       path: "/account-setting/account",
     },
-    {
-      label: "FAQ",
-      icon: "bx bx-help-circle",
-      path: "/account-setting/account",
-    },
   ],
   doctor: [
     {
