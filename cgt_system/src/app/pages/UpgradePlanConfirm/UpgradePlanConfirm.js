@@ -17,7 +17,7 @@ export default function UpgradePlanConfirm() {
         </p>
         <p className="mb-6 mx-2">Make every milestone even more special! 🚀</p>
         <Link
-          to={"/dashboard"}
+          to={"/member/children"}
           className={cx("btn", "btn-primary", "btn-animated")}
         >
           Explore New Features

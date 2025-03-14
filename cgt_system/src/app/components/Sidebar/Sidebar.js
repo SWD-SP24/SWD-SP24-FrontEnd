@@ -83,9 +83,6 @@ export default function Sidebar({ role }) {
           <Link to={"/"} className="app-brand-link">
             <AppBrandLogo />
           </Link>
-          <Link className="layout-menu-toggle menu-link text-large ms-auto d-block">
-            <i className="bx bx-chevron-left bx-sm align-middle"></i>
-          </Link>
         </div>
         <div className="menu-inner-shadow"></div>
         <ul className="menu-inner py-1">

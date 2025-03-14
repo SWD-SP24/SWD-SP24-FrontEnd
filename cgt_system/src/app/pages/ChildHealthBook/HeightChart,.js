@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { LineChart } from "../../pages/Overview/partials/myChart";
-import { getDate, getYear } from "../../util/dateFormat";
+import { getDate, getMonth, getYear } from "../../util/dateFormat";
 import API_URLS from "../../config/apiUrls";
 import useApi from "../../hooks/useApi";
 export default function HeightChart({ childId }) {
@@ -32,8 +32,13 @@ export default function HeightChart({ childId }) {
       }
 
       // Extract data
-      const newLabels = reversedData.map((record) =>
-        getDate(record.recordTime)
+      const newLabels = reversedData.map(
+        (record) =>
+          getDate(record.recordTime) +
+          "/" +
+          getMonth(record.recordTime) +
+          "/" +
+          getYear(record.recordTime)
       );
       const newHeightDatasets = reversedData.map((record) => record.height);
 
@@ -42,6 +47,7 @@ export default function HeightChart({ childId }) {
       setHeightDatasets(newHeightDatasets);
     }
   }, [response]);
+
   return (
     <div style={{ width: "100%", minHeight: "100vh", height: "auto" }}>
       <div

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate } from "react-router";
+import useUser from "./useUser";
 
 export const useLogout = () => {
   const [loading, setLoading] = useState(false);

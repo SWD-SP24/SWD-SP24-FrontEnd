@@ -44,7 +44,8 @@ export default function UserProfile({ user, callApiGetUser }) {
 
             {user.role === "member" && (
               <span
-                className={`d-flex align-items-center badge ${
+                style={{ paddingLeft: "17px", paddingRight: "17px" }}
+                className={`d-flex align-items-center justify-content-center gap-1 badge ${
                   user.emailActivation === "unactivated"
                     ? "bg-label-secondary"
                     : "bg-label-success"
@@ -55,7 +56,7 @@ export default function UserProfile({ user, callApiGetUser }) {
                     user.emailActivation === "unactivated"
                       ? "text-bg-secondary"
                       : "text-bg-success"
-                  } me-1`}
+                  }`}
                   style={{ width: "13px", height: "13px" }}
                 >
                   <i

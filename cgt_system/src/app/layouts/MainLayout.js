@@ -7,6 +7,14 @@ import Navbar from "../components/Nav/Navbar";
 import Loading from "../components/Loading/Loading";
 import useApi from "../hooks/useApi";
 import API_URLS from "../config/apiUrls";
+import {
+  doc,
+  getDoc,
+  serverTimestamp,
+  setDoc,
+  updateDoc,
+} from "firebase/firestore";
+import { db } from "../config/firebase";
 
 export default function MainLayout() {
   const { user, setUser } = useUser();
@@ -27,6 +35,49 @@ export default function MainLayout() {
       setUser(user);
     }
   }, [response]);
+
+  // Cập nhật trạng thái online khi vào chat
+  useEffect(() => {
+    if (!user) return;
+
+    const userId = String(user.userId);
+    const userRef = doc(db, "activeUsers", userId);
+
+    const setUserOnline = async () => {
+      const userDoc = await getDoc(userRef);
+
+      if (userDoc.exists()) {
+        // Nếu user đã tồn tại, cập nhật trạng thái online
+        await updateDoc(userRef, {
+          isOnline: true,
+          lastSeen: serverTimestamp(),
+        });
+      } else {
+        // Nếu user chưa tồn tại, tạo mới
+        await setDoc(userRef, {
+          isOnline: true,
+          lastSeen: serverTimestamp(),
+        });
+      }
+    };
+
+    setUserOnline();
+
+    // Cập nhật trạng thái offline khi rời trang
+    const handleOffline = async () => {
+      await updateDoc(userRef, {
+        isOnline: false,
+        lastSeen: serverTimestamp(),
+      });
+    };
+
+    window.addEventListener("beforeunload", handleOffline);
+
+    return () => {
+      handleOffline();
+      window.removeEventListener("beforeunload", handleOffline);
+    };
+  }, [user]);
 
   if (user === null) {
     return <Loading />;

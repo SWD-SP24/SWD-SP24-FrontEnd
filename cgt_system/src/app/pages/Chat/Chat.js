@@ -20,14 +20,24 @@ import doctor_image from "../../assets/img/illustrations/doctor.png";
 import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
 import DoctorListModal from "../DoctorListModal/DoctorListModal";
-import { Outlet, useNavigate } from "react-router";
 import ChatHistory from "./partials/ChatHistory";
 export default function Chat() {
   const [conversations, setConversations] = useState([]);
   const [messages, setMessages] = useState([]);
   const [selectedConversation, setSelectedConversation] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
   const { user } = useUser();
+
+  // Debounce giá trị search 300ms
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [search]);
 
   // Lấy tất cả cuộc trò chuyện của user
   useEffect(() => {
@@ -99,55 +109,21 @@ export default function Chat() {
         })
       );
 
-      setConversations(conversations);
+      // Lọc danh sách hội thoại có tên đối phương chứa search
+      const filteredConversations = conversations.filter((conv) => {
+        const recipientId = conv.participants.find((id) => id !== user.userId);
+        const recipientName = conv[recipientId]?.name || "";
+        return recipientName
+          .toLowerCase()
+          .includes(debouncedSearch.toLowerCase());
+      });
+
+      setConversations(filteredConversations);
       setIsLoading(false);
     });
 
     return () => unsubscribe();
-  }, [user]);
-
-  // Cập nhật trạng thái online khi vào chat
-  useEffect(() => {
-    if (!user) return;
-
-    const userId = String(user.userId);
-    const userRef = doc(db, "activeUsers", userId);
-
-    const setUserOnline = async () => {
-      const userDoc = await getDoc(userRef);
-
-      if (userDoc.exists()) {
-        // Nếu user đã tồn tại, cập nhật trạng thái online
-        await updateDoc(userRef, {
-          isOnline: true,
-          lastSeen: serverTimestamp(),
-        });
-      } else {
-        // Nếu user chưa tồn tại, tạo mới
-        await setDoc(userRef, {
-          isOnline: true,
-          lastSeen: serverTimestamp(),
-        });
-      }
-    };
-
-    setUserOnline();
-
-    // Cập nhật trạng thái offline khi rời trang
-    const handleOffline = async () => {
-      await updateDoc(userRef, {
-        isOnline: false,
-        lastSeen: serverTimestamp(),
-      });
-    };
-
-    window.addEventListener("beforeunload", handleOffline);
-
-    return () => {
-      handleOffline();
-      window.removeEventListener("beforeunload", handleOffline);
-    };
-  }, [user]);
+  }, [user, debouncedSearch]);
 
   // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
   const timeAgo = (timestamp) => {
@@ -227,6 +203,8 @@ export default function Chat() {
                   className="form-control chat-search-input"
                   placeholder="Search..."
                   aria-label="Search..."
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   aria-describedby="basic-addon-search31"
                 />
               </div>
@@ -321,7 +299,7 @@ export default function Chat() {
                           <img
                             src={chatPartner.avatar || image}
                             alt="Avatar"
-                            className="rounded-circle"
+                            className="rounded-circle border"
                           />
                         </div>
                         <div className="chat-contact-info flex-grow-1 ms-4">
@@ -337,29 +315,40 @@ export default function Chat() {
                             >
                               {chatPartner.name}
                             </h6>
+
+                            {conversation.unreadCounts > 0 &&
+                              conversation.lastSenderId !== user.userId &&
+                              conversation?.id !== selectedConversation?.id && (
+                                <span className="ms-2">
+                                  <span class="badge badge-dot"></span>
+                                </span>
+                              )}
+                          </div>
+
+                          <div className="d-flex justify-content-between">
+                            <small
+                              className={`chat-contact-status text-truncate ${
+                                conversation.unreadCounts > 0 &&
+                                conversation.lastSenderId !== user.userId &&
+                                conversation?.id !== selectedConversation?.id &&
+                                "fw-bold"
+                              }`}
+                              style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                maxWidth: "200px",
+                                display: "inline-block",
+                              }}
+                            >
+                              {user.userId === conversation.lastSenderId &&
+                                "You: "}{" "}
+                              {conversation.lastMessage}
+                            </small>
                             <small className="chat-contact-list-item-time">
                               {timeAgo(conversation.lastTimestamp)}
                             </small>
                           </div>
-                          <small
-                            className={`chat-contact-status text-truncate ${
-                              conversation.unreadCounts > 0 &&
-                              conversation.lastSenderId !== user.userId &&
-                              conversation?.id !== selectedConversation?.id &&
-                              "fw-bold"
-                            }`}
-                            style={{
-                              whiteSpace: "nowrap",
-                              overflow: "hidden",
-                              textOverflow: "ellipsis",
-                              maxWidth: "200px",
-                              display: "inline-block",
-                            }}
-                          >
-                            {user.userId === conversation.lastSenderId &&
-                              "You: "}{" "}
-                            {conversation.lastMessage}
-                          </small>
                         </div>
                       </a>
                     </li>

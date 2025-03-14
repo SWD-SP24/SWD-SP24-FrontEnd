@@ -10,6 +10,8 @@ import Dashboard from "../pages/Dashboard/Dashboard.js";
 export default function AdminRoutes() {
   const { user } = useOutletContext();
 
+  console.log("User in AdminRoute: ", user);
+
   return (
     <Routes>
       <Route
