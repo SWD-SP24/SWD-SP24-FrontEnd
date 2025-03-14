@@ -10,7 +10,7 @@ const Features = () => {
           <span class="badge bg-label-primary">Useful Features</span>
         </div>
         <h4 class="text-center mb-1">
-          <span class="position-relative fw-extrabold z-1">
+          <span class="position-relative fw-extrabold z-1 m-2">
             Everything you need
             <img
               src={Images.sectionTitleIcon}
