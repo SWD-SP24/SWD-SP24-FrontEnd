@@ -31,32 +31,29 @@ export default function AIAnalysis({ vaccinations }) {
               {
                 parts: [
                   {
-                    text: `
-                                    Dưới đây là thông tin tiêm chủng của trẻ:  
-🧒 **Tên bé:** ${name}, **Tuổi:** ${age}, 🩸 **Nhóm máu:** ${bloodType}, ⚧️ **Giới tính:** ${gender}.  
-💉 **Lịch sử tiêm chủng:** ${vaccinationInfo}  
+                    text: `Below is the child's vaccination information:  
+🧒 **Name:** ${name}, **Age:** ${age}, 🩸 **Blood Type:** ${bloodType}, ⚧️ **Gender:** ${gender}.  
+💉 **Vaccination History:** ${vaccinationInfo}  
 
-Hãy phân tích và phản hồi theo đúng format sau:  
+Please analyze and respond strictly following this format:  
 
-📊 **Phân tích của chuyên gia**  
+📊 **Expert Analysis**  
 
-**💉 Nhận xét:** {Đánh giá tổng quan về tình trạng tiêm chủng, ví dụ: đã tiêm đầy đủ theo lịch, còn thiếu mũi nào, có phản ứng sau tiêm không}.  
+**💉 Assessment:** {General evaluation of the vaccination status, e.g., whether the child has received all required doses, any missing vaccines, or any post-vaccination reactions}.  
 
-**🔍 Nguy cơ tiềm ẩn:**  
-- {Nếu thiếu mũi tiêm quan trọng, hãy phân tích nguy cơ mắc bệnh và ảnh hưởng}.  
-- {Nếu đã tiêm đủ, xác nhận và nhấn mạnh tầm quan trọng của việc tiếp tục theo dõi}.  
+**🔍 Potential Risks:**  
+- {If important vaccines are missing, analyze the risk of disease and possible consequences}.  
+- {If all vaccinations are complete, confirm and emphasize the importance of continued monitoring}.  
 
-**🛡️ Lời khuyên chăm sóc:**  
-- **Tiêm chủng bổ sung:** {Nếu còn thiếu mũi, gợi ý thời gian và địa điểm tiêm}.  
-- **Theo dõi phản ứng sau tiêm:** {Cách quan sát dấu hiệu bất thường, khi nào cần đến bác sĩ}.  
-- **Tăng cường miễn dịch:** {Lời khuyên về dinh dưỡng, giấc ngủ giúp trẻ khỏe mạnh}.  
+**🛡️ Care Recommendations:**  
+- **Additional Vaccinations:** {If any vaccines are missing, suggest the recommended time and place for vaccination}.  
+- **Post-Vaccination Monitoring:** {How to observe for abnormal reactions and when to consult a doctor}.  
+- **Boosting Immunity:** {Advice on nutrition and sleep to help strengthen the child's immune system}.  
 
-**🏥 Khi nào cần đi khám bác sĩ?**  
-- {Gợi ý khi nào nên kiểm tra tình trạng miễn dịch, dấu hiệu bất thường sau tiêm cần thăm khám}.  
+**🏥 When to See a Doctor?**  
+- {Suggest when to check immune status and signs of abnormal reactions that require medical consultation}.  
 
-Không thêm nội dung nào ngoài format trên và chuyển tất cả thành tiếng anh.
-
-                                    `,
+Do not include any content outside the format above. `,
                   },
                 ],
               },
