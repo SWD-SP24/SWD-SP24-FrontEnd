@@ -1,12 +1,16 @@
 import React, { useEffect } from "react";
+import Cookies from "js-cookie";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
 import { sFormData, sFormError } from "../../changePasswordStore";
 import { useNavigate } from "react-router";
 import { validateField } from "../../schemas/changePasswordSchema";
 import showToast from "../../../../util/showToast";
+import { useLogout } from "../../../../hooks/useLogout";
+import useUser from "../../../../hooks/useUser";
 
 export default function Button({ buttonTag, onReset, user }) {
+  const { setUser } = useUser();
   const formData = sFormData.use();
   const navigate = useNavigate();
   const isReset = buttonTag === "Reset";
@@ -31,10 +35,13 @@ export default function Button({ buttonTag, onReset, user }) {
           showButtons: true,
           confirmText: "Go to Login",
           cancelText: "",
-          onConfirm: () => navigate(redirectTo),
+          onConfirm: () => {
+            setUser(null);
+            navigate(redirectTo);
+          },
           onCancle: null,
           disableOutsideClick: true,
-          targetElement: document.body,
+          targetElement: document.getElementById("root"),
         });
       }
     };
