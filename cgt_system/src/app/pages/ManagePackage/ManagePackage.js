@@ -235,7 +235,7 @@ export default function ManagePackages() {
           </div>
         </div>
         <AddPackageModal />
-        <EditPackageModal users={users} />
+        <EditPackageModal users={users} onFetchPackages={fetchPackages} />
       </div>
     </>
   );

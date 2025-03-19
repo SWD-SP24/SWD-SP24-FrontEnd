@@ -33,7 +33,10 @@ const setupInterceptors = () => {
   axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-      if (error.response?.status === 401) {
+      if (
+        error.response?.status === 401 &&
+        error.response?.message === "JWT token has expired."
+      ) {
         // Hủy tất cả request đang chờ
         cancelTokenSource.cancel("Session expired. Cancelling all requests.");
 

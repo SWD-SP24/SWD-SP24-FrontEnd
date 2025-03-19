@@ -1,12 +1,7 @@
 import React, { useEffect } from "react";
 import useApi from "../../../../hooks/useApi";
 import API_URLS from "../../../../config/apiUrls";
-import {
-  sFormData,
-  sFormError,
-  sPackages,
-  sPagination,
-} from "../../managePackageStore";
+import { sFormData, sFormError } from "../../managePackageStore";
 import { validateField } from "../../schemas/managePackageSchema";
 import showToast from "../../../../util/showToast";
 import { Modal } from "bootstrap";
@@ -16,26 +11,12 @@ export default function Button({
   data,
   image,
   selectedPermissions,
-  users,
+  onFetchPackages,
 }) {
-  const pagination = sPagination.use();
   const formData = sFormData.use();
-  const usersUse = users?.filter(
-    (user) => user.membershipPackageId === data?.membershipPackageId
-  );
 
   const { isLoading, response, error, callApi } = useApi({
     method: buttonTag === "Submit" ? "POST" : "PUT",
-  });
-
-  const {
-    isLoading: getPackagesLoading,
-    response: getPackageResponse,
-    error: getPackageError,
-    callApi: getPackageCallApi,
-  } = useApi({
-    url: `${API_URLS.MEMBERSHIP_PACKAGE.GET}?pageNumber=${pagination.currentPage}&pageSize=${pagination.itemsPerPage}`,
-    method: "GET",
   });
 
   const {
@@ -49,10 +30,10 @@ export default function Button({
   });
 
   useEffect(() => {
-    const handleApiResponse = () => {
+    const handleApiResponse = async () => {
       if (response?.status === "success") {
         closeModal();
-        getPackageCallApi();
+        onFetchPackages();
       }
     };
 
@@ -73,34 +54,6 @@ export default function Button({
       console.error("Error handling API response:", err);
     }
   }, [response, error]);
-
-  useEffect(() => {
-    const handleApiResponse = () => {
-      if (getPackageResponse?.status === "successful") {
-        const packages = getPackageResponse.data || {};
-        if (packages) {
-          sPackages.set(packages);
-        }
-      }
-    };
-
-    const handleError = () => {
-      if (getPackageError?.message) {
-        showToast({
-          icon: "error",
-          text: error?.message,
-          targetElement: document.querySelector(".card"),
-        });
-      }
-    };
-
-    try {
-      handleApiResponse();
-      handleError();
-    } catch (err) {
-      console.error("Error handling API response:", err);
-    }
-  }, [getPackageResponse, getPackageError]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -199,7 +152,7 @@ export default function Button({
 
   return (
     <button className={"btn btn-primary me-sm-3 me-1"} onClick={handleSubmit}>
-      {isLoading || getPackagesLoading || getImageUrlLoading ? (
+      {isLoading || getImageUrlLoading ? (
         <>
           <span
             className="spinner-border spinner-border-sm"

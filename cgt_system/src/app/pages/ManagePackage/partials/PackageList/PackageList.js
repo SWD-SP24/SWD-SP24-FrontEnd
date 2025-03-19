@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PackageItem from "../PackageItem/PackageItem";
 
 export default function PackageList({ packages, users, onFetchPackages }) {
@@ -22,7 +22,7 @@ export default function PackageList({ packages, users, onFetchPackages }) {
           />
         );
       })}
-      <div class="col-xl-4 col-lg-6 col-md-6">
+      {/* <div class="col-xl-4 col-lg-6 col-md-6">
         <div class="card h-100">
           <div class="row h-100">
             <div class="col-sm-5">
@@ -55,7 +55,7 @@ export default function PackageList({ packages, users, onFetchPackages }) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
