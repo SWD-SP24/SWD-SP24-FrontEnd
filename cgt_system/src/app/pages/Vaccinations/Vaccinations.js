@@ -55,6 +55,7 @@ export default function Vaccinations() {
           vaccineList={response}
           refetch={callApi}
           onSetVaccinations={setVaccinations}
+          dob={childrenData.dob}
         />
         <div class="row mx-2 justify-content-between">
           <div class="d-md-flex justify-content-between align-items-center dt-layout-start col-md-auto me-auto px-4 mt-0">

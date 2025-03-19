@@ -1,5 +1,5 @@
 const API_URLS = {
-  BASE_URL: "https://swd39220250217220816.azurewebsites.net",
+  BASE_URL: "https://localhost:7067",
   AUTH: {
     LOGIN: "/api/Users/login",
     REGISTER: "/api/Users/register",

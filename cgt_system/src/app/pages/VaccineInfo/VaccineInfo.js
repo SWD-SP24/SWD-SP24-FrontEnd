@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router";
+import {
+  useLocation,
+  useNavigate,
+  useOutletContext,
+  useParams,
+} from "react-router";
 import { vaccineDetail } from "../../constants/VaccineDetail";
 
 import {
@@ -10,8 +15,10 @@ import {
 import AddVaccineModal from "../Vaccinations/partials/AddVaccineModal";
 import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
-export default function VaccineInfo() {
+export default function VaccineInfo({ dob }) {
   const { childId, vaccineId } = useParams();
+  const { permissions, childrenData } = useOutletContext();
+
   const navigate = useNavigate();
   const [vaccine, setVaccine] = useState(null);
   const location = useLocation();
@@ -158,7 +165,7 @@ export default function VaccineInfo() {
           </tr>
         </tbody>
       </table>
-      <AddVaccineModal refetch={callApi} />
+      <AddVaccineModal refetch={callApi} dob={childrenData.dob} />
     </div>
   );
 }

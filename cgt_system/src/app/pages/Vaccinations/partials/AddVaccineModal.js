@@ -3,8 +3,8 @@ import { sDose, sVaccineId, sVaccineName } from "./VaccineTable";
 import { useParams } from "react-router";
 import useApi from "../../../hooks/useApi";
 import API_URLS from "../../../config/apiUrls";
-import { toDMY } from "../../../util/dateFormat";
-export default function AddVaccineModal({ refetch }) {
+import { convertToISOString, toDMY } from "../../../util/dateFormat";
+export default function AddVaccineModal({ refetch, dob }) {
   const shotDateRef = useRef(null);
   const doseValue = sDose.use();
   const vaccineNameValue = sVaccineName.use();
@@ -100,6 +100,7 @@ export default function AddVaccineModal({ refetch }) {
                     type="date"
                     defaultValue={new Date().toISOString().split("T")[0]}
                     id="shotDateInput"
+                    min={convertToISOString(dob)}
                     max={new Date().toISOString().split("T")[0]}
                   />
                 </div>

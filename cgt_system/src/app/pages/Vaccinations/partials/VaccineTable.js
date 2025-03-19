@@ -12,6 +12,7 @@ export default function VaccineTable({
   vaccineList,
   refetch,
   onSetVaccinations,
+  dob,
 }) {
   const childId = useParams().childId;
   const { response, callApi } = useApi({
@@ -260,7 +261,7 @@ export default function VaccineTable({
         </div>
       </div>
 
-      <AddVaccineModal refetch={callApi} />
+      <AddVaccineModal refetch={callApi} dob={dob} />
     </div>
   );
 }
