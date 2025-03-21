@@ -1,6 +1,7 @@
 import React from "react";
 
 export default function BillingRow({ index, billingItem }) {
+  // Hàm format ngày, tháng, năm
   const formatDate = (dateString) => {
     if (!dateString) return "N/A";
     const date = new Date(dateString);
@@ -11,13 +12,29 @@ export default function BillingRow({ index, billingItem }) {
     });
   };
 
+  // Hàm xác định màu sắc badge theo status
+  const getStatusColor = (status) => {
+    switch (status.toLowerCase()) {
+      case "pending":
+        return "warning";
+      case "success":
+        return "success";
+      case "cancel":
+        return "secondary";
+      case "failed":
+        return "danger";
+      default:
+        return "secondary";
+    }
+  };
+
   return (
     <tr>
       <td>
         <div>#{index + 1}</div>
       </td>
       <td>
-        <div class="d-flex justify-content-start align-items-center">
+        <div class="d-flex align-items-center justify-content-start">
           <td class="dt-type-numeric">
             <span class="d-none"></span>
             {billingItem.previousMembershipPackageName}
@@ -36,9 +53,15 @@ export default function BillingRow({ index, billingItem }) {
         {formatDate(billingItem.transactionDate)}
       </td>
       <td>
-        <span class="badge bg-label-success text-capitalized">
-          {billingItem.status}
-        </span>
+        <h6
+          class={`mb-0 align-items-center d-flex w-px-100 text-${getStatusColor(
+            billingItem.status
+          )}`}
+        >
+          <i class="icon-base bx bxs-circle icon-8px me-1"></i>
+          {billingItem.status.charAt(0).toUpperCase() +
+            billingItem.status.slice(1)}
+        </h6>
       </td>
     </tr>
   );

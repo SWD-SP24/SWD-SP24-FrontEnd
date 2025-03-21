@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import "../../styles/demo.css";
 import AppBrandLogo from "../AppBrandLogo/AppBrandLogo";
 import { sidebarItems } from "../../constants/sidebarItems";
@@ -14,6 +14,7 @@ export default function Sidebar({ role }) {
   const { setUser } = useUser();
   const { logout } = useLogout();
   const location = useLocation();
+  const navigate = useNavigate();
   const menuItems = sidebarItems[role] || [];
 
   const [permissions, setPermissions] = useState([]);
@@ -64,9 +65,11 @@ export default function Sidebar({ role }) {
     setActiveMenu(activeMenu === menu ? null : menu);
   };
 
-  const handleSubMenuClick = (subMenu, menu) => {
+  const handleSubMenuClick = (subMenu, menu, redirectTo) => {
     setActiveSubMenu(subMenu);
     setActiveMenu(menu);
+
+    if (redirectTo) navigate(redirectTo);
   };
 
   return (
@@ -124,8 +127,7 @@ export default function Sidebar({ role }) {
               >
                 {item.submenu ? (
                   <>
-                    <Link
-                      to={hasPermission ? item.path : "#"}
+                    <div
                       className={`menu-link menu-toggle ${
                         hasPermission ? "" : "locked"
                       }`}
@@ -138,7 +140,7 @@ export default function Sidebar({ role }) {
                       {!hasPermission && (
                         <i className="bx bx-lock-alt text-warning ml-2"></i>
                       )}
-                    </Link>
+                    </div>
                     <ul className="menu-sub">
                       {item.submenu.map((subItem, subIndex) => {
                         const subHasPermission =
@@ -154,14 +156,17 @@ export default function Sidebar({ role }) {
                               activeSubMenu === subItem.title ? "active" : ""
                             }`}
                           >
-                            <Link
-                              to={subHasPermission ? subItem.path : "#"}
+                            <div
                               className={`menu-link ${
                                 subHasPermission ? "" : "locked"
                               }`}
                               onClick={() =>
                                 subHasPermission &&
-                                handleSubMenuClick(subItem.title, item.title)
+                                handleSubMenuClick(
+                                  subItem.title,
+                                  item.title,
+                                  subItem.path
+                                )
                               }
                             >
                               <div data-i18n={subItem.title}>
@@ -170,20 +175,20 @@ export default function Sidebar({ role }) {
                               {!subHasPermission && (
                                 <i className="bx bx-lock-alt text-warning ml-2"></i>
                               )}
-                            </Link>
+                            </div>
                           </li>
                         );
                       })}
                     </ul>
                   </>
                 ) : (
-                  <Link
-                    to={hasPermission ? item.path : "#"}
+                  <div
                     data-bs-target={hasPermission ? "" : "#upgradePlanModal"}
                     data-bs-toggle={hasPermission ? "" : "modal"}
                     className={`menu-link ${hasPermission ? "" : "locked"}`}
                     onClick={() =>
-                      hasPermission && handleSubMenuClick(item.title)
+                      hasPermission &&
+                      handleSubMenuClick(item.title, "", item.path)
                     }
                   >
                     <i className={`menu-icon tf-icons bx ${item.icon}`}></i>
@@ -196,7 +201,7 @@ export default function Sidebar({ role }) {
                         ></i>
                       </div>
                     )}
-                  </Link>
+                  </div>
                 )}
               </li>
             );

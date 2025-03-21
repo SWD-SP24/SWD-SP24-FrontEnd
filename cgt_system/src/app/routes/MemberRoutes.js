@@ -12,12 +12,11 @@ import Teeth from "../pages/Teeth/Teeth";
 import Chat from "../pages/Chat";
 import Vaccinations from "../pages/Vaccinations/Vaccinations";
 import VaccineInfo from "../pages/VaccineInfo/VaccineInfo";
-import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
-import PermissionRoute from "./PermissionRoute";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
   const permissions = JSON.parse(Cookies.get("permissions") || "[]");
+
   return (
     <Routes>
       <Route
@@ -42,11 +41,20 @@ export default function MemberRoutes() {
             element={<VaccineInfo />}
           />
         </Route>
-        <Route path="upgrade-plan/checkout" element={<Checkout />} />
+        <Route
+          element={
+            <ProtectedRoute
+              isAllowed={user?.emailActivation === "activated"}
+              redirectTo={"/not-authorized"}
+            />
+          }
+        >
+          <Route path="upgrade-plan/checkout" element={<Checkout />} />
+        </Route>
         <Route path="*" element={<ComingSoon />} />
         <Route
           element={
-            <PermissionRoute
+            <ProtectedRoute
               isAllowed={permissions.some(
                 (p) =>
                   p.permissionName === "DOCTOR_CHAT" ||
@@ -58,11 +66,6 @@ export default function MemberRoutes() {
         >
           <Route path="consultations" element={<Chat />} />
         </Route>
-
-        <Route
-          path="consultations/child-details"
-          element={<ChildHealthBook />}
-        />
       </Route>
     </Routes>
   );

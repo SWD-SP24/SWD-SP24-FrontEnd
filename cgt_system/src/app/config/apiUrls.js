@@ -37,6 +37,8 @@ const API_URLS = {
     GET_DOCTORS_LIST: "/api/Users/doctors",
     USERS_AND_MEMBERSHIP: "/api/Users/list-user-active-memberships",
     PAYMENT_HISTORY: "api/PaymentTransactions/history",
+    GET_PENDING_BILLING: "api/PaymentTransactions/PendingTransactions",
+    CANCEL_BILLING: "api/PaymentTransactions/Cancel",
     VERIFY_EMAIL: "/api/Users/resend-verification-email",
   },
   ADMIN: {
