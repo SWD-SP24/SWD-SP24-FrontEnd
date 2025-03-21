@@ -97,7 +97,7 @@ export default function BillingTable({ billings }) {
                 tabIndex="0"
               >
                 <span className="dt-column-title" role="button">
-                  Status
+                  Payment
                 </span>
                 <span className="dt-column-order"></span>
               </th>

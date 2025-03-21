@@ -20,6 +20,8 @@ export default function BillingRow({ index, billingItem }) {
       case "success":
         return "success";
       case "cancel":
+        return "secondary";
+      case "failed":
         return "danger";
       default:
         return "secondary";
@@ -32,7 +34,7 @@ export default function BillingRow({ index, billingItem }) {
         <div>#{index + 1}</div>
       </td>
       <td>
-        <div class="d-flex justify-content-start align-items-center">
+        <div class="d-flex align-items-center justify-content-start">
           <td class="dt-type-numeric">
             <span class="d-none"></span>
             {billingItem.previousMembershipPackageName}
@@ -51,13 +53,15 @@ export default function BillingRow({ index, billingItem }) {
         {formatDate(billingItem.transactionDate)}
       </td>
       <td>
-        <span
-          class={`badge bg-label-${getStatusColor(
+        <h6
+          class={`mb-0 align-items-center d-flex w-px-100 text-${getStatusColor(
             billingItem.status
-          )} text-capitalized`}
+          )}`}
         >
-          {billingItem.status.toUpperCase()}
-        </span>
+          <i class="icon-base bx bxs-circle icon-8px me-1"></i>
+          {billingItem.status.charAt(0).toUpperCase() +
+            billingItem.status.slice(1)}
+        </h6>
       </td>
     </tr>
   );

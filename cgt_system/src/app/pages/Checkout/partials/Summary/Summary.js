@@ -42,7 +42,7 @@ export default function Summary({ checkoutInfo, isYearly }) {
 
   return (
     <>
-      <div className="col-lg-5 card-body p-md-8">
+      <div className="card col-lg-5 card-body p-md-8 border rounded">
         <h4 className="mb-2">Summary</h4>
         <p className="mb-8">
           Review the upgrade details before proceeding with payment.
@@ -56,7 +56,7 @@ export default function Summary({ checkoutInfo, isYearly }) {
                 ? checkoutInfo?.membershipPackage?.yearlyPrice.toFixed(2)
                 : checkoutInfo?.membershipPackage?.price.toFixed(2)}
             </h1>
-            <sub className="h6 text-body mb-n3">
+            <sub className="h7 text-body mb-n3">
               {isYearly ? "/year" : "/month"}
             </sub>
             {isYearly && (
