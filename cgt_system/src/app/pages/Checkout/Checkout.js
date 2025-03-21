@@ -8,7 +8,7 @@ import UpgradePlanSkeleton from "./partials/UpgradePlan/UpgradePlanSkeleton";
 import Summary from "./partials/Summary/Summary";
 import SummarySkeleton from "./partials/Summary/SummarySkeleton";
 import useUser from "../../hooks/useUser";
-import CancelButton from "./partials/CancelButton/CancelButton";
+import CancelUpgradeModal from "./partials/CancelUpgradeModal/CancelUpgradeModal";
 
 export default function Checkout() {
   const [searchParams] = useSearchParams();
@@ -133,56 +133,64 @@ export default function Checkout() {
     });
   }
 
-  const formattedDate = formatDate("2025-03-20T12:04:20.94");
-  console.log(formattedDate); // Output: Mar 20, 2025, 12:04 PM
-
   // Nếu không hợp lệ thì không render UI
   if (!isValid) return null;
 
   return (
-    <div className="row p-3">
-      {isLoading ? (
-        <>
-          <UpgradePlanSkeleton />
-          <SummarySkeleton />
-        </>
-      ) : (
-        checkoutInfo && (
+    <>
+      <div className="row p-3">
+        {isLoading ? (
           <>
-            {pendingInfo && (
-              <div
-                class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 row-gap-4"
-                style={{ padding: "22px 14px 12px 14px" }}
-              >
-                <div class="d-flex flex-column justify-content-center">
-                  <div class="mb-1">
-                    <span class="h5">
-                      Upgrade #{pendingInfo[0].paymentTransactionId}
-                    </span>
-                    <span class="badge bg-label-warning me-1 ms-2">
-                      Pending
-                    </span>
-                    <span class="badge bg-label-info">Ready to Activate</span>
-                  </div>
-                  <p class="mb-0">
-                    Requested on: {formatDate(pendingInfo[0].transactionDate)}
-                  </p>
-                </div>
-                <div class="d-flex align-content-center flex-wrap gap-2">
-                  <CancelButton
-                    paymentTransactionId={pendingInfo[0].paymentTransactionId}
-                  />
-                </div>
-              </div>
-            )}
-
-            <div className="d-flex gap-6">
-              <UpgradePlan checkoutInfo={checkoutInfo} isYearly={isYearly} />
-              <Summary checkoutInfo={checkoutInfo} isYearly={isYearly} />
-            </div>
+            <UpgradePlanSkeleton />
+            <SummarySkeleton />
           </>
-        )
+        ) : (
+          checkoutInfo && (
+            <>
+              {pendingInfo && (
+                <div
+                  class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 row-gap-4"
+                  style={{ padding: "22px 14px 12px 14px" }}
+                >
+                  <div class="d-flex flex-column justify-content-center">
+                    <div class="mb-1">
+                      <span class="h5">
+                        Upgrade #{pendingInfo[0].paymentTransactionId}
+                      </span>
+                      <span class="badge bg-label-warning me-1 ms-2">
+                        Pending
+                      </span>
+                      <span class="badge bg-label-info">Ready to Activate</span>
+                    </div>
+                    <p class="mb-0">
+                      Requested on: {formatDate(pendingInfo[0].transactionDate)}
+                    </p>
+                  </div>
+                  <div class="d-flex align-content-center flex-wrap gap-2">
+                    <button
+                      class="btn btn-label-danger cancel-upgrade"
+                      data-bs-toggle="modal"
+                      data-bs-target="#cancelModal"
+                    >
+                      Cancel Upgrade
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div className="d-flex gap-6">
+                <UpgradePlan checkoutInfo={checkoutInfo} isYearly={isYearly} />
+                <Summary checkoutInfo={checkoutInfo} isYearly={isYearly} />
+              </div>
+            </>
+          )
+        )}
+      </div>
+      {pendingInfo && (
+        <CancelUpgradeModal
+          paymentTransactionId={pendingInfo[0].paymentTransactionId}
+        />
       )}
-    </div>
+    </>
   );
 }
