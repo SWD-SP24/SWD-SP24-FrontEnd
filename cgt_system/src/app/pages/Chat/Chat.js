@@ -16,6 +16,7 @@ import {
 } from "firebase/firestore";
 import "./chat.css";
 import image from "../../assets/img/avatars/default-avatar.jpg";
+import not_found_search from "../../assets/img/illustrations/not_found_search.png";
 import doctor_image from "../../assets/img/illustrations/doctor.png";
 import useUser from "../../hooks/useUser";
 import Skeleton from "react-loading-skeleton";
@@ -245,30 +246,47 @@ export default function Chat() {
                   </li>
                 ))
               ) : conversations.length === 0 ? (
-                // Khi không có cuộc trò chuyện nào
-                <li className="chat-contact-list-item text-center text-muted d-flex flex-column align-items-center">
-                  <img
-                    src={doctor_image}
-                    alt="Chat with a doctor"
-                    width="200"
-                    className="mb-3"
-                  />
-                  <p className="fw-bold">No messages yet</p>
-                  <p className="text-muted text-center">
-                    {user.role === "doctor"
-                      ? "You haven't had any consultations yet. Stay available for patients seeking medical advice."
-                      : "Have questions about your child's health? Chat with a doctor for expert advice and guidance."}
-                  </p>
-                  {user.role !== "doctor" && (
-                    <button
-                      className="btn btn-primary mt-2"
-                      data-bs-toggle="modal"
-                      data-bs-target="#doctorListModal"
-                    >
-                      Start Consultation
-                    </button>
-                  )}
-                </li>
+                search ? (
+                  <li className="chat-contact-list-item text-center text-muted d-flex flex-column align-items-center">
+                    <img
+                      src={not_found_search}
+                      alt="No results found"
+                      width="150"
+                      className="mb-3"
+                    />
+                    <p className="fw-bold">No results found</p>
+                    <p className="text-muted text-center">
+                      {user.role === "doctor"
+                        ? "No patients found matching your search criteria."
+                        : "We couldn't find any doctors matching your search."}
+                    </p>
+                  </li>
+                ) : (
+                  // Khi không có cuộc trò chuyện nào
+                  <li className="chat-contact-list-item text-center text-muted d-flex flex-column align-items-center">
+                    <img
+                      src={doctor_image}
+                      alt="Chat with a doctor"
+                      width="200"
+                      className="mb-3"
+                    />
+                    <p className="fw-bold">No messages yet</p>
+                    <p className="text-muted text-center">
+                      {user.role === "doctor"
+                        ? "You haven't had any consultations yet. Stay available for patients seeking medical advice."
+                        : "Have questions about your child's health? Chat with a doctor for expert advice and guidance."}
+                    </p>
+                    {user.role !== "doctor" && (
+                      <button
+                        className="btn btn-primary mt-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#doctorListModal"
+                      >
+                        Start Consultation
+                      </button>
+                    )}
+                  </li>
+                )
               ) : (
                 // Danh sách cuộc trò chuyện
                 conversations.map((conversation, index) => {
