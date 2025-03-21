@@ -12,6 +12,9 @@ import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { Animations } from "../../assets/js/Animations.js";
 import { signify } from "react-signify";
 import "./indicator.scss";
+import BluetoothComponent from "../../components/BluetoothComponent/BluetoothComponent.js";
+import BthAddIndicators from "./partials/BthAddIndicators.js";
+import BthAddModal from "./partials/BthAddModal.js";
 export const sHeight = signify("");
 export const sWeight = signify("");
 export default function Indicators() {
@@ -79,11 +82,12 @@ export default function Indicators() {
                 />
               </div>
               <div class="d-md-flex justify-content-between align-items-center dt-layout-end col-md-auto ms-auto px-4 mt-0 gap-2">
-                <AddIndicators
+                <BthAddIndicators />
+                {/* <AddIndicators
                   refetch={callApi}
                   childId={childId}
                   dob={childrenData.dob}
-                />
+                /> */}
               </div>
             </div>
             <div class="justify-content-between dt-layout-table">
@@ -295,6 +299,9 @@ export default function Indicators() {
           </div>
         )}
       </div>
+
+      <BluetoothComponent />
+      <BthAddModal dob={childrenData.dob} refetch={callApi} />
     </>
   );
 }
