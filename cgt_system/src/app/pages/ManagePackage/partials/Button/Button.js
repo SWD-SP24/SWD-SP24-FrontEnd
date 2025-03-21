@@ -5,6 +5,7 @@ import { sFormData, sFormError } from "../../managePackageStore";
 import { validateField } from "../../schemas/managePackageSchema";
 import showToast from "../../../../util/showToast";
 import { Modal } from "bootstrap";
+import { toast } from "react-toastify";
 
 export default function Button({
   buttonTag,
@@ -34,6 +35,15 @@ export default function Button({
       if (response?.status === "success") {
         closeModal();
         onFetchPackages();
+        toast.success("Membership Package Has Updated Successful!", {
+          position: "top-right", // Vị trí hiển thị
+          autoClose: 5000, // Đóng sau 5s
+          hideProgressBar: false, // Hiển thị thanh tiến trình
+          closeOnClick: true, // Đóng khi click vào
+          pauseOnHover: true, // Tạm dừng khi hover
+          draggable: true, // Có thể kéo được
+          theme: "colored", // Chủ đề màu sắc
+        });
       }
     };
 

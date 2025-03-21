@@ -48,7 +48,20 @@ export default function ChatHistory({
   });
 
   useEffect(() => {
+    if (!currentUser?.userId || !conversationId) return;
+
+    const userRef = doc(db, "activeUsers", String(currentUser.userId));
+    updateDoc(userRef, {
+      activeConversation: conversationId,
+    });
+
     callApi();
+
+    return () => {
+      updateDoc(userRef, {
+        activeConversation: "", // Khi rời chat, đặt về rỗng
+      });
+    };
   }, [conversationId]);
 
   useEffect(() => {
@@ -124,16 +137,25 @@ export default function ChatHistory({
         }
       );
 
+      // Kiểm tra trạng thái activeConversation của recipient
+      const recipientRef = doc(db, "activeUsers", String(recipientId));
+      const recipientSnap = await recipientRef.get();
+      const isRecipientInChat =
+        recipientSnap.exists() &&
+        recipientSnap.data().activeConversation === conversationId;
+
       // Cập nhật lastMessage, lastSenderId, lastSenderName, lastSenderAvatar trong conversations
       const conversationRef = doc(db, "conversations", conversationId);
 
       await updateDoc(conversationRef, {
-        [`unreadCounts.${recipientId}`]: increment(1),
         lastMessage: message,
         lastSenderId: currentUser.userId,
         lastSenderName: currentUser.fullName,
         lastSenderAvatar: currentUser.avatar || "",
         lastTimestamp: serverTimestamp(),
+        ...(isRecipientInChat
+          ? {}
+          : { [`unreadCounts.${recipientId}`]: increment(1) }),
       });
 
       // Nếu recipient offline, thêm thông báo
@@ -185,6 +207,24 @@ export default function ChatHistory({
 
     return () => unsubscribe();
   }, [recipientId]);
+
+  useEffect(() => {
+    if (!conversationId || !recipientId) return;
+
+    // Lắng nghe trạng thái typing từ conversation
+    const conversationRef = doc(db, "conversations", conversationId);
+    const unsubscribeConversation = onSnapshot(conversationRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setIsRecipientTyping(
+          snapshot.data().typingStatus?.[recipientId] || false
+        );
+      } else {
+        setIsRecipientTyping(false);
+      }
+    });
+
+    return () => unsubscribeConversation();
+  }, [conversationId, recipientId]);
 
   useEffect(() => {
     if (!conversationId || !recipientId) return;
@@ -245,14 +285,19 @@ export default function ChatHistory({
   };
 
   const handleTyping = () => {
-    const currentUserRef = doc(db, "activeUsers", String(currentUser.userId));
-    updateDoc(currentUserRef, {
-      isTyping: true,
+    const conversationRef = doc(db, "conversations", conversationId);
+
+    const currentUserId = currentUser.userId;
+
+    // Cập nhật trạng thái typing cho người dùng trong cuộc hội thoại
+    updateDoc(conversationRef, {
+      [`typingStatus.${currentUserId}`]: true,
     });
 
+    // Tự động tắt trạng thái typing sau 3 giây
     setTimeout(() => {
-      updateDoc(currentUserRef, {
-        isTyping: false,
+      updateDoc(conversationRef, {
+        [`typingStatus.${currentUserId}`]: false,
       });
     }, 3000);
   };
