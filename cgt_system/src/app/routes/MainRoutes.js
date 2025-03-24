@@ -39,6 +39,7 @@ import TermAndPolicy from "../pages/TermAndPolicy/TermAndPolicy";
 import PersistLogin from "../layouts/PersistLogin";
 import SpeechRecognitionComponent from "../pages/SpeechRecognitionComponent ";
 import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
+import VideoCall from "../pages/VideoCall/VideoCall";
 
 export default function MainRoutes() {
   return (
@@ -95,6 +96,7 @@ export default function MainRoutes() {
               <Route path="billing-and-plans" element={<BillingAndPlans />} />
             </Route>
           </Route>
+          <Route path="call" element={<VideoCall />} />
         </Route>
 
         {/* Các trang khác */}

@@ -127,7 +127,7 @@ export default function PackageItem({
 
   return (
     <>
-      {showDelete && (
+      {/* {showDelete && (
         <div
           className={`delete-icon alert ${
             isDraggingOver ? "alert-outline-danger" : "alert-outline-secondary"
@@ -151,18 +151,18 @@ export default function PackageItem({
               "opacity 0.3s ease, background-color 0.3s ease, transform 0.3s ease",
             backgroundColor: isDraggingOver ? "#f8d7da" : "transparent",
           }}
-          onDrop={(e) => {
-            setIsDraggingOver(false);
-            handleDrop(e);
-          }}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setIsDraggingOver(true);
-          }}
-          onDragEnter={() => setIsDraggingOver(true)}
-          onDragLeave={() => setIsDraggingOver(false)}
-          onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
-          onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.8")}
+          // onDrop={(e) => {
+          //   setIsDraggingOver(false);
+          //   handleDrop(e);
+          // }}
+          // onDragOver={(e) => {
+          //   e.preventDefault();
+          //   setIsDraggingOver(true);
+          // }}
+          // onDragEnter={() => setIsDraggingOver(true)}
+          // onDragLeave={() => setIsDraggingOver(false)}
+          // onMouseEnter={(e) => (e.currentTarget.style.opacity = "1")}
+          // onMouseLeave={(e) => (e.currentTarget.style.opacity = "0.8")}
         >
           <i
             className="bx bx-trash"
@@ -174,7 +174,7 @@ export default function PackageItem({
             }}
           ></i>
         </div>
-      )}
+      )} */}
 
       <div
         className="col-xl-4 col-lg-6 col-md-6"
@@ -236,7 +236,7 @@ export default function PackageItem({
                   <span>Edit</span>
                 </Link>
               </div>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <Skeleton height={16.4} width={28.4} borderRadius={30} />
               ) : (
                 <div className="me-5">
@@ -252,7 +252,7 @@ export default function PackageItem({
                     </span>
                   </label>
                 </div>
-              )}
+              )} */}
             </div>
           </div>
         </div>

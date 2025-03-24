@@ -1,140 +1,126 @@
 import React from "react";
 
-const servers = {
-  iceServers: [{ urls: "stun:stun.l.google.com:19302" }],
-};
+import image from "../../../assets/img/avatars/default-avatar.jpg";
 
-export default function ChatHistoryHeader() {
-  const [callId, setCallId] = useState("");
-  const [callStartTime, setCallStartTime] = useState(null);
-  const localVideoRef = useRef(null);
-  const remoteVideoRef = useRef(null);
-  const peerConnection = useRef(new RTCPeerConnection(servers));
-  const localStream = useRef(null);
+export default function ChatHistoryHeader({
+  recipient,
+  recipientId,
+  isRecipientOnline,
+  lastSeen,
+  currentUser,
+  conversationId,
+}) {
+  // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
+  const timeAgo = (timestamp) => {
+    if (!timestamp?.seconds) return "";
+    const timeDiff = Date.now() - timestamp.seconds * 1000;
+    const minutes = Math.floor(timeDiff / (1000 * 60));
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
 
-  const parentId = "parent_123";
-  const doctorId = "doctor_456";
-  const chatRef = collection(db, "messages", `${parentId}_${doctorId}`);
-
-  // Bật camera
-  const startCamera = async () => {
-    localStream.current = await navigator.mediaDevices.getUserMedia({
-      video: true,
-      audio: true,
-    });
-    localVideoRef.current.srcObject = localStream.current;
-    localStream.current.getTracks().forEach((track) => {
-      peerConnection.current.addTrack(track, localStream.current);
-    });
-
-    peerConnection.current.ontrack = (event) => {
-      remoteVideoRef.current.srcObject = event.streams[0];
-    };
+    if (minutes < 1) return "";
+    if (minutes < 60) return `${minutes} minutes ago`;
+    if (hours < 24) return `${hours} hours ago`;
+    return `${days} days ago`;
   };
 
-  // Lưu lịch sử cuộc gọi vào tin nhắn
-  const saveCallMessage = async (callStatus, duration) => {
-    await addDoc(chatRef, {
-      senderId: parentId,
-      type: "call",
-      callStatus: callStatus, // "ended" | "missed" | "rejected"
-      duration: duration, // Thời gian gọi (giây)
-      timestamp: new Date(),
-    });
-  };
-
-  // Tạo cuộc gọi
-  const createCall = async () => {
-    const callDoc = doc(collection(db, "calls"));
-    setCallId(callDoc.id);
-    setCallStartTime(new Date());
-
-    const offerCandidates = collection(callDoc, "offerCandidates");
-    const answerCandidates = collection(callDoc, "answerCandidates");
-
-    peerConnection.current.onicecandidate = async (event) => {
-      if (event.candidate) {
-        await addDoc(offerCandidates, event.candidate.toJSON());
-      }
+  // Hàm mở cửa sổ mới khi gọi video
+  const handleVideoCall = () => {
+    const callData = {
+      recipient,
+      recipientId,
+      caller: currentUser,
+      conversationId,
+      currentUser,
     };
 
-    const offerDescription = await peerConnection.current.createOffer();
-    await peerConnection.current.setLocalDescription(offerDescription);
-    await setDoc(callDoc, { offer: offerDescription });
+    // Lưu dữ liệu vào sessionStorage (chỉ tồn tại trong phiên làm việc)
+    sessionStorage.setItem("videoCallData", JSON.stringify(callData));
 
-    onSnapshot(callDoc, (snapshot) => {
-      const data = snapshot.data();
-      if (!peerConnection.current.currentRemoteDescription && data?.answer) {
-        const answerDescription = new RTCSessionDescription(data.answer);
-        peerConnection.current.setRemoteDescription(answerDescription);
-      }
-    });
+    const videoCallUrl = `/call`;
+    // Kích thước cửa sổ video call
+    const width = 900;
+    const height = 600;
 
-    onSnapshot(answerCandidates, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          peerConnection.current.addIceCandidate(candidate);
-        }
-      });
-    });
-  };
+    // Lấy kích thước màn hình hiển thị (tránh lỗi ESLint)
+    const screenWidth =
+      window.innerWidth ||
+      document.documentElement.clientWidth ||
+      window.screen.availWidth;
+    const screenHeight =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      window.screen.availHeight;
 
-  // Tham gia cuộc gọi
-  const joinCall = async () => {
-    const callDoc = doc(db, "calls", callId);
-    const offerCandidates = collection(callDoc, "offerCandidates");
-    const answerCandidates = collection(callDoc, "answerCandidates");
-    setCallStartTime(new Date());
+    // Lấy vị trí hiện tại của cửa sổ (nếu có nhiều màn hình)
+    const left = (screenWidth - width) / 2 + window.screenX;
+    const top = (screenHeight - height) / 2 + window.screenY;
 
-    peerConnection.current.onicecandidate = async (event) => {
-      if (event.candidate) {
-        await addDoc(answerCandidates, event.candidate.toJSON());
-      }
-    };
-
-    const callData = (await getDoc(callDoc)).data();
-    await peerConnection.current.setRemoteDescription(
-      new RTCSessionDescription(callData.offer)
+    // Mở cửa sổ trước, sau đó đặt lại vị trí
+    const newWindow = window.open(
+      videoCallUrl,
+      "_blank",
+      `width=${width},height=${height},resizable=yes,scrollbars=yes,status=no`
     );
-    const answerDescription = await peerConnection.current.createAnswer();
-    await peerConnection.current.setLocalDescription(answerDescription);
-    await setDoc(callDoc, { answer: answerDescription }, { merge: true });
 
-    onSnapshot(offerCandidates, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          peerConnection.current.addIceCandidate(candidate);
-        }
-      });
-    });
-  };
-
-  // Kết thúc cuộc gọi
-  const endCall = async () => {
-    const endTime = new Date();
-    const duration = Math.floor((endTime - callStartTime) / 1000);
-    await saveCallMessage("ended", duration);
-
-    localStream.current?.getTracks().forEach((track) => track.stop());
-    peerConnection.current.close();
-    peerConnection.current = new RTCPeerConnection(servers);
-    setCallId("");
-    setCallStartTime(null);
+    if (newWindow) {
+      // Đợi một chút rồi căn giữa cửa sổ
+      setTimeout(() => {
+        newWindow.moveTo(left, top);
+        newWindow.focus();
+      }, 50);
+    } else {
+      alert("Popup bị chặn! Hãy bật popup trong trình duyệt.");
+    }
   };
 
   return (
-    <div>
-      <h1>Video Call App</h1>
-      <video ref={localVideoRef} autoPlay playsInline muted></video>
-      <video ref={remoteVideoRef} autoPlay playsInline></video>
-
-      <button onClick={startCamera}>Start Camera</button>
-      <button onClick={createCall}>Create Call</button>
-      <input value={callId} onChange={(e) => setCallId(e.target.value)} />
-      <button onClick={joinCall}>Join Call</button>
-      <button onClick={endCall}>End Call</button>
+    <div className="chat-history-header border-bottom">
+      <div className="d-flex justify-content-between align-items-center">
+        <div className="d-flex overflow-hidden align-items-center justify-content-between ">
+          <i
+            className="icon-base bx bx-menu icon-lg cursor-pointer d-lg-none d-block me-4"
+            data-bs-toggle="sidebar"
+            data-overlay=""
+            data-target="#app-chat-contacts"
+          ></i>
+          <div
+            className={`flex-shrink-0 avatar ${
+              isRecipientOnline ? "avatar-online" : "avatar-offline"
+            }`}
+          >
+            <img
+              src={recipient?.avatar || image}
+              alt="Avatar"
+              className="rounded-circle border"
+              data-bs-toggle="sidebar"
+              data-overlay=""
+              data-target="#app-chat-sidebar-right"
+            />
+          </div>
+          <div className="chat-contact-info flex-grow-1 ms-4">
+            <h6 className="m-0 fw-normal">{recipient?.name || "Unknown"}</h6>
+            <small class="user-status text-body">
+              {isRecipientOnline
+                ? "Active now"
+                : lastSeen &&
+                  timeAgo(lastSeen) &&
+                  `Active ${timeAgo(lastSeen)}`}
+            </small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center">
+          <span class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
+            <i class="icon-base bx bx-phone icon-md"></i>
+          </span>
+          <span
+            class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
+            onClick={() => handleVideoCall()}
+          >
+            <i class="icon-base bx bx-video icon-md"></i>
+          </span>
+        </div>
+      </div>
     </div>
   );
 }

@@ -3,13 +3,13 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import UpgradePlanModalSkeleton from "./UpgradePlanModalSkeleton";
-import { useNavigate } from "react-router";
 import useUser from "../../hooks/useUser";
 import Button from "./Button";
 
 export default function UpgradePlanModal() {
   const [isAnnually, setIsAnnually] = useState(false);
   const [pricingPlans, setPricingPlans] = useState([]);
+  const [currentPlan, setCurrentPlan] = useState({});
   const [pendingBillings, setPendingBillings] = useState([]);
   const [maxDiscount, setMaxDiscount] = useState(null);
   const { user } = useUser();
@@ -27,11 +27,18 @@ export default function UpgradePlanModal() {
     }
   );
 
+  // API lấy thông tin các gói đang chờ thanh toán
+  const { response: currentPlanRes, callApi: getCurrentPlan } = useApi({
+    url: API_URLS.USER.MEMBERSHIP_PACKAGE.CURRENT,
+    method: "GET",
+  });
+
   useEffect(() => {
     const modalElement = document.getElementById("upgradePlanModal");
 
     const handleShowModal = () => {
       callApi();
+      getCurrentPlan();
       checkPendingOrder();
     };
 
@@ -70,6 +77,12 @@ export default function UpgradePlanModal() {
       setPendingBillings(pendingOrderResponse);
     }
   }, [pendingOrderResponse]);
+
+  useEffect(() => {
+    if (currentPlanRes) {
+      setCurrentPlan(currentPlanRes);
+    }
+  }, [currentPlanRes]);
 
   useEffect(() => {
     if (error?.message) {
@@ -118,7 +131,6 @@ export default function UpgradePlanModal() {
                   comprehensive child development tracking. Choose the best plan
                   to fit your needs.
                 </p>
-
                 {user?.emailActivation === "unactivated" && (
                   <div
                     class="d-flex alert alert-warning align-items-center gap-3 mb-0 mt-3"
@@ -175,19 +187,25 @@ export default function UpgradePlanModal() {
                     </span>
                   </div>
                 </div>
-
                 <div className="row gy-6">
                   {pricingPlans.map((pricingPlan, index) => {
                     const previousPlanName =
                       index > 0
-                        ? pricingPlans[index - 1].membershipPackageName
+                        ? pricingPlans[index - 1]?.membershipPackageName
                         : null;
                     const activePlanIndex = pricingPlans.findIndex(
-                      (plan) => plan.isActive
+                      (plan) => plan?.isActive
                     );
+
+                    // Nếu là plan đang active, thay pricingPlan bằng currentPlan
+                    const displayedPlan =
+                      pricingPlan?.isActive && currentPlan
+                        ? currentPlan?.membershipPackage
+                        : pricingPlan;
+
                     return (
                       <div
-                        key={pricingPlan.membershipPackageId}
+                        key={displayedPlan?.membershipPackageId}
                         className="col-xl d-flex mb-md-0 px-3"
                       >
                         <div className="d-flex flex-column card border h-100 rounded shadow-none">
@@ -200,16 +218,16 @@ export default function UpgradePlanModal() {
                                 }}
                               >
                                 <img
-                                  src={pricingPlan.image}
+                                  src={displayedPlan?.image}
                                   alt="Image"
                                   width="120"
                                 />
                               </div>
                               <h4 className="card-title text-capitalize text-center mb-1">
-                                {pricingPlan.membershipPackageName}
+                                {displayedPlan?.membershipPackageName}
                               </h4>
-                              <p class="text-center mb-5">
-                                {pricingPlan.summary}
+                              <p className="text-center mb-5">
+                                {displayedPlan?.summary}
                               </p>
                               <div className="h-px-50 text-center mb-10">
                                 <div className="d-flex justify-content-center">
@@ -219,30 +237,33 @@ export default function UpgradePlanModal() {
                                   <h1 className="text-primary mb-0">
                                     {isAnnually
                                       ? Number.isInteger(
-                                          pricingPlan.price -
-                                            pricingPlan.savingPerMonth
+                                          displayedPlan?.price -
+                                            displayedPlan?.savingPerMonth
                                         )
-                                        ? pricingPlan.price -
-                                          pricingPlan.savingPerMonth
+                                        ? displayedPlan?.price -
+                                          displayedPlan?.savingPerMonth
                                         : (
-                                            pricingPlan.price -
-                                            pricingPlan.savingPerMonth
-                                          ).toFixed(2)
-                                      : Number.isInteger(pricingPlan.price)
-                                      ? pricingPlan.price
-                                      : pricingPlan.price.toFixed(2)}
+                                            displayedPlan?.price -
+                                            displayedPlan?.savingPerMonth
+                                          )?.toFixed(2)
+                                      : Number.isInteger(displayedPlan?.price)
+                                      ? displayedPlan?.price
+                                      : displayedPlan?.price?.toFixed(2)}
                                   </h1>
                                   <sub className="text-body h6 mb-1 mt-auto pricing-duration">
                                     /month
                                   </sub>
                                 </div>
-                                {isAnnually && pricingPlan.yearlyPrice > 0 && (
-                                  <small className="text-body-secondary price-yearly price-yearly-toggle">
-                                    ${pricingPlan.yearlyPrice} / year
-                                  </small>
-                                )}
+                                {isAnnually &&
+                                  displayedPlan?.yearlyPrice > 0 && (
+                                    <small className="text-body-secondary price-yearly price-yearly-toggle">
+                                      ${displayedPlan?.yearlyPrice} / year
+                                    </small>
+                                  )}
                               </div>
-                              {pricingPlan.isActive ? (
+                              {displayedPlan?.membershipPackageId ===
+                              currentPlan?.membershipPackage
+                                ?.membershipPackageId ? (
                                 <div
                                   className="d-flex alert alert-success align-items-center justify-content-center mb-0"
                                   style={{ height: "37.6px" }}
@@ -255,41 +276,41 @@ export default function UpgradePlanModal() {
                                   activePlanIndex={activePlanIndex}
                                   index={index}
                                   user={user}
-                                  pricingPlan={pricingPlan}
+                                  pricingPlan={displayedPlan}
                                   isAnnually={isAnnually}
                                 />
                               )}
                             </div>
                             <hr />
                             <b className="text-start mb-5">
-                              {pricingPlan.price === 0
+                              {displayedPlan?.price === 0
                                 ? "A simple start for everyone:"
                                 : `Everything in the ${previousPlanName}, plus:`}
                             </b>
                             <ul className="flex-grow-1 list-group">
-                              {pricingPlan?.permissions
-                                .filter((permission) => {
+                              {displayedPlan?.permissions
+                                ?.filter((permission) => {
                                   if (
-                                    displayedPermissions.has(
-                                      permission.permissionId
+                                    displayedPermissions?.has(
+                                      permission?.permissionId
                                     )
                                   ) {
                                     return false; // Bỏ qua quyền đã xuất hiện ở gói trước
                                   }
-                                  displayedPermissions.add(
-                                    permission.permissionId
+                                  displayedPermissions?.add(
+                                    permission?.permissionId
                                   );
                                   return true; // Hiển thị quyền chưa xuất hiện
                                 })
-                                .map((permission) => (
+                                ?.map((permission) => (
                                   <li
-                                    key={permission.permissionId}
+                                    key={permission?.permissionId}
                                     className="d-flex align-items-center mb-4"
                                   >
                                     <span className="badge bg-label-primary h-px-20 p-50 rounded-pill w-px-20 me-2">
                                       <i className="bx bx-check icon-base icon-xs"></i>
                                     </span>
-                                    <span>{permission.description}</span>
+                                    <span>{permission?.description}</span>
                                   </li>
                                 ))}
                             </ul>

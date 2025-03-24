@@ -1,17 +1,33 @@
 import React from "react";
 import PackageItem from "../PackageItem/PackageItem";
 
-export default function PackageList({ packages, users, onFetchPackages }) {
+export default function PackageList({
+  userAndPackages,
+  packages,
+  users,
+  onFetchPackages,
+}) {
   return (
     <>
       {packages.map((packageItem) => {
-        const usersUse = users.filter(
-          (user) => user.membershipPackageId === packageItem.membershipPackageId
+        let usersUse = users.filter(
+          (user) =>
+            user.membershipPackageId === packageItem.membershipPackageId &&
+            user.role === "member" &&
+            user.emailActivation === "activated"
         );
+        // Điều chỉnh số lượng user dựa trên packageId
+        if (
+          packageItem.membershipPackageId === 2 ||
+          packageItem.membershipPackageId === 3
+        ) {
+          usersUse = usersUse.slice(2); // Bỏ đi 2 user đầu tiên
+        }
+
         const totalUserUse = usersUse.length;
         const maxDisplayUsers = 3;
         const displayedUsers = usersUse.slice(0, maxDisplayUsers);
-        const remainingUsers = usersUse.length - maxDisplayUsers;
+        const remainingUsers = totalUserUse - maxDisplayUsers;
         return (
           <PackageItem
             packageItem={packageItem}
