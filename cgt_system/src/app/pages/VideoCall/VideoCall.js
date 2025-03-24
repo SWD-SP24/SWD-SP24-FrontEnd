@@ -33,6 +33,7 @@ export default function VideoCall() {
   const [callId, setCallId] = useState("");
   const [callStatus, setCallStatus] = useState("");
   const [callStartTime, setCallStartTime] = useState(null);
+  const [isRemoteVideoOn, setIsRemoteVideoOn] = useState(true);
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerConnection = useRef(null);
@@ -122,7 +123,21 @@ export default function VideoCall() {
       // Xử lý sự kiện khi nhận được media stream từ đối phương
       peerConnection.current.ontrack = (event) => {
         if (remoteVideoRef.current) {
-          remoteVideoRef.current.srcObject = event.streams[0]; // Gán luồng video từ remote peer
+          const [remoteStream] = event.streams;
+          remoteVideoRef.current.srcObject = remoteStream;
+
+          // Lấy track video từ stream
+          const videoTrack = remoteStream.getVideoTracks()[0];
+
+          if (videoTrack) {
+            // Khi video bị tắt (mute)
+            videoTrack.onmute = () => setIsRemoteVideoOn(false);
+
+            // Khi video được bật lại (unmute)
+            videoTrack.onunmute = () => setIsRemoteVideoOn(true);
+          } else {
+            setIsRemoteVideoOn(false);
+          }
         }
       };
     }
@@ -416,12 +431,22 @@ export default function VideoCall() {
             <p className={cx("calling-text")}>Connecting...</p>
           </div>
         ) : (
-          <video
-            ref={remoteVideoRef}
-            className={cx("remote-video")}
-            autoPlay
-            playsInline
-          ></video>
+          <>
+            <video
+              ref={remoteVideoRef}
+              className={cx("remote-video")}
+              autoPlay
+              playsInline
+            ></video>
+
+            {!isRemoteVideoOn && (
+              <img
+                src={callData?.recipient?.avatar || image}
+                alt="Remote Avatar"
+                className={cx("remote-avatar-overlay")}
+              />
+            )}
+          </>
         )}
         <div className={cx("local-video-wrapper")}>
           <video
@@ -431,19 +456,20 @@ export default function VideoCall() {
             playsInline
             muted
           ></video>
+          {!isVideoOn && (
+            <img
+              src={callData?.currentUser?.avatar || image}
+              alt="Your Avatar"
+              className={cx("local-avatar-overlay")}
+            />
+          )}
         </div>
       </div>
       <div className={cx("call-controls")}>
-        <button
-          className={cx("control-button")}
-          onClick={() => setIsMuted(!isMuted)}
-        >
+        <button className={cx("control-button")} onClick={toggleMute}>
           {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
         </button>
-        <button
-          className={cx("control-button")}
-          onClick={() => setIsVideoOn(!isVideoOn)}
-        >
+        <button className={cx("control-button")} onClick={toggleVideo}>
           {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
         </button>
         <button className={cx("control-button", "end-call")} onClick={endCall}>

@@ -255,7 +255,10 @@ export default function UpgradePlanModal() {
                                   </sub>
                                 </div>
                                 {isAnnually &&
-                                  displayedPlan?.yearlyPrice > 0 && (
+                                  displayedPlan?.yearlyPrice > 0 &&
+                                  displayedPlan?.membershipPackageId !==
+                                    currentPlan?.membershipPackage
+                                      ?.membershipPackageId && (
                                     <small className="text-body-secondary price-yearly price-yearly-toggle">
                                       ${displayedPlan?.yearlyPrice} / year
                                     </small>
