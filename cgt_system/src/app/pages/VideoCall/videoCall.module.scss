@@ -101,7 +101,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
   }
   
   .avatar {
@@ -140,6 +140,13 @@
     font-weight: bold;
     text-align: center;
   }
+
+  .connecting-text {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    text-align: center;
+  }
   
   /* Nút điều khiển */
   .call-controls {
@@ -148,6 +155,14 @@
     display: flex;
     gap: 20px;
   }
+
+    /* Nút điều khiển */
+    .call-controls-busy {
+      position: absolute;
+      bottom: 10px;
+      display: flex;
+      gap: 50px;
+    }
   
   .control-button {
     width: 50px;

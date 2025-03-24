@@ -10,19 +10,15 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  FaMicrophone,
-  FaMicrophoneSlash,
-  FaVideo,
-  FaVideoSlash,
-  FaPhoneSlash,
-} from "react-icons/fa";
 import { db } from "../../config/firebase";
 import styles from "./videoCall.module.scss";
 import classNames from "classnames/bind";
 import image_avt from "../../assets/img/avatars/default-avatar.jpg";
 import addMessage from "../../util/addMessage";
-import { getCallMessageText } from "./usecases/videoCallUseCases";
+import {
+  checkRecipientInCall,
+  getCallMessageText,
+} from "./usecases/videoCallUseCases";
 import ringTone from "../../assets/audio/ringTone.mp3";
 
 const cx = classNames.bind(styles);
@@ -79,7 +75,7 @@ export default function VideoCall() {
       if (docSnap.exists()) {
         const callStatus = docSnap.data().status;
         const isRemoteOn =
-          callData?.currentUser.userId === callData.callerId
+          callData?.currentUser.userId === callData.caller.userId
             ? docSnap.data().receiverVideoOn
             : docSnap.data().callerVideoOn;
         setIsRemoteVideoOn(isRemoteOn);
@@ -224,8 +220,6 @@ export default function VideoCall() {
         initializePeerConnection();
       }
 
-      setCallStartTime(new Date()); // Lưu thời gian bắt đầu cuộc gọi
-
       // Tạo một document mới trong Firestore để lưu thông tin cuộc gọi
       const callDocRef = await addDoc(callRef, {
         callerId,
@@ -289,6 +283,8 @@ export default function VideoCall() {
 
     changeCallStatus(callId, conversationId, "ongoing");
 
+    setCallStartTime(new Date());
+
     // Tham chiếu đến tài liệu cuộc gọi trong Firestore
     const callDocRef = doc(
       db,
@@ -316,6 +312,7 @@ export default function VideoCall() {
 
     updateDoc(callDocRef, {
       receiverVideoOn: true,
+      callStartTime: serverTimestamp(),
     });
 
     // Lấy Offer từ Firestore và thiết lập kết nối
@@ -347,10 +344,27 @@ export default function VideoCall() {
   // Kết thúc cuộc gọi
   const endCall = async () => {
     const newCallStatus = callStatus === "pending" ? "canceled" : "ended";
+    let callDuration = 0;
 
-    const callDuration = callStartTime
-      ? Math.floor((Date.now() - callStartTime) / 1000)
-      : 0;
+    if (callStatus === "ongoing") {
+      const callDocRef = doc(
+        db,
+        "conversations",
+        callData?.conversationId,
+        "calls",
+        callId
+      );
+
+      const callDocSnap = await getDoc(callDocRef);
+      if (callDocSnap.exists()) {
+        const callData = callDocSnap.data();
+        const callStartTime = callData?.callStartTime;
+
+        const startTimeMillis =
+          callStartTime.seconds * 1000 + callStartTime.nanoseconds / 1000000;
+        callDuration = Math.floor((Date.now() - startTimeMillis) / 1000);
+      }
+    }
 
     const message = {
       type: "call",
@@ -359,9 +373,9 @@ export default function VideoCall() {
       text: getCallMessageText(newCallStatus, "video"),
       timestamp: serverTimestamp(),
       isRead: false,
-      callType: "video", // "audio" hoặc "video"
+      callType: "video",
       callStatus: newCallStatus,
-      duration: callDuration || 0, // thời gian cuộc gọi (giây)
+      duration: callDuration || 0,
     };
 
     await addMessage(
@@ -370,6 +384,7 @@ export default function VideoCall() {
       callData?.recipientId,
       message
     );
+
     setCallStartTime(null);
 
     await changeCallStatus(
@@ -383,6 +398,12 @@ export default function VideoCall() {
 
   // Xử lí khi bắt đầu cuộc gọi
   const handleStartCall = async () => {
+    const isInCall = await checkRecipientInCall(callData?.recipientId);
+    if (isInCall) {
+      handleBusyCall();
+      return;
+    }
+
     if (!peerConnection.current) {
       initializePeerConnection();
     }
@@ -408,6 +429,30 @@ export default function VideoCall() {
       isRead: false,
       callType: "video",
       callStatus: "missed",
+      duration: 0,
+    };
+
+    await addMessage(
+      callData?.conversationId,
+      callData?.caller,
+      callData?.recipientId,
+      message
+    );
+  };
+
+  // Xử lí cuộc gọi bận
+  const handleBusyCall = async () => {
+    setCallStatus("busy");
+
+    const message = {
+      type: "call",
+      senderId: callData?.caller?.userId,
+      recipientId: callData?.recipientId,
+      text: getCallMessageText("busy", "video"),
+      timestamp: serverTimestamp(),
+      isRead: false,
+      callType: "video",
+      callStatus: "busy",
       duration: 0,
     };
 
@@ -478,8 +523,9 @@ export default function VideoCall() {
           "calls",
           callId
         );
+
         const updateField =
-          callData?.currentUserId === callData?.callerId
+          callData?.currentUser?.userId === callData?.caller?.userId
             ? "callerVideoOn"
             : "receiverVideoOn";
         updateDoc(callDocRef, {
@@ -490,14 +536,16 @@ export default function VideoCall() {
     });
   };
 
+  const buttonDisable = callStatus !== "ongoing";
+  const endButtonDisable = callStatus === "ended";
+
   return (
     <div className={cx("video-call-container")}>
       <audio ref={audioRef} src={ringTone} loop />
-      <div className={cx("connected-container")}>
-        {callStatus === "pending" ? (
+      {callStatus === "busy" ? (
+        <div className="d-flex flex-column align-items-center">
           <div className={cx("calling-overlay")}>
             <div className={cx("avatar-container")}>
-              <div className={cx("avatar-ring")}></div>
               <img
                 src={callData?.recipient?.avatar || image_avt}
                 alt="Avatar"
@@ -505,61 +553,122 @@ export default function VideoCall() {
               />
             </div>
             <h6 className={cx("calling-text")}>{callData?.recipient?.name}</h6>
-            <p className={cx("calling-text")}>Connecting...</p>
+            <small className={cx("connecting-text")}>
+              The user is currently on another call
+            </small>
           </div>
-        ) : (
-          <>
+          <div className={cx("call-controls-busy")}>
+            <div className="d-flex flex-column align-items-center gap-1">
+              <button
+                className="btn rounded-pill btn-icon btn-label-secondary"
+                onClick={() => window.close()}
+              >
+                <i className="bx bx-x"></i>
+              </button>
+              <p className="mb-0 fw-blod">Cancel</p>
+            </div>
+
+            <div className="d-flex flex-column align-items-center gap-1">
+              <button
+                className="btn rounded-pill btn-icon btn-success"
+                onClick={() => handleStartCall()}
+              >
+                <i className="bx bx-revision"></i>
+              </button>
+              <p className="mb-0 fw-blod">Try Again</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className={cx("connected-container")}>
+          {callStatus === "pending" ? (
+            <div className={cx("calling-overlay")}>
+              <div className={cx("avatar-container")}>
+                <div className={cx("avatar-ring")}></div>
+                <img
+                  src={callData?.recipient?.avatar || image_avt}
+                  alt="Avatar"
+                  className={cx("avatar")}
+                />
+              </div>
+              <h6 className={cx("calling-text")}>
+                {callData?.recipient?.name}
+              </h6>
+              <small className={cx("connecting-text")}>Connecting...</small>
+            </div>
+          ) : (
+            <>
+              <video
+                ref={remoteVideoRef}
+                className={cx("remote-video")}
+                autoPlay
+                playsInline
+              ></video>
+
+              {!isRemoteVideoOn && (
+                <img
+                  src={
+                    callData?.currentUser?.userId === callData?.caller?.userId
+                      ? callData?.recipient?.avatar
+                      : callData?.caller?.avatar || image_avt
+                  }
+                  alt="Remote Avatar"
+                  className={cx("remote-avatar-overlay")}
+                />
+              )}
+            </>
+          )}
+          <div className={cx("local-video-wrapper")}>
             <video
-              ref={remoteVideoRef}
-              className={cx("remote-video")}
+              ref={localVideoRef}
+              className={cx("local-video")}
               autoPlay
               playsInline
+              muted
             ></video>
-
-            {!isRemoteVideoOn && (
+            {!isVideoOn && (
               <img
-                src={
-                  callData?.currentUser?.userId === callData?.caller?.userId
-                    ? callData?.recipient?.avatar
-                    : callData?.caller?.avatar
-                }
-                alt="Remote Avatar"
-                className={cx("remote-avatar-overlay")}
+                src={callData?.currentUser?.avatar || image_avt}
+                alt="Your Avatar"
+                className={cx("local-avatar-overlay")}
               />
             )}
-          </>
-        )}
-        <div className={cx("local-video-wrapper")}>
-          <video
-            ref={localVideoRef}
-            className={cx("local-video")}
-            autoPlay
-            playsInline
-            muted
-          ></video>
-          {!isVideoOn && (
-            <img
-              src={callData?.currentUser?.avatar || image_avt}
-              alt="Your Avatar"
-              className={cx("local-avatar-overlay")}
-            />
-          )}
+          </div>
         </div>
-      </div>
-      <div className={cx("call-controls")}>
-        <button className={cx("control-button")} onClick={() => toggleMute()}>
-          {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
-        </button>
-        <button className={cx("control-button")} onClick={() => toggleVideo()}>
-          {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
-        </button>
-        <button
-          className={cx("control-button", "end-call")}
-          onClick={() => endCall()}
-        >
-          <FaPhoneSlash />
-        </button>
-      </div>
+      )}
+      {callStatus !== "busy" && (
+        <div className={cx("call-controls")}>
+          <button
+            disabled={buttonDisable}
+            className="btn rounded-pill btn-icon btn-label-secondary"
+            onClick={() => !buttonDisable && toggleMute()}
+          >
+            {isMuted ? (
+              <i className="bx bxs-microphone-off"></i>
+            ) : (
+              <i className="bx bxs-microphone"></i>
+            )}
+          </button>
+          <button
+            disabled={buttonDisable}
+            className="btn rounded-pill btn-icon btn-label-secondary"
+            onClick={() => !buttonDisable && toggleVideo()}
+          >
+            {isVideoOn ? (
+              <i className="bx bxs-video"></i>
+            ) : (
+              <i className="bx bxs-video-off"></i>
+            )}
+          </button>
+          <button
+            disabled={endButtonDisable}
+            className="btn rounded-pill btn-icon btn-danger"
+            onClick={() => !endButtonDisable && endCall()}
+          >
+            <i className="bx bxs-phone"></i>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

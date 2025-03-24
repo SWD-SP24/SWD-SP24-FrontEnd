@@ -291,6 +291,20 @@ export default function ChatHistory({
     }, 3000);
   };
 
+  const formatCallDuration = (durationInSeconds) => {
+    const hours = Math.floor(durationInSeconds / 3600);
+    const minutes = Math.floor((durationInSeconds % 3600) / 60);
+    const seconds = durationInSeconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    } else {
+      return `${seconds}s`;
+    }
+  };
+
   return (
     <div
       className="col app-chat-history d-block"
@@ -359,21 +373,46 @@ export default function ChatHistory({
                         </div>
                       ) : message.type === "call" ? (
                         // Nếu là tin nhắn cuộc gọi
-                        <div className="chat-message-call p-2 d-flex align-items-center bg-light rounded">
-                          <i
-                            className={`me-2 ${
-                              message.callType === "video"
-                                ? "bx bx-camera-movie"
-                                : "bx bx-phone-call"
+                        <div
+                          className={`chat-message-call p-2 d-flex align-items-center bg-light rounded gap-2 `}
+                        >
+                          <span
+                            className={`badge rounded-circle d-flex justify-content-center align-items-center ${
+                              message.senderId !== currentUser.userId &&
+                              (message.callStatus === "missed" ||
+                                message.callStatus === "busy" ||
+                                message.callStatus === "canceled" ||
+                                message.callStatus === "declined")
+                                ? "text-bg-danger"
+                                : "text-bg-secondary"
                             }`}
-                            style={{ fontSize: "1.2rem" }}
-                          ></i>
-                          <p className="mb-0">
-                            {message.text || "Call"}{" "}
-                            {message.duration > 0
-                              ? `(${message.duration}s)`
-                              : ""}
-                          </p>
+                            style={{
+                              width: "33px",
+                              height: "33px",
+                              padding: 0,
+                            }}
+                          >
+                            <i
+                              className={`${
+                                message.callType === "video"
+                                  ? "icon-base bx bx-bxs-video"
+                                  : "icon-base bx bx-phone-call"
+                              }`}
+                              style={{ fontSize: "1.2rem" }}
+                            ></i>
+                          </span>
+
+                          <div className="d-flex flex-column gap-1 justify-content-start">
+                            <p className="mb-0 fw-bold">
+                              {message.text || "Call"}{" "}
+                            </p>
+
+                            {message.duration > 0 ? (
+                              <small className="mb-0 text-start">
+                                {formatCallDuration(message.duration)}
+                              </small>
+                            ) : null}
+                          </div>
                         </div>
                       ) : (
                         // Nếu là tin nhắn kiểu childData (card)
