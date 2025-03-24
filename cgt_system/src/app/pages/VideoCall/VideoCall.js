@@ -78,9 +78,12 @@ export default function VideoCall() {
     const unsubscribe = onSnapshot(callRef, (docSnap) => {
       if (docSnap.exists()) {
         const callStatus = docSnap.data().status;
+        const isRemoteOn =
+          callData?.currentUser.userId === callData.callerId
+            ? docSnap.data().receiverVideoOn
+            : docSnap.data().callerVideoOn;
+        setIsRemoteVideoOn(isRemoteOn);
         setCallStatus(callStatus);
-
-        console.log(callStatus);
 
         switch (callStatus) {
           case "pending":
@@ -90,7 +93,6 @@ export default function VideoCall() {
                 .catch((error) => console.error("Lỗi phát âm thanh:", error));
             }
 
-            // Đợi 30 giây nếu không trả lời thì chuyển thành cuộc gọi nhỡ
             // Đợi 30 giây nếu không trả lời thì chuyển thành cuộc gọi nhỡ
             if (!timeoutRef.current) {
               // Tránh set nhiều lần
@@ -134,8 +136,6 @@ export default function VideoCall() {
     return () => unsubscribe();
   }, [callId]);
 
-  console.log(timeoutRef);
-
   // Khởi tạo hoặc reset PeerConnection nếu chưa có hoặc đã bị đóng
   const initializePeerConnection = () => {
     if (
@@ -153,6 +153,7 @@ export default function VideoCall() {
 
           // Lấy track video từ stream
           const videoTrack = remoteStream.getVideoTracks()[0];
+          console.log("Track: ", videoTrack);
 
           if (videoTrack) {
             // Khi video bị tắt (mute)
@@ -230,6 +231,8 @@ export default function VideoCall() {
         callerId,
         recipientId,
         status: "pending",
+        callerVideoOn: true,
+        receiverVideoOn: false,
         createdAt: serverTimestamp(),
       });
 
@@ -311,6 +314,10 @@ export default function VideoCall() {
 
     await startCamera();
 
+    updateDoc(callDocRef, {
+      receiverVideoOn: true,
+    });
+
     // Lấy Offer từ Firestore và thiết lập kết nối
     const callDoc = await getDoc(callDocRef);
     if (callDoc.exists()) {
@@ -339,8 +346,6 @@ export default function VideoCall() {
 
   // Kết thúc cuộc gọi
   const endCall = async () => {
-    disconnect();
-
     const newCallStatus = callStatus === "pending" ? "canceled" : "ended";
 
     const callDuration = callStartTime
@@ -366,11 +371,14 @@ export default function VideoCall() {
       message
     );
     setCallStartTime(null);
-    changeCallStatus(
+
+    await changeCallStatus(
       callId,
       callData?.conversationId,
       callStatus === "pending" ? "canceled" : "ended"
     );
+
+    disconnect();
   };
 
   // Xử lí khi bắt đầu cuộc gọi
@@ -462,6 +470,21 @@ export default function VideoCall() {
         localStream.current.getVideoTracks().forEach((track) => {
           track.enabled = !prev; // Nếu đang bật thì tắt, nếu đang tắt thì bật
         });
+
+        const callDocRef = doc(
+          db,
+          "conversations",
+          callData?.conversationId,
+          "calls",
+          callId
+        );
+        const updateField =
+          callData?.currentUserId === callData?.callerId
+            ? "callerVideoOn"
+            : "receiverVideoOn";
+        updateDoc(callDocRef, {
+          [updateField]: !prev,
+        });
       }
       return !prev;
     });
@@ -495,7 +518,11 @@ export default function VideoCall() {
 
             {!isRemoteVideoOn && (
               <img
-                src={callData?.recipient?.avatar || image_avt}
+                src={
+                  callData?.currentUser?.userId === callData?.caller?.userId
+                    ? callData?.recipient?.avatar
+                    : callData?.caller?.avatar
+                }
                 alt="Remote Avatar"
                 className={cx("remote-avatar-overlay")}
               />
