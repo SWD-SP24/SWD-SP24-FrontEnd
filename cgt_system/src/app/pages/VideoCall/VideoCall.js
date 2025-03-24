@@ -20,7 +20,7 @@ import {
 import { db } from "../../config/firebase";
 import styles from "./videoCall.module.scss";
 import classNames from "classnames/bind";
-import image from "../../assets/img/avatars/default-avatar.jpg";
+import image_avt from "../../assets/img/avatars/default-avatar.jpg";
 import addMessage from "../../util/addMessage";
 import { getCallMessageText } from "./usecases/videoCallUseCases";
 import ringTone from "../../assets/audio/ringTone.mp3";
@@ -39,6 +39,7 @@ export default function VideoCall() {
   const peerConnection = useRef(null);
   const localStream = useRef(null);
   const audioRef = useRef(null);
+  const timeoutRef = useRef(null);
 
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOn, setIsVideoOn] = useState(true);
@@ -88,17 +89,39 @@ export default function VideoCall() {
                 .play()
                 .catch((error) => console.error("Lỗi phát âm thanh:", error));
             }
+
+            // Đợi 30 giây nếu không trả lời thì chuyển thành cuộc gọi nhỡ
+            // Đợi 30 giây nếu không trả lời thì chuyển thành cuộc gọi nhỡ
+            if (!timeoutRef.current) {
+              // Tránh set nhiều lần
+              timeoutRef.current = setTimeout(() => {
+                changeCallStatus(callId, callData?.conversationId, "missed");
+              }, 30000);
+            }
             break;
           case "ongoing":
             if (audioRef.current) {
               audioRef.current.pause();
               audioRef.current.currentTime = 0;
             }
+
+            // Hủy timeout nếu cuộc gọi được nhận
+            if (timeoutRef.current) {
+              clearTimeout(timeoutRef.current);
+              timeoutRef.current = null;
+            }
+            break;
+          case "canceled":
+            window.close();
             break;
           case "declined":
             window.close();
             break;
           case "ended":
+            window.close();
+            break;
+          case "missed":
+            handleMissedCall();
             window.close();
             break;
 
@@ -110,6 +133,8 @@ export default function VideoCall() {
 
     return () => unsubscribe();
   }, [callId]);
+
+  console.log(timeoutRef);
 
   // Khởi tạo hoặc reset PeerConnection nếu chưa có hoặc đã bị đóng
   const initializePeerConnection = () => {
@@ -349,12 +374,42 @@ export default function VideoCall() {
     setCallStartTime(null);
   };
 
+  // Xử lí khi bắt đầu cuộc gọi
   const handleStartCall = async () => {
     if (!peerConnection.current) {
       initializePeerConnection();
     }
     await startCamera();
     await createCall();
+  };
+
+  // Xử lí khi cuộc gọi bị nhỡ
+  const handleMissedCall = async () => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+
+    setCallStatus("missed");
+
+    const message = {
+      type: "call",
+      senderId: callData?.caller?.userId,
+      recipientId: callData?.recipientId,
+      text: getCallMessageText("missed", "video"),
+      timestamp: serverTimestamp(),
+      isRead: false,
+      callType: "video",
+      callStatus: "missed",
+      duration: 0,
+    };
+
+    await addMessage(
+      callData?.conversationId,
+      callData?.caller,
+      callData?.recipientId,
+      message
+    );
   };
 
   // Đóng tất cả tài nguyên liên quan đến cuộc gọi
@@ -422,7 +477,7 @@ export default function VideoCall() {
             <div className={cx("avatar-container")}>
               <div className={cx("avatar-ring")}></div>
               <img
-                src={callData?.recipient?.avatar || image}
+                src={callData?.recipient?.avatar || image_avt}
                 alt="Avatar"
                 className={cx("avatar")}
               />
@@ -441,7 +496,7 @@ export default function VideoCall() {
 
             {!isRemoteVideoOn && (
               <img
-                src={callData?.recipient?.avatar || image}
+                src={callData?.recipient?.avatar || image_avt}
                 alt="Remote Avatar"
                 className={cx("remote-avatar-overlay")}
               />
@@ -458,7 +513,7 @@ export default function VideoCall() {
           ></video>
           {!isVideoOn && (
             <img
-              src={callData?.currentUser?.avatar || image}
+              src={callData?.currentUser?.avatar || image_avt}
               alt="Your Avatar"
               className={cx("local-avatar-overlay")}
             />
@@ -466,13 +521,16 @@ export default function VideoCall() {
         </div>
       </div>
       <div className={cx("call-controls")}>
-        <button className={cx("control-button")} onClick={toggleMute}>
+        <button className={cx("control-button")} onClick={() => toggleMute()}>
           {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
         </button>
-        <button className={cx("control-button")} onClick={toggleVideo}>
+        <button className={cx("control-button")} onClick={() => toggleVideo()}>
           {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
         </button>
-        <button className={cx("control-button", "end-call")} onClick={endCall}>
+        <button
+          className={cx("control-button", "end-call")}
+          onClick={() => endCall()}
+        >
           <FaPhoneSlash />
         </button>
       </div>

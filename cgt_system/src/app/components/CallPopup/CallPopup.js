@@ -160,7 +160,7 @@ export default function CallPopup({
       <div className="modal-dialog modal-small modal-simple modal-dialog-centered">
         <div className="modal-content border-0 shadow-lg rounded-4">
           <div className="modal-body p-4 d-flex flex-column gap-10">
-            <audio ref={audioRef} src={coming_call_tone} loop playsInline />
+            <audio ref={audioRef} src={coming_call_tone} loop />
             <div className="user-avatar-section d-flex align-items-center flex-column">
               <img
                 className="img-fluid border rounded-circle mb-4"

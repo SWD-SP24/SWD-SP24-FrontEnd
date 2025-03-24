@@ -1,33 +1,34 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../../config/firebase";
 
-// const checkRecipientInCall = async (recipientId) => {
-//   if (!recipientId) return false;
+const checkRecipientInCall = async (recipientId) => {
+  if (!recipientId) return false;
 
-//   // Tìm tất cả conversations mà recipientId là participant
-//   const conversationsQuery = query(
-//     collection(db, "conversations"),
-//     where("participants", "array-contains", recipientId)
-//   );
+  // Tìm tất cả conversations mà recipientId là participant
+  const conversationsQuery = query(
+    collection(db, "conversations"),
+    where("participants", "array-contains", recipientId)
+  );
 
-//   const conversationsSnapshot = await getDocs(conversationsQuery);
-//   if (conversationsSnapshot.empty) return false;
+  const conversationsSnapshot = await getDocs(conversationsQuery);
+  if (conversationsSnapshot.empty) return false;
 
-//   // Lấy danh sách conversationId từ kết quả
-//   const conversationIds = conversationsSnapshot.docs.map((doc) => doc.id);
+  // Lấy danh sách conversationId từ kết quả
+  const conversationIds = conversationsSnapshot.docs.map((doc) => doc.id);
 
-//   // Kiểm tra xem có cuộc gọi nào đang pending hoặc ongoing không
-//   for (const conversationId of conversationIds) {
-//     const callsQuery = query(
-//       collection(db, "conversations", conversationId, "calls"),
-//       where("status", "in", ["ongoing", "pending"])
-//     );
+  // Kiểm tra xem có cuộc gọi nào đang pending hoặc ongoing không
+  for (const conversationId of conversationIds) {
+    const callsQuery = query(
+      collection(db, "conversations", conversationId, "calls"),
+      where("status", "in", ["ongoing", "pending"])
+    );
 
-//     const callsSnapshot = await getDocs(callsQuery);
-//     if (!callsSnapshot.empty) return true; // Nếu có cuộc gọi thỏa mãn, return true ngay
-//   }
+    const callsSnapshot = await getDocs(callsQuery);
+    if (!callsSnapshot.empty) return true; // Nếu có cuộc gọi thỏa mãn, return true ngay
+  }
 
-//   return false; // Không tìm thấy cuộc gọi nào đang active
-// };
+  return false; // Không tìm thấy cuộc gọi nào đang active
+};
 
 // // ✅ Khi cuộc gọi được chấp nhận
 // const handleCallAccepted = () => {
