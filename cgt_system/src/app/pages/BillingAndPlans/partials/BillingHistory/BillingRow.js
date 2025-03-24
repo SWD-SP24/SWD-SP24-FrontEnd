@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router";
 
 export default function BillingRow({ index, billingItem }) {
   // Hàm format ngày, tháng, năm
@@ -31,7 +32,7 @@ export default function BillingRow({ index, billingItem }) {
   return (
     <tr>
       <td>
-        <div>#{index + 1}</div>
+        <div>#{billingItem.paymentTransactionId}</div>
       </td>
       <td>
         <div class="d-flex align-items-center justify-content-start">
@@ -63,6 +64,21 @@ export default function BillingRow({ index, billingItem }) {
             billingItem.status.slice(1)}
         </h6>
       </td>
+      {billingItem.status === "pending" ? (
+        <td className="ps-0">
+          <Link
+            to={`/member/upgrade-plan/checkout?planId=${
+              billingItem.membershipPackage.membershipPackageId
+            }&isYearly=${
+              billingItem.membershipPackage.price < billingItem.amount
+            }`}
+          >
+            Pay now
+          </Link>
+        </td>
+      ) : (
+        <td></td>
+      )}
     </tr>
   );
 }

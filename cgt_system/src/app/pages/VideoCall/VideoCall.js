@@ -360,8 +360,6 @@ export default function VideoCall() {
   const changeCallStatus = async (callId, conversationId, status) => {
     if (!callId) callId = callData?.callId;
 
-    console.log(callId, conversationId);
-
     if (callId && conversationId) {
       const callDocRef = doc(
         db,

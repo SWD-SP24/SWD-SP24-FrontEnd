@@ -14,16 +14,19 @@ export default function BillingTable({ billings }) {
           style={{ width: "100%" }}
         >
           <colgroup>
-            <col data-dt-column="2" style={{ width: "30.3125px" }} />
-            <col data-dt-column="2" style={{ width: "200.3125px" }} />
-            <col data-dt-column="3" style={{ width: "200.656px" }} />
-            <col data-dt-column="4" style={{ width: "100.594px" }} />
-            <col data-dt-column="6" style={{ width: "200.594px" }} />
+            <col data-dt-column="1" style={{ width: "41.775px" }} />
+            <col data-dt-column="2" style={{ width: "167.137px" }} />
+            <col data-dt-column="3" style={{ width: "163.488px" }} />
+            <col data-dt-column="4" style={{ width: "106.95px" }} />
+            <col data-dt-column="5" style={{ width: "227.137px" }} />
+            <col data-dt-column="6" style={{ width: "10.125px" }} />
+            <col data-dt-column="7" style={{ width: "80.387px" }} />
           </colgroup>
+
           <thead>
             <tr>
               <th
-                data-dt-column="2"
+                data-dt-column="1"
                 rowSpan="1"
                 colSpan="1"
                 className="dt-orderable-asc dt-orderable-desc dt-ordering-desc"
@@ -37,7 +40,7 @@ export default function BillingTable({ billings }) {
                 <span className="dt-column-order"></span>
               </th>
               <th
-                data-dt-column="3"
+                data-dt-column="2"
                 rowSpan="1"
                 colSpan="1"
                 className="dt-orderable-asc dt-orderable-desc"
@@ -76,7 +79,7 @@ export default function BillingTable({ billings }) {
                 <span className="dt-column-order"></span>
               </th>
               <th
-                data-dt-column="6"
+                data-dt-column="5"
                 rowSpan="1"
                 colSpan="1"
                 className="dt-orderable-asc dt-orderable-desc"
@@ -98,6 +101,19 @@ export default function BillingTable({ billings }) {
               >
                 <span className="dt-column-title" role="button">
                   Payment
+                </span>
+                <span className="dt-column-order"></span>
+              </th>
+              <th
+                data-dt-column="7"
+                rowSpan="1"
+                colSpan="1"
+                className="dt-orderable-asc dt-orderable-desc ps-0"
+                aria-label="Status: Activate to sort"
+                tabIndex="0"
+              >
+                <span className="dt-column-title" role="button">
+                  Action
                 </span>
                 <span className="dt-column-order"></span>
               </th>

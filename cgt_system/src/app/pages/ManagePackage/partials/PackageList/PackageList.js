@@ -1,12 +1,7 @@
 import React from "react";
 import PackageItem from "../PackageItem/PackageItem";
 
-export default function PackageList({
-  userAndPackages,
-  packages,
-  users,
-  onFetchPackages,
-}) {
+export default function PackageList({ packages, users, onFetchPackages }) {
   return (
     <>
       {packages.map((packageItem) => {
