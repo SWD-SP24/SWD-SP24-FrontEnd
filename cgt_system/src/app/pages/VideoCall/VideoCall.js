@@ -341,12 +341,6 @@ export default function VideoCall() {
   const endCall = async () => {
     disconnect();
 
-    changeCallStatus(
-      callId,
-      callData?.conversationId,
-      callStatus === "pending" ? "canceled" : "ended"
-    );
-
     const newCallStatus = callStatus === "pending" ? "canceled" : "ended";
 
     const callDuration = callStartTime
@@ -372,6 +366,11 @@ export default function VideoCall() {
       message
     );
     setCallStartTime(null);
+    changeCallStatus(
+      callId,
+      callData?.conversationId,
+      callStatus === "pending" ? "canceled" : "ended"
+    );
   };
 
   // Xử lí khi bắt đầu cuộc gọi

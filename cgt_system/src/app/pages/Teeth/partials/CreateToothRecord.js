@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { useParams } from "react-router";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
-import { toDMY } from "../../../util/dateFormat";
+import { convertToISOString, toDMY } from "../../../util/dateFormat";
 import showToast from "../../../util/showToast";
-export default function CreateToothRecord({ toothId, refetch }) {
+export default function CreateToothRecord({ toothId, refetch, dob }) {
   const id = useParams().childId;
   const eruptionDate = useRef(null);
   const note = useRef(null);
@@ -60,6 +60,7 @@ export default function CreateToothRecord({ toothId, refetch }) {
                   className="form-control"
                   type="date"
                   id="fromDateInput"
+                  min={convertToISOString(dob)}
                   max={new Date().toISOString().split("T")[0]}
                 />
               </div>
