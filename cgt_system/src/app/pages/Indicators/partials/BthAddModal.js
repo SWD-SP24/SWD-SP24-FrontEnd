@@ -1,14 +1,20 @@
 import React, { useEffect, useRef, useState } from "react";
 import { convertToISOString, toDMY } from "../../../util/dateFormat";
 import { sLatestHeight } from "./BthAddIndicators";
-import { Bluetooth } from "lucide-react";
+import {
+  Bluetooth,
+  BluetoothConnected,
+  BluetoothSearching,
+} from "lucide-react";
 import useApi from "../../../hooks/useApi";
 import API_URLS from "../../../config/apiUrls";
 import showToast from "../../../util/showToast";
 import { useParams } from "react-router";
+import BluetoothWeight from "./BluetoothWeight";
+import { createPortal } from "react-dom";
 export default function BthAddModal({ dob, refetch }) {
   const { childId } = useParams();
-  const weightRef = useRef(null);
+  const [weightCurrent, setWeightCurrent] = useState(null);
   const recordTimeRef = useRef(null);
   const [latestHeight, setLatestHeight] = useState(null);
   const { response, callApi } = useApi({
@@ -20,6 +26,7 @@ export default function BthAddModal({ dob, refetch }) {
     url: `${API_URLS.INDICATORS.LATEST_RECORD}?childrenId=${childId}`,
     method: "GET",
   });
+
   useEffect(() => {
     callLatestApi();
   }, []);
@@ -31,7 +38,7 @@ export default function BthAddModal({ dob, refetch }) {
   }, [latestResponse]);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const weight = weightRef.current.value.trim();
+    const weight = weightCurrent;
     const recordTime = recordTimeRef.current.value.trim();
     if (!latestHeight || !weight) {
       const target = document.querySelector(".content-wrapper");
@@ -44,7 +51,7 @@ export default function BthAddModal({ dob, refetch }) {
     }
     const data = {
       height: latestHeight,
-      weight: weightRef.current.value,
+      weight: weight,
       recordTime: toDMY(recordTime),
       childrenId: childId,
     };
@@ -55,7 +62,7 @@ export default function BthAddModal({ dob, refetch }) {
     refetch();
     e.target.reset();
   };
-  return (
+  return createPortal(
     <div
       class="modal fade"
       id="modalBluetoothAdd"
@@ -82,21 +89,10 @@ export default function BthAddModal({ dob, refetch }) {
                   <label for="weight" class="form-label">
                     Weight
                   </label>
-                  <div className="input-group">
-                    <input
-                      ref={weightRef}
-                      type="text"
-                      id="weight"
-                      className="form-control"
-                      placeholder="Enter Weight"
-                    />
-                    <span
-                      className="input-group-text"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <Bluetooth size={20} />
-                    </span>
-                  </div>
+                  <BluetoothWeight
+                    setWeightCurrent={setWeightCurrent}
+                    weightCurrent={weightCurrent}
+                  />
                 </div>
                 <div class="col mb-3">
                   <label for="height" class="form-label">
@@ -144,6 +140,7 @@ export default function BthAddModal({ dob, refetch }) {
           </form>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -300,7 +300,6 @@ export default function Indicators() {
         )}
       </div>
 
-      <BluetoothComponent />
       <BthAddModal dob={childrenData.dob} refetch={callApi} />
     </>
   );

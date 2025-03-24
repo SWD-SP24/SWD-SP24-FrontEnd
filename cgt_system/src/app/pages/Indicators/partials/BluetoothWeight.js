@@ -2,13 +2,13 @@ import {
   Bluetooth,
   BluetoothConnected,
   BluetoothSearching,
-} from "lucide-react"; // Import Lucide icons
-import { useState } from "react";
-
-const BluetoothComponent = () => {
+} from "lucide-react";
+import React, { useState } from "react";
+import { extractWeight } from "../../../util/formatData";
+export default function BluetoothWeight({ setWeightCurrent }) {
   const [isConnected, setIsConnected] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [retrievedValue, setRetrievedValue] = useState("NaN");
+  const [retrievedValue, setRetrievedValue] = useState("");
   const [timestamp, setTimestamp] = useState("");
   const [bleServer, setBleServer] = useState(null);
   const [sensorCharacteristic, setSensorCharacteristic] = useState(null);
@@ -26,6 +26,7 @@ const BluetoothComponent = () => {
   };
 
   const connectToDevice = async () => {
+    console.log("Clicked!");
     if (!isWebBluetoothEnabled()) return;
 
     setIsSearching(true); // Show searching state
@@ -75,6 +76,7 @@ const BluetoothComponent = () => {
   };
 
   const disconnectDevice = async () => {
+    console.log("Clicked!");
     if (!isConnected || !bleServer) {
       alert("Bluetooth is not connected.");
       return;
@@ -93,32 +95,45 @@ const BluetoothComponent = () => {
   /** 🔵 Dynamically select Bluetooth icon */
   const renderBluetoothIcon = () => {
     if (isSearching) {
-      return <BluetoothSearching size={32} color="#f5a623" />;
+      return (
+        <button className="input-group-text" style={{ cursor: "pointer" }}>
+          <BluetoothSearching size={21} color="#f5a623" />
+        </button>
+      );
     }
     if (isConnected) {
       return (
-        <button onClick={disconnectDevice} style={{ cursor: "pointer" }}>
-          <BluetoothConnected size={32} color="#778BE3" />
+        <button
+          className="input-group-text"
+          onClick={disconnectDevice}
+          style={{ cursor: "pointer" }}
+        >
+          <BluetoothConnected size={21} color="#778BE3" />
         </button>
       );
     }
     return (
-      <button onClick={connectToDevice} style={{ cursor: "pointer" }}>
-        <Bluetooth size={32} color="#778BE3" />
+      <button
+        className="input-group-text"
+        onClick={connectToDevice}
+        style={{ cursor: "pointer" }}
+      >
+        <Bluetooth size={21} color="#778BE3" />
       </button>
     );
   };
 
   return (
-    <div>
-      <h1>ESP32 Web BLE Application</h1>
+    <div className="input-group">
+      <input
+        value={extractWeight(retrievedValue)}
+        type="text"
+        id="weight"
+        className="form-control"
+        placeholder="Enter Weight"
+        onChange={(e) => setWeightCurrent(e.target.value)}
+      />
       {renderBluetoothIcon()}
-
-      <h2>Fetched Value</h2>
-      <p>{retrievedValue}</p>
-      <p>Last reading: {timestamp}</p>
     </div>
   );
-};
-
-export default BluetoothComponent;
+}
