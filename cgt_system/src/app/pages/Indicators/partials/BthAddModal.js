@@ -38,6 +38,7 @@ export default function BthAddModal({ dob, refetch }) {
   }, [latestResponse]);
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Clicked! Submit");
     const weight = weightCurrent;
     const recordTime = recordTimeRef.current.value.trim();
     if (!latestHeight || !weight) {

@@ -96,7 +96,11 @@ export default function BluetoothWeight({ setWeightCurrent }) {
   const renderBluetoothIcon = () => {
     if (isSearching) {
       return (
-        <button className="input-group-text" style={{ cursor: "pointer" }}>
+        <button
+          type="button"
+          className="input-group-text"
+          style={{ cursor: "pointer" }}
+        >
           <BluetoothSearching size={21} color="#f5a623" />
         </button>
       );
@@ -105,6 +109,7 @@ export default function BluetoothWeight({ setWeightCurrent }) {
       return (
         <button
           className="input-group-text"
+          type="button"
           onClick={disconnectDevice}
           style={{ cursor: "pointer" }}
         >
@@ -115,6 +120,7 @@ export default function BluetoothWeight({ setWeightCurrent }) {
     return (
       <button
         className="input-group-text"
+        type="button"
         onClick={connectToDevice}
         style={{ cursor: "pointer" }}
       >
