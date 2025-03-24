@@ -122,14 +122,15 @@ export default function Checkout() {
   }, [error]);
 
   function formatDate(isoString) {
-    const date = new Date(isoString);
-    return date.toLocaleDateString("en-US", {
+    const date = new Date(isoString + "Z");
+    return date.toLocaleString("en-US", {
       month: "short",
       day: "2-digit",
       year: "numeric",
       hour: "2-digit",
       minute: "2-digit",
       hour12: true,
+      timeZone: "Asia/Ho_Chi_Minh",
     });
   }
 

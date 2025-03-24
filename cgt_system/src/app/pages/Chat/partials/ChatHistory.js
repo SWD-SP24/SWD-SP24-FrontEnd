@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
-import image from "../../../assets/img/avatars/default-avatar.jpg";
+
 import { motion } from "framer-motion";
 import {
   addDoc,
   collection,
   doc,
+  getDoc,
   increment,
   onSnapshot,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../config/firebase";
+import image from "../../../assets/img/avatars/default-avatar.jpg";
 import addNotification from "../../../util/addNotification";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
@@ -21,6 +22,7 @@ import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
 import { useNavigate } from "react-router";
 import Tippy from "@tippyjs/react";
+import ChatHistoryHeader from "./ChatHistoryHeader";
 
 export default function ChatHistory({
   currentUser,
@@ -106,20 +108,6 @@ export default function ChatHistory({
     }
   };
 
-  // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
-  const timeAgo = (timestamp) => {
-    if (!timestamp?.seconds) return "";
-    const timeDiff = Date.now() - timestamp.seconds * 1000;
-    const minutes = Math.floor(timeDiff / (1000 * 60));
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (minutes < 1) return "";
-    if (minutes < 60) return `${minutes} minutes ago`;
-    if (hours < 24) return `${hours} hours ago`;
-    return `${days} days ago`;
-  };
-
   const sendMessage = async (type, childId, message) => {
     if (!conversationId) return;
 
@@ -139,7 +127,8 @@ export default function ChatHistory({
 
       // Kiểm tra trạng thái activeConversation của recipient
       const recipientRef = doc(db, "activeUsers", String(recipientId));
-      const recipientSnap = await recipientRef.get();
+      const recipientSnap = await getDoc(recipientRef);
+
       const isRecipientInChat =
         recipientSnap.exists() &&
         recipientSnap.data().activeConversation === conversationId;
@@ -309,45 +298,14 @@ export default function ChatHistory({
       draggable
     >
       <div className="chat-history-wrapper">
-        <div className="chat-history-header border-bottom">
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="d-flex overflow-hidden align-items-center justify-content-between ">
-              <i
-                className="icon-base bx bx-menu icon-lg cursor-pointer d-lg-none d-block me-4"
-                data-bs-toggle="sidebar"
-                data-overlay=""
-                data-target="#app-chat-contacts"
-              ></i>
-              <div
-                className={`flex-shrink-0 avatar ${
-                  isRecipientOnline ? "avatar-online" : "avatar-offline"
-                }`}
-              >
-                <img
-                  src={recipient?.avatar || image}
-                  alt="Avatar"
-                  className="rounded-circle border"
-                  data-bs-toggle="sidebar"
-                  data-overlay=""
-                  data-target="#app-chat-sidebar-right"
-                />
-              </div>
-              <div className="chat-contact-info flex-grow-1 ms-4">
-                <h6 className="m-0 fw-normal">
-                  {recipient?.name || "Unknown"}
-                </h6>
-                <small class="user-status text-body">
-                  {isRecipientOnline
-                    ? "Active now"
-                    : lastSeen &&
-                      timeAgo(lastSeen) &&
-                      `Active ${timeAgo(lastSeen)}`}
-                </small>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <ChatHistoryHeader
+          isRecipientOnline={isRecipientOnline}
+          recipient={recipient}
+          recipientId={recipientId}
+          lastSeen={lastSeen}
+          currentUser={currentUser}
+          conversationId={conversationId}
+        />
         {/* Chat History Body */}
         <div className="chat-history-body overflow-auto">
           <div className="d-flex flex-column justify-content-center align-items-center my-4">
@@ -398,6 +356,24 @@ export default function ChatHistory({
                       {message.type === "text" ? (
                         <div className="chat-message-text p-2 rounded bg-light">
                           <p className="mb-0">{message.text}</p>
+                        </div>
+                      ) : message.type === "call" ? (
+                        // Nếu là tin nhắn cuộc gọi
+                        <div className="chat-message-call p-2 d-flex align-items-center bg-light rounded">
+                          <i
+                            className={`me-2 ${
+                              message.callType === "video"
+                                ? "bx bx-camera-movie"
+                                : "bx bx-phone-call"
+                            }`}
+                            style={{ fontSize: "1.2rem" }}
+                          ></i>
+                          <p className="mb-0">
+                            {message.text || "Call"}{" "}
+                            {message.duration > 0
+                              ? `(${message.duration}s)`
+                              : ""}
+                          </p>
                         </div>
                       ) : (
                         // Nếu là tin nhắn kiểu childData (card)

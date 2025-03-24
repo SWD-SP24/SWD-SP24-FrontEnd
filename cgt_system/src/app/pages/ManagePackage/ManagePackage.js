@@ -184,6 +184,7 @@ export default function ManagePackages() {
 
       <div className="row g-6">
         <PackageList
+          usersAndPackages={usersAndPackages}
           packages={packages}
           users={users}
           onFetchPackages={fetchPackages}

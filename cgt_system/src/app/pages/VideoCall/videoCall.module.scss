@@ -1,0 +1,178 @@
+.video-call-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #121212;
+  }
+
+  .remote-video {
+    width: 100%;
+    height: 100vh;
+  }
+
+  .remote-avatar-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: black;
+    border: 3px solid white;
+  }
+  
+
+  .local-video-wrapper {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    width: 200px;
+    height: 150px;
+    border-radius: 10px;
+    border: 2px solid white;
+    object-fit: cover;
+  }
+  
+  .local-video {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    background-color: black;
+  }
+  
+  .local-avatar-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: black;
+    border: 3px solid white;
+  }
+  
+
+  .avatar-overlay {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #222;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .avatar-overlay img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+  }
+  
+  
+  
+  .calling-overlay {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .avatar-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+  }
+  
+  .avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    background-color: white;
+    position: relative;
+    z-index: 2;
+  }
+  
+  .avatar-ring {
+    position: absolute;
+    width: 125px;
+    height: 125px;
+    border-radius: 50%;
+    border: 4px solid transparent;
+    background: conic-gradient(#ff007f, #7303c0, #ff007f);
+    animation: rotate-border 2s linear infinite;
+    z-index: 1;
+  }
+  
+  @keyframes rotate-border {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+  
+  .calling-text {
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  /* Nút điều khiển */
+  .call-controls {
+    position: absolute;
+    bottom: 10px;
+    display: flex;
+    gap: 20px;
+  }
+  
+  .control-button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .control-button:hover {
+    background-color: rgba(255, 255, 255, 0.4);
+  }
+  
+  .end-call {
+    background-color: red;
+  }
+  
+  .end-call:hover {
+    background-color: darkred;
+  }
+  

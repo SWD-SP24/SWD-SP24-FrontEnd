@@ -17,7 +17,7 @@ export default function Summary({ checkoutInfo, isYearly }) {
 
   useEffect(() => {
     if (response) {
-      const paypalRedirectUrl = response.link || "";
+      const paypalRedirectUrl = response.link || response.pendingUrl || "";
       if (paypalRedirectUrl) {
         window.location.href = paypalRedirectUrl;
       }

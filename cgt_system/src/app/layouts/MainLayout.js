@@ -15,9 +15,15 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../config/firebase";
+import useCallListener from "../hooks/useCallListener";
+import CallPopup from "../components/CallPopup/CallPopup";
+import { Modal } from "bootstrap";
 
 export default function MainLayout() {
   const { user, setUser } = useUser();
+
+  const { incomingCall, setIncomingCall } = useCallListener(user);
+  console.log(incomingCall);
 
   const { response, callApi } = useApi({
     url: `${API_URLS.USER.CURRENT_USER}`,
@@ -79,42 +85,67 @@ export default function MainLayout() {
     };
   }, [user]);
 
+  useEffect(() => {
+    const modalElement = document.getElementById("callPopup");
+
+    if (modalElement) {
+      let modalInstance = Modal.getInstance(modalElement);
+
+      if (!modalInstance) {
+        modalInstance = new Modal(modalElement, { backdrop: "static" });
+      }
+
+      if (incomingCall) {
+        modalInstance.show();
+      } else {
+        modalInstance.hide();
+      }
+    }
+  }, [incomingCall]);
+
   if (user === null) {
     return <Loading />;
   }
 
   return (
-    <div>
-      <div className="pattern-bg"></div>
+    <>
+      <div>
+        <div className="pattern-bg"></div>
 
-      <div className="layout-wrapper layout-content-navbar bg-body  ">
-        <div className="layout-container">
-          <Sidebar role={user.role} />
-          <div className="menu-mobile-toggler d-xl-none rounded-1">
-            <a
-              href="javascript:void(0);"
-              className="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1"
+        <div className="layout-wrapper layout-content-navbar bg-body  ">
+          <div className="layout-container">
+            <Sidebar role={user.role} />
+            <div className="menu-mobile-toggler d-xl-none rounded-1">
+              <a
+                href="javascript:void(0);"
+                className="layout-menu-toggle menu-link text-large text-bg-secondary p-2 rounded-1"
+              >
+                <i className="bx bx-menu icon-base"></i>
+                <i className="bx bx-chevron-right icon-base"></i>
+              </a>
+            </div>
+            <div
+              className="layout-page"
+              style={{
+                paddingLeft: "260px",
+                paddingTop: "76px",
+              }}
             >
-              <i className="bx bx-menu icon-base"></i>
-              <i className="bx bx-chevron-right icon-base"></i>
-            </a>
-          </div>
-          <div
-            className="layout-page"
-            style={{
-              paddingLeft: "260px",
-              paddingTop: "76px",
-            }}
-          >
-            <Navbar user={user} />
-            <div className="content-wrapper">
-              <div className="container-xxl flex-grow-1 container-p-y">
-                <Outlet context={{ user, setUser, callApi }} />
+              <Navbar user={user} />
+              <div className="content-wrapper">
+                <div className="container-xxl flex-grow-1 container-p-y">
+                  <Outlet context={{ user, setUser, callApi }} />
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+      <CallPopup
+        incomingCall={incomingCall}
+        setIncomingCall={setIncomingCall}
+        currentUser={user}
+      />
+    </>
   );
 }
