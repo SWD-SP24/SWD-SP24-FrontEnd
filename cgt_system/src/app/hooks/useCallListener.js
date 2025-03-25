@@ -49,6 +49,7 @@ const useCallListener = (currentUser) => {
                   // Nếu có ít nhất một cuộc gọi "pending", đặt incomingCall
                   hasPendingCall = true;
                   setIncomingCall({
+                    callType: call.callType,
                     conversationId,
                     callId: callDoc.id,
                     callerId: call.callerId,

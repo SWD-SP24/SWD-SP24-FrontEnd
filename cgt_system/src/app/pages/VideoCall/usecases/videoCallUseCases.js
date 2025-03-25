@@ -72,7 +72,7 @@ export const getCallMessageText = (callStatus, callType) => {
   } else if (callStatus === "canceled") {
     return `Missed ${callType === "video" ? "video" : "audio"} call`;
   } else if (callStatus === "ended") {
-    return `${callType === "video" ? "Video" : "Audio"} Call`;
+    return `${callType === "video" ? "Video" : "Audio"} call`;
   } else if (callStatus === "declined") {
     return `Missed ${callType === "video" ? "video" : "audio"} call`;
   } else if (callStatus === "busy") {
