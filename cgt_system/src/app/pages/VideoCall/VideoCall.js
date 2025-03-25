@@ -79,7 +79,7 @@ export default function VideoCall() {
       if (docSnap.exists()) {
         const callStatus = docSnap.data().status;
         const isRemoteOn =
-          callData?.currentUser.userId === callData.callerId
+          callData?.currentUser.userId === callData.caller.userId
             ? docSnap.data().receiverVideoOn
             : docSnap.data().callerVideoOn;
         setIsRemoteVideoOn(isRemoteOn);
@@ -479,7 +479,7 @@ export default function VideoCall() {
           callId
         );
         const updateField =
-          callData?.currentUserId === callData?.callerId
+          callData?.currentUser.userId === callData?.caller.userId
             ? "callerVideoOn"
             : "receiverVideoOn";
         updateDoc(callDocRef, {
