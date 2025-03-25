@@ -189,7 +189,6 @@ export default function VideoCall() {
     return () => clearInterval(timer);
   }, [callStartTime]);
 
-  // Khởi tạo hoặc reset PeerConnection nếu chưa có hoặc đã bị đóng
   const initializePeerConnection = () => {
     if (
       !peerConnection.current ||
@@ -200,32 +199,30 @@ export default function VideoCall() {
 
       // Xử lý sự kiện khi nhận được media stream từ đối phương
       peerConnection.current.ontrack = (event) => {
-        if (remoteVideoRef.current) {
-          const [remoteStream] = event.streams;
+        console.log("📡 Nhận track:", event.track.kind);
+        const [remoteStream] = event.streams;
+
+        // Nếu có video, gán vào remoteVideoRef
+        if (event.track.kind === "video" && remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream;
 
-          // Lấy track video từ stream
+          // Kiểm tra trạng thái của video
           const videoTrack = remoteStream.getVideoTracks()[0];
-          console.log("Track: ", videoTrack);
-
           if (videoTrack) {
-            // Khi video bị tắt (mute)
             videoTrack.onmute = () => setIsRemoteVideoOn(false);
-
-            // Khi video được bật lại (unmute)
             videoTrack.onunmute = () => setIsRemoteVideoOn(true);
           } else {
             setIsRemoteVideoOn(false);
           }
+        }
 
-          const audioTrack = remoteStream.getAudioTracks()[0];
-          if (audioTrack) {
-            console.log("Audio track received:", audioTrack);
-            remoteAudioRef.current.srcObject = remoteStream;
-            remoteAudioRef.current.muted = false;
-          } else {
-            console.warn("Không có audio track!");
-          }
+        // Nếu có audio, gán vào remoteAudioRef
+        if (event.track.kind === "audio" && remoteAudioRef.current) {
+          remoteAudioRef.current.srcObject = remoteStream;
+          remoteAudioRef.current.muted = false;
+          remoteAudioRef.current
+            .play()
+            .catch((error) => console.error("Lỗi phát âm thanh:", error));
         }
       };
     }
@@ -645,6 +642,8 @@ export default function VideoCall() {
   const buttonDisable = callStatus !== "ongoing";
   const endButtonDisable = callStatus === "ended";
 
+  console.log(callData);
+
   return (
     <div className={cx("video-call-container")}>
       <audio ref={audioRef} src={ringTone} loop />
@@ -709,7 +708,12 @@ export default function VideoCall() {
                   <div className={cx("avatar-container")}>
                     <div className={cx("avatar-ring")}></div>
                     <img
-                      src={callData?.recipient?.avatar || image_avt}
+                      src={
+                        callData?.currentUser?.userId ===
+                        callData?.caller?.userId
+                          ? callData?.recipient?.avatar
+                          : callData?.caller?.avatar || image_avt
+                      }
                       alt="Avatar"
                       className={cx("avatar")}
                     />
