@@ -38,38 +38,35 @@ const useCallListener = (currentUser) => {
           const unsubscribeCalls = onSnapshot(
             callsCollection,
             (callSnapshot) => {
-              callSnapshot.docs.forEach(async (callDoc) => {
+              let hasPendingCall = false; // Biến kiểm tra xem có cuộc gọi "pending" nào không
+
+              callSnapshot.docs.forEach((callDoc) => {
                 const call = callDoc.data();
 
-                if (call.recipientId !== currentUserId) return;
+                if (call.recipientId !== currentUserId) return; // Nếu không phải cuộc gọi của user, bỏ qua
 
-                switch (call.status) {
-                  case "pending":
-                    setIncomingCall({
-                      conversationId,
-                      callId: callDoc.id,
-                      callerId: call.callerId,
-                      caller: {
-                        userId: call.callerId,
-                        fullName: caller.name,
-                        avatar: caller.avatar,
-                      },
-                      recipientId: call.recipientId,
-                    });
-                    break;
-
-                  case "canceled":
-                    setIncomingCall(null);
-                    break;
-
-                  case "missed":
-                    setIncomingCall(null);
-                    break;
-
-                  default:
-                    break;
+                if (call.status === "pending") {
+                  // Nếu có ít nhất một cuộc gọi "pending", đặt incomingCall
+                  hasPendingCall = true;
+                  setIncomingCall({
+                    callType: call.callType,
+                    conversationId,
+                    callId: callDoc.id,
+                    callerId: call.callerId,
+                    caller: {
+                      userId: call.callerId,
+                      fullName: caller.name,
+                      avatar: caller.avatar,
+                    },
+                    recipientId: call.recipientId,
+                  });
                 }
               });
+
+              // Nếu không có cuộc gọi "pending" nào, reset incomingCall về null
+              if (!hasPendingCall) {
+                setIncomingCall(null);
+              }
             }
           );
 

@@ -18,6 +18,7 @@ import { db } from "../config/firebase";
 import useCallListener from "../hooks/useCallListener";
 import CallPopup from "../components/CallPopup/CallPopup";
 import { Modal } from "bootstrap";
+import Chatbot from "../components/ChatBot/ChatBot";
 
 export default function MainLayout() {
   const { user, setUser } = useUser();
@@ -146,6 +147,7 @@ export default function MainLayout() {
         setIncomingCall={setIncomingCall}
         currentUser={user}
       />
+      <Chatbot />
     </>
   );
 }

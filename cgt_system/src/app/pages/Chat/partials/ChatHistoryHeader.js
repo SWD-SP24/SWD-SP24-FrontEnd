@@ -1,4 +1,5 @@
 import React from "react";
+import Cookies from "js-cookie";
 
 import image from "../../../assets/img/avatars/default-avatar.jpg";
 
@@ -10,6 +11,10 @@ export default function ChatHistoryHeader({
   currentUser,
   conversationId,
 }) {
+  const permissions = JSON.parse(Cookies.get("permissions") || "[]");
+  const hasPermission = permissions.some(
+    (p) => p.permissionName === "DOCTOR_CALL"
+  );
   // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
   const timeAgo = (timestamp) => {
     if (!timestamp?.seconds) return "";
@@ -25,8 +30,9 @@ export default function ChatHistoryHeader({
   };
 
   // Hàm mở cửa sổ mới khi gọi video
-  const handleVideoCall = () => {
+  const handleVideoCall = (callType) => {
     const callData = {
+      callType: callType,
       recipient,
       recipientId,
       caller: currentUser,
@@ -72,6 +78,23 @@ export default function ChatHistoryHeader({
     } else {
       alert("Popup bị chặn! Hãy bật popup trong trình duyệt.");
     }
+
+    // Lắng nghe tin nhắn từ tab con
+    window.addEventListener("message", (event) => {
+      if (event.data === "closeVideoCall") {
+        console.log("Tab con đóng -> Xóa sessionStorage.");
+        sessionStorage.clear();
+      }
+    });
+
+    // Kiểm tra nếu tab con bị đóng mà không gửi tin nhắn
+    const interval = setInterval(() => {
+      if (newWindow.closed) {
+        console.log("Tab con bị đóng (interval check) -> Xóa sessionStorage.");
+        sessionStorage.clear();
+        clearInterval(interval);
+      }
+    }, 1000);
   };
 
   return (
@@ -109,16 +132,51 @@ export default function ChatHistoryHeader({
             </small>
           </div>
         </div>
-        <div class="d-flex align-items-center">
-          <span class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill">
-            <i class="icon-base bx bx-phone icon-md"></i>
-          </span>
-          <span
-            class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
-            onClick={() => handleVideoCall()}
-          >
-            <i class="icon-base bx bx-video icon-md"></i>
-          </span>
+        <div style={{ position: "relative", display: "inline-block" }}>
+          {!hasPermission && currentUser?.role === "member" && (
+            <div
+              data-bs-target={hasPermission ? "" : "#upgradePlanModal"}
+              data-bs-toggle={hasPermission ? "" : "modal"}
+              className="border rounded"
+              style={{
+                position: "absolute",
+                inset: 0,
+                backgroundColor: "#696cff",
+                opacity: 0.2,
+                zIndex: 10,
+                cursor: "pointer",
+              }}
+            ></div>
+          )}
+          <div className="d-flex align-items-center gap-2 ps-3">
+            {!hasPermission && currentUser?.role === "member" && (
+              <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">
+                <i className="bx bx-lock" style={{ fontSize: "18px" }}></i>
+              </div>
+            )}
+            <div class="d-flex align-items-center">
+              <span
+                class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
+                onClick={() => {
+                  if (currentUser?.role === "doctor" || hasPermission) {
+                    handleVideoCall("audio");
+                  }
+                }}
+              >
+                <i class="icon-base bx bx-phone icon-md"></i>
+              </span>
+              <span
+                class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
+                onClick={() => {
+                  if (currentUser?.role === "doctor" || hasPermission) {
+                    handleVideoCall("video");
+                  }
+                }}
+              >
+                <i class="icon-base bx bx-video icon-md"></i>
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

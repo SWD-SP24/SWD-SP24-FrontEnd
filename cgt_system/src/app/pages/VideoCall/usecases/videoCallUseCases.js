@@ -1,7 +1,7 @@
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "../../../config/firebase";
 
-const checkRecipientInCall = async (recipientId) => {
+export const checkRecipientInCall = async (recipientId) => {
   if (!recipientId) return false;
 
   // Tìm tất cả conversations mà recipientId là participant
@@ -68,13 +68,15 @@ const checkRecipientInCall = async (recipientId) => {
 
 export const getCallMessageText = (callStatus, callType) => {
   if (callStatus === "missed") {
-    return `Missed ${callType === "video" ? "Video" : "Audio"} Call`;
+    return `Missed ${callType === "video" ? "video" : "audio"} call`;
   } else if (callStatus === "canceled") {
-    return `Canceled ${callType === "video" ? "Video" : "Audio"} Call`;
+    return `Missed ${callType === "video" ? "video" : "audio"} call`;
   } else if (callStatus === "ended") {
-    return `Ended ${callType === "video" ? "Video" : "Audio"} Call`;
+    return `${callType === "video" ? "Video" : "Audio"} call`;
   } else if (callStatus === "declined") {
-    return `Declined ${callType === "video" ? "Video" : "Audio"} Call`;
+    return `Missed ${callType === "video" ? "video" : "audio"} call`;
+  } else if (callStatus === "busy") {
+    return `Missed ${callType === "video" ? "video" : "audio"} call`;
   }
-  return `${callType === "video" ? "Video" : "Audio"} Call`;
+  return `${callType === "video" ? "Video" : "audio"} call`;
 };

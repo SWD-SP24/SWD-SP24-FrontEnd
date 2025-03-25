@@ -10,30 +10,35 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import React, { useEffect, useRef, useState } from "react";
-import {
-  FaMicrophone,
-  FaMicrophoneSlash,
-  FaVideo,
-  FaVideoSlash,
-  FaPhoneSlash,
-} from "react-icons/fa";
 import { db } from "../../config/firebase";
 import styles from "./videoCall.module.scss";
+import Cookies from "js-cookie";
 import classNames from "classnames/bind";
 import image_avt from "../../assets/img/avatars/default-avatar.jpg";
 import addMessage from "../../util/addMessage";
-import { getCallMessageText } from "./usecases/videoCallUseCases";
+import {
+  checkRecipientInCall,
+  getCallMessageText,
+} from "./usecases/videoCallUseCases";
 import ringTone from "../../assets/audio/ringTone.mp3";
+import { useNavigate } from "react-router";
+import useUser from "../../hooks/useUser";
 
 const cx = classNames.bind(styles);
 const servers = { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] };
 
 export default function VideoCall() {
+  const permissions = JSON.parse(Cookies.get("permissions") || "[]");
+  const hasPermission = permissions.some(
+    (p) => p.permissionName === "DOCTOR_CALL"
+  );
+  const { user } = useUser();
   const [callData, setCallData] = useState(null);
   const [callId, setCallId] = useState("");
   const [callStatus, setCallStatus] = useState("");
-  const [callStartTime, setCallStartTime] = useState(null);
+  const [callStartTime, setCallStartTime] = useState(0);
   const [isRemoteVideoOn, setIsRemoteVideoOn] = useState(true);
+
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
   const peerConnection = useRef(null);
@@ -43,14 +48,27 @@ export default function VideoCall() {
 
   const [isMuted, setIsMuted] = useState(false);
   const [isVideoOn, setIsVideoOn] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (!hasPermission && user.role === "member") navigate("/not-authorized");
+
     const storedCallData = sessionStorage.getItem("videoCallData");
+
+    if (!storedCallData) {
+      navigate(-1);
+      return;
+    }
     if (storedCallData) setCallData(JSON.parse(storedCallData));
+
+    window.addEventListener("beforeunload", () => {
+      if (window.opener) {
+        window.opener.postMessage("closeVideoCall", "*");
+      }
+    });
 
     return () => {
       disconnect();
-      sessionStorage.removeItem("videoCallData");
     };
   }, []);
 
@@ -78,6 +96,12 @@ export default function VideoCall() {
     const unsubscribe = onSnapshot(callRef, (docSnap) => {
       if (docSnap.exists()) {
         const callStatus = docSnap.data().status;
+        const callStartTime = docSnap.data().callStartTime;
+        const miligiay =
+          callStartTime?.seconds * 1000 + callStartTime?.nanoseconds / 1000000;
+        const result = Math.floor((miligiay - Date.now()) / 1000);
+        setCallStartTime(result);
+
         const isRemoteOn =
           callData?.currentUser.userId === callData.caller.userId
             ? docSnap.data().receiverVideoOn
@@ -112,6 +136,7 @@ export default function VideoCall() {
               clearTimeout(timeoutRef.current);
               timeoutRef.current = null;
             }
+
             break;
           case "canceled":
             window.close();
@@ -133,8 +158,20 @@ export default function VideoCall() {
       }
     });
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribe();
+    };
   }, [callId]);
+
+  useEffect(() => {
+    let timer;
+
+    timer = setInterval(() => {
+      setCallStartTime((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [callStartTime]);
 
   // Khởi tạo hoặc reset PeerConnection nếu chưa có hoặc đã bị đóng
   const initializePeerConnection = () => {
@@ -205,6 +242,39 @@ export default function VideoCall() {
     }
   };
 
+  const startAudio = async () => {
+    try {
+      if (
+        !peerConnection.current ||
+        peerConnection.current.signalingState === "closed"
+      ) {
+        initializePeerConnection();
+      }
+
+      // Yêu cầu quyền truy cập micro (chỉ audio)
+      localStream.current = await navigator.mediaDevices.getUserMedia({
+        audio: true,
+        video: false,
+      });
+
+      if (localVideoRef.current) {
+        localVideoRef.current.srcObject = null; // Không cần video stream cho cuộc gọi âm thanh
+      }
+
+      // Thêm các track vào peer connection
+      localStream.current.getTracks().forEach((track) => {
+        if (
+          peerConnection.current &&
+          peerConnection.current.signalingState !== "closed"
+        ) {
+          peerConnection.current.addTrack(track, localStream.current);
+        }
+      });
+    } catch (error) {
+      console.error("Lỗi khi mở micro:", error);
+    }
+  };
+
   // Tạo cuộc gọi
   const createCall = async () => {
     // Kiểm tra nếu không có conversationId thì thoát
@@ -224,10 +294,9 @@ export default function VideoCall() {
         initializePeerConnection();
       }
 
-      setCallStartTime(new Date()); // Lưu thời gian bắt đầu cuộc gọi
-
       // Tạo một document mới trong Firestore để lưu thông tin cuộc gọi
       const callDocRef = await addDoc(callRef, {
+        callType: callData?.callType,
         callerId,
         recipientId,
         status: "pending",
@@ -312,10 +381,15 @@ export default function VideoCall() {
       }
     };
 
-    await startCamera();
+    if (callData?.callType === "video") {
+      await startCamera();
+    } else {
+      await startAudio();
+    }
 
     updateDoc(callDocRef, {
       receiverVideoOn: true,
+      callStartTime: serverTimestamp(),
     });
 
     // Lấy Offer từ Firestore và thiết lập kết nối
@@ -326,42 +400,39 @@ export default function VideoCall() {
         await peerConnection.current.setRemoteDescription(
           new RTCSessionDescription(callData.offer)
         );
+
+        // Lắng nghe và thêm các ICE Candidate từ Caller
+        onSnapshot(offerCandidates, (snapshot) => {
+          snapshot.docChanges().forEach((change) => {
+            if (change.type === "added") {
+              const candidate = new RTCIceCandidate(change.doc.data());
+              peerConnection.current.addIceCandidate(candidate);
+            }
+          });
+        });
+
         // Tạo và lưu Answer vào Firestore
         const answerDescription = await peerConnection.current.createAnswer();
         await peerConnection.current.setLocalDescription(answerDescription);
         await updateDoc(callDocRef, { answer: answerDescription });
       }
     }
-
-    // Lắng nghe và thêm các ICE Candidate từ Caller
-    onSnapshot(offerCandidates, (snapshot) => {
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-          const candidate = new RTCIceCandidate(change.doc.data());
-          peerConnection.current.addIceCandidate(candidate);
-        }
-      });
-    });
   };
 
   // Kết thúc cuộc gọi
   const endCall = async () => {
     const newCallStatus = callStatus === "pending" ? "canceled" : "ended";
 
-    const callDuration = callStartTime
-      ? Math.floor((Date.now() - callStartTime) / 1000)
-      : 0;
-
     const message = {
       type: "call",
       senderId: callData?.caller?.userId,
       recipientId: callData?.recipientId,
-      text: getCallMessageText(newCallStatus, "video"),
+      text: getCallMessageText(newCallStatus, callData?.callType),
       timestamp: serverTimestamp(),
       isRead: false,
-      callType: "video", // "audio" hoặc "video"
+      callType: callData?.callType,
       callStatus: newCallStatus,
-      duration: callDuration || 0, // thời gian cuộc gọi (giây)
+      duration: callStartTime || 0,
     };
 
     await addMessage(
@@ -370,7 +441,8 @@ export default function VideoCall() {
       callData?.recipientId,
       message
     );
-    setCallStartTime(null);
+
+    setCallStartTime(0);
 
     await changeCallStatus(
       callId,
@@ -383,10 +455,21 @@ export default function VideoCall() {
 
   // Xử lí khi bắt đầu cuộc gọi
   const handleStartCall = async () => {
+    const isInCall = await checkRecipientInCall(callData?.recipientId);
+    if (isInCall) {
+      handleBusyCall();
+      return;
+    }
+
     if (!peerConnection.current) {
       initializePeerConnection();
     }
-    await startCamera();
+    if (callData?.callType === "video") {
+      await startCamera();
+    } else {
+      await startAudio();
+    }
+
     await createCall();
   };
 
@@ -403,11 +486,35 @@ export default function VideoCall() {
       type: "call",
       senderId: callData?.caller?.userId,
       recipientId: callData?.recipientId,
-      text: getCallMessageText("missed", "video"),
+      text: getCallMessageText("missed", callData?.callType),
       timestamp: serverTimestamp(),
       isRead: false,
-      callType: "video",
+      callType: callData?.callType,
       callStatus: "missed",
+      duration: 0,
+    };
+
+    await addMessage(
+      callData?.conversationId,
+      callData?.caller,
+      callData?.recipientId,
+      message
+    );
+  };
+
+  // Xử lí cuộc gọi bận
+  const handleBusyCall = async () => {
+    setCallStatus("busy");
+
+    const message = {
+      type: "call",
+      senderId: callData?.caller?.userId,
+      recipientId: callData?.recipientId,
+      text: getCallMessageText("busy", callData?.callType),
+      timestamp: serverTimestamp(),
+      isRead: false,
+      callType: callData?.callType,
+      callStatus: "busy",
       duration: 0,
     };
 
@@ -478,8 +585,9 @@ export default function VideoCall() {
           "calls",
           callId
         );
+
         const updateField =
-          callData?.currentUser.userId === callData?.caller.userId
+          callData?.currentUser?.userId === callData?.caller?.userId
             ? "callerVideoOn"
             : "receiverVideoOn";
         updateDoc(callDocRef, {
@@ -490,14 +598,35 @@ export default function VideoCall() {
     });
   };
 
+  const formatElapsedTime = (seconds) => {
+    if (!seconds || seconds < 0) return "00:00";
+
+    const hrs = Math.floor(seconds / 3600); // Giờ
+    const mins = Math.floor((seconds % 3600) / 60); // Phút
+    const secs = seconds % 60; // Giây
+
+    // Format thành dạng 2 chữ số
+    const formattedMins = String(mins).padStart(2, "0");
+    const formattedSecs = String(secs).padStart(2, "0");
+
+    if (hrs > 0) {
+      const formattedHrs = String(hrs).padStart(2, "0");
+      return `${formattedHrs}:${formattedMins}:${formattedSecs}`;
+    } else {
+      return `${formattedMins}:${formattedSecs}`;
+    }
+  };
+
+  const buttonDisable = callStatus !== "ongoing";
+  const endButtonDisable = callStatus === "ended";
+
   return (
     <div className={cx("video-call-container")}>
       <audio ref={audioRef} src={ringTone} loop />
-      <div className={cx("connected-container")}>
-        {callStatus === "pending" ? (
+      {callStatus === "busy" ? (
+        <div className="d-flex flex-column align-items-center">
           <div className={cx("calling-overlay")}>
             <div className={cx("avatar-container")}>
-              <div className={cx("avatar-ring")}></div>
               <img
                 src={callData?.recipient?.avatar || image_avt}
                 alt="Avatar"
@@ -505,61 +634,145 @@ export default function VideoCall() {
               />
             </div>
             <h6 className={cx("calling-text")}>{callData?.recipient?.name}</h6>
-            <p className={cx("calling-text")}>Connecting...</p>
+            <small className={cx("connecting-text")}>
+              The user is currently on another call
+            </small>
           </div>
-        ) : (
-          <>
-            <video
-              ref={remoteVideoRef}
-              className={cx("remote-video")}
-              autoPlay
-              playsInline
-            ></video>
+          <div className={cx("call-controls-busy")}>
+            <div className="d-flex flex-column align-items-center gap-1">
+              <button
+                className="btn rounded-pill btn-icon btn-label-secondary"
+                onClick={() => window.close()}
+              >
+                <i className="bx bx-x"></i>
+              </button>
+              <p className="mb-0 fw-blod">Cancel</p>
+            </div>
 
-            {!isRemoteVideoOn && (
-              <img
-                src={
-                  callData?.currentUser?.userId === callData?.caller?.userId
-                    ? callData?.recipient?.avatar
-                    : callData?.caller?.avatar
-                }
-                alt="Remote Avatar"
-                className={cx("remote-avatar-overlay")}
-              />
-            )}
-          </>
-        )}
-        <div className={cx("local-video-wrapper")}>
-          <video
-            ref={localVideoRef}
-            className={cx("local-video")}
-            autoPlay
-            playsInline
-            muted
-          ></video>
-          {!isVideoOn && (
-            <img
-              src={callData?.currentUser?.avatar || image_avt}
-              alt="Your Avatar"
-              className={cx("local-avatar-overlay")}
-            />
+            <div className="d-flex flex-column align-items-center gap-1">
+              <button
+                className="btn rounded-pill btn-icon btn-success"
+                onClick={() => handleStartCall()}
+              >
+                <i className="bx bx-revision"></i>
+              </button>
+              <p className="mb-0 fw-blod">Try Again</p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className={cx("connected-container")}>
+          {callStatus === "pending" || !callStatus ? (
+            <div className={cx("calling-overlay")}>
+              <div className={cx("avatar-container")}>
+                <div className={cx("avatar-ring")}></div>
+                <img
+                  src={callData?.recipient?.avatar || image_avt}
+                  alt="Avatar"
+                  className={cx("avatar")}
+                />
+              </div>
+              <h6 className={cx("calling-text")}>
+                {callData?.recipient?.name}
+              </h6>
+              <small className={cx("connecting-text")}>Connecting...</small>
+            </div>
+          ) : (
+            <>
+              {callData?.callType === "audio" && callStatus === "ongoing" ? (
+                <div className={cx("calling-overlay")}>
+                  <div className={cx("avatar-container")}>
+                    <div className={cx("avatar-ring")}></div>
+                    <img
+                      src={callData?.recipient?.avatar || image_avt}
+                      alt="Avatar"
+                      className={cx("avatar")}
+                    />
+                  </div>
+                  <h6 className={cx("calling-text")}>
+                    {callData?.recipient?.name}
+                  </h6>
+                  <small className={cx("connecting-text")}>
+                    {formatElapsedTime(callStartTime)}
+                  </small>
+                </div>
+              ) : (
+                <video
+                  ref={remoteVideoRef}
+                  className={cx("remote-video")}
+                  autoPlay
+                  playsInline
+                />
+              )}
+
+              {!isRemoteVideoOn && (
+                <img
+                  src={
+                    callData?.currentUser?.userId === callData?.caller?.userId
+                      ? callData?.recipient?.avatar
+                      : callData?.caller?.avatar || image_avt
+                  }
+                  alt="Remote Avatar"
+                  className={cx("remote-avatar-overlay")}
+                />
+              )}
+            </>
+          )}
+          {callData?.callType === "video" && (
+            <div className={cx("local-video-wrapper")}>
+              <video
+                ref={localVideoRef}
+                className={cx("local-video")}
+                autoPlay
+                playsInline
+                muted
+              ></video>
+              {!isVideoOn && (
+                <img
+                  src={callData?.currentUser?.avatar || image_avt}
+                  alt="Your Avatar"
+                  className={cx("local-avatar-overlay")}
+                />
+              )}
+            </div>
           )}
         </div>
-      </div>
-      <div className={cx("call-controls")}>
-        <button className={cx("control-button")} onClick={() => toggleMute()}>
-          {isMuted ? <FaMicrophoneSlash /> : <FaMicrophone />}
-        </button>
-        <button className={cx("control-button")} onClick={() => toggleVideo()}>
-          {isVideoOn ? <FaVideo /> : <FaVideoSlash />}
-        </button>
-        <button
-          className={cx("control-button", "end-call")}
-          onClick={() => endCall()}
-        >
-          <FaPhoneSlash />
-        </button>
-      </div>
+      )}
+      {callStatus !== "busy" && (
+        <div className={cx("call-controls")}>
+          <button
+            disabled={buttonDisable}
+            className="btn rounded-pill btn-icon btn-label-secondary"
+            onClick={() => !buttonDisable && toggleMute()}
+          >
+            {isMuted ? (
+              <i className="bx bxs-microphone-off"></i>
+            ) : (
+              <i className="bx bxs-microphone"></i>
+            )}
+          </button>
+          {callData?.callType === "video" && (
+            <button
+              disabled={buttonDisable}
+              className="btn rounded-pill btn-icon btn-label-secondary"
+              onClick={() => !buttonDisable && toggleVideo()}
+            >
+              {isVideoOn ? (
+                <i className="bx bxs-video"></i>
+              ) : (
+                <i className="bx bxs-video-off"></i>
+              )}
+            </button>
+          )}
+          <button
+            disabled={endButtonDisable}
+            className="btn rounded-pill btn-icon btn-danger"
+            onClick={() => !endButtonDisable && endCall()}
+          >
+            <i className="bx bxs-phone"></i>
+          </button>
+        </div>
+      )}
     </div>
   );
 }

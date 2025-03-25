@@ -41,6 +41,7 @@ export default function CallPopup({
     }
 
     const callData = {
+      callType: incomingCall?.callType,
       callId: incomingCall?.callId,
       recipient: { name: currentUser.fullName, avatar: currentUser.avatar },
       recipientId: currentUser.userId,
@@ -103,6 +104,8 @@ export default function CallPopup({
       audioRef.current.currentTime = 0;
     }
 
+    sessionStorage.removeItem("videoCallData");
+
     if (incomingCall?.callId && incomingCall?.conversationId) {
       const callDocRef = doc(
         db,
@@ -119,10 +122,10 @@ export default function CallPopup({
         type: "call",
         senderId: incomingCall?.caller?.userId,
         recipientId: incomingCall?.recipientId,
-        text: getCallMessageText("declined", "video"),
+        text: getCallMessageText("declined", incomingCall?.callType),
         timestamp: serverTimestamp(),
         isRead: false,
-        callType: "video", // "audio" hoặc "video"
+        callType: incomingCall?.callType,
         callStatus: "declined",
         duration: 0, // thời gian cuộc gọi (giây)
       };

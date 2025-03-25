@@ -11,7 +11,6 @@ export default function App() {
       {/* Fragment để bọc MainRoutes và Chatbot */}
       <ToastContainer />
       <MainRoutes />
-      <Chatbot />
     </>
   );
 }
