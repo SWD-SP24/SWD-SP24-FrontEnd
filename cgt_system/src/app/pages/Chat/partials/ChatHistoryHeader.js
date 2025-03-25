@@ -132,52 +132,54 @@ export default function ChatHistoryHeader({
             </small>
           </div>
         </div>
-        <div style={{ position: "relative", display: "inline-block" }}>
-          {!hasPermission && currentUser?.role === "member" && (
-            <div
-              data-bs-target={hasPermission ? "" : "#upgradePlanModal"}
-              data-bs-toggle={hasPermission ? "" : "modal"}
-              className="border rounded"
-              style={{
-                position: "absolute",
-                inset: 0,
-                backgroundColor: "#696cff",
-                opacity: 0.2,
-                zIndex: 10,
-                cursor: "pointer",
-              }}
-            ></div>
-          )}
-          <div className="d-flex align-items-center gap-2 ps-3">
+        {currentUser?.role === "member" && (
+          <div style={{ position: "relative", display: "inline-block" }}>
             {!hasPermission && currentUser?.role === "member" && (
-              <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">
-                <i className="bx bx-lock" style={{ fontSize: "18px" }}></i>
-              </div>
+              <div
+                data-bs-target={hasPermission ? "" : "#upgradePlanModal"}
+                data-bs-toggle={hasPermission ? "" : "modal"}
+                className="border rounded"
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  backgroundColor: "#696cff",
+                  opacity: 0.2,
+                  zIndex: 10,
+                  cursor: "pointer",
+                }}
+              ></div>
             )}
-            <div class="d-flex align-items-center">
-              <span
-                class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
-                onClick={() => {
-                  if (currentUser?.role === "doctor" || hasPermission) {
-                    handleVideoCall("audio");
-                  }
-                }}
-              >
-                <i class="icon-base bx bx-phone icon-md"></i>
-              </span>
-              <span
-                class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
-                onClick={() => {
-                  if (currentUser?.role === "doctor" || hasPermission) {
-                    handleVideoCall("video");
-                  }
-                }}
-              >
-                <i class="icon-base bx bx-video icon-md"></i>
-              </span>
+            <div className="d-flex align-items-center gap-2 ps-3">
+              {!hasPermission && currentUser?.role === "member" && (
+                <div class="badge rounded-pill bg-label-primary text-uppercase fs-tiny ms-auto">
+                  <i className="bx bx-lock" style={{ fontSize: "18px" }}></i>
+                </div>
+              )}
+              <div class="d-flex align-items-center">
+                <span
+                  class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
+                  onClick={() => {
+                    if (hasPermission) {
+                      handleVideoCall("audio");
+                    }
+                  }}
+                >
+                  <i class="icon-base bx bx-phone icon-md"></i>
+                </span>
+                <span
+                  class="btn btn-text-secondary text-secondary cursor-pointer d-sm-inline-flex d-none me-1 btn-icon rounded-pill"
+                  onClick={() => {
+                    if (hasPermission) {
+                      handleVideoCall("video");
+                    }
+                  }}
+                >
+                  <i class="icon-base bx bx-video icon-md"></i>
+                </span>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

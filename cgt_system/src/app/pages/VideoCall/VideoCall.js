@@ -41,6 +41,7 @@ export default function VideoCall() {
 
   const localVideoRef = useRef(null);
   const remoteVideoRef = useRef(null);
+  const remoteAudioRef = useRef(null);
   const peerConnection = useRef(null);
   const localStream = useRef(null);
   const audioRef = useRef(null);
@@ -51,7 +52,10 @@ export default function VideoCall() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!hasPermission && user.role === "member") navigate("/not-authorized");
+    if (!hasPermission && user.role === "member") {
+      navigate("/not-authorized");
+      return;
+    }
 
     const storedCallData = sessionStorage.getItem("videoCallData");
 
@@ -59,7 +63,19 @@ export default function VideoCall() {
       navigate(-1);
       return;
     }
-    if (storedCallData) setCallData(JSON.parse(storedCallData));
+
+    const callData = JSON.parse(storedCallData);
+
+    // Kiểm tra quyền truy cập
+    if (
+      (user.role === "member" && !hasPermission) ||
+      (user.role === "doctor" && user.userId !== callData.recipientId)
+    ) {
+      navigate("/not-authorized");
+      return;
+    }
+
+    setCallData(callData);
 
     window.addEventListener("beforeunload", () => {
       if (window.opener) {
@@ -200,6 +216,15 @@ export default function VideoCall() {
             videoTrack.onunmute = () => setIsRemoteVideoOn(true);
           } else {
             setIsRemoteVideoOn(false);
+          }
+
+          const audioTrack = remoteStream.getAudioTracks()[0];
+          if (audioTrack) {
+            console.log("Audio track received:", audioTrack);
+            remoteAudioRef.current.srcObject = remoteStream;
+            remoteAudioRef.current.muted = false;
+          } else {
+            console.warn("Không có audio track!");
           }
         }
       };
@@ -695,6 +720,8 @@ export default function VideoCall() {
                   <small className={cx("connecting-text")}>
                     {formatElapsedTime(callStartTime)}
                   </small>
+
+                  <audio ref={remoteAudioRef} autoPlay playsInline />
                 </div>
               ) : (
                 <video
