@@ -36,7 +36,7 @@ const Pricing = () => {
     if (type === "Standard") {
       return Images.standardPlanIcon;
     }
-    if (type === "Enterprise") {
+    if (type === "Premium") {
       return Images.PremiumPlanIcon;
     }
   };
@@ -52,7 +52,7 @@ const Pricing = () => {
     return membershipData.map((pkgData) => {
       let filteredPermissions = [...packageMap[pkgData.membershipPackageName]];
 
-      if (pkgData.membershipPackageName === "Enterprise") {
+      if (pkgData.membershipPackageName === "Premium") {
         filteredPermissions = filteredPermissions.filter(
           (p) => !packageMap["Standard"].has(p)
         );
@@ -70,7 +70,17 @@ const Pricing = () => {
   }
 
   // Sample API response (replace this with your actual API response)
-
+  const permissionSubtitle = (name) => {
+    if (name === "Basic") {
+      return <strong>Simple start for everyone</strong>;
+    }
+    if (name === "Standard") {
+      return <strong> Contain all the features of basic plan</strong>;
+    }
+    if (name === "Premium") {
+      return <strong> Contain all the features of standard plan</strong>;
+    }
+  };
   const filteredPermissions = filterPermissions(membershipPackages);
   console.log(filteredPermissions);
   return (
@@ -142,8 +152,11 @@ const Pricing = () => {
                     style={{ flexGrow: 1, overflow: "hidden" }}
                   >
                     {/* Limit height for permissions */}
+                    <span style={{ textAlign: "center" }}>
+                      {permissionSubtitle(packages.membershipPackageName)}
+                    </span>
                     <ul
-                      className="list-unstyled pricing-list flex-grow-1"
+                      className="list-unstyled pricing-list flex-grow-1 mt-4"
                       style={{ maxHeight: "400px", overflowY: "auto" }}
                     >
                       {filteredPermissions &&

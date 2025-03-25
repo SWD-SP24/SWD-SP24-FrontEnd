@@ -32,7 +32,7 @@ export default function PricingPlan() {
     if (type === "Standard") {
       return Images.standardPlanIcon;
     }
-    if (type === "Enterprise") {
+    if (type === "Premium") {
       return Images.PremiumPlanIcon;
     }
   };
@@ -55,7 +55,7 @@ export default function PricingPlan() {
     return membershipData.data.map((pkgData) => {
       let filteredPermissions = [...packageMap[pkgData.membershipPackageName]];
 
-      if (pkgData.membershipPackageName === "Enterprise") {
+      if (pkgData.membershipPackageName === "Premium") {
         filteredPermissions = filteredPermissions.filter(
           (p) => !packageMap["Standard"].has(p)
         );
@@ -72,6 +72,17 @@ export default function PricingPlan() {
     });
   }
 
+  const permissionSubtitle = (name) => {
+    if (name === "Basic") {
+      return <strong>Simple start for everyone</strong>;
+    }
+    if (name === "Standard") {
+      return <strong> Contain all the features of basic plan</strong>;
+    }
+    if (name === "Premium") {
+      return <strong> Contain all the features of standard plan</strong>;
+    }
+  };
   // Sample API response (replace this with your actual API response)
 
   const filteredPermissions = filterPermissions(response);
@@ -139,9 +150,12 @@ export default function PricingPlan() {
                             className="card-body d-flex flex-column"
                             style={{ flexGrow: 1, overflow: "hidden" }}
                           >
+                            <span style={{ textAlign: "center" }}>
+                              {permissionSubtitle(pkg.membershipPackageName)}
+                            </span>
                             {/* Limit height for permissions */}
                             <ul
-                              className="list-unstyled pricing-list flex-grow-1"
+                              className="list-unstyled pricing-list flex-grow-1 mt-4"
                               style={{ maxHeight: "400px", overflowY: "auto" }}
                             >
                               {filteredPermissions &&
@@ -178,7 +192,7 @@ export default function PricingPlan() {
                     );
                   })}
 
-                {/* <!-- Enterprise --> */}
+                {/* <!-- Premium --> */}
               </div>
             </div>
           </div>

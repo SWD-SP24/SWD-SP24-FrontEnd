@@ -12,11 +12,14 @@ import showToast from "../../../util/showToast";
 import { useParams } from "react-router";
 import BluetoothWeight from "./BluetoothWeight";
 import { createPortal } from "react-dom";
+import { extractWeight } from "../../../util/formatData";
 export default function BthAddModal({ dob, refetch }) {
   const { childId } = useParams();
   const [weightCurrent, setWeightCurrent] = useState(null);
   const recordTimeRef = useRef(null);
   const [latestHeight, setLatestHeight] = useState(null);
+  const [retrievedValue, setRetrievedValue] = useState("");
+
   const { response, callApi } = useApi({
     url: `${API_URLS.INDICATORS.INDICATORS}`,
     method: "POST",
@@ -39,9 +42,16 @@ export default function BthAddModal({ dob, refetch }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Clicked! Submit");
-    const weight = weightCurrent;
+
     const recordTime = recordTimeRef.current.value.trim();
-    if (!latestHeight || !weight) {
+    const data = {
+      height: latestHeight,
+      weight: extractWeight(retrievedValue),
+      recordTime: toDMY(recordTime),
+      childrenId: childId,
+    };
+    console.log(data);
+    if (data.height === null || data.weight === null) {
       const target = document.querySelector(".content-wrapper");
       showToast({
         icon: "warning",
@@ -50,12 +60,6 @@ export default function BthAddModal({ dob, refetch }) {
       });
       return;
     }
-    const data = {
-      height: latestHeight,
-      weight: weight,
-      recordTime: toDMY(recordTime),
-      childrenId: childId,
-    };
     const closeButton = document.querySelector("#closeBluetoothModal");
     closeButton.click();
     console.log(data);
@@ -91,8 +95,8 @@ export default function BthAddModal({ dob, refetch }) {
                     Weight
                   </label>
                   <BluetoothWeight
-                    setWeightCurrent={setWeightCurrent}
-                    weightCurrent={weightCurrent}
+                    setRetrievedValue={setRetrievedValue}
+                    retrievedValue={retrievedValue}
                   />
                 </div>
                 <div class="col mb-3">

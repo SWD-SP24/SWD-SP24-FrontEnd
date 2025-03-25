@@ -5,10 +5,9 @@ import {
 } from "lucide-react";
 import React, { useState } from "react";
 import { extractWeight } from "../../../util/formatData";
-export default function BluetoothWeight({ setWeightCurrent }) {
+export default function BluetoothWeight({ retrievedValue, setRetrievedValue }) {
   const [isConnected, setIsConnected] = useState(false);
   const [isSearching, setIsSearching] = useState(false);
-  const [retrievedValue, setRetrievedValue] = useState("");
   const [timestamp, setTimestamp] = useState("");
   const [bleServer, setBleServer] = useState(null);
   const [sensorCharacteristic, setSensorCharacteristic] = useState(null);
@@ -105,7 +104,7 @@ export default function BluetoothWeight({ setWeightCurrent }) {
         </button>
       );
     }
-    if (isConnected) {
+    if (isConnected === true) {
       return (
         <button
           className="input-group-text"
@@ -113,7 +112,7 @@ export default function BluetoothWeight({ setWeightCurrent }) {
           onClick={disconnectDevice}
           style={{ cursor: "pointer" }}
         >
-          <BluetoothConnected size={21} color="#778BE3" />
+          <BluetoothConnected size={21} color="#3F7BEC" />
         </button>
       );
     }
@@ -124,11 +123,13 @@ export default function BluetoothWeight({ setWeightCurrent }) {
         onClick={connectToDevice}
         style={{ cursor: "pointer" }}
       >
-        <Bluetooth size={21} color="#778BE3" />
+        <Bluetooth size={21} color="#D2D5DA" />
       </button>
     );
   };
-
+  const handleChange = () => {
+    console.log("set cuurrent weight", retrievedValue);
+  };
   return (
     <div className="input-group">
       <input
@@ -137,7 +138,7 @@ export default function BluetoothWeight({ setWeightCurrent }) {
         id="weight"
         className="form-control"
         placeholder="Enter Weight"
-        onChange={(e) => setWeightCurrent(e.target.value)}
+        onChange={() => handleChange()}
       />
       {renderBluetoothIcon()}
     </div>
