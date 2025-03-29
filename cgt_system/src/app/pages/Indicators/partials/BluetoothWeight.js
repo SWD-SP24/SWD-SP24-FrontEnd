@@ -127,8 +127,8 @@ export default function BluetoothWeight({ retrievedValue, setRetrievedValue }) {
       </button>
     );
   };
-  const handleChange = () => {
-    console.log("set cuurrent weight", retrievedValue);
+  const handleChange = (e) => {
+    setRetrievedValue(e.target.value);
   };
   return (
     <div className="input-group">
@@ -138,7 +138,7 @@ export default function BluetoothWeight({ retrievedValue, setRetrievedValue }) {
         id="weight"
         className="form-control"
         placeholder="Enter Weight"
-        onChange={() => handleChange()}
+        onChange={(e) => handleChange(e)}
       />
       {renderBluetoothIcon()}
     </div>
