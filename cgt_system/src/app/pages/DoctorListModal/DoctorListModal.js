@@ -16,6 +16,7 @@ import {
   addDoc,
   collection,
   doc,
+  increment,
   serverTimestamp,
   setDoc,
 } from "firebase/firestore";
@@ -77,18 +78,23 @@ export default function DoctorListModal({
     } else {
       // Nếu chưa, tạo cuộc trò chuyện mới
       const conversationId = `${user.userId}_${doctor.userId}`;
+
       const conversationRef = doc(db, "conversations", conversationId);
+
       await setDoc(conversationRef, {
         id: `${user.userId}_${doctor.userId}`,
         participants: [user.userId, doctor.userId],
         lastSenderId: "",
         lastSenderName: "",
         lastSenderAvatar: "",
-        lastMessage:
-          "You are now connected with the doctor. Feel free to start a conversation!",
+        lastMessage: "The consultation has started",
         lastTimestamp: serverTimestamp(),
         [user.userId]: { name: user.fullName, avatar: user.avatar },
         [doctor.userId]: { name: doctor.fullName, avatar: doctor.avatar },
+        unreadCounts: {
+          [user.userId]: 1,
+          [doctor.userId]: 1,
+        },
       });
 
       const newConversation = {
@@ -97,11 +103,14 @@ export default function DoctorListModal({
         lastSenderId: "",
         lastSenderName: "",
         lastSenderAvatar: "",
-        lastMessage:
-          "You are now connected with the doctor. Feel free to start a conversation!",
+        lastMessage: "The consultation has started",
         lastTimestamp: serverTimestamp(),
         [user.userId]: { name: user.fullName, avatar: user.avatar },
         [doctor.userId]: { name: doctor.fullName, avatar: doctor.avatar },
+        unreadCounts: {
+          [user.userId]: 1,
+          [doctor.userId]: 1,
+        },
       };
 
       // Mở cuộc trò chuyện mới

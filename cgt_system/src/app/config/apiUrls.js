@@ -1,5 +1,5 @@
 const API_URLS = {
-  BASE_URL: "https://swd39220250217220816.azurewebsites.net",
+  BASE_URL: "https://localhost:7067",
   AUTH: {
     LOGIN: "/api/Users/login",
     REGISTER: "/api/Users/register",
@@ -37,6 +37,8 @@ const API_URLS = {
     GET_DOCTORS_LIST: "/api/Users/doctors",
     USERS_AND_MEMBERSHIP: "/api/Users/list-user-active-memberships",
     PAYMENT_HISTORY: "api/PaymentTransactions/history",
+    GET_PENDING_BILLING: "api/PaymentTransactions/PendingTransactions",
+    CANCEL_BILLING: "api/PaymentTransactions/Cancel",
     VERIFY_EMAIL: "/api/Users/resend-verification-email",
   },
   ADMIN: {

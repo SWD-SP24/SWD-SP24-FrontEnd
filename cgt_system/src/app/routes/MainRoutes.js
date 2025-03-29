@@ -30,16 +30,16 @@ import NotAuthorized from "../pages/NotAuthorized";
 
 // Coming Soon Page
 import BillingAndPlans from "../pages/BillingAndPlans";
-import Chat from "../pages/Chat";
-import ComingSoon from "../pages/ComingSoon";
 import PricingPlan from "../pages/PricingPlan/PricingPlan";
 import Profile from "../pages/Profile/Profile";
-import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
 import MemberRoutes from "./MemberRoutes";
 import AboutUs from "../pages/AboutUs/AboutUs";
-import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
 import DoctorRoutes from "./DoctorRoutes";
 import TermAndPolicy from "../pages/TermAndPolicy/TermAndPolicy";
+import PersistLogin from "../layouts/PersistLogin";
+import SpeechRecognitionComponent from "../pages/SpeechRecognitionComponent ";
+import UpgradePlanConfirm from "../pages/UpgradePlanConfirm/UpgradePlanConfirm";
+import VideoCall from "../pages/VideoCall/VideoCall";
 
 export default function MainRoutes() {
   return (
@@ -52,7 +52,7 @@ export default function MainRoutes() {
           <Route path="/about-us" element={<AboutUs />} />
           <Route path="/term-and-policy" element={<TermAndPolicy />} />
         </Route>
-        <Route path="test" element={<ChildHealthBook />} />
+        <Route path="/test" element={<SpeechRecognitionComponent />} />
 
         {/* Các trang liên quan đến Auth */}
         <Route path="login" element={<Login />} />
@@ -78,24 +78,25 @@ export default function MainRoutes() {
           path="admin-doctor/forgot-password/reset-password"
           element={<ResetPasswordForm />}
         />
+        <Route element={<PersistLogin />}>
+          {/* Các route sử dụng MainLayout */}
+          <Route element={<MainLayout />}>
+            {/* Admin Routes */}
+            <Route path="admin/*" element={<AdminRoutes />} />
+            <Route path="doctor/*" element={<DoctorRoutes />} />
 
-        {/* Các route sử dụng MainLayout */}
-        <Route element={<MainLayout />}>
-          {/* Admin Routes */}
-          <Route path="admin/*" element={<AdminRoutes />} />
-          <Route path="doctor/*" element={<DoctorRoutes />} />
-          <Route path="/dashboard" element={<ComingSoon />} />
+            {/* Member Routes */}
+            <Route path="member/*" element={<MemberRoutes />} />
+            {/* Account Setting với layout riêng */}
+            <Route path="account-setting" element={<AccountSettingLayout />}>
+              <Route path="account" element={<Profile />} />
 
-          {/* Member Routes */}
-          <Route path="member/*" element={<MemberRoutes />} />
-          {/* Account Setting với layout riêng */}
-          <Route path="account-setting" element={<AccountSettingLayout />}>
-            <Route path="account" element={<Profile />} />
+              <Route path="security" element={<ChangePassword />} />
 
-            <Route path="security" element={<ChangePassword />} />
-
-            <Route path="billing-and-plans" element={<BillingAndPlans />} />
+              <Route path="billing-and-plans" element={<BillingAndPlans />} />
+            </Route>
           </Route>
+          <Route path="call" element={<VideoCall />} />
         </Route>
 
         {/* Các trang khác */}

@@ -184,6 +184,7 @@ export default function ManagePackages() {
 
       <div className="row g-6">
         <PackageList
+          usersAndPackages={usersAndPackages}
           packages={packages}
           users={users}
           onFetchPackages={fetchPackages}
@@ -235,7 +236,7 @@ export default function ManagePackages() {
           </div>
         </div>
         <AddPackageModal />
-        <EditPackageModal users={users} />
+        <EditPackageModal users={users} onFetchPackages={fetchPackages} />
       </div>
     </>
   );

@@ -1,17 +1,28 @@
-import React, { useEffect } from "react";
+import React from "react";
 import PackageItem from "../PackageItem/PackageItem";
 
 export default function PackageList({ packages, users, onFetchPackages }) {
   return (
     <>
       {packages.map((packageItem) => {
-        const usersUse = users.filter(
-          (user) => user.membershipPackageId === packageItem.membershipPackageId
+        let usersUse = users.filter(
+          (user) =>
+            user.membershipPackageId === packageItem.membershipPackageId &&
+            user.role === "member" &&
+            user.emailActivation === "activated"
         );
+        // Điều chỉnh số lượng user dựa trên packageId
+        if (
+          packageItem.membershipPackageId === 2 ||
+          packageItem.membershipPackageId === 3
+        ) {
+          usersUse = usersUse.slice(2); // Bỏ đi 2 user đầu tiên
+        }
+
         const totalUserUse = usersUse.length;
         const maxDisplayUsers = 3;
         const displayedUsers = usersUse.slice(0, maxDisplayUsers);
-        const remainingUsers = usersUse.length - maxDisplayUsers;
+        const remainingUsers = totalUserUse - maxDisplayUsers;
         return (
           <PackageItem
             packageItem={packageItem}
@@ -22,7 +33,7 @@ export default function PackageList({ packages, users, onFetchPackages }) {
           />
         );
       })}
-      <div class="col-xl-4 col-lg-6 col-md-6">
+      {/* <div class="col-xl-4 col-lg-6 col-md-6">
         <div class="card h-100">
           <div class="row h-100">
             <div class="col-sm-5">
@@ -55,7 +66,7 @@ export default function PackageList({ packages, users, onFetchPackages }) {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

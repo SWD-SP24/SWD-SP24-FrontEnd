@@ -13,3 +13,8 @@
 .tippy-arrow {
   color: #696cff !important; /* Match the tooltip color */
 }
+
+.input-group::before {
+  content: none !important;
+  display: none !important;
+}

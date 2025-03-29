@@ -18,7 +18,7 @@ export default function UpgradePlan({ checkoutInfo, isYearly }) {
   };
 
   return (
-    <div className="col-lg-7 card-body border-end p-md-8">
+    <div className="card col-lg-7 card-body border rounded p-md-8">
       <h4 className="mb-2">Upgrade Plan</h4>
       <p className="mb-0">
         Upgrade your plan to access exclusive child development tracking

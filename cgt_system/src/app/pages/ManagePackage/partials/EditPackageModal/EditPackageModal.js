@@ -15,7 +15,7 @@ import Skeleton from "react-loading-skeleton";
 import Pagination from "../Pagination/Pagination";
 import no_image from "../../../../assets/img/illustrations/no_image.jpg";
 
-export default function EditPackageModal({ users }) {
+export default function EditPackageModal({ users, onFetchPackages }) {
   const packageId = sPackageIdToEdit.use();
   const pagination = sPermissionsPagination.use();
   const [permissions, setPermissions] = useState([]);
@@ -413,6 +413,7 @@ export default function EditPackageModal({ users }) {
                       selectedPermissions={selectedPermissions}
                       image={file}
                       users={users}
+                      onFetchPackages={onFetchPackages}
                     />
                     <button
                       type="reset"

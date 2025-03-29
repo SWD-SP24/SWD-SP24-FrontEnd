@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Routes, useOutletContext } from "react-router";
 import ProtectedRoute from "./ProtectedRoute";
 import ComingSoon from "../pages/ComingSoon";
+import Cookies from "js-cookie";
 import ManageChildren from "../pages/ManageChildren/ManageChildren";
 import ChildLayout from "../layouts/ChildLayout/ChildLayout";
 import Indicators from "../pages/Indicators/Indicators";
@@ -11,10 +12,11 @@ import Teeth from "../pages/Teeth/Teeth";
 import Chat from "../pages/Chat";
 import Vaccinations from "../pages/Vaccinations/Vaccinations";
 import VaccineInfo from "../pages/VaccineInfo/VaccineInfo";
-import ChildHealthBook from "../pages/ChildHealthBook/ChildHealthBook";
 
 export default function MemberRoutes() {
   const { user } = useOutletContext();
+  const permissions = JSON.parse(Cookies.get("permissions") || "[]");
+
   return (
     <Routes>
       <Route
@@ -39,13 +41,31 @@ export default function MemberRoutes() {
             element={<VaccineInfo />}
           />
         </Route>
-        <Route path="upgrade-plan/checkout" element={<Checkout />} />
-        <Route path="*" element={<ComingSoon />} />
-        <Route path="consultations" element={<Chat />} />
         <Route
-          path="consultations/child-details"
-          element={<ChildHealthBook />}
-        />
+          element={
+            <ProtectedRoute
+              isAllowed={user?.emailActivation === "activated"}
+              redirectTo={"/not-authorized"}
+            />
+          }
+        >
+          <Route path="upgrade-plan/checkout" element={<Checkout />} />
+        </Route>
+        <Route path="*" element={<ComingSoon />} />
+        <Route
+          element={
+            <ProtectedRoute
+              isAllowed={permissions.some(
+                (p) =>
+                  p.permissionName === "DOCTOR_CHAT" ||
+                  p.permissionName === "DOCTOR_CHAT_VIP"
+              )}
+              redirectTo={"/not-authorized"}
+            />
+          }
+        >
+          <Route path="consultations" element={<Chat />} />
+        </Route>
       </Route>
     </Routes>
   );

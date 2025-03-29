@@ -19,10 +19,10 @@ const DropdownMenu = ({ id, refetch }) => {
     navigate(`/admin/users/${id}`);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const data = { status: "inactive" };
     console.log("BLOCK USER", API_URLS.USER.USER_WITH_ID + id);
-    callApi(data);
+    await callApi(data);
     refetch();
   };
 

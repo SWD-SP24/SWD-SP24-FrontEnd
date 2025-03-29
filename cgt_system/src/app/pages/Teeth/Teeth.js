@@ -811,6 +811,7 @@ export default function Teeth() {
             <ToothNote
               toothNumber={toothNumber}
               setToothRecord={setToothRecord}
+              dob={childrenData.dob}
             />
           </div>
         </div>

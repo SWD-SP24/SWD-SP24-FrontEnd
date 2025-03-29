@@ -3,32 +3,52 @@ import useApi from "../../hooks/useApi";
 import API_URLS from "../../config/apiUrls";
 import showToast from "../../util/showToast";
 import UpgradePlanModalSkeleton from "./UpgradePlanModalSkeleton";
-import { useNavigate } from "react-router";
 import useUser from "../../hooks/useUser";
+import Button from "./Button";
 
 export default function UpgradePlanModal() {
   const [isAnnually, setIsAnnually] = useState(false);
   const [pricingPlans, setPricingPlans] = useState([]);
+  const [currentPlan, setCurrentPlan] = useState({});
+  const [pendingBillings, setPendingBillings] = useState([]);
   const [maxDiscount, setMaxDiscount] = useState(null);
   const { user } = useUser();
-
-  const navigate = useNavigate();
 
   const { isLoading, response, error, callApi } = useApi({
     url: API_URLS.MEMBERSHIP_PACKAGE.GET_PRICING_PLAN,
     method: "GET",
   });
 
+  // API lấy thông tin các gói đang chờ thanh toán
+  const { response: pendingOrderResponse, callApi: checkPendingOrder } = useApi(
+    {
+      url: API_URLS.USER.GET_PENDING_BILLING,
+      method: "GET",
+    }
+  );
+
+  // API lấy thông tin các gói đang chờ thanh toán
+  const { response: currentPlanRes, callApi: getCurrentPlan } = useApi({
+    url: API_URLS.USER.MEMBERSHIP_PACKAGE.CURRENT,
+    method: "GET",
+  });
+
   useEffect(() => {
     const modalElement = document.getElementById("upgradePlanModal");
 
+    const handleShowModal = () => {
+      callApi();
+      getCurrentPlan();
+      checkPendingOrder();
+    };
+
     if (modalElement) {
-      modalElement.addEventListener("shown.bs.modal", () => callApi());
+      modalElement.addEventListener("shown.bs.modal", handleShowModal);
       modalElement.addEventListener("hidden.bs.modal", handleCloseModal);
     }
     return () => {
       if (modalElement) {
-        modalElement.removeEventListener("shown.bs.modal", callApi);
+        modalElement.removeEventListener("shown.bs.modal", handleShowModal);
         modalElement.removeEventListener("hidden.bs.modal", handleCloseModal);
       }
     };
@@ -51,6 +71,18 @@ export default function UpgradePlanModal() {
       }
     }
   }, [response]);
+
+  useEffect(() => {
+    if (pendingOrderResponse) {
+      setPendingBillings(pendingOrderResponse);
+    }
+  }, [pendingOrderResponse]);
+
+  useEffect(() => {
+    if (currentPlanRes) {
+      setCurrentPlan(currentPlanRes);
+    }
+  }, [currentPlanRes]);
 
   useEffect(() => {
     if (error?.message) {
@@ -79,7 +111,7 @@ export default function UpgradePlanModal() {
       role="dialog"
       style={{ display: "none" }}
     >
-      <div className="modal-dialog modal-xl modal-simple modal-dialog-centered modal-pricing">
+      <div className="modal-dialog modal-dialog-centered modal-pricing modal-simple modal-xl">
         <div className="modal-content">
           {isLoading ? (
             <UpgradePlanModalSkeleton />
@@ -99,22 +131,21 @@ export default function UpgradePlanModal() {
                   comprehensive child development tracking. Choose the best plan
                   to fit your needs.
                 </p>
-
                 {user?.emailActivation === "unactivated" && (
                   <div
-                    class="alert alert-warning mb-0 mt-3 d-flex align-items-center gap-3"
+                    class="d-flex alert alert-warning align-items-center gap-3 mb-0 mt-3"
                     role="alert"
                   >
-                    <h5 class="alert-heading d-flex align-items-center justify-between mb-0">
+                    <h5 class="d-flex alert-heading align-items-center justify-between mb-0">
                       <span class="alert-icon rounded-circle">
                         <span
                           style={{ fontSize: "54px" }}
-                          class="icon-base bx bx-error icon-md"
+                          class="bx bx-error icon-base icon-md"
                         ></span>
                       </span>
                     </h5>
                     <div className="d-flex flex-column">
-                      <h5 className="text-warning mb-0 fw-bold">
+                      <h5 className="text-warning fw-bold mb-0">
                         Your account is not activated yet!
                       </h5>
                       <span>
@@ -125,12 +156,12 @@ export default function UpgradePlanModal() {
                     </div>
                   </div>
                 )}
-                <div className="d-flex align-items-center justify-content-center flex-wrap gap-2 pt-7 pb-4">
-                  <label className="switch switch-sm ms-sm-12 ps-sm-12 me-0">
-                    <span className="switch-label fs-6 text-body">Monthly</span>
+                <div className="d-flex flex-wrap align-items-center justify-content-center gap-2 pb-4 pt-7">
+                  <label className="me-0 ms-sm-12 ps-sm-12 switch switch-sm">
+                    <span className="text-body fs-6 switch-label">Monthly</span>
                     <input
                       type="checkbox"
-                      className="switch-input price-duration-toggler"
+                      className="price-duration-toggler switch-input"
                       onChange={() => setIsAnnually((prev) => !prev)}
                       checked={isAnnually}
                     />
@@ -138,161 +169,151 @@ export default function UpgradePlanModal() {
                       <span className="switch-on"></span>
                       <span className="switch-off"></span>
                     </span>
-                    <span className="switch-label fs-6 text-body">
+                    <span className="text-body fs-6 switch-label">
                       Annually
                     </span>
                   </label>
-                  <div className="mt-n5 ms-n10 ml-2 mb-10 d-none d-sm-flex align-items-center gap-1">
+                  <div className="d-none d-sm-flex align-items-center gap-1 mb-10 ml-2 ms-n10 mt-n5">
                     <img
                       src="https://demos.themeselection.com/sneat-bootstrap-html-admin-template/assets/img/pages/pricing-arrow-light.png"
                       alt="arrow img"
-                      className="scaleX-n1-rtl pt-1"
+                      className="pt-1 scaleX-n1-rtl"
                       data-app-dark-img="pages/pricing-arrow-dark.png"
                       data-app-light-img="pages/pricing-arrow-light.png"
                       style={{ visibility: "visible" }}
                     />
-                    <span className="badge badge-sm bg-label-primary rounded-1 mb-2 ">
+                    <span className="badge badge-sm bg-label-primary rounded-1 mb-2">
                       Save up to {maxDiscount}%
                     </span>
                   </div>
                 </div>
-
                 <div className="row gy-6">
                   {pricingPlans.map((pricingPlan, index) => {
                     const previousPlanName =
                       index > 0
-                        ? pricingPlans[index - 1].membershipPackageName
+                        ? pricingPlans[index - 1]?.membershipPackageName
                         : null;
                     const activePlanIndex = pricingPlans.findIndex(
-                      (plan) => plan.isActive
+                      (plan) => plan?.isActive
                     );
+
+                    // Nếu là plan đang active, thay pricingPlan bằng currentPlan
+                    const displayedPlan =
+                      pricingPlan?.isActive && currentPlan
+                        ? currentPlan?.membershipPackage
+                        : pricingPlan;
+
                     return (
                       <div
-                        key={pricingPlan.membershipPackageId}
-                        className="col-xl mb-md-0 px-3 d-flex"
+                        key={displayedPlan?.membershipPackageId}
+                        className="col-xl d-flex mb-md-0 px-3"
                       >
-                        <div className="card border rounded shadow-none d-flex flex-column h-100">
-                          <div className="card-body pt-12 d-flex flex-column h-100">
+                        <div className="d-flex flex-column card border h-100 rounded shadow-none">
+                          <div className="d-flex flex-column card-body h-100 pt-12">
                             <div>
                               <div
-                                className="mt-3 mb-5 text-center"
+                                className="text-center mb-5 mt-3"
                                 style={{
                                   height: "125px",
                                 }}
                               >
                                 <img
-                                  src={pricingPlan.image}
+                                  src={displayedPlan?.image}
                                   alt="Image"
                                   width="120"
                                 />
                               </div>
-                              <h4 className="card-title text-center text-capitalize mb-1">
-                                {pricingPlan.membershipPackageName}
+                              <h4 className="card-title text-capitalize text-center mb-1">
+                                {displayedPlan?.membershipPackageName}
                               </h4>
-                              <p class="text-center mb-5">
-                                {pricingPlan.summary}
+                              <p className="text-center mb-5">
+                                {displayedPlan?.summary}
                               </p>
-                              <div className="text-center h-px-50 mb-10">
+                              <div className="h-px-50 text-center mb-10">
                                 <div className="d-flex justify-content-center">
-                                  <sup className="h6 text-body pricing-currency mt-2 mb-0 me-1">
+                                  <sup className="text-body h6 mb-0 me-1 mt-2 pricing-currency">
                                     $
                                   </sup>
-                                  <h1 className="mb-0 text-primary">
+                                  <h1 className="text-primary mb-0">
                                     {isAnnually
                                       ? Number.isInteger(
-                                          pricingPlan.price -
-                                            pricingPlan.savingPerMonth
+                                          displayedPlan?.price -
+                                            displayedPlan?.savingPerMonth
                                         )
-                                        ? pricingPlan.price -
-                                          pricingPlan.savingPerMonth
+                                        ? displayedPlan?.price -
+                                          displayedPlan?.savingPerMonth
                                         : (
-                                            pricingPlan.price -
-                                            pricingPlan.savingPerMonth
-                                          ).toFixed(2)
-                                      : Number.isInteger(pricingPlan.price)
-                                      ? pricingPlan.price
-                                      : pricingPlan.price.toFixed(2)}
+                                            displayedPlan?.price -
+                                            displayedPlan?.savingPerMonth
+                                          )?.toFixed(2)
+                                      : Number.isInteger(displayedPlan?.price)
+                                      ? displayedPlan?.price
+                                      : displayedPlan?.price?.toFixed(2)}
                                   </h1>
-                                  <sub className="h6 text-body pricing-duration mt-auto mb-1">
+                                  <sub className="text-body h6 mb-1 mt-auto pricing-duration">
                                     /month
                                   </sub>
                                 </div>
-                                {isAnnually && pricingPlan.yearlyPrice > 0 && (
-                                  <small className="price-yearly price-yearly-toggle text-body-secondary">
-                                    ${pricingPlan.yearlyPrice} / year
-                                  </small>
-                                )}
+                                {isAnnually &&
+                                  displayedPlan?.yearlyPrice > 0 &&
+                                  displayedPlan?.membershipPackageId !==
+                                    currentPlan?.membershipPackage
+                                      ?.membershipPackageId && (
+                                    <small className="text-body-secondary price-yearly price-yearly-toggle">
+                                      ${displayedPlan?.yearlyPrice} / year
+                                    </small>
+                                  )}
                               </div>
-                              {pricingPlan.isActive ? (
+                              {displayedPlan?.membershipPackageId ===
+                              currentPlan?.membershipPackage
+                                ?.membershipPackageId ? (
                                 <div
-                                  className="alert alert-success d-flex align-items-center justify-content-center mb-0"
+                                  className="d-flex alert alert-success align-items-center justify-content-center mb-0"
                                   style={{ height: "37.6px" }}
                                 >
                                   <span>Your Current Plan</span>
                                 </div>
                               ) : (
-                                <button
-                                  type="button"
-                                  className="btn btn-label-primary d-grid w-100"
-                                  data-bs-dismiss="modal"
-                                  disabled={
-                                    (activePlanIndex !== -1 &&
-                                      index < activePlanIndex) ||
-                                    user?.emailActivation === "unactivated"
-                                  }
-                                  onClick={
-                                    activePlanIndex !== -1 &&
-                                    index < activePlanIndex
-                                      ? undefined
-                                      : () =>
-                                          navigate(
-                                            "/member/upgrade-plan/checkout",
-                                            {
-                                              state: {
-                                                planId:
-                                                  pricingPlan.membershipPackageId,
-                                                isYearly: isAnnually,
-                                              },
-                                            }
-                                          )
-                                  }
-                                >
-                                  {pricingPlan.isActive
-                                    ? "Your Current Plan"
-                                    : "Upgrade"}
-                                </button>
+                                <Button
+                                  pendingBillings={pendingBillings}
+                                  activePlanIndex={activePlanIndex}
+                                  index={index}
+                                  user={user}
+                                  pricingPlan={displayedPlan}
+                                  isAnnually={isAnnually}
+                                />
                               )}
                             </div>
                             <hr />
                             <b className="text-start mb-5">
-                              {pricingPlan.price === 0
+                              {displayedPlan?.price === 0
                                 ? "A simple start for everyone:"
                                 : `Everything in the ${previousPlanName}, plus:`}
                             </b>
-                            <ul className="list-group flex-grow-1">
-                              {pricingPlan?.permissions
-                                .filter((permission) => {
+                            <ul className="flex-grow-1 list-group">
+                              {displayedPlan?.permissions
+                                ?.filter((permission) => {
                                   if (
-                                    displayedPermissions.has(
-                                      permission.permissionId
+                                    displayedPermissions?.has(
+                                      permission?.permissionId
                                     )
                                   ) {
                                     return false; // Bỏ qua quyền đã xuất hiện ở gói trước
                                   }
-                                  displayedPermissions.add(
-                                    permission.permissionId
+                                  displayedPermissions?.add(
+                                    permission?.permissionId
                                   );
                                   return true; // Hiển thị quyền chưa xuất hiện
                                 })
-                                .map((permission) => (
+                                ?.map((permission) => (
                                   <li
-                                    key={permission.permissionId}
-                                    className="mb-4 d-flex align-items-center"
+                                    key={permission?.permissionId}
+                                    className="d-flex align-items-center mb-4"
                                   >
-                                    <span className="badge p-50 w-px-20 h-px-20 rounded-pill bg-label-primary me-2">
-                                      <i className="icon-base bx bx-check icon-xs"></i>
+                                    <span className="badge bg-label-primary h-px-20 p-50 rounded-pill w-px-20 me-2">
+                                      <i className="bx bx-check icon-base icon-xs"></i>
                                     </span>
-                                    <span>{permission.description}</span>
+                                    <span>{permission?.description}</span>
                                   </li>
                                 ))}
                             </ul>

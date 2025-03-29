@@ -6,7 +6,7 @@ import { toDMY } from "../../../util/dateFormat";
 import UpdateToothRecord from "./UpdateToothRecord";
 import CreateToothRecord from "./CreateToothRecord";
 
-export default function ToothNote({ toothNumber, setToothRecord }) {
+export default function ToothNote({ toothNumber, setToothRecord, dob }) {
   const id = useParams().childId;
   const [toothData, setToothData] = useState({
     recordId: "",
@@ -48,9 +48,14 @@ export default function ToothNote({ toothNumber, setToothRecord }) {
           toothData={toothData}
           setToothData={setToothData}
           refetch={callApi}
+          dob={dob}
         />
       ) : (
-        <CreateToothRecord toothId={toothNumber + 2} refetch={callApi} />
+        <CreateToothRecord
+          toothId={toothNumber + 2}
+          refetch={callApi}
+          dob={dob}
+        />
       )}
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { formatDate } from "../../../util/dateFormat";
+import { convertToISOString, formatDate } from "../../../util/dateFormat";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
 import showToast from "../../../util/showToast.js";
@@ -7,6 +7,7 @@ export default function UpdateToothRecord({
   toothData,
   setToothData,
   refetch,
+  dob,
 }) {
   const url = `${API_URLS.TEETH_RECORD.TEETH_RECORD}/${toothData.recordId}`;
   const { response, callApi } = useApi({
@@ -55,6 +56,7 @@ export default function UpdateToothRecord({
                       eruptionDate: e.target.value,
                     }))
                   }
+                  min={convertToISOString(dob)}
                   max={new Date().toISOString().split("T")[0]}
                 />
               </div>

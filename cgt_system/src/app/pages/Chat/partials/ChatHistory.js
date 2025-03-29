@@ -1,17 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
-import Cookies from "js-cookie";
-import image from "../../../assets/img/avatars/default-avatar.jpg";
+
 import { motion } from "framer-motion";
 import {
   addDoc,
   collection,
   doc,
+  getDoc,
   increment,
   onSnapshot,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
 import { db } from "../../../config/firebase";
+import image from "../../../assets/img/avatars/default-avatar.jpg";
 import addNotification from "../../../util/addNotification";
 import API_URLS from "../../../config/apiUrls";
 import useApi from "../../../hooks/useApi";
@@ -21,6 +22,7 @@ import { Modal } from "bootstrap";
 import ChildHealthBook from "../../ChildHealthBook/ChildHealthBook";
 import { useNavigate } from "react-router";
 import Tippy from "@tippyjs/react";
+import ChatHistoryHeader from "./ChatHistoryHeader";
 
 export default function ChatHistory({
   currentUser,
@@ -48,7 +50,20 @@ export default function ChatHistory({
   });
 
   useEffect(() => {
+    if (!currentUser?.userId || !conversationId) return;
+
+    const userRef = doc(db, "activeUsers", String(currentUser.userId));
+    updateDoc(userRef, {
+      activeConversation: conversationId,
+    });
+
     callApi();
+
+    return () => {
+      updateDoc(userRef, {
+        activeConversation: "", // Khi rời chat, đặt về rỗng
+      });
+    };
   }, [conversationId]);
 
   useEffect(() => {
@@ -93,20 +108,6 @@ export default function ChatHistory({
     }
   };
 
-  // Hàm tính thời gian cuối cùng của đoạn hội thoại tới hiện tại
-  const timeAgo = (timestamp) => {
-    if (!timestamp?.seconds) return "";
-    const timeDiff = Date.now() - timestamp.seconds * 1000;
-    const minutes = Math.floor(timeDiff / (1000 * 60));
-    const hours = Math.floor(minutes / 60);
-    const days = Math.floor(hours / 24);
-
-    if (minutes < 1) return "";
-    if (minutes < 60) return `${minutes} minutes ago`;
-    if (hours < 24) return `${hours} hours ago`;
-    return `${days} days ago`;
-  };
-
   const sendMessage = async (type, childId, message) => {
     if (!conversationId) return;
 
@@ -124,16 +125,26 @@ export default function ChatHistory({
         }
       );
 
+      // Kiểm tra trạng thái activeConversation của recipient
+      const recipientRef = doc(db, "activeUsers", String(recipientId));
+      const recipientSnap = await getDoc(recipientRef);
+
+      const isRecipientInChat =
+        recipientSnap.exists() &&
+        recipientSnap.data().activeConversation === conversationId;
+
       // Cập nhật lastMessage, lastSenderId, lastSenderName, lastSenderAvatar trong conversations
       const conversationRef = doc(db, "conversations", conversationId);
 
       await updateDoc(conversationRef, {
-        [`unreadCounts.${recipientId}`]: increment(1),
         lastMessage: message,
         lastSenderId: currentUser.userId,
         lastSenderName: currentUser.fullName,
         lastSenderAvatar: currentUser.avatar || "",
         lastTimestamp: serverTimestamp(),
+        ...(isRecipientInChat
+          ? {}
+          : { [`unreadCounts.${recipientId}`]: increment(1) }),
       });
 
       // Nếu recipient offline, thêm thông báo
@@ -185,6 +196,24 @@ export default function ChatHistory({
 
     return () => unsubscribe();
   }, [recipientId]);
+
+  useEffect(() => {
+    if (!conversationId || !recipientId) return;
+
+    // Lắng nghe trạng thái typing từ conversation
+    const conversationRef = doc(db, "conversations", conversationId);
+    const unsubscribeConversation = onSnapshot(conversationRef, (snapshot) => {
+      if (snapshot.exists()) {
+        setIsRecipientTyping(
+          snapshot.data().typingStatus?.[recipientId] || false
+        );
+      } else {
+        setIsRecipientTyping(false);
+      }
+    });
+
+    return () => unsubscribeConversation();
+  }, [conversationId, recipientId]);
 
   useEffect(() => {
     if (!conversationId || !recipientId) return;
@@ -245,16 +274,35 @@ export default function ChatHistory({
   };
 
   const handleTyping = () => {
-    const currentUserRef = doc(db, "activeUsers", String(currentUser.userId));
-    updateDoc(currentUserRef, {
-      isTyping: true,
+    const conversationRef = doc(db, "conversations", conversationId);
+
+    const currentUserId = currentUser.userId;
+
+    // Cập nhật trạng thái typing cho người dùng trong cuộc hội thoại
+    updateDoc(conversationRef, {
+      [`typingStatus.${currentUserId}`]: true,
     });
 
+    // Tự động tắt trạng thái typing sau 3 giây
     setTimeout(() => {
-      updateDoc(currentUserRef, {
-        isTyping: false,
+      updateDoc(conversationRef, {
+        [`typingStatus.${currentUserId}`]: false,
       });
     }, 3000);
+  };
+
+  const formatCallDuration = (durationInSeconds) => {
+    const hours = Math.floor(durationInSeconds / 3600);
+    const minutes = Math.floor((durationInSeconds % 3600) / 60);
+    const seconds = durationInSeconds % 60;
+
+    if (hours > 0) {
+      return `${hours}h ${minutes}m`;
+    } else if (minutes > 0) {
+      return `${minutes}m ${seconds}s`;
+    } else {
+      return `${seconds}s`;
+    }
   };
 
   return (
@@ -264,45 +312,14 @@ export default function ChatHistory({
       draggable
     >
       <div className="chat-history-wrapper">
-        <div className="chat-history-header border-bottom">
-          <div className="d-flex justify-content-between align-items-center">
-            <div className="d-flex overflow-hidden align-items-center justify-content-between ">
-              <i
-                className="icon-base bx bx-menu icon-lg cursor-pointer d-lg-none d-block me-4"
-                data-bs-toggle="sidebar"
-                data-overlay=""
-                data-target="#app-chat-contacts"
-              ></i>
-              <div
-                className={`flex-shrink-0 avatar ${
-                  isRecipientOnline ? "avatar-online" : "avatar-offline"
-                }`}
-              >
-                <img
-                  src={recipient?.avatar || image}
-                  alt="Avatar"
-                  className="rounded-circle border"
-                  data-bs-toggle="sidebar"
-                  data-overlay=""
-                  data-target="#app-chat-sidebar-right"
-                />
-              </div>
-              <div className="chat-contact-info flex-grow-1 ms-4">
-                <h6 className="m-0 fw-normal">
-                  {recipient?.name || "Unknown"}
-                </h6>
-                <small class="user-status text-body">
-                  {isRecipientOnline
-                    ? "Active now"
-                    : lastSeen &&
-                      timeAgo(lastSeen) &&
-                      `Active ${timeAgo(lastSeen)}`}
-                </small>
-              </div>
-            </div>
-          </div>
-        </div>
-
+        <ChatHistoryHeader
+          isRecipientOnline={isRecipientOnline}
+          recipient={recipient}
+          recipientId={recipientId}
+          lastSeen={lastSeen}
+          currentUser={currentUser}
+          conversationId={conversationId}
+        />
         {/* Chat History Body */}
         <div className="chat-history-body overflow-auto">
           <div className="d-flex flex-column justify-content-center align-items-center my-4">
@@ -353,6 +370,49 @@ export default function ChatHistory({
                       {message.type === "text" ? (
                         <div className="chat-message-text p-2 rounded bg-light">
                           <p className="mb-0">{message.text}</p>
+                        </div>
+                      ) : message.type === "call" ? (
+                        // Nếu là tin nhắn cuộc gọi
+                        <div
+                          className={`chat-message-call p-2 d-flex align-items-center bg-light rounded gap-2 `}
+                        >
+                          <span
+                            className={`badge rounded-circle d-flex justify-content-center align-items-center ${
+                              message.senderId !== currentUser.userId &&
+                              (message.callStatus === "missed" ||
+                                message.callStatus === "busy" ||
+                                message.callStatus === "canceled" ||
+                                message.callStatus === "declined")
+                                ? "text-bg-danger"
+                                : "text-bg-secondary"
+                            }`}
+                            style={{
+                              width: "33px",
+                              height: "33px",
+                              padding: 0,
+                            }}
+                          >
+                            <i
+                              className={`${
+                                message.callType === "video"
+                                  ? "icon-base bx bx-bxs-video"
+                                  : "icon-base bx bx-phone-call"
+                              }`}
+                              style={{ fontSize: "1.2rem" }}
+                            ></i>
+                          </span>
+
+                          <div className="d-flex flex-column gap-1 justify-content-start">
+                            <p className="mb-0 fw-bold">
+                              {message.text || "Call"}{" "}
+                            </p>
+
+                            {message.duration > 0 ? (
+                              <small className="mb-0 text-start">
+                                {formatCallDuration(message.duration)}
+                              </small>
+                            ) : null}
+                          </div>
                         </div>
                       ) : (
                         // Nếu là tin nhắn kiểu childData (card)
